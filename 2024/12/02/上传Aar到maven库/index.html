@@ -1,0 +1,673 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="方式一:12345678910111213141516171819202122232425262728293031323334353637383940plugins &#123;    id &#x27;com.android.library&#x27;    id &#x27;org.jetbrains.kotlin.android&#x27;    id &#x27;maven-publish">
+<meta property="og:type" content="article">
+<meta property="og:title" content="上传Aar到maven库">
+<meta property="og:url" content="http://example.com/2024/12/02/%E4%B8%8A%E4%BC%A0Aar%E5%88%B0maven%E5%BA%93/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="方式一:12345678910111213141516171819202122232425262728293031323334353637383940plugins &#123;    id &#x27;com.android.library&#x27;    id &#x27;org.jetbrains.kotlin.android&#x27;    id &#x27;maven-publish">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/test.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/19f4152760ea79193b5bb931c0e7a7aa.png">
+<meta property="article:published_time" content="2024-12-02T09:50:32.078Z">
+<meta property="article:modified_time" content="2024-12-02T09:57:12.785Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/test.png">
+  
+  
+  
+  <title>上传Aar到maven库 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="上传Aar到maven库"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-02 17:50" pubdate>
+          2024年12月2日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">上传Aar到maven库</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="方式一"><a href="#方式一" class="headerlink" title="方式一:"></a>方式一:</h1><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs stylus">plugins &#123;<br>    id <span class="hljs-string">&#x27;com.android.library&#x27;</span><br>    id <span class="hljs-string">&#x27;org.jetbrains.kotlin.android&#x27;</span><br>    id <span class="hljs-string">&#x27;maven-publish&#x27;</span><br>&#125;<br><br>task <span class="hljs-built_in">androidSourceJar</span>(type: Jar) &#123;<br>    from android<span class="hljs-selector-class">.sourceSets</span><span class="hljs-selector-class">.main</span><span class="hljs-selector-class">.java</span><span class="hljs-selector-class">.getSrcDirs</span>()<span class="hljs-comment">//源码路径 包括Java和Kotlin源码</span><br>    archiveClassifier<span class="hljs-selector-class">.set</span>(<span class="hljs-string">&quot;sources&quot;</span>)<br>&#125;<br><br>afterEvaluate &#123;<br>    publishing &#123;<br>        publications &#123;<br>            <span class="hljs-built_in">plugin</span>(MavenPublication) &#123;<br>                artifact androidSourceJar <span class="hljs-comment">// 增加上传源码的 task</span><br>                afterEvaluate &#123; <span class="hljs-built_in">artifact</span>(tasks<span class="hljs-selector-class">.getByName</span>(<span class="hljs-string">&quot;bundleReleaseAar&quot;</span>)) &#125;<br>                groupId = <span class="hljs-string">&#x27;com.peng&#x27;</span><br>                artifactId = <span class="hljs-string">&#x27;imageloader&#x27;</span><br>                version = <span class="hljs-string">&#x27;1.1.0&#x27;</span><br>            &#125;<br>        &#125;<br>        repositories &#123;<br>            maven &#123;<br>                url = <span class="hljs-string">&#x27;https://packages.aliyun.com/maven/repository/2327308-release-bYyYbx/&#x27;</span><br>                credentials &#123;<br>                    username = <span class="hljs-string">&#x27;63dcce3babc54e81b83ad6cb&#x27;</span><br>                    password = <span class="hljs-string">&#x27;do0qQ1PvgsF-&#x27;</span><br>                &#125;<br>            &#125;<br>            maven &#123;<br>                url = <span class="hljs-string">&#x27;https://packages.aliyun.com/maven/repository/2327308-snapshot-qzGl2I/&#x27;</span><br>                credentials &#123;<br>                    username = <span class="hljs-string">&#x27;63dcce3babc54e81b83ad6cb&#x27;</span><br>                    password = <span class="hljs-string">&#x27;do0qQ1PvgsF-&#x27;</span><br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="方式二"><a href="#方式二" class="headerlink" title="方式二:"></a>方式二:</h1><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">plugins &#123;<br>    id <span class="hljs-string">&#x27;com.android.library&#x27;</span><br>    id <span class="hljs-string">&#x27;org.jetbrains.kotlin.android&#x27;</span><br>    id <span class="hljs-string">&#x27;maven-publish&#x27;</span><br>&#125;<br><br>afterEvaluate &#123;<br>    publishing &#123;<br>        publications &#123;<br>            plugin(MavenPublication) &#123;<br>                // 添加以下配置可以自动从编译容器中获取<span class="hljs-keyword">release</span>版本内容（使用<span class="hljs-keyword">debug</span>可以获取<span class="hljs-keyword">debug</span>版本内容），并生成pom文件<br>                // 注意：发布物声明必须在 afterEvaluate 内部，因为 components 在 afterEvaluate 阶段才生成完成<br>                <span class="hljs-keyword">from</span> components.<span class="hljs-keyword">release</span><br>                groupId = <span class="hljs-string">&#x27;com.peng&#x27;</span><br>                artifactId = <span class="hljs-string">&#x27;imageloader&#x27;</span><br>                version = <span class="hljs-string">&#x27;1.1.0&#x27;</span><br>            &#125;<br>        &#125;<br>        repositories &#123;<br>            maven &#123;<br>                url = <span class="hljs-string">&#x27;https://packages.aliyun.com/maven/repository/2327308-release-bYyYbx/&#x27;</span><br>                credentials &#123;<br>                    username = <span class="hljs-string">&#x27;63dcce3babc54e81b83ad6cb&#x27;</span><br>                    <span class="hljs-keyword">password</span> = <span class="hljs-string">&#x27;do0qQ1PvgsF-&#x27;</span><br>                &#125;<br>            &#125;<br>            maven &#123;<br>                url = <span class="hljs-string">&#x27;https://packages.aliyun.com/maven/repository/2327308-snapshot-qzGl2I/&#x27;</span><br>                credentials &#123;<br>                    username = <span class="hljs-string">&#x27;63dcce3babc54e81b83ad6cb&#x27;</span><br>                    <span class="hljs-keyword">password</span> = <span class="hljs-string">&#x27;do0qQ1PvgsF-&#x27;</span><br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="说明文档"><a href="#说明文档" class="headerlink" title="说明文档"></a>说明文档</h1><p>伴随着正式的JDK 11环境以及 Gradle 7.0，迎来了一系列的 gradle 编译问题，当然，这里主要讨论 maven 发布相关的变更与适配。</p>
+<p>这里直接抛出主要问题：以前的 **maven **plugin 已经被废弃，带来的是 <strong>maven-publish</strong> plugin 。从代码层面讲就是：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">apply</span> plugin: <span class="hljs-string">&#x27;maven&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>变成了：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">apply</span> plugin: <span class="hljs-string">&#x27;maven-publish&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>同时，相关脚本也进行了变更，直接贴上最新的脚本代码：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs abnf">afterEvaluate &#123;<br>    publishing &#123;<br>        publications &#123;<br>            release(MavenPublication) &#123;<br>                 from components.release <br>                groupId <span class="hljs-operator">=</span> MAVEN_GROUP_ID<br>                artifactId <span class="hljs-operator">=</span> MAVEN_ARTIFACTID<br>                version <span class="hljs-operator">=</span> MAVEN_VERSION<br>            &#125;<br>        &#125;<br><br>        repositories &#123;<br>            maven &#123;<br>                allowInsecureProtocol true<br>                name <span class="hljs-operator">=</span> <span class="hljs-string">&quot;nexus&quot;</span><br>                url <span class="hljs-operator">=</span> MAVEN_RELEASE_URL<br>                credentials &#123;<br>                    username <span class="hljs-operator">=</span> MAVEN_USERNAME<br>                    password <span class="hljs-operator">=</span> MAVEN_PASSWORD<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里大写的属性均为 gradle.properties 中定义的与 maven 发布相关的变量，通过命名应该很容易知道。</p>
+<p>主要说两点:</p>
+<ul>
+<li>对于非 https 的仓库地址，需要使用 <code>allowInsecureProtocol</code> 字段，包括引用该仓库的地方</li>
+<li>对于需要上传的 maven 仓库，需要显式指定 name，因为在编译后，会生成相关任务，比如这样：</li>
+</ul>
+<p><img src="/images/test.png" srcset="/img/loading.gif" lazyload></p>
+<p>另外，对于 release(MavenPublication) 节点中 <code>from components.&lt;strong&gt;release&lt;span&gt; &lt;/span&gt;&lt;/strong&gt;</code>字段，是有含义的~ 官网描述如下：</p>
+<p><a target="_blank" rel="noopener" href="http://i.lckiss.com/wp-content/uploads/2021/08/2021080206253739.png"><img src="https://img-blog.csdnimg.cn/img_convert/19f4152760ea79193b5bb931c0e7a7aa.png" srcset="/img/loading.gif" lazyload></a></p>
+<p>换成中文说就是：一个 module 的不同变种。</p>
+<p>而对于 Android 来说，一般情况下有两种 lib，一种是 比如 gradle 插件的 Jar lib，另一种为 资源库类型的 AAR lib，这里分开说明。</p>
+<ul>
+<li>Jar lib</li>
+</ul>
+<p>纯 jar 包，也就是 gradle 配置为：<code>apply&lt;span&gt; &lt;/span&gt;&lt;strong&gt;plugin&lt;/strong&gt;:&lt;span&gt; &lt;/span&gt;&lt;strong&gt;&#39;java-library&#39;&lt;/strong&gt;</code> 类型的 module，直接按照官方的例子进行配置：</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">from</span> components.java<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>AAR lib</li>
+</ul>
+<p>对于 Android 特有的lib，即 gradle 配置为：<code>apply&lt;span&gt; &lt;/span&gt;&lt;strong&gt;plugin&lt;/strong&gt;:&lt;span&gt; &lt;/span&gt;&lt;strong&gt;&#39;com.android.library&#39;&lt;/strong&gt;</code> 类型的 module，则需要根据 module 中的buildTypes 进行配置，比如：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">buildTypes</span> &#123;<br>    <span class="hljs-section">release</span> &#123;<br>        <span class="hljs-attribute">minifyEnabled</span> <span class="hljs-literal">false</span><br>        proguardFiles getDefaultProguardFile(<span class="hljs-string">&#x27;proguard-android-optimize.txt&#x27;</span>), <span class="hljs-string">&#x27;proguard-rules.pro&#x27;</span><br>    &#125;<br>    <span class="hljs-literal">debug</span> &#123;<br>        <span class="hljs-attribute">minifyEnabled</span> <span class="hljs-literal">false</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>那么就有两种选择：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">from</span> components.<span class="hljs-keyword">release</span> <br>或<br><span class="hljs-keyword">from</span> components.<span class="hljs-keyword">debug</span><br></code></pre></td></tr></table></figure>
+
+<p>即会上传不同版本的 aar 文件，这里还可以添加 Android 的风味，即：productFlavors，不进行赘述，详见官方文档：</p>
+<p><a target="_blank" rel="noopener" href="https://developer.android.com/studio/build/build-variants?hl=zh-cn">https://developer.android.com/studio/build/build-variants?hl=zh-cn</a></p>
+<h1 id="处理依赖传递问题"><a href="#处理依赖传递问题" class="headerlink" title="处理依赖传递问题"></a>处理依赖传递问题</h1><p>依赖传递是使用仓库的一个便利之处，就是我们只需要引入某个库的依赖，这个库所依赖的其他依赖项，都会自动依赖到项目中，完成这一个功能主要依靠 pom.xml 文件的配置信息。 pom.xml 文件中声明了关联的所有依赖，其中 <scope> 节点定义了依赖的传递类型，其中包括以下几种：</p>
+<p>compile：依赖在编译时起作用，具有传递性；<br>provided：依赖在编译或者测试时起作用，跟 compile 类似，但是无传递性；<br>runtime：依赖在运行时或者测试时起作用，编译时不起作用，不具备传递性；<br>test：依赖在测试时起作用，运行时不起作用；<br>system：跟 provided 非常类似，主要不同之处是 system 需要我们在系统中直接指定一个特定的jar，需要配合 <systemPath> 使用，这个 scope 已经废弃。<br>import：Maven 2.0.9 之后新增，仅在依赖类型为 pom 时（由<type>节点指定）有用。表示此项依赖将会被 pom 文件中所有有效的依赖替代。<br>其实我们常用的是上面的四种，对于手动生成 pom 文件，可以根据需求进行手动指定映射，但是对于自动生成 pom 文件的情况，我们就必须清楚在 AndroidStudio 的依赖声明中，依赖类型默认映射是怎样的，才能准确实现依赖传递。下面是常用的部分</p>
+<p>AndroidStudio依赖类型	Maven 依赖类型<br>implementation	runtime<br>api	compile<br>provided	provided<br>runtimeOnly	runtime<br>compileOnly	-<br>testImplementation	-<br>从前面的介绍我们知道，Maven 中只有 compile 依赖才具有传递性，因此，在AndroidStudio中使用 maven-pulbish 插件发布工件，如果使用自动生成 pom 文件，那么就需要在 build.gradle 文件中声明依赖是，对需要传递的依赖使用 api 来声明。</p>
+<p>__注意事项：旧版的maven插件的映射有所不同，其中implementation映射为compile，因此如果你的项目从旧版迁移到新版插件，切记一定要修改依赖声明，否则会出现需要传递的依赖无法传递的问题。<scope>节点未指定时，默认为compile，如果手动生成pom文件，没有指定<scope>将采用默认值，但是建议显式指定<scope>值。 __</p>
+<p>#使用生成的aar</p>
+<p>在settings.gradle中要先把公司的maven仓库地址设置好，如下：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs gradle">dependencyResolutionManagement &#123;<br>    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)<br>    <span class="hljs-keyword">repositories</span> &#123;<br>        google()<br>        mavenCentral()<br><br>        <span class="hljs-comment">// 公司仓库</span><br>        maven &#123;<br>            allowInsecureProtocol = <span class="hljs-keyword">true</span> <span class="hljs-comment">// 仓库默认不允许使用非https协议，所以这里设置为允许</span><br>            url <span class="hljs-string">&#x27;http://192.168.1.251:8081/content/repositories/android_repositories/&#x27;</span><br>        &#125;<br>    &#125;<br>&#125;<br>rootProject.name = <span class="hljs-string">&quot;ContextHolderLib&quot;</span><br><span class="hljs-keyword">include</span> <span class="hljs-string">&#x27;:app&#x27;</span><br><span class="hljs-keyword">include</span> <span class="hljs-string">&#x27;:ContextHolder&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>设置好仓库地址后，就可以在module的build.gradle中依赖我们的aar库了，如下：</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs clean">dependencies &#123;<br><br>    <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;androidx.core:core-ktx:1.5.0&#x27;</span><br>    <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;androidx.appcompat:appcompat:1.2.0&#x27;</span><br>    <br>    <span class="hljs-comment">// ContextHolder</span><br>    <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;cn.android666.contextholder:contextholder:1.1.1&#x27;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h1><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7017608469901475847#heading-0">Android：发布aar包到maven仓库以及 maven插件 和 maven-publish 插件的区别</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/e55401f7e462">Android studio通过Gradle7发布aar到maven私有仓库</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/h_bpdwn/article/details/122479437">Android：发布aar包到maven仓库； maven插件 和 maven-publish 插件的区别</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>上传Aar到maven库</div>
+      <div>http://example.com/2024/12/02/上传Aar到maven库/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/02/Android%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D/" title="Android屏幕适配">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Android屏幕适配</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/02/hello-world/" title="Hello World">
+                        <span class="hidden-mobile">Hello World</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
