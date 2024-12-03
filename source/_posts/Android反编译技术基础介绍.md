@@ -1,5 +1,8 @@
 ---
 title: Android反编译技术基础介绍
+date: 2017-09-02
+categories: 
+  - Android开发
 ---
 
 # 一.APK简介

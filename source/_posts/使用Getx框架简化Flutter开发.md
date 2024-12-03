@@ -1,5 +1,8 @@
 ---
 title: 使用Getx框架简化Flutter开发
+date: 2021-09-29
+categories: 
+  - Flutter开发
 ---
 
 # 一. GetX的作用

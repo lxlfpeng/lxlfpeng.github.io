@@ -1,5 +1,8 @@
 ---
 title: CI-CD工具之Jenkins
+date: 2019-07-10
+categories: 
+  - CI/CD
 ---
 
 # 一.CI/CD(持续集成/持续部署)

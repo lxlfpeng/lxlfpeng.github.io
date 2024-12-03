@@ -1,5 +1,8 @@
 ---
 title: Android kotlin之koin
+date: 2020-10-12
+categories: 
+  - Android开发
 ---
 
 # 一.依赖引入

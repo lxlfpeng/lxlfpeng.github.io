@@ -1,5 +1,8 @@
 ---
 title: Jetpack-Compose之三附带效应(副作用)
+date: 2022-01-13
+categories: 
+  - JetpackCompose
 ---
 
 # 一.Compose组合函数的特点

@@ -1,5 +1,8 @@
 ---
 title: Python使用技巧
+date: 2018-08-11
+categories: 
+  - Python
 ---
 
 # Python拼接字符串的几种方式

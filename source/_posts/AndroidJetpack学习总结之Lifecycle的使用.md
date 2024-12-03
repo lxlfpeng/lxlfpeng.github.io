@@ -1,5 +1,8 @@
 ---
 title: AndroidJetpack学习总结之Lifecycle的使用
+date: 2020-11-01
+categories: 
+  - Android开发
 ---
 
 # 一.Lifecycle为何被创造出来

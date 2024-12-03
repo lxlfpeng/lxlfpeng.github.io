@@ -1,5 +1,8 @@
 ---
 title: Java编译过程及Jvm详解
+date: 2019-07-24 
+categories: 
+  - Java开发
 ---
 
 # 一.Jvm简介

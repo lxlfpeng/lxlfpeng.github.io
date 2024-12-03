@@ -1,5 +1,8 @@
 ---
 title: Android音视频开发总结之一理论基础
+date: 2019-06-14 
+categories: 
+  - Android开发
 ---
 
 # 一. 音频技术基础概念

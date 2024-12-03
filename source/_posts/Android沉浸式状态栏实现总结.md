@@ -1,5 +1,8 @@
 ---
 title: Android沉浸式状态栏实现总结
+date: 2022-10-28
+categories: 
+  - Android开发
 ---
 
 

@@ -1,5 +1,8 @@
 ---
 title: CoordinatorLayout及自定义Behavior总结
+date: 2016-09-12 
+categories: 
+  - Android开发
 ---
 
 # 一. CoordinatorLayout

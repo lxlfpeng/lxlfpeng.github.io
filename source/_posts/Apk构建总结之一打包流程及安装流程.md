@@ -1,5 +1,8 @@
 ---
 title: Apk构建总结之一打包流程及安装流程
+date: 2019-08-01
+categories: 
+  - Android开发
 ---
 
 # 一. 分析已经打好的apk

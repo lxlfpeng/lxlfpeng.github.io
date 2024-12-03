@@ -1,5 +1,8 @@
 ---
 title: Android虚拟机之Dalvik和ART
+date: 2016-06-09
+categories: 
+  - Android开发
 ---
 
 # 一.Java平台的虚拟机Jvm

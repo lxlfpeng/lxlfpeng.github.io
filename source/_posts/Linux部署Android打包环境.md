@@ -1,5 +1,8 @@
 ---
 title: Linux部署Android打包环境
+date: 2020-11-02
+categories: 
+  - Linux系统
 ---
 
 # 一.配置JDK、Gradle、Git环境

@@ -1,5 +1,8 @@
 ---
 title: Kotlin总结之一变量常量及流程控制
+date: 2019-06-20 
+categories: 
+  - Kotlin
 ---
 
 # 一.Kotlin中的变量

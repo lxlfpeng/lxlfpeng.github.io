@@ -1,5 +1,8 @@
 ---
 title: Android颜色透明度
+date: 2017-01-18
+categories: 
+  - Android开发
 ---
 
 # 十六进制颜色透明度表格

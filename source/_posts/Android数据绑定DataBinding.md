@@ -1,5 +1,8 @@
 ---
 title: Android数据绑定DataBinding
+date: 2019-07-01
+categories: 
+  - Android开发
 ---
 
 # 一.DataBinding简介

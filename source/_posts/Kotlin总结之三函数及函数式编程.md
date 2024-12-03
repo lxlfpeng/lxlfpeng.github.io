@@ -1,5 +1,8 @@
 ---
 title: Kotlin总结之三函数及函数式编程
+date: 2019-07-26
+categories: 
+  - Kotlin
 ---
 
 # 一.Kotlin中的函数

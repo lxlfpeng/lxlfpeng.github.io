@@ -1,5 +1,8 @@
 ---
 title: Futter命令大全
+date: 2021-03-15
+categories: 
+  - Fluter开发
 ---
 
 # Flutter常用命令

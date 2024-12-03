@@ -1,5 +1,8 @@
 ---
 title: Android项目Gadle统一依赖管理
+date: 2022-10-03
+categories: 
+  - Android开发
 ---
 
 # 一.Gradle管理依赖版本

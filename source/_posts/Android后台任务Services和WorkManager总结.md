@@ -1,5 +1,8 @@
 ---
 title: Android后台任务Services和WorkManager总结
+date: 2022-09-18
+categories: 
+  - Android开发
 ---
 
 # Android后台服务限制

@@ -1,5 +1,8 @@
 ---
 title: Android调试桥(ADB)
+date: 2016-11-25
+categories: 
+  - Android开发
 ---
 
 # 一.ADB概念

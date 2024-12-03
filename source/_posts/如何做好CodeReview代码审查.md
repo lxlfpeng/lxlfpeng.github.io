@@ -1,5 +1,8 @@
 ---
 title: 如何做好CodeReview代码审查
+date: 2021-06-09
+categories: 
+  - 代码审查
 ---
 
 # 1 review的好处

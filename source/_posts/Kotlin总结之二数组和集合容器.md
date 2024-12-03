@@ -1,5 +1,8 @@
 ---
 title: Kotlin总结之二数组和集合容器
+date: 2019-07-09
+categories: 
+  - Kotlin
 ---
 
 # 一 Kotlin中的数组

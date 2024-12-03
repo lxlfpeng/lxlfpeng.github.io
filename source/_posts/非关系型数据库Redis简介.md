@@ -1,5 +1,8 @@
 ---
 title: 非关系型数据库Redis简介
+date: 2021-06-10
+categories: 
+  - 数据库
 ---
 
 # 一.Redis简介

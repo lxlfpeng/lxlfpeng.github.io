@@ -1,12 +1,15 @@
 ---
 title: Nginx代理转发实现域名访问并且隐藏端口号
+date: 2021-05-25
+categories: 
+  - Nginx服务器
 ---
 
 1. docker 新建nginx 容器用于代理转发,这里必须要映射到80端口,因为访问宿主机会直接访问80端口
 ```
 docker run -d --name nginx_agent -p 80:80 nginx:latest
 ```
-2. 编辑nginx配置文件/etc/nginx/conf.d/default.conf
+1. 编辑nginx配置文件/etc/nginx/conf.d/default.conf
 ```
 
   server {

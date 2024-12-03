@@ -1,5 +1,8 @@
 ---
 title: GitHubAction详解
+date: 2021-10-10
+categories: 
+  - GitHub
 ---
 
 # 一.GitHubAction简介

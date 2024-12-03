@@ -1,5 +1,8 @@
 ---
 title: Win10及11安装Wsl2
+date: 2023-02-19
+categories: 
+  - Linux系统
 ---
 
 # 一.安装Wsl2

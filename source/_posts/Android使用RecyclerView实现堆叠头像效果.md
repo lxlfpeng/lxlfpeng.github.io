@@ -1,5 +1,8 @@
 ---
 title: Android使用RecyclerView实现堆叠头像效果
+date: 2020-01-07
+categories: 
+  - Android开发
 ---
 
 第二个盖住第一个视图:

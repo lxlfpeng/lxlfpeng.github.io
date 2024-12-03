@@ -1,5 +1,8 @@
 ---
 title: Python语法总结
+date: 2016-12-22 
+categories: 
+  - Python
 ---
 
 # 一.python的基本数据类型。

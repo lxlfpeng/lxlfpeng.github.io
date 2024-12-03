@@ -1,5 +1,8 @@
 ---
 title: Android音视频开发总结之三网络直播技术
+date: 2019-06-18 
+categories: 
+  - Android开发
 ---
 
 # 一. 直播流程总览

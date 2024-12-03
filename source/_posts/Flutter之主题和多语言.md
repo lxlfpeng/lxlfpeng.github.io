@@ -1,5 +1,8 @@
 ---
 title: Flutter之主题和多语言
+date: 2021-07-05
+categories: 
+  - Fluter开发
 ---
 
 # 支持国际化

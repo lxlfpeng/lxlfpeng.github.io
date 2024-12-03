@@ -1,5 +1,8 @@
 ---
 title: Android音视频开发之ijkplayer
+date: 2019-12-10
+categories: 
+  - Android开发
 ---
 
 # 一.Ijkplayer

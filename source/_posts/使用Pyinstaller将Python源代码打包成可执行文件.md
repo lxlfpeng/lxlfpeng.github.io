@@ -1,5 +1,8 @@
 ---
 title: 使用Pyinstaller将Python源代码打包成可执行文件
+date: 2018-07-22
+categories: 
+  - Python开发
 ---
 
 # 一.Pyinstaller简介

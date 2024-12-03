@@ -1,5 +1,8 @@
 ---
 title: Android工程编码规范
+date: 2022-01-25
+categories: 
+  - Android开发
 ---
 
 # 一. AndroidStudio开发工具规范

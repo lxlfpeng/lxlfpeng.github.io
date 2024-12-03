@@ -1,5 +1,8 @@
 ---
 title: 黑苹果引导软件之OpenCore
+date: 2022-01-10
+categories: 
+  - 黑苹果
 ---
 
 # 一.OpenCore简介

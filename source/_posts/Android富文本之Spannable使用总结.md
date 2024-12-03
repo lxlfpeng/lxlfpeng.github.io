@@ -1,5 +1,8 @@
 ---
 title: Android富文本之Spannable使用总结
+date: 2021-01-11
+categories: 
+  - Android开发
 ---
 
 # 使用SpannableStringBuilder设置多个属性

@@ -1,5 +1,8 @@
 ---
 title: AndroidStudio使用技巧
+date: 2020-11-02
+categories: 
+  - Android开发
 ---
 
 # 一.Android-Studio模板文件Template

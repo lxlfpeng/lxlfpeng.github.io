@@ -1,5 +1,8 @@
 ---
 title: 使用FFmpeg命令对音视频进行基础的编辑
+date: 2019-07-11
+categories: 
+  - 音视频开发
 ---
 
 ![](/images/1141fc6290e4720b55fa763f9a733084.webp)

@@ -1,5 +1,8 @@
 ---
 title: Android夜间模式(换肤)总结
+date: 2018-07-02
+categories: 
+  - Android开发
 ---
 
 # 一.Android 平台常见的换肤方案

@@ -1,5 +1,9 @@
 ---
 title: 使用Appuim+Python脚本实现Android应用自动化
+date: 2020-06-01
+categories: 
+  - Android开发
+  - 自动化
 ---
 
 # 一.引言

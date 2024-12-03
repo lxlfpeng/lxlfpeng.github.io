@@ -1,5 +1,8 @@
 ---
 title: Android依赖注入框架hilt使用
+date: 2021-11-02
+categories: 
+  - Android开发
 ---
 
 # 一.什么是Hilt

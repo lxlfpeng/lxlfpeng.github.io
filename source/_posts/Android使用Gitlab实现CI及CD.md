@@ -1,5 +1,8 @@
 ---
 title: Android使用Gitlab实现CI及CD
+date: 2020-01-09
+categories: 
+  - Android开发
 ---
 
 # Android 项目配置 gitlab-ci 持续集成

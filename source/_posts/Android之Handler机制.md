@@ -1,5 +1,8 @@
 ---
 title: Android之Handler机制
+date: 2017-09-11
+categories: 
+  - Android开发
 ---
 
 # 一. Handler其实有两大主要作用

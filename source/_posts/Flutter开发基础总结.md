@@ -1,5 +1,8 @@
 ---
 title: Flutter开发基础总结
+date: 2020-04-08
+categories: 
+  - Fluter开发
 ---
 
 # 一.命令式UI和声明式UI

@@ -1,5 +1,9 @@
 ---
 title: 使用Fastlane编写Android自动打包脚本
+date: 2021-07-15
+categories: 
+  - Android开发
+  - 打包
 ---
 
 # 一.什么是Fastlane?

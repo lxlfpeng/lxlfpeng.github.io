@@ -1,5 +1,8 @@
 ---
 title: 使用Feed43为网页生成RSS订阅源
+date: 2022-08-25
+categories: 
+  - RSS订阅
 ---
 
 # 简介

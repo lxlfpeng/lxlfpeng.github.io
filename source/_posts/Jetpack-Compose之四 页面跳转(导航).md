@@ -1,5 +1,8 @@
 ---
 title: Jetpack-Compose之四 页面跳转(导航)
+date: 2022-05-20
+categories: 
+  - JetpackCompose
 ---
 
 # 一.Compose页面跳转的方式

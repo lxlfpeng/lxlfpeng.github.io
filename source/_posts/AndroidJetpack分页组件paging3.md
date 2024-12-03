@@ -1,5 +1,8 @@
 ---
 title: AndroidJetpack分页组件paging3
+date: 2021-09-02
+categories: 
+  - Android开发
 ---
 
 # 一.什么是paging

@@ -1,5 +1,8 @@
 ---
 title: Android-ORM框架-GreenDao
+date: 2018-07-05
+categories: 
+  - Android开发
 ---
 
 # 一.GreenDao简介

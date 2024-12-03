@@ -1,5 +1,8 @@
 ---
 title: Android即时通讯Im开发总结
+date: 2022-09-23
+categories: 
+  - Android开发
 ---
 
 # 实现即时通讯IM的方式

@@ -1,5 +1,8 @@
 ---
 title: Android弹窗BottomSheetDialog总结
+date: 2020-07-11
+categories: 
+  - Android开发
 ---
 
 # 圆角效果

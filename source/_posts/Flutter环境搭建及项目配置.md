@@ -1,5 +1,8 @@
 ---
 title: Flutter环境搭建及项目配置
+date: 2019-06-21
+categories: 
+  - Fluter开发
 ---
 
 # 一. 下载安装Flutter。

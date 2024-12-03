@@ -1,5 +1,8 @@
 ---
 title: Win11正式版(21H2)安装Android子系统
+date: 2022-12-18
+categories: 
+  - Linux系统
 ---
 
 > 本教程的背景是Win11正式版本(21H2)暂未全面推送Android子系统的情况的尝鲜教程。

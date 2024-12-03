@@ -1,5 +1,8 @@
 ---
 title: Ubuntu相关问题及处理
+date: 2021-08-13
+categories: 
+  - Linux系统
 ---
 
 # Ubuntu下root用户无法通过SSH登录？

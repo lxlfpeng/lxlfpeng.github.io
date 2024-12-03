@@ -1,5 +1,8 @@
 ---
 title: Dockerfile之ENTRYPOINT和CMD的异同
+date: 2020-02-18
+categories: 
+  - Docker容器
 ---
 
 # Dockerfile中CMD和ENTRYPOINT的区别

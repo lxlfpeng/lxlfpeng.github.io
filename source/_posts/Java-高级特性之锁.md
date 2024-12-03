@@ -1,5 +1,8 @@
 ---
 title: Java-高级特性之锁
+date: 2016-12-11
+categories: 
+  - Java开发
 ---
 
 Java多线程开发中，如果涉及到共享资源操作场景，那就必不可少要和Java锁打交道。

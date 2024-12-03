@@ -1,5 +1,8 @@
 ---
 title: Dagger2全面使用总结
+date: 2017-02-17
+categories: 
+  - Android开发
 ---
 
 # 一 依赖注入

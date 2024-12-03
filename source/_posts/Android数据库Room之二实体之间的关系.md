@@ -1,5 +1,8 @@
 ---
 title: Android数据库Room之二实体之间的关系
+date: 2020-06-12
+categories: 
+  - Android开发
 ---
 
 # 一.定义对象之间的关系

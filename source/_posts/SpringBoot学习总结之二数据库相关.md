@@ -1,5 +1,8 @@
 ---
 title: SpringBoot学习总结之二数据库相关
+date: 2021-04-25 
+categories: 
+  - SpringBoot
 ---
 
 # 一.常见的数据库访问框架

@@ -1,5 +1,8 @@
 ---
 title: ExoPlayer添加Ffmpeg扩展实现软解功能
+date: 2022-05-12
+categories: 
+  - Android开发
 ---
 
 # 一.准备环境

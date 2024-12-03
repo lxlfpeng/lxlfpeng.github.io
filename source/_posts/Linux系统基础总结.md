@@ -1,5 +1,8 @@
 ---
 title: Linux系统基础总结
+date: 2019-07-04 
+categories: 
+  - Linux系统
 ---
 
 # 一.Linux系统

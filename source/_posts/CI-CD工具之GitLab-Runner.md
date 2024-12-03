@@ -1,5 +1,8 @@
 ---
 title: CI-CD工具之GitLab-Runner
+date: 2021-07-11
+categories: 
+  - CI/CD
 ---
 
 # 一.GitLab-CI和GitLab-Runner简介

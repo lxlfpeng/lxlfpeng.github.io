@@ -1,5 +1,8 @@
 ---
 title: Android存储之分区存储适配
+date: 2021-10-18
+categories: 
+  - Android开发
 ---
 
 # 一.Android存储分区介绍

@@ -1,5 +1,8 @@
 ---
 title: Android音视频开发总结之二Android平台采集、编码、解码
+date: 2019-06-17
+categories: 
+  - Android开发
 ---
 
 # 一. 音视频采集流程

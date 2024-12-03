@@ -1,5 +1,8 @@
 ---
 title: Android国际化多语言
+date: 2018-07-11
+categories: 
+  - Android开发
 ---
 
 # 一、静态配置

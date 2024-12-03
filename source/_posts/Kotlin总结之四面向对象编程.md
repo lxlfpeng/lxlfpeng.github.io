@@ -1,5 +1,8 @@
 ---
 title: Kotlin总结之四面向对象编程
+date: 2019-08-08 
+categories: 
+  - Kotlin
 ---
 
 # 一.Kotlin类的创建

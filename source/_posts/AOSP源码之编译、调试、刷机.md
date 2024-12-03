@@ -1,5 +1,8 @@
 ---
 title: AOSP源码之编译、调试、刷机
+date: 2019-09-28 
+categories: 
+  - Android开发
 ---
 
 # 一.准备工作 

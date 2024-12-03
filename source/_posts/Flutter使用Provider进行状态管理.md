@@ -1,5 +1,8 @@
 ---
 title: Flutter使用Provider进行状态管理
+date: 2020-11-08
+categories: 
+  - Fluter开发
 ---
 
 ### provider状态管理
