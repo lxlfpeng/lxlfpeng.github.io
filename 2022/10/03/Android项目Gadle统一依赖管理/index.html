@@ -1,0 +1,756 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.Gradle管理依赖版本在中大型Android项目中，都会有多个Module进行协同配合。这些module中可能会依赖同一个库的不同版本，这将导致一些问题，要么是代码冲突，要么是APK包体积增大，亦或是项目构建的时间变长，拖慢开发效率。 例如:下图就是在不同的module中依赖同一个库的不同版本。要解决这个问题我们首先要了解在Android项目中目前有那些方案来引入第三方依赖:  直接编写(默">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android项目Gadle统一依赖管理">
+<meta property="og:url" content="http://example.com/2022/10/03/Android%E9%A1%B9%E7%9B%AEGadle%E7%BB%9F%E4%B8%80%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.Gradle管理依赖版本在中大型Android项目中，都会有多个Module进行协同配合。这些module中可能会依赖同一个库的不同版本，这将导致一些问题，要么是代码冲突，要么是APK包体积增大，亦或是项目构建的时间变长，拖慢开发效率。 例如:下图就是在不同的module中依赖同一个库的不同版本。要解决这个问题我们首先要了解在Android项目中目前有那些方案来引入第三方依赖:  直接编写(默">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/c63d31316e04ce77f0f00564a522b47f.webp">
+<meta property="og:image" content="http://example.com/images/57c2e3d510848d6ee53cf1c95df38040.webp">
+<meta property="article:published_time" content="2022-10-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:25:28.965Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/c63d31316e04ce77f0f00564a522b47f.webp">
+  
+  
+  
+  <title>Android项目Gadle统一依赖管理 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Android项目Gadle统一依赖管理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-10-03 00:00" pubdate>
+          2022年10月3日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Android项目Gadle统一依赖管理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-Gradle管理依赖版本"><a href="#一-Gradle管理依赖版本" class="headerlink" title="一.Gradle管理依赖版本"></a>一.Gradle管理依赖版本</h1><p>在中大型Android项目中，都会有多个Module进行协同配合。这些module中可能会依赖同一个库的不同版本，这将导致一些问题，要么是代码冲突，要么是APK包体积增大，亦或是项目构建的时间变长，拖慢开发效率。 例如:下图就是在不同的module中依赖同一个库的不同版本。<br><img src="/images/c63d31316e04ce77f0f00564a522b47f.webp" srcset="/img/loading.gif" lazyload><br>要解决这个问题我们首先要了解在Android项目中目前有那些方案来引入第三方依赖:</p>
+<ol>
+<li>直接编写(默认方式)</li>
+<li>使用ext扩展抽取公共版本</li>
+<li>使用buildSrc管理依赖</li>
+<li>使用composing builds管理依赖</li>
+<li>使用catalog管理依赖(gradle7版本以上才能用，因此暂时忽略)</li>
+</ol>
+<h1 id="二-直接编写-默认方式"><a href="#二-直接编写-默认方式" class="headerlink" title="二.直接编写(默认方式)"></a>二.直接编写(默认方式)</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>直接编写是Android项目工程自带的默认管理方式，在每一个module中都写死了不同依赖及版本号，因此每次升级依赖库时都需要对每一个module做大量的手动更改。</p>
+<p><strong>module_a&#x2F;build.gradle:</strong></p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs clean">dependencies &#123;<br>    <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;androidx.core:core-ktx:1.7.0&#x27;</span><br>    <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;androidx.appcompat:appcompat:1.4.1&#x27;</span><br>    <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;com.google.android.material:material:1.5.0&#x27;</span><br>    <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;androidx.constraintlayout:constraintlayout:2.1.3&#x27;</span><br>    <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;com.squareup.okhttp3:okhttp:4.10.0&#x27;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>module_b&#x2F;build.gradle:</strong></p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs clean">dependencies &#123;<br>    <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;androidx.core:core-ktx:1.7.0&#x27;</span><br>    <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;androidx.appcompat:appcompat:1.4.1&#x27;</span><br>    <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;com.google.android.material:material:1.5.0&#x27;</span><br>    <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;androidx.constraintlayout:constraintlayout:2.1.3&#x27;</span><br>    <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;com.squareup.okhttp3:okhttp:4.10.0&#x27;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><p>如果是单个module的项目非常适合这种比较简单的方式，一目了然。远端依赖如果升级了新的版本会有提供升级的功能。</p>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>如果项目中有多个不同的module，你需要在多个module的build.gradle文件中都做对应的配置，还要确保依赖的库的版本号一致，配置项要重复编写多次。</p>
+<h1 id="三-使用gradle的extra属性-推荐"><a href="#三-使用gradle的extra属性-推荐" class="headerlink" title="三.使用gradle的extra属性(推荐)"></a>三.使用gradle的extra属性(推荐)</h1><h2 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h2><p>Google在<a target="_blank" rel="noopener" href="https://developer.android.com/studio/build/gradle-tips#configure-project-wide-properties">Android官方文档</a>中推荐通过使用gradle的extra属性，将依赖及版本号编写到config.gradle配置文件中，每个module都去依赖config.gradle中的版本，从而达到统一管理的目的。</p>
+<p><strong>Root-level config.gradle</strong></p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-title class_">ext</span> <span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">versions</span> <span class="hljs-operator">=</span> [<br><span class="hljs-symbol">    core_ktx:</span> <span class="hljs-string">&quot;1.7.0&quot;</span>,<br><span class="hljs-symbol">    appcompat:</span> <span class="hljs-string">&quot;1.4.1&quot;</span>,<br><span class="hljs-symbol">    okhttp:</span> <span class="hljs-string">&quot;4.10.0&quot;</span><br>  ]<br>  <span class="hljs-attr">libs</span> <span class="hljs-operator">=</span> [<br>    core_ktx :<span class="hljs-string">&quot;androidx.core:core-ktx:$&#123;versions.core_ktx&#125;&quot;</span>,<br><span class="hljs-symbol">    appcompat:</span> <span class="hljs-string">&quot;androidx.appcompat:appcompat:$&#123;versions.appcompat&#125;&quot;</span>,<br><span class="hljs-symbol">    okhttp:</span> <span class="hljs-string">&quot;com.squareup.okhttp3:okhttp:$&#123;versions.rxjava&#125;&quot;</span><br>  ]<br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>Root-level build.gradle</strong></p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sqf"><span class="hljs-built_in">apply</span> <span class="hljs-keyword">from</span>: <span class="hljs-string">&quot;config.gradle&quot;</span><br><br></code></pre></td></tr></table></figure>
+
+<p><strong>module_a&#x2F;build.gradle</strong></p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br>dependencies &#123;<br>    <span class="hljs-keyword">implementation</span> libs.core_ktx<br>    <span class="hljs-keyword">implementation</span> libs.appcompat<br>    <span class="hljs-keyword">implementation</span> libs.okhttp<br>&#125;    <br></code></pre></td></tr></table></figure>
+
+<p><strong>module_b&#x2F;build.gradle</strong></p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs clean">dependencies &#123;<br>    <span class="hljs-keyword">implementation</span> libs.core_ktx<br>    <span class="hljs-keyword">implementation</span> libs.appcompat<br>    <span class="hljs-keyword">implementation</span> libs.okhttp<br>&#125;   <br></code></pre></td></tr></table></figure>
+
+<h2 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h2><p>将版本统一管理起来了，只需要更改config.gradle中的版本号就可以对所有module的依赖版本进行修改。</p>
+<h2 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li>不支持代码补全提示。</li>
+<li>不支持单击跳转。</li>
+<li>多模块开发时，不同模块相同的依赖需要复制粘贴。</li>
+<li>依赖版本更新不会提示。</li>
+</ul>
+<h1 id="四-使用buildSrc管理-推荐"><a href="#四-使用buildSrc管理-推荐" class="headerlink" title="四.使用buildSrc管理(推荐)"></a>四.使用buildSrc管理(推荐)</h1><h2 id="简介-2"><a href="#简介-2" class="headerlink" title="简介"></a>简介</h2><p><a target="_blank" rel="noopener" href="https://docs.gradle.org/current/userguide/organizing_build_logic.html#sec:build_sources">Gradle文档</a>中说到:当运行 Gradle 时会检查项目中是否存在一个名为 buildSrc 的目录。 然后Gradle 会自动编译并测试这段代码，并将其放入构建脚本的类路径中， 对于多项目构建，只能有一个 buildSrc 目录，该目录必须位于根项目目录中， buildSrc 是 Gradle 项目根目录下的一个目录， 它可以包含我们的构建逻辑，与脚本插件相比，buildSrc应该是首选，因为它更易于维护、重构和测试代码。</p>
+<h2 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h2><p>1.项目根目录下新建一个名为buildSrc的文件夹(注意：名字必须是 buildSrc，因为上文提到了运行 Gradle 时会检查项目中是否存在一个名为 buildSrc 的目录)，然后在 buildSrc 文件夹里创建名为 build.gradle.kts 的文件。</p>
+<p><strong>build.gradle.kts</strong></p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs isbl"><span class="hljs-variable">plugins</span> &#123;<br>    `<span class="hljs-variable">kotlin</span>-<span class="hljs-variable">dsl</span>`<br>&#125;<br><br><span class="hljs-variable">repositories</span> &#123;<br>    <span class="hljs-function"><span class="hljs-title">mavenCentral</span>()</span><br>    <span class="hljs-function"><span class="hljs-title">google</span>()</span><br>    <span class="hljs-function"><span class="hljs-title">gradlePluginPortal</span>()</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>buildSrc下新建目录<code>src\main\kotlin</code>这里的目录只是建议，输入其他的名称也是可以的。</p>
+</li>
+<li><p>在<code>src\main\kotlin</code>中创建Dependencies.kt等配置文件:<br><strong>Dependencies.kt</strong></p>
+</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">object</span> BuildVersion &#123;<br>    <span class="hljs-keyword">const</span> <span class="hljs-keyword">val</span> compileSdk = <span class="hljs-number">30</span><br>    <span class="hljs-keyword">const</span> <span class="hljs-keyword">val</span> buildTools = <span class="hljs-string">&quot;30.0.2&quot;</span><br>    <span class="hljs-keyword">const</span> <span class="hljs-keyword">val</span> minSdk = <span class="hljs-number">21</span><br>    <span class="hljs-keyword">const</span> <span class="hljs-keyword">val</span> targetSdk = <span class="hljs-number">30</span><br>    <span class="hljs-keyword">const</span> <span class="hljs-keyword">val</span> versionCode = <span class="hljs-number">1</span><br>    <span class="hljs-keyword">const</span> <span class="hljs-keyword">val</span> versionName = <span class="hljs-string">&quot;1.0.0&quot;</span><br>&#125;<br><br><span class="hljs-keyword">object</span> Versions &#123;<br>    <span class="hljs-keyword">val</span> core_ktx = <span class="hljs-string">&quot;1.7.0&quot;</span><br>    <span class="hljs-keyword">val</span> appcompat = <span class="hljs-string">&quot;1.4.1&quot;</span><br>    <span class="hljs-keyword">val</span> okhttp = <span class="hljs-string">&quot;4.10.0&quot;</span><br>&#125;<br><br><span class="hljs-keyword">object</span> Libs &#123;<br>    <span class="hljs-keyword">val</span> core_ktx = <span class="hljs-string">&quot;androidx.core:core-ktx:<span class="hljs-subst">$&#123;Versions.core_ktx&#125;</span>&quot;</span><br>    <span class="hljs-keyword">val</span> appcompat = <span class="hljs-string">&quot;androidx.appcompat:appcompat:<span class="hljs-subst">$&#123;Versions.appcompat&#125;</span>&quot;</span><br>    <span class="hljs-keyword">val</span> okhttp = <span class="hljs-string">&quot;com.squareup.okhttp3:okhttp:<span class="hljs-subst">$&#123;Versions.okhttp&#125;</span>&quot;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>4.经过上面步骤后，执行一次Gradle Sync任务，就可以在Android Studio中访问Dependencies.kt中任何值了。 看起来结果与“ext”方式非常相似，但是它支持自动补全和单击跳转功能。</p>
+<p><strong>module_a&#x2F;build.gradle</strong></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs stylus">android &#123;<br>    compileSdkVersion BuildVersion<span class="hljs-selector-class">.compileSdk</span><br>    buildToolsVersion BuildVersion<span class="hljs-selector-class">.buildTools</span><br><br>    defaultConfig &#123;<br>        minSdkVersion BuildVersion<span class="hljs-selector-class">.minSdk</span><br>        targetSdkVersion BuildVersion<span class="hljs-selector-class">.targetSdk</span><br>        versionCode BuildVersion<span class="hljs-selector-class">.versionCode</span><br>        versionName BuildVersion<span class="hljs-selector-class">.versionName</span><br>        ...<br>    &#125;<br><br>    ...<br>&#125;<br><br>dependencies &#123;<br>    implementation Libs<span class="hljs-selector-class">.core_ktx</span><br>    implementation Libs<span class="hljs-selector-class">.appcompat</span><br>    implementation Libs<span class="hljs-selector-class">.okhttp</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>module_b&#x2F;build.gradle</strong></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs stylus">android &#123;<br>    compileSdkVersion BuildVersion<span class="hljs-selector-class">.compileSdk</span><br>    buildToolsVersion BuildVersion<span class="hljs-selector-class">.buildTools</span><br><br>    defaultConfig &#123;<br>        minSdkVersion BuildVersion<span class="hljs-selector-class">.minSdk</span><br>        targetSdkVersion BuildVersion<span class="hljs-selector-class">.targetSdk</span><br>        versionCode BuildVersion<span class="hljs-selector-class">.versionCode</span><br>        versionName BuildVersion<span class="hljs-selector-class">.versionName</span><br>        ...<br>    &#125;<br><br>    ...<br>&#125;<br><br>dependencies &#123;<br>    implementation Libs<span class="hljs-selector-class">.core_ktx</span><br>    implementation Libs<span class="hljs-selector-class">.appcompat</span><br>    implementation Libs<span class="hljs-selector-class">.okhttp</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="优点-2"><a href="#优点-2" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>将版本统一管理起来了，我们只需要更改Dependencies.kt中的版本号就可以对所有module的依赖版本进行修改。</li>
+<li>支持 AndroidStudio 自动补全。</li>
+<li>支持依赖库的点击跳转。</li>
+</ul>
+<h2 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li>buildSrc 依赖更新将重新构建整个项目，buildSrc 依赖更新将重新构建整个项目，项目越大，重新构建的时间就越长，造成不必要的时间浪费。</li>
+<li>依赖版本更新不会提示。</li>
+</ul>
+<h1 id="五-使用Composing-builds管理"><a href="#五-使用Composing-builds管理" class="headerlink" title="五.使用Composing builds管理"></a>五.使用Composing builds管理</h1><h2 id="简介-3"><a href="#简介-3" class="headerlink" title="简介"></a>简介</h2><p>摘自 <a target="_blank" rel="noopener" href="https://docs.gradle.org/current/userguide/composite_builds.html">Gradle 文档</a>：复合构建只是包含其他构建的构建. 在许多方面，复合构建类似于 Gradle 多项目构建，不同之处在于，它包括完整的 builds，而不是包含单个 projects</p>
+<h2 id="使用步骤-1"><a href="#使用步骤-1" class="headerlink" title="使用步骤"></a>使用步骤</h2><ol>
+<li><p>新建Android library工程module名为version_plugin，包名为com.huke.plugin（非固定名可以自取）并删除多余的文件及文件夹。<br><img src="/images/57c2e3d510848d6ee53cf1c95df38040.webp" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>修改version_plugin工程中的 build.gradle文件。</p>
+</li>
+</ol>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs fsharp">apply plugin<span class="hljs-operator">:</span> <span class="hljs-symbol">&#x27;kotlin</span>&#x27;<br>apply plugin<span class="hljs-operator">:</span> <span class="hljs-symbol">&#x27;java</span><span class="hljs-operator">-</span>gradle<span class="hljs-operator">-</span>plugin&#x27;<br><br><span class="hljs-keyword">buildscript</span> &#123;<br>    <span class="hljs-keyword">repositories</span> &#123;<br>        google()<br>        <span class="hljs-keyword">maven</span> &#123; url <span class="hljs-symbol">&#x27;https</span><span class="hljs-operator">:</span><span class="hljs-comment">//jitpack.io&#x27; &#125;</span><br>        <span class="hljs-keyword">maven</span> &#123; url <span class="hljs-symbol">&#x27;https</span><span class="hljs-operator">:</span><span class="hljs-comment">//maven.aliyun.com/nexus/content/groups/public/&#x27; &#125;</span><br>        <span class="hljs-keyword">maven</span> &#123; url <span class="hljs-symbol">&#x27;https</span><span class="hljs-operator">:</span><span class="hljs-comment">//maven.aliyun.com/nexus/content/repositories/jcenter&#x27; &#125;</span><br>        gradlePluginPortal()<br>        mavenCentral()<br>    &#125;<br><br>    <span class="hljs-keyword">dependencies</span> &#123;<br>        <span class="hljs-comment">// 因为使用的 Kotlin 需要需要添加 Kotlin 插件，需要和主工程对应，不然就出现两个版本了</span><br>        classpath <span class="hljs-string">&quot;org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0&quot;</span><br>    &#125;<br><br>&#125;<br><br><span class="hljs-keyword">repositories</span> &#123;<br>    google()<br>    <span class="hljs-keyword">maven</span> &#123; url <span class="hljs-symbol">&#x27;https</span><span class="hljs-operator">:</span><span class="hljs-comment">//jitpack.io&#x27; &#125;</span><br>    <span class="hljs-keyword">maven</span> &#123;url <span class="hljs-symbol">&#x27;https</span><span class="hljs-operator">:</span><span class="hljs-comment">//maven.aliyun.com/nexus/content/repositories/releases/&#x27;&#125;</span><br>    <span class="hljs-keyword">maven</span> &#123; url <span class="hljs-symbol">&#x27;https</span><span class="hljs-operator">:</span><span class="hljs-comment">//maven.aliyun.com/nexus/content/groups/public/&#x27; &#125;</span><br>    <span class="hljs-keyword">maven</span> &#123; url <span class="hljs-symbol">&#x27;https</span><span class="hljs-operator">:</span><span class="hljs-comment">//maven.aliyun.com/nexus/content/repositories/jcenter&#x27; &#125;</span><br>    mavenCentral()<br>&#125;<br><br><span class="hljs-keyword">dependencies</span> &#123;<br>    <span class="hljs-comment">//添加Gradle相关的API，否则无法自定义Plugin和Task</span><br>    implementation gradleApi()<br>    implementation <span class="hljs-string">&quot;org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0&quot;</span><br>&#125;<br><br><span class="hljs-keyword">compileKotlin</span> &#123;<br>    <span class="hljs-keyword">kotlinOptions</span> &#123;<br>        jvmTarget <span class="hljs-operator">=</span> <span class="hljs-string">&quot;1.8&quot;</span><br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">compileTestKotlin</span> &#123;<br>    <span class="hljs-keyword">kotlinOptions</span> &#123;<br>        jvmTarget <span class="hljs-operator">=</span> <span class="hljs-string">&quot;1.8&quot;</span><br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">gradlePlugin</span> &#123;<br>    <span class="hljs-keyword">plugins</span> &#123;<br>        <span class="hljs-keyword">version</span> &#123;<br>            <span class="hljs-comment">// 在 app 模块需要通过 id 引用这个插件</span><br>            <span class="hljs-built_in">id</span> <span class="hljs-operator">=</span> <span class="hljs-symbol">&#x27;com</span>.huke.plugin&#x27;<br>            <span class="hljs-comment">// 实现这个插件的类的路径</span><br>            implementationClass <span class="hljs-operator">=</span> <span class="hljs-symbol">&#x27;com</span>.huke.version.VersionPlugin&#x27;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意，插件中的build.gradle文件中的 kotlin-gradle-plugin 版本要和主工程对应。</p>
+</blockquote>
+<ol start="3">
+<li>在项目 settings.gradle 文件内添加<code>includeBuild(&quot;version_plugin&quot;)</code>，添加完毕以后可以Rebuild项目。</li>
+</ol>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">includeBuild</span><span class="hljs-params">(<span class="hljs-string">&#x27;version_plugin&#x27;</span>)</span></span><br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>在plugin-version module中创建VersionPlugin类，继承Plugin。这里可以空实现，也可以根据需求添加其他代码。</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">import</span> org.gradle.api.Plugin<br><span class="hljs-keyword">import</span> org.gradle.api.Project<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">VersionPlugin</span> : <span class="hljs-type">Plugin</span>&lt;<span class="hljs-type">Project</span>&gt; &#123;<br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">apply</span><span class="hljs-params">(target: <span class="hljs-type">Project</span>)</span></span> &#123;<br><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>5.在plugin-version module中创建<code>Deps.kt</code>文件用来管理依赖包和版本号，可以声明多个kt文件。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 配置和 build相关的</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">object</span> BuildVersion &#123;<br>    <span class="hljs-keyword">const</span> <span class="hljs-keyword">val</span> compileSdk = <span class="hljs-number">30</span><br>    <span class="hljs-keyword">const</span> <span class="hljs-keyword">val</span> buildTools = <span class="hljs-string">&quot;30.0.2&quot;</span><br>    <span class="hljs-keyword">const</span> <span class="hljs-keyword">val</span> minSdk = <span class="hljs-number">21</span><br>    <span class="hljs-keyword">const</span> <span class="hljs-keyword">val</span> targetSdk = <span class="hljs-number">30</span><br>    <span class="hljs-keyword">const</span> <span class="hljs-keyword">val</span> versionCode = <span class="hljs-number">1</span><br>    <span class="hljs-keyword">const</span> <span class="hljs-keyword">val</span> versionName = <span class="hljs-string">&quot;1.0.0&quot;</span><br>    <br>&#125;<br><br><span class="hljs-keyword">object</span> Versions &#123;<br>    <span class="hljs-keyword">val</span> core_ktx = <span class="hljs-string">&quot;1.7.0&quot;</span><br>    <span class="hljs-keyword">val</span> appcompat = <span class="hljs-string">&quot;1.4.1&quot;</span><br>    <span class="hljs-keyword">val</span> okhttp = <span class="hljs-string">&quot;4.10.0&quot;</span><br>&#125;<br><br><span class="hljs-keyword">object</span> Libs &#123;<br>    <span class="hljs-keyword">val</span> core_ktx = <span class="hljs-string">&quot;androidx.core:core-ktx:<span class="hljs-subst">$&#123;Versions.core_ktx&#125;</span>&quot;</span><br>    <span class="hljs-keyword">val</span> appcompat = <span class="hljs-string">&quot;androidx.appcompat:appcompat:<span class="hljs-subst">$&#123;Versions.appcompat&#125;</span>&quot;</span><br>    <span class="hljs-keyword">val</span> okhttp = <span class="hljs-string">&quot;com.squareup.okhttp3:okhttp:<span class="hljs-subst">$&#123;Versions.okhttp&#125;</span>&quot;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>在app或module的 build.gradle 中使用plugin-version中的依赖<br><strong>module_a&#x2F;build.gradle</strong></li>
+</ol>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs gradle">plugins &#123;<br>    id <span class="hljs-string">&#x27;com.android.application&#x27;</span><br>    id <span class="hljs-string">&#x27;org.jetbrains.kotlin.android&#x27;</span><br>    id <span class="hljs-string">&#x27;com.ileo.plugin.version&#x27;</span><br>    <span class="hljs-comment">//引用插件框架</span><br>    id <span class="hljs-string">&#x27;com.huke.plugin&#x27;</span><br>&#125;<br>/导入依赖包下的类<br><span class="hljs-keyword">import</span> com.huke.version.*<br>android &#123;<br>    compileSdk BuildVersion.compileSdk<br><br>    defaultConfig &#123;<br>        applicationId <span class="hljs-string">&quot;com.huke.composingbuildsdemo&quot;</span><br>        minSdk BuildVersion.minSdk<br>        targetSdk BuildVersion.targetSdk<br>        versionCode BuildVersion.versionCode<br>        versionName BuildVersion.versionName<br><br>        testInstrumentationRunner <span class="hljs-string">&quot;androidx.test.runner.AndroidJUnitRunner&quot;</span><br>    &#125;<br><br>    buildTypes &#123;<br>        release &#123;<br>            minifyEnabled <span class="hljs-keyword">false</span><br>            proguardFiles getDefaultProguardFile(<span class="hljs-string">&#x27;proguard-android-optimize.txt&#x27;</span>), <span class="hljs-string">&#x27;proguard-rules.pro&#x27;</span><br>        &#125;<br>    &#125;<br>    compileOptions &#123;<br>        <span class="hljs-keyword">sourceCompatibility</span> JavaVersion.VERSION_1_8<br>        <span class="hljs-keyword">targetCompatibility</span> JavaVersion.VERSION_1_8<br>    &#125;<br>    kotlinOptions &#123;<br>        jvmTarget = <span class="hljs-string">&#x27;1.8&#x27;</span><br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">dependencies</span> &#123;<br>    <span class="hljs-comment">//引用依赖</span><br>    implementation <span class="hljs-keyword">Dependencies</span>.core_ktx<br>    implementation <span class="hljs-keyword">Dependencies</span>.appcompat<br>    implementation <span class="hljs-keyword">Dependencies</span>.okhttp<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>module_b&#x2F;build.gradle</strong></p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs gradle">plugins &#123;<br>    id <span class="hljs-string">&#x27;com.android.application&#x27;</span><br>    id <span class="hljs-string">&#x27;org.jetbrains.kotlin.android&#x27;</span><br>    id <span class="hljs-string">&#x27;com.ileo.plugin.version&#x27;</span><br>    <span class="hljs-comment">//引用插件框架</span><br>    id <span class="hljs-string">&#x27;com.huke.plugin&#x27;</span><br>&#125;<br>/导入依赖包下的类<br><span class="hljs-keyword">import</span> com.huke.version.*<br>android &#123;<br>    compileSdk BuildVersion.compileSdk<br>    defaultConfig &#123;<br>        applicationId <span class="hljs-string">&quot;com.huke.composingbuildsdemo&quot;</span><br>        minSdk BuildVersion.minSdk<br>        targetSdk BuildVersion.targetSdk<br>        versionCode BuildVersion.versionCode<br>        versionName BuildVersion.versionName<br><br>        testInstrumentationRunner <span class="hljs-string">&quot;androidx.test.runner.AndroidJUnitRunner&quot;</span><br>    &#125;<br><br>    buildTypes &#123;<br>        release &#123;<br>            minifyEnabled <span class="hljs-keyword">false</span><br>            proguardFiles getDefaultProguardFile(<span class="hljs-string">&#x27;proguard-android-optimize.txt&#x27;</span>), <span class="hljs-string">&#x27;proguard-rules.pro&#x27;</span><br>        &#125;<br>    &#125;<br>    compileOptions &#123;<br>        <span class="hljs-keyword">sourceCompatibility</span> JavaVersion.VERSION_1_8<br>        <span class="hljs-keyword">targetCompatibility</span> JavaVersion.VERSION_1_8<br>    &#125;<br>    kotlinOptions &#123;<br>        jvmTarget = <span class="hljs-string">&#x27;1.8&#x27;</span><br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">dependencies</span> &#123;<br>    <span class="hljs-comment">//引用依赖</span><br>    implementation <span class="hljs-keyword">Dependencies</span>.core_ktx<br>    implementation <span class="hljs-keyword">Dependencies</span>.appcompat<br>    implementation <span class="hljs-keyword">Dependencies</span>.okhttp<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>tip 如果import com.huke.version.*无法导入可以先使用implementation添加依赖再进行import导包或者 使用com.huke.version.Dependencies.okhttp进行导入。</p>
+</blockquote>
+<h2 id="优点-3"><a href="#优点-3" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>支持依赖统一管理。</li>
+<li>支持单向跟踪。</li>
+<li>代码自动补全。</li>
+<li>依赖更新时，不会重新构建整个项目。</li>
+</ul>
+<h2 id="缺点-3"><a href="#缺点-3" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li>配置较为复杂。</li>
+<li>依赖版本更新不会提示。</li>
+</ul>
+<h1 id="六-总结"><a href="#六-总结" class="headerlink" title="六.总结"></a>六.总结</h1><p>直接编写(默认方式)这种方式适合单一module项目使用，并且它并不是一无是处，在远端的依赖版本更新时，它会有提示功能，这是其他几种方式目前无法做到的。使用gradle的extra属性这种方式是google之前推荐的一种方式，不过它并不支持点击跳转，如果要查看依赖的详情必须要进行搜索查看找到对应的源头进行查看。 使用buildSrc管理这种方式比较简单，支持跳转，但是要注意版本号变更以后编译时间比较长。使用Composing builds管理也支持跳转，但是配置稍复杂。目前看来这几种方案似乎都没有做到完美，大家可以根据自己的工程灵活选择其中一种方式使用。</p>
+<h1 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/chuyouyinghe/article/details/122500139">统一依赖管理Composing builds</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8bbd415ac55f">项目依赖统一管理方案</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/yubo_725/article/details/118895551">Android项目管理依赖方式总结</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/7037371592816459806">Android - 依赖统一管理</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904176250519565#heading-3">再见吧 buildSrc, 拥抱 Composing builds 提升 Android 编译速度</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_35691921/article/details/126381834">Composing builds</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/chuyouyinghe/article/details/122500139">统一依赖管理Composing builds</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Android项目Gadle统一依赖管理</div>
+      <div>http://example.com/2022/10/03/Android项目Gadle统一依赖管理/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年10月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/10/28/Android%E6%B2%89%E6%B5%B8%E5%BC%8F%E7%8A%B6%E6%80%81%E6%A0%8F%E5%AE%9E%E7%8E%B0%E6%80%BB%E7%BB%93/" title="Android沉浸式状态栏实现总结">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Android沉浸式状态栏实现总结</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/09/23/Android%E5%8D%B3%E6%97%B6%E9%80%9A%E8%AE%AFIm%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93/" title="Android即时通讯Im开发总结">
+                        <span class="hidden-mobile">Android即时通讯Im开发总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

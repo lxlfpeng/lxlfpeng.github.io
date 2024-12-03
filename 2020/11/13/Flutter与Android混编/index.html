@@ -1,0 +1,869 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.Flutter工程模式flutter有四种工程模式:application、plugin、package、module 1.Flutter Application： Flutter应用(1.)创建命令1flutter create xxapp (2.)目录结构1234567891011121314│  pubspec.lock│  pubspec.yaml│  README.md├─andro">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flutter与Android混编">
+<meta property="og:url" content="http://example.com/2020/11/13/Flutter%E4%B8%8EAndroid%E6%B7%B7%E7%BC%96/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.Flutter工程模式flutter有四种工程模式:application、plugin、package、module 1.Flutter Application： Flutter应用(1.)创建命令1flutter create xxapp (2.)目录结构1234567891011121314│  pubspec.lock│  pubspec.yaml│  README.md├─andro">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/e6b2d91cb53653c31113edf4be75aff1.webp">
+<meta property="og:image" content="http://example.com/images/6befc8db1857031a7ca81469b24e89a9.webp">
+<meta property="article:published_time" content="2020-11-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:32:47.723Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/e6b2d91cb53653c31113edf4be75aff1.webp">
+  
+  
+  
+  <title>Flutter与Android混编 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Flutter与Android混编"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-11-13 00:00" pubdate>
+          2020年11月13日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          50 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Flutter与Android混编</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-Flutter工程模式"><a href="#一-Flutter工程模式" class="headerlink" title="一.Flutter工程模式"></a>一.Flutter工程模式</h1><p>flutter有四种工程模式:<code>application、plugin、package、module</code></p>
+<h3 id="1-Flutter-Application：-Flutter应用"><a href="#1-Flutter-Application：-Flutter应用" class="headerlink" title="1.Flutter Application： Flutter应用"></a>1.Flutter Application： Flutter应用</h3><h5 id="1-创建命令"><a href="#1-创建命令" class="headerlink" title="(1.)创建命令"></a>(1.)创建命令</h5><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">flutter create xxapp</span><br></code></pre></td></tr></table></figure>
+<h5 id="2-目录结构"><a href="#2-目录结构" class="headerlink" title="(2.)目录结构"></a>(2.)目录结构</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs stylus">│  pubspec<span class="hljs-selector-class">.lock</span><br>│  pubspec<span class="hljs-selector-class">.yaml</span><br>│  README<span class="hljs-selector-class">.md</span><br>├─android<br>│<br>├─ios<br>│<br>├─lib<br>│      <span class="hljs-selector-tag">main</span><span class="hljs-selector-class">.dart</span><br>│<br>├─test<br>│      widget_test<span class="hljs-selector-class">.dart</span><br>│<br>└─web<br></code></pre></td></tr></table></figure>
+<ul>
+<li>android：Android原生代码目录。</li>
+<li>ios：iOS原生代码目录。</li>
+<li>lib：这个是Flutter项目的核心目录，写的Flutter代码放在这个目录，也可以在这个目录创建子目录。</li>
+<li>test：测试代码目录。</li>
+<li>pubspec.yaml：这个是Flutter项目的依赖配置文件，类似于Android build.gradle文件，这里面包含了Flutter SDK 版本、依赖等。</li>
+</ul>
+<h5 id="3-说明"><a href="#3-说明" class="headerlink" title="(3.)说明"></a>(3.)说明</h5><p>Flutter Application是一个标准的Flutter App项目工程，包含标准的Dart层与Native平台层代码，项目主体是Flutter， 其内部包含 Android 和 iOS、 Web 项目。</p>
+<h3 id="2-Flutter-Plugin：Flutter插件"><a href="#2-Flutter-Plugin：Flutter插件" class="headerlink" title="2.Flutter Plugin：Flutter插件"></a>2.Flutter Plugin：Flutter插件</h3><h5 id="1-创建命令-1"><a href="#1-创建命令-1" class="headerlink" title="(1.)创建命令"></a>(1.)创建命令</h5><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">flutter <span class="hljs-built_in">create</span> <span class="hljs-comment">--template=plugin xxapp_plugin</span><br></code></pre></td></tr></table></figure>
+<h5 id="2-目录结构-1"><a href="#2-目录结构-1" class="headerlink" title="(2.)目录结构"></a>(2.)目录结构</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs stylus">│  pubspec<span class="hljs-selector-class">.lock</span><br>│  pubspec<span class="hljs-selector-class">.yaml</span><br>│  README<span class="hljs-selector-class">.md</span><br>│<br>├─example<br>│  │<br>│  ├─lib<br>│  │      <span class="hljs-selector-tag">main</span><span class="hljs-selector-class">.dart</span><br>│  │<br>│  └─test<br>│          widget_test<span class="hljs-selector-class">.dart</span><br>│<br>├─lib<br>│      flutter_application_1<span class="hljs-selector-class">.dart</span><br>│<br>└─test<br>        flutter_application_1_test.dart<br></code></pre></td></tr></table></figure>
+<h5 id="3-说明-1"><a href="#3-说明-1" class="headerlink" title="(3.)说明"></a>(3.)说明</h5><p>FlutterPlugin是Flutter 插件，包含Dart层与Native平台层的实现。Flutter Plugin提供Android或者iOS的底层封装，在Flutter层提供组件功能， 使Flutter可以方便的调取Native的模块。如果要开发一个 Plugin 且此 Plugin 涉及到原生支持，比如蓝牙功能、网络功能等，这些功能纯 Flutter 是无法实现得。 很多平台相关性或者对于Flutter实现起来比较复杂的部分，也都可以封装成Plugin。</p>
+<h3 id="3-Flutter-Package：纯Dart组件"><a href="#3-Flutter-Package：纯Dart组件" class="headerlink" title="3.Flutter Package：纯Dart组件"></a>3.Flutter Package：纯Dart组件</h3><h5 id="1-创建命令-2"><a href="#1-创建命令-2" class="headerlink" title="(1.)创建命令"></a>(1.)创建命令</h5><figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs d">flutter create --<span class="hljs-keyword">template</span>=<span class="hljs-keyword">package</span> xxapp_package<br></code></pre></td></tr></table></figure>
+<h5 id="2-目录结构-2"><a href="#2-目录结构-2" class="headerlink" title="(2.)目录结构"></a>(2.)目录结构</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs stylus">│  pubspec<span class="hljs-selector-class">.lock</span><br>│  pubspec<span class="hljs-selector-class">.yaml</span><br>│  README<span class="hljs-selector-class">.md</span><br>├─lib<br>│      flutter_application_1<span class="hljs-selector-class">.dart</span><br>│<br>└─test<br>        flutter_application_1_test.dart<br></code></pre></td></tr></table></figure>
+<h5 id="3-说明-2"><a href="#3-说明-2" class="headerlink" title="(3.)说明"></a>(3.)说明</h5><p>Flutter Package是纯 Flutter 模块，不需要原生开发，没有Android 和 iOS 项目，仅包含Dart层的实现，往往定义一些公共Widget。</p>
+<h3 id="4-Flutter-Module-Flutter模块"><a href="#4-Flutter-Module-Flutter模块" class="headerlink" title="4.Flutter Module :Flutter模块"></a>4.Flutter Module :Flutter模块</h3><h5 id="1-创建命令-3"><a href="#1-创建命令-3" class="headerlink" title="(1.)创建命令"></a>(1.)创建命令</h5><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">flutter create --<span class="hljs-keyword">template</span> <span class="hljs-keyword">module</span> my_flutter<br></code></pre></td></tr></table></figure>
+<h5 id="2-目录结构-3"><a href="#2-目录结构-3" class="headerlink" title="(2.)目录结构"></a>(2.)目录结构</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs stylus">│  pubspec<span class="hljs-selector-class">.lock</span><br>│  pubspec<span class="hljs-selector-class">.yaml</span><br>│  README<span class="hljs-selector-class">.md</span><br>│<br>├─<span class="hljs-selector-class">.android</span><br>│<br>├─<span class="hljs-selector-class">.ios</span><br>│<br>├─lib<br>│      <span class="hljs-selector-tag">main</span><span class="hljs-selector-class">.dart</span><br>│<br>└─test<br>        widget_test.dart<br></code></pre></td></tr></table></figure>
+<p>.android 文件夹包含一个 Android 项目，该项目不仅可以帮助你通过 flutter run 运行这个 Flutter 模块的独立应用，而且还可以作为封装程序来帮助引导 Flutter 模块作为可嵌入的 Android 库。<br>通过查看app的build.gradle文件可以知道是将Flutter变成moudle的形式依赖到Android项目中的:</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs gradle">...<br>buildDir = <span class="hljs-keyword">new</span> <span class="hljs-keyword">File</span>(rootProject.projectDir, <span class="hljs-string">&quot;../build/host&quot;</span>)<br><span class="hljs-keyword">dependencies</span> &#123;<br>    implementation <span class="hljs-keyword">project</span>(<span class="hljs-string">&#x27;:flutter&#x27;</span>)<br>    implementation <span class="hljs-keyword">fileTree</span>(dir: <span class="hljs-string">&#x27;libs&#x27;</span>, <span class="hljs-keyword">include</span>: [<span class="hljs-string">&#x27;*.jar&#x27;</span>])<br>...<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+
+<blockquote>
+<p>这种集成方式虽然比较方便， 但是在多人协作的app中， 尤其是对非flutter开发的同学来说， 是强依赖本地安装flutter环境的， 所以也是有缺点的。</p>
+</blockquote>
+<h1 id="二-Flutter和Native工程混编方案"><a href="#二-Flutter和Native工程混编方案" class="headerlink" title="二.Flutter和Native工程混编方案"></a>二.Flutter和Native工程混编方案</h1><h3 id="1-混编方案"><a href="#1-混编方案" class="headerlink" title="1.混编方案"></a>1.混编方案</h3><p>一般来说混编方案有以下两种：</p>
+<h5 id="1-统一管理方案-不推荐"><a href="#1-统一管理方案-不推荐" class="headerlink" title="(1.)统一管理方案(不推荐)"></a>(1.)统一管理方案(不推荐)</h5><p><img src="/images/e6b2d91cb53653c31113edf4be75aff1.webp" srcset="/img/loading.gif" lazyload alt="image.png"><br>也就是Flutter Application创建工程的方案，目的是将iOS工程和Android工程作为Flutter工程的子工程，由Flutter统一管理。<br><strong>优点:</strong></p>
+<ul>
+<li>代码集中，可以很方便的进行项目开发，每个开发都可以进行iOS、Android和Flutter的工程开发。</li>
+</ul>
+<p><strong>缺点:</strong></p>
+<ul>
+<li>对原有项目的侵入性太大，项目对外部环境的依赖程度增加。</li>
+<li>每个开发人员本地都要装有自己端的开发环境（iOS&#x2F;Android）和Flutter的开发环境，并且Flutter SDK版本要保持一致。</li>
+<li>耦合度会越来越高。当项目越来越复杂后，整个项目的代码耦合度会越来越高，相关工具链耗时也会越来越长，导致开发效率降低。</li>
+</ul>
+<h5 id="2-各端分离方案-推荐"><a href="#2-各端分离方案-推荐" class="headerlink" title="(2.)各端分离方案(推荐)"></a>(2.)各端分离方案(推荐)</h5><p><img src="/images/6befc8db1857031a7ca81469b24e89a9.webp" srcset="/img/loading.gif" lazyload alt="image.png"><br>各端分离方案是iOS、Android和Flutter分别作为三个独立项目存在，将Flutter工程的编译产物作为iOS工程和Android工程的依赖模块，原有工程的管理模式不变，对原生工程没有侵入性，无需额外配置工作。 这种方案需要单独创建Flutter项目，然后通过iOS（CocoaPods）和安卓的依赖管理工具将Flutter项目build出来的framework、资源包等放入Native工程以供使用。 这种方式可以将iOS、Android和Flutter项目放在一个目录下面作为一个项目来管理，也可以不在同一目录下，关键是设置Flutter模块依赖时相对路径一定要设置正确。</p>
+<blockquote>
+<p>通过Flutter Module创建工程的方案就可以完成这种混编。</p>
+</blockquote>
+<h3 id="2-混编方案总结"><a href="#2-混编方案总结" class="headerlink" title="2.混编方案总结"></a>2.混编方案总结</h3><p><strong>官方也比较推荐各端分离方案这种混合开发解决方案，并且推出了Flutter Module工程方便，可将flutter作为module让原生native工程直接依赖。</strong></p>
+<h1 id="三-Android项目引入Flutter模块"><a href="#三-Android项目引入Flutter模块" class="headerlink" title="三.Android项目引入Flutter模块"></a>三.Android项目引入Flutter模块</h1><p>在上文中得出Flutter和Native工程混编采用各端分离方案比较合理，下面来研究一下如果将Flutter作用一个单独的模块如何引入Android项目工程。<br>Flutter 可以作为 Gradle 子项目源码或者 AAR 嵌入到现有的 Android 应用程序中。因此Android 原生项目中接入Flutter项目一般有两种方式:</p>
+<ul>
+<li>将 Flutter 打包成 AAR 包，然后在现有项目引入。</li>
+<li>将 Flutter 源码视为 Gradle Module 引入现有项目。<blockquote>
+<p>目前现有的 Android 项目可能支持 mips 或 x86 之类的架构，然而，Flutter 当前仅支持 为 x86_64，armeabi-v7a 和 arm64-v8a 构建预编（AOT）的库。 可以考虑使用 abiFilters 这个 Android Gradle 插件 API 来指定 APK 中支持的架构，从而避免 libflutter.so 无法生成而导致应用运行时崩溃</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="四-通过AAR的方式引入Flutter"><a href="#四-通过AAR的方式引入Flutter" class="headerlink" title="四.通过AAR的方式引入Flutter"></a>四.通过AAR的方式引入Flutter</h1><h3 id="1-创建Flutter-module工程"><a href="#1-创建Flutter-module工程" class="headerlink" title="1.创建Flutter module工程"></a>1.创建Flutter module工程</h3><p>这种方式需要配置好Flutter的开发环境. 有两种方式:</p>
+<ul>
+<li>通过命令行生成Flutter module</li>
+<li>可以通过Android Studio或者Vscode安装对应的插件创建工程。</li>
+</ul>
+<h5 id="1-命令行生成Flutter-module集成项目"><a href="#1-命令行生成Flutter-module集成项目" class="headerlink" title="(1.)命令行生成Flutter module集成项目"></a>(1.)命令行生成Flutter module集成项目</h5><p>在Android工程中集成flutter，要保证 将要使用的Flutter Module工程与原生Android工程 在同一根目录下 ， Terminal进入到项目根目录， 执行以下命令:</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs lua">flutter <span class="hljs-built_in">create</span> -t <span class="hljs-built_in">module</span> <span class="hljs-comment">--org &#123;package_name&#125; &#123;module_name&#125;</span><br>// 此处 module_name 的命令遵循 Android 子 <span class="hljs-built_in">module</span> 的命名即可。不能有中划线。比如，:<br>flutter <span class="hljs-built_in">create</span> -t <span class="hljs-built_in">module</span> <span class="hljs-comment">--org com.emple.demo.flutter flutter_module</span><br></code></pre></td></tr></table></figure>
+<p>执行完成后会在Android的同一级目录下生成一个新的 flutter_module文件夹。这里在项目根目录创建子 module 只是为了把代码放在一个仓库，方便维护，理论上可以放在硬盘的任何位置。</p>
+<h5 id="2-通过Android-studio创建Flutter-module"><a href="#2-通过Android-studio创建Flutter-module" class="headerlink" title="(2.)通过Android studio创建Flutter module"></a>(2.)通过Android studio创建Flutter module</h5><ol>
+<li>通过Android studio创建module</li>
+<li>new-&gt;new module择flutter module</li>
+<li>根据提示指定创建路径后，指定目录就可以看见刚刚创建的module</li>
+</ol>
+<p>Flutter module模块项目，其中包含一些 Dart 代码来帮助你入门以及一个隐藏的子文件夹 .android&#x2F;。 .android 文件夹包含一个 Android 项目，该项目不仅可以帮助你通过 flutter run 运行这个 Flutter 模块的独立应用，而且还可以作为封装程序来帮助引导 Flutter 模块作为可嵌入的 Android 库。 注意:</p>
+<ul>
+<li>将自己的 Android 代码添加到现有应用程序的项目或插件中，而不是添加到 .android&#x2F; 中的模块。在模块的 .android&#x2F; 目录中所做的任何更改并不会显示在使用该模块的现有 Android 项目中。</li>
+<li>由于 .android&#x2F; 目录是自动生成的，因此不需要对它的代码进行版本控制，在新机器上构建模块之前，可以先在 my_flutter 目录中运行 flutter pub get 来重新生成 .android&#x2F; 目录，然后再使用 Flutter 模块构建 Android 项目。</li>
+</ul>
+<h3 id="2-编译打包AAR"><a href="#2-编译打包AAR" class="headerlink" title="2.编译打包AAR"></a>2.编译打包AAR</h3><p>可以将Flutter模块打成Android AAR 作为依赖媒介引入到Android应用程序中，这样Android应用开发不用安装Flutter SDK也可以.缺点是如果Flutter需要经常修改就需要每次都需要重新编译一次打包AAR进行引入。这种方式会将 Flutter 库打包成由 AAR 和 POM artifacts 组成的本地 Maven 存储库。这种方案可以使你的团队不需要安装 Flutter SDK 即可编译宿主应用。之后，也可以从本地或远程存储库中分发更新AAR。<br>假设你在 some&#x2F;path&#x2F;my_flutter 下构建 Flutter 模块，执行如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">content_copy<br><span class="hljs-built_in">cd</span> some/path/my_flutter<br>flutter build aar<br></code></pre></td></tr></table></figure>
+<p>执行打包命令<code>flutter build aar</code>，这个打包AAR方式会包含多种abi，如果想要指定abi可以使用 <code>flutter build aar --target-platform xxx</code>平台。<br>执行成功以后会输出以下信息。也就是说build以后会生成本地的maven仓库，仓库位于build-&gt;host-&gt;outputs-&gt;repo内，将这个仓库配置到需要混编的Android项目的gradle就可以完成混编。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs routeros">1. Open &lt;host&gt;\app\build.gradle<br>2. Ensure you have the repositories configured, otherwise <span class="hljs-built_in">add</span> them:<br><br>    String storageUrl = System.env.FLUTTER_STORAGE_BASE_URL ?: <span class="hljs-string">&quot;https://storage.googleapis.com&quot;</span><br>    repositories &#123;<br>      maven &#123;<br>          url <span class="hljs-string">&#x27;C:\Users\WIN10\Desktop\fluttermodel\flutter_module2\build\host\outputs\repo&#x27;</span><br>      &#125;<br>      maven &#123;<br>          url <span class="hljs-string">&quot;<span class="hljs-variable">$storageUrl</span>/download.flutter.io&quot;</span><br>      &#125;<br>    &#125;<br>3. Make the host app depend on the Flutter module:<br><br>  dependencies &#123;<br>    debugImplementation <span class="hljs-string">&#x27;cn.tqxd.flutter_module2:flutter_debug:1.0&#x27;</span><br>    profileImplementation <span class="hljs-string">&#x27;cn.tqxd.flutter_module2:flutter_profile:1.0&#x27;</span><br>    releaseImplementation <span class="hljs-string">&#x27;cn.tqxd.flutter_module2:flutter_release:1.0&#x27;</span><br>  &#125;<br>4. <span class="hljs-built_in">Add</span> the `profile` build type:<br><br>  android &#123;<br>    buildTypes &#123;<br>     <span class="hljs-built_in"> profile </span>&#123;<br>        initWith <span class="hljs-built_in">debug</span><br>      &#125;<br>    &#125;<br>  &#125;<br></code></pre></td></tr></table></figure>
+<p><code>flutter build aar</code>该命令主要用于创建（默认情况下创建 debug&#x2F;profile&#x2F;release 所有模式）本地存储库，主要包含以下文件:<br>build&#x2F;host&#x2F;outputs&#x2F;repo<br>└── com<br>└── example<br>└── my_flutter<br>├── flutter_release<br>│   ├── 1.0<br>│   │   ├── flutter_release-1.0.aar<br>│   │   ├── flutter_release-1.0.aar.md5<br>│   │   ├── flutter_release-1.0.aar.sha1<br>│   │   ├── flutter_release-1.0.pom<br>│   │   ├── flutter_release-1.0.pom.md5<br>│   │   └── flutter_release-1.0.pom.sha1<br>│   ├── maven-metadata.xml<br>│   ├── maven-metadata.xml.md5<br>│   └── maven-metadata.xml.sha1<br>├── flutter_profile<br>│   ├── …<br>└── flutter_debug<br>└── …</p>
+<h3 id="3-Android工程引入AAR"><a href="#3-Android工程引入AAR" class="headerlink" title="3.Android工程引入AAR"></a>3.Android工程引入AAR</h3><p>可以发现，使用上面的命令编译的AAR包主要分为debug、profile和release三个版本，使用哪个版本的AAR需要根据原生的环境进行选择。找到AAR包，然后再Android宿主应用程序中修改 app&#x2F;build.gradle 文件， 使其包含本地存储库和上述依赖项。</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs gradle">android &#123;<br>  <span class="hljs-comment">// ...</span><br>&#125;<br><br><span class="hljs-keyword">repositories</span> &#123;<br>  maven &#123;<br>    url <span class="hljs-string">&#x27;some/path/my_flutter/build/host/outputs/repo&#x27;</span><br>    <span class="hljs-comment">// This is relative to the location of the build.gradle file</span><br>    <span class="hljs-comment">// if using a relative path.</span><br>  &#125;<br>  maven &#123;<br>    url <span class="hljs-string">&#x27;https://storage.googleapis.com/download.flutter.io&#x27;</span><br>  &#125;<br>&#125;<br><br><span class="hljs-keyword">dependencies</span> &#123;<br>  <span class="hljs-comment">// ...</span><br>  debugImplementation <span class="hljs-string">&#x27;com.example.flutter_module:flutter_debug:1.0&#x27;</span><br>  profileImplementation <span class="hljs-string">&#x27;com.example.flutter_module:flutter_profile:1.0&#x27;</span><br>  releaseImplementation <span class="hljs-string">&#x27;com.example.flutter_module:flutter_release:1.0&#x27;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>注意，不要将编译好的aar直接copy到项目中去，必须要通过maven坐标依赖才能将完整的Flutter模块引入。</p>
+</blockquote>
+<p>如果需要打不同版本的AAR在构建命令后面加上<code> --build-number [版本号]</code>；<br>例如:</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql">flutter <span class="hljs-keyword">build</span> aar --<span class="hljs-keyword">build</span>-<span class="hljs-keyword">number</span> <span class="hljs-number">1.1</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-AAR上传Maven仓库"><a href="#4-AAR上传Maven仓库" class="headerlink" title="4.AAR上传Maven仓库"></a>4.AAR上传Maven仓库</h3><p>如果团队开发时，这种本地Maven仓库引用aar的方式就不方便了，毕竟本地仓库路径都不一样。可以先分析通过flutter build aar是如何生成本地的maven仓库的:<br>&#x2F;&#x2F;执行-v命令，查看命令输出信息</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">flutter build aar -v</span><br></code></pre></td></tr></table></figure>
+<p>可以发现，整个flutter build aar命令中，其实就执行了这三个Gradle任务<code>assembleAarDebug、assembleAarProfile、assembleAarRelease</code>而这三个任务都执行了<code>flutter\packages\flutter_tools\gradle\aar_init_script.gradle</code>这个gradle脚本。<br>查看aar_init_script.gradle文件:</p>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs fsharp"><span class="hljs-comment">// This script is used to initialize the build in a module or plugin project.</span><br><span class="hljs-comment">// During this phase, the script applies the Maven plugin and configures the</span><br><span class="hljs-comment">// destination of the local repository.</span><br><span class="hljs-comment">// The local repository will contain the AAR and POM files.</span><br><span class="hljs-comment">// 此脚本用于在模块或插件项目中初始化构建。</span><br><span class="hljs-comment">// 在此阶段，脚本应用 Maven 插件并配置</span><br><span class="hljs-comment">// 本地存储库的目的地。</span><br><span class="hljs-comment">// 本地存储库将包含 AAR 和 POM 文件。</span><br><br><span class="hljs-comment">//配置了本地maven仓库的地址</span><br> project.<span class="hljs-keyword">uploadArchives</span> &#123;<br>        <span class="hljs-keyword">repositories</span> &#123;<br>            <span class="hljs-keyword">mavenDeployer</span> &#123;<br>              repository(url<span class="hljs-operator">:</span><span class="hljs-string">&quot;file://$&#123;outputDir&#125;/outputs/repo&quot;</span>)<br>            &#125;<br>        &#125;<br>    &#125;<br><br></code></pre></td></tr></table></figure>
+<p>它在指定的目录下，<code>生成了一个maven本地仓库，并将aar上传到了这里</code>。 因此如果需要将aar上传到自己的私有maven仓库中，只需要把repository中的地址改成自己的maven私服地址即可。<br>例如</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs stylus">...<br><br><span class="hljs-function"><span class="hljs-title">repository</span><span class="hljs-params">(url: <span class="hljs-string">&quot;http://172.17.0.172:8081/repository/maven-releases/&quot;</span>)</span></span> &#123;<br>    <span class="hljs-built_in">authentication</span>(userName: <span class="hljs-string">&quot;xxx&quot;</span>, password: <span class="hljs-string">&quot;xxx&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>也可以通过shell脚本来实现动态的修改:</p>
+</blockquote>
+<h3 id="5-AAR的方式的优缺点"><a href="#5-AAR的方式的优缺点" class="headerlink" title="5.AAR的方式的优缺点"></a>5.AAR的方式的优缺点</h3><p><strong>优点：</strong></p>
+<ul>
+<li>不开发flutter的同学无需安装环境与工程，方便分离开发。</li>
+<li>更有利于组件化开展。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>调试包与正式包都需要单独编译，测试较为麻烦。</li>
+<li>上线前需要主动更新版本号。</li>
+</ul>
+<h1 id="五-依赖模块的源码引入Flutter"><a href="#五-依赖模块的源码引入Flutter" class="headerlink" title="五.依赖模块的源码引入Flutter"></a>五.依赖模块的源码引入Flutter</h1><h3 id="1-创建Flutter-module工程-1"><a href="#1-创建Flutter-module工程-1" class="headerlink" title="1.创建Flutter module工程"></a>1.创建Flutter module工程</h3><p>和上文中一致，参考上文。</p>
+<h3 id="2-settings-gradle配置"><a href="#2-settings-gradle配置" class="headerlink" title="2.settings.gradle配置"></a>2.settings.gradle配置</h3><p>在settings.gradle里面配置如下代码:<br>&#x2F;&#x2F; 加入下面配置</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">setBinding</span><span class="hljs-params">(new Binding([gradle: this])</span></span>)<br><span class="hljs-built_in">evaluate</span>(new <span class="hljs-built_in">File</span>(<br>        settingsDir<span class="hljs-selector-class">.parentFile</span>,<br>        rootProject<span class="hljs-selector-class">.name</span> + <span class="hljs-string">&#x27;/flutter_module/.android/include_flutter.groovy&#x27;</span><br>))<br>include <span class="hljs-string">&#x27;:flutter_module&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>如果主module名称不是app，而是改成了其他的名称:，则还需要在project级别的gradle.properties中添加如下代码:</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">flutter.hostAppProjectName</span> = app_module_name <br></code></pre></td></tr></table></figure>
+
+<h3 id="3-依赖flutter模块"><a href="#3-依赖flutter模块" class="headerlink" title="3.依赖flutter模块"></a>3.依赖flutter模块</h3><p>在app主模块的build.gradle的dependencies中加入依赖库</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs isbl"><span class="hljs-variable">implementation</span> <span class="hljs-function"><span class="hljs-title">project</span>(<span class="hljs-string">&#x27;:flutter&#x27;</span>)</span><br></code></pre></td></tr></table></figure>
+<p>现在的原生项目就包含 Flutter SDK 的所有依赖了。 Flutter UI 相关的内容，还是用 dart 在 main.dart 中写， 然后可以把这个 dart 渲染出来的内容按照 Activity 、Fragment 或 View 的形式添加到已有的项目中了。</p>
+<h3 id="4-Flutter-Module方式的优缺点"><a href="#4-Flutter-Module方式的优缺点" class="headerlink" title="4.Flutter Module方式的优缺点"></a>4.Flutter Module方式的优缺点</h3><p><strong>优点</strong><br>方便快捷，所见即所得，不用频繁发布。</p>
+<p><strong>缺点</strong></p>
+<ul>
+<li>需要Android开发者配置flutter环境，且会增加构建时间。</li>
+<li>Android Studio 项目结构上会出现很多flutter依赖的模块，使项目视图变得杂乱。 </li>
+<li>需要团队每个人都要安装flutter 环境，下载sdk等，否则无法编译项目。</li>
+</ul>
+<h1 id="六-Android启动Flutter页面"><a href="#六-Android启动Flutter页面" class="headerlink" title="六.Android启动Flutter页面"></a>六.Android启动Flutter页面</h1><h3 id="1-Android启动Flutter页面"><a href="#1-Android启动Flutter页面" class="headerlink" title="1.Android启动Flutter页面"></a>1.Android启动Flutter页面</h3><p>有两种方式:</p>
+<ul>
+<li>直接启动一个FlutterActivity</li>
+<li>启动复写后的FlutterActivity（推荐）</li>
+</ul>
+<h5 id="1-直接启动一个FlutterActivity"><a href="#1-直接启动一个FlutterActivity" class="headerlink" title="(1.)直接启动一个FlutterActivity"></a>(1.)直接启动一个FlutterActivity</h5><p>&#x2F;&#x2F;在清单配置文件中注册activity</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;activity<br>   android:<span class="hljs-attribute">name</span>=<span class="hljs-string">&quot;io.flutter.embedding.android.FlutterActivity&quot;</span><br>   android:<span class="hljs-attribute">configChanges</span>=<span class="hljs-string">&quot;orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode&quot;</span><br>   android:<span class="hljs-attribute">hardwareAccelerated</span>=<span class="hljs-string">&quot;true&quot;</span><br>   android:<span class="hljs-attribute">windowSoftInputMode</span>=<span class="hljs-string">&quot;adjustResize&quot;</span><br>   /&gt;<br></code></pre></td></tr></table></figure>
+<p>&#x2F;&#x2F;跳转到flutter页面</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs lisp">startActivity(<br>    <span class="hljs-name">FlutterActivity</span><br>        .withNewEngine() <br>        //.initialRoute(<span class="hljs-string">&quot;/my_route&quot;</span>)<br>        .build(<span class="hljs-name">MainActivity</span>.this)<br>)<span class="hljs-comment">;</span><br> <br></code></pre></td></tr></table></figure>
+<h5 id="2-启动复写后的FlutterActivity（推荐）"><a href="#2-启动复写后的FlutterActivity（推荐）" class="headerlink" title="(2.)启动复写后的FlutterActivity（推荐）"></a>(2.)启动复写后的FlutterActivity（推荐）</h5><p>自己创建一个FlutterAppActivity继承自FlutterActivity.</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs scala">public <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MainActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">FlutterActivity</span> </span>&#123;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="3-两种启动方式的区别"><a href="#3-两种启动方式的区别" class="headerlink" title="(3.)两种启动方式的区别"></a>(3.)两种启动方式的区别</h5><p>如果单纯只是想打开一个Flutter页面，两种方式实际上基本没有太大区别，第一种方式也许还会更简单一点。 但是，在Flutter开发中，往往还需要开发一些Native插件供Flutter调用，如果使用复写FlutterActivity的方式更有利于在FlutterActivity中注册的Native插件， 所以实际开发中一般推荐使用第二种方式.</p>
+<h3 id="2-Android跳转到Flutter指定页面"><a href="#2-Android跳转到Flutter指定页面" class="headerlink" title="2.Android跳转到Flutter指定页面"></a>2.Android跳转到Flutter指定页面</h3><p>上文中的跳转是假定 Dart 代码入口是调用 main()，并且Flutter 初始路由是 ‘&#x2F;’。 Dart 代码入口不能通过 Intent 改变，但是初始路由可以通过 Intent 来修改。Android跳转到Flutter指定页面是通过路由来跳转的,需要先声明路由;<br>在Flutter项目工程的MeterialApp下声明路由;并创建ImagePage()和TextPage()页面:</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs coffeescript">MaterialApp(<br>      theme: ThemeData(<br>      ),<br>      home: MyHomePage(),<br>      routes: &lt;<span class="hljs-built_in">String</span>,WidgetBuilder&gt;&#123;<br>        <span class="hljs-string">&quot;one_page&quot;</span> : <span class="hljs-function"><span class="hljs-params">(context)</span> =&gt;</span> OnePage(),<br>        <span class="hljs-string">&quot;two_page&quot;</span> : <span class="hljs-function"><span class="hljs-params">(context)</span> =&gt;</span> TwoPage(),<br>      &#125;,<br>    );<br></code></pre></td></tr></table></figure>
+<p>Android部分通过指定路由跳转:</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 进入Flutter页面 通过路由来指定页面</span><br><span class="hljs-comment"> */</span><br><span class="hljs-built_in">startActivity</span>(FlutterActivity.<br>        withNewEngine().<br>        <span class="hljs-built_in">initialRoute</span>(&quot;two_page&quot;).<span class="hljs-comment">//跳转到two_page页面</span><br>        <span class="hljs-built_in">build</span>(MainActivity.this));<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-缓存FlutterEngine（可选）"><a href="#3-缓存FlutterEngine（可选）" class="headerlink" title="3.缓存FlutterEngine（可选）"></a>3.缓存FlutterEngine（可选）</h3><p>默认情况下，每一个FlutterActivity都会创建自己的FlutterEngine对象，每一个FlutterEngine都需要加载耗时，也就是说打开每一个标准的FlutterActivity时都会有一个延迟。 为了减少这个延迟，可以在打开FlutterActivity前预加载FlutterEngine，需要使用的时候直接使用预加载好的FlutterEngine。<br>需要找一个合适的地方来预加载FlutterEngine，下面的示例在Application代码中进行预加载：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs scala">public <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyApplication</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Application</span> </span>&#123;<br>  <span class="hljs-meta">@Override</span><br>  public void onCreate() &#123;<br>    <span class="hljs-keyword">super</span>.onCreate();<br>    <span class="hljs-comment">// Instantiate a FlutterEngine.</span><br>    flutterEngine = <span class="hljs-keyword">new</span> <span class="hljs-type">FlutterEngine</span>(<span class="hljs-keyword">this</span>);<br><br>    <span class="hljs-comment">// Start executing Dart code to pre-warm the FlutterEngine.</span><br>    flutterEngine.getDartExecutor().executeDartEntrypoint(<br>      <span class="hljs-type">DartEntrypoint</span>.createDefault()<br>    );<br><br>    <span class="hljs-comment">// Cache the FlutterEngine to be used by FlutterActivity.</span><br>    <span class="hljs-type">FlutterEngineCache</span><br>      .getInstance()<br>      .put(<span class="hljs-string">&quot;my_engine_id&quot;</span>, flutterEngine);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>传递给FlutterEngineCache的id可以是任意值，只要确保和在FlutterActivity和FlutterFragment中取出FlutterEngine时使用的一致即可。要使用预热且缓存的 FlutterEngine 时，让你的 FlutterActivity 从缓存中获取 FlutterEngine，而不是创建一个新的。可以使用 FlutterActivity 的 withCachedEngine() 方法来实现：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs typescript">myButton.<span class="hljs-title function_">addOnClickListener</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">OnClickListener</span>() &#123;<br>  <span class="hljs-meta">@Override</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">onClick</span>(<span class="hljs-params"><span class="hljs-title class_">View</span> v</span>) &#123;<br>    <span class="hljs-title function_">startActivity</span>(<br>      <span class="hljs-title class_">FlutterActivity</span><br>        .<span class="hljs-title function_">withCachedEngine</span>(<span class="hljs-string">&quot;my_engine_id&quot;</span>)<br>        .<span class="hljs-title function_">build</span>(currentActivity)<br>      );<br>  &#125;<br>&#125;);<br></code></pre></td></tr></table></figure>
+<p>当使用withCachedEngine方法时，注意id要和预加载FlutterEngine时保持一致。现在再打开FlutterActivity时，延迟问题就好很多了。</p>
+<blockquote>
+<p>当使用一个缓存的 FlutterEngine 时， FlutterEngine 会比展示它的 FlutterActivity 或 FlutterFragment 存活得更久。切记，Dart 代码会在你预热 FlutterEngine 时就开始执行，并且在你的 FlutterActivity 或 FlutterFragment 销毁后继续运行。要停止代码运行和清理相关资源，可以从 FlutterEngineCache 中获取你的 FlutterEngine，然后使用 FlutterEngine.destroy() 来销毁 FlutterEngine。</p>
+</blockquote>
+<h1 id="七-通过FlutterFragment添加Flutter界面"><a href="#七-通过FlutterFragment添加Flutter界面" class="headerlink" title="七.通过FlutterFragment添加Flutter界面"></a>七.通过FlutterFragment添加Flutter界面</h1><h3 id="1-FlutterFragment启动Flutter页面"><a href="#1-FlutterFragment启动Flutter页面" class="headerlink" title="1.FlutterFragment启动Flutter页面"></a>1.FlutterFragment启动Flutter页面</h3><figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-type">MainActivity</span> : <span class="hljs-type">AppCompatActivity</span>() &#123;</span><br><span class="hljs-class"></span><br><span class="hljs-class">    override fun onCreate(<span class="hljs-title">savedInstanceState</span>: <span class="hljs-type">Bundle</span>?) &#123;</span><br><span class="hljs-class">        super.onCreate(<span class="hljs-title">savedInstanceState</span>)</span><br><span class="hljs-class">        setContentView(<span class="hljs-type">R</span>.<span class="hljs-title">layout</span>.<span class="hljs-title">activity_main</span>)</span><br><span class="hljs-class"></span><br><span class="hljs-class">        //val flutterFragment =fragmentManager.findFragmentByTag(<span class="hljs-type">TAG_FLUTTER_FRAGMENT</span>) as <span class="hljs-type">FlutterFragment</span>;</span><br><span class="hljs-class">        val flutterFragment = <span class="hljs-type">FlutterFragment</span>.createDefault()</span><br><span class="hljs-class">        supportFragmentManager</span><br><span class="hljs-class">            .beginTransaction()</span><br><span class="hljs-class">            .add(<span class="hljs-type">R</span>.<span class="hljs-title">id</span>.<span class="hljs-title">fragment_container</span>, <span class="hljs-title">flutterFragment</span>)</span><br><span class="hljs-class">            .commit()</span><br><span class="hljs-class">    &#125;</span><br><span class="hljs-class">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-FlutterFragment生命周期"><a href="#2-FlutterFragment生命周期" class="headerlink" title="2.FlutterFragment生命周期"></a>2.FlutterFragment生命周期</h3><p>FlutterFragment它不支持生命周期管理，需要借助Activity:</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">FragmentActivity</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">onPostResume</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-variable language_">super</span>.<span class="hljs-title function_">onPostResume</span>();<br>        flutterFragment.<span class="hljs-title function_">onPostResume</span>();<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">onNewIntent</span>(<span class="hljs-params"><span class="hljs-meta">@NonNull</span> <span class="hljs-title class_">Intent</span> intent</span>) &#123;<br>        flutterFragment.<span class="hljs-title function_">onNewIntent</span>(intent);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">onBackPressed</span>(<span class="hljs-params"></span>) &#123;<br>        flutterFragment.<span class="hljs-title function_">onBackPressed</span>();<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">onRequestPermissionsResult</span>(<span class="hljs-params"></span><br><span class="hljs-params">        int requestCode,</span><br><span class="hljs-params">        <span class="hljs-meta">@NonNull</span> <span class="hljs-title class_">String</span>[] permissions,</span><br><span class="hljs-params">        <span class="hljs-meta">@NonNull</span> int[] grantResults</span><br><span class="hljs-params">    </span>) &#123;<br>        flutterFragment.<span class="hljs-title function_">onRequestPermissionsResult</span>(<br>            requestCode,<br>            permissions,<br>            grantResults<br>        );<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">onUserLeaveHint</span>(<span class="hljs-params"></span>) &#123;<br>        flutterFragment.<span class="hljs-title function_">onUserLeaveHint</span>();<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">onTrimMemory</span>(<span class="hljs-params">int level</span>) &#123;<br>        <span class="hljs-variable language_">super</span>.<span class="hljs-title function_">onTrimMemory</span>(level);<br>        flutterFragment.<span class="hljs-title function_">onTrimMemory</span>(level);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-FlutterFragment使用预热的-FlutterEngine"><a href="#3-FlutterFragment使用预热的-FlutterEngine" class="headerlink" title="3.FlutterFragment使用预热的 FlutterEngine"></a>3.FlutterFragment使用预热的 FlutterEngine</h3><p>默认情况下，FlutterFragment 会创建它自己的 FlutterEngine 实例，同时也需要不少的启动时间。这就意味着您的用户会看到短暂的白屏。通过使用已存在的、预热的 FlutterEngine 就可以大幅度减少启动的耗时。 要在 FlutterFragment 中使用预热 FlutterEngine，可以使用工厂方法 withCachedEngine() 实例化 FlutterFragment。</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><span class="hljs-comment">// Somewhere in your app, before your FlutterFragment is needed,</span><br><span class="hljs-comment">// like in the Application class ...</span><br><span class="hljs-comment">// Instantiate a FlutterEngine.</span><br>FlutterEngine flutterEngine = <span class="hljs-keyword">new</span> FlutterEngine(context);<br><br><span class="hljs-comment">// Start executing Dart code in the FlutterEngine.</span><br>flutterEngine.getDartExecutor().executeDartEntrypoint(<br>    DartEntrypoint.createDefault()<br>);<br><br><span class="hljs-comment">// Cache the pre-warmed FlutterEngine to be used later by FlutterFragment.</span><br>FlutterEngineCache<br>  .getInstance()<br>  .put(<span class="hljs-string">&quot;my_engine_id&quot;</span>, flutterEngine);<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">FlutterFragment.withCachedEngine(<span class="hljs-string">&quot;my_engine_id&quot;</span>).build()<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>FlutterFragment 内部可访问 FlutterEngineCache，并且可以根据传递给 withCachedEngine() 的 ID 获取预热的 FlutterEngine。 如上所示，通过提供预热的 FlutterEngine，您的应用将以最快速度渲染出第一帧。</p>
+<h3 id="4-FlutterFragment缓存引擎中的初始路由"><a href="#4-FlutterFragment缓存引擎中的初始路由" class="headerlink" title="4.FlutterFragment缓存引擎中的初始路由"></a>4.FlutterFragment缓存引擎中的初始路由</h3><p>当配置一个使用新 FlutterEngine 的 FlutterActivity 或者 FlutterFragment 时，会使用到初始路由的概念。但是，使用缓存中的 Flutter 引擎时， FlutterActivity 或者 FlutterFragment 则没有涉及初始路由的概念。这是因为被缓存的引擎理论上已经执行了 Dart 代码，在这时配置初始路由已经太迟了。<br>开发者如果想要让缓存中的引擎从自定义的初始路由开始运行，那么可以执行 Dart 入口前，为缓存的 FlutterEngine 配置自定义的初始路由。如下面这个例子：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs scala">public <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyApplication</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Application</span> </span>&#123;<br>  <span class="hljs-meta">@Override</span><br>  public void onCreate() &#123;<br>    <span class="hljs-keyword">super</span>.onCreate();<br>    <span class="hljs-comment">// Instantiate a FlutterEngine.</span><br>    flutterEngine = <span class="hljs-keyword">new</span> <span class="hljs-type">FlutterEngine</span>(<span class="hljs-keyword">this</span>);<br>    <span class="hljs-comment">// Configure an initial route.</span><br>    flutterEngine.getNavigationChannel().setInitialRoute(<span class="hljs-string">&quot;your/route/here&quot;</span>);<br>    <span class="hljs-comment">// Start executing Dart code to pre-warm the FlutterEngine.</span><br>    flutterEngine.getDartExecutor().executeDartEntrypoint(<br>      <span class="hljs-type">DartEntrypoint</span>.createDefault()<br>    );<br>    <span class="hljs-comment">// Cache the FlutterEngine to be used by FlutterActivity or FlutterFragment.</span><br>    <span class="hljs-type">FlutterEngineCache</span><br>      .getInstance()<br>      .put(<span class="hljs-string">&quot;my_engine_id&quot;</span>, flutterEngine);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>通过设置导航通道中的初始路由，会让关联的 FlutterEngine 在 runApp() 方法首次执行后，展示已配置的路由页面。在 runApp() 的首次执行之后，修改导航通道中的初始路由属性是不会生效的。想要在不同的 Activity 和 Fragment 之间使用同一个 FlutterEngine，并且在其展示时切换不同的路由，开发者需要设置一个方法通道，来显式地通知他们的 Dart 代码切换 Navigator 路由。</p>
+<h1 id="八-Flutter与Android原生交互"><a href="#八-Flutter与Android原生交互" class="headerlink" title="八.Flutter与Android原生交互"></a>八.Flutter与Android原生交互</h1><h3 id="1-在Flutter中调用原生方法，并获取返回值"><a href="#1-在Flutter中调用原生方法，并获取返回值" class="headerlink" title="1.在Flutter中调用原生方法，并获取返回值"></a>1.在Flutter中调用原生方法，并获取返回值</h3><h5 id="1-Flutter端代码"><a href="#1-Flutter端代码" class="headerlink" title="(1.)Flutter端代码"></a>(1.)Flutter端代码</h5><p>首先创建一个MethodChannel对象，它接受一个String作为参数，String可以为任意字符串，这个String的作用是用来和原生中注册的MethodChannel进行匹配，只有双方的值一致时，这个通道才起作用。</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><span class="hljs-keyword">static</span> <span class="hljs-keyword">const</span> platform = <span class="hljs-function"><span class="hljs-keyword">const</span> <span class="hljs-title">MethodChannel</span><span class="hljs-params">(<span class="hljs-string">&#x27;samples.flutter.dev/battery&#x27;</span>)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>然后通过MethodChannel的invokeMethod()方法调用原生，这个方法接受两个参数，第一个参数为标识，也就是原生内边的方法名字，第二个参数就是需要向原生传递的参数，可以是一个map或者jsonString，我这没有需要向原生传递的参数，所以就没填。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs dart">Future&lt;<span class="hljs-keyword">void</span>&gt; _getBatteryLevel() <span class="hljs-keyword">async</span> &#123;<br>    <span class="hljs-built_in">String</span> batteryLevel;<br>    <span class="hljs-keyword">try</span> &#123;<br>      <span class="hljs-keyword">final</span> <span class="hljs-built_in">int</span> result = <span class="hljs-keyword">await</span> platform.invokeMethod(<span class="hljs-string">&#x27;getBatteryLevel&#x27;</span>);<br>      batteryLevel = <span class="hljs-string">&#x27;您的手机电量还有 <span class="hljs-subst">$result</span> % .&#x27;</span>;<br>    &#125; <span class="hljs-keyword">on</span> PlatformException <span class="hljs-keyword">catch</span> (e) &#123;<br>      batteryLevel = <span class="hljs-string">&quot;手机电量获取失败: &#x27;<span class="hljs-subst">$&#123;e.message&#125;</span>&#x27;.&quot;</span>;<br>    &#125;<br> <br>    setState(() &#123;<br>      _batteryLevel = batteryLevel;<br>    &#125;);<br>  &#125;<br></code></pre></td></tr></table></figure>
+<h5 id="2-Android端代码"><a href="#2-Android端代码" class="headerlink" title="(2.)Android端代码"></a>(2.)Android端代码</h5><p>Fluttrt的代码写完后，接着实现原生端的代码，首先需要在原生注册MethodChannel，如果你用的Activity，那么就继承FlutterActivity，如果用的Fragment，那么就继承FlutterFragment， 然后需要在Activity或者Fragment中实例化一下这个通道。常用的做法是在 configureFlutterEngine 这个方法中实例化通道就行了，有多少个通道，就在这里实例化多少个通道。</p>
+<blockquote>
+<p>值得注意：不管执行结果如何都要执行result.success或者result.error，否则Flutter端可能会一直等待响应</p>
+</blockquote>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">configureFlutterEngine</span><span class="hljs-params">(<span class="hljs-meta">@NonNull</span> flutterEngine: <span class="hljs-type">FlutterEngine</span>)</span></span> &#123;<br>        GeneratedPluginRegistrant.registerWith(flutterEngine)<br>        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, <span class="hljs-string">&quot;samples.flutter.dev/battery&quot;</span>)<br>                .setMethodCallHandler &#123; call, result -&gt;<br>                    <span class="hljs-keyword">when</span> (call.method) &#123;<br>                                  <span class="hljs-string">&quot;getBatteryLevel&quot;</span> -&gt; &#123;<br>                                      <span class="hljs-keyword">val</span> batteryLevel = getBatteryLevel()<br>                                      <span class="hljs-keyword">if</span> (batteryLevel != -<span class="hljs-number">1</span>) &#123;<br>                                          result.success(batteryLevel)<br>                                      &#125; <span class="hljs-keyword">else</span> &#123;<br>                                          result.error(<span class="hljs-string">&quot;UNAVAILABLE&quot;</span>, <span class="hljs-string">&quot;Battery level not available.&quot;</span>, <span class="hljs-literal">null</span>)<br>                                      &#125;<br>                                  &#125;<br>                              &#125;<br>                &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>注意，第二个参数的值要和Flutter中MethodChannel的值一致。</p>
+</blockquote>
+<p>在Android实例化了一个MethodChannel对象，并调用了setMethodCallHandler方法进行注册。这个setMethodCallHandler方法需要实现一个接口参数，这个接口为MethodChannel.MethodCallHandler，看一下这个接口。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">public</span> <span class="hljs-selector-tag">interface</span> <span class="hljs-selector-tag">MethodCallHandler</span> &#123;        <br>    <span class="hljs-variable">@UiThread</span><br>    void <span class="hljs-built_in">onMethodCall</span>(<span class="hljs-variable">@NonNull</span> MethodCall call, <span class="hljs-variable">@NonNull</span> Result result);<br>&#125;<br>```    <br>这个接口只有一个<span class="hljs-selector-tag">onMethodCall</span>方法，并且有两个参数，<span class="hljs-selector-tag">MethodCall</span>和<span class="hljs-selector-tag">Result</span>，其实最终就是通过这两个参数来与<span class="hljs-selector-tag">Flutter</span>进行通信。<span class="hljs-selector-tag">Result</span>，为一个接口，当<span class="hljs-selector-tag">Android</span>处理完<span class="hljs-selector-tag">Flutter</span>调用的方法逻辑后需要向<span class="hljs-selector-tag">Flutter</span>回传一些数据时，就通过<span class="hljs-selector-tag">Result</span>来实现。<br><br>### <span class="hljs-number">2</span>.在<span class="hljs-selector-tag">Android</span>中调用<span class="hljs-selector-tag">Flutter</span>方法<br><span class="hljs-selector-tag">Android</span>调用<span class="hljs-selector-tag">Flutter</span>，更简单，只是需要注意线程问题，<span class="hljs-selector-tag">UI</span>相关就放主线程执行，耗时操作放子线程然后<span class="hljs-selector-tag">event</span>更新即可.<br>例如<br><span class="hljs-selector-tag">-</span> <span class="hljs-selector-tag">Android</span>端调用<span class="hljs-selector-tag">location</span>方法并传参给<span class="hljs-selector-tag">Flutter</span>，当然不传参数不加参数，也不取参数就行了，这里就写个带参数的<br><br>##### (<span class="hljs-number">1</span>.)<span class="hljs-selector-tag">Flutter</span>端代码<br>例如用的<span class="hljs-selector-tag">StatefulWidget</span>，在<span class="hljs-selector-tag">initState</span>方法中给它加个接收消息<br></code></pre></td></tr></table></figure>
+<p>  @override<br>  void initState() {<br>    _initChannel();<br>  }<br>  void _initChannel() {<br>      var channel &#x3D; MethodChannel(“your_channel_name”);<br>      channel.setMethodCallHandler((call) {<br>          &#x2F;&#x2F; 同样也是根据方法名分发不同的函数<br>          switch(call.method) {<br>            case “your_method_name”: {<br>              String msg &#x3D; call.arguments[“msg”];<br>              print(“Native 调用 Flutter 成功，参数是：$msg”);<br>              return “成功”;<br>            }<br>          }<br>          return null;<br>      });<br>  }</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs clean">##### (<span class="hljs-number">2.</span>)Android端代码<br></code></pre></td></tr></table></figure>
+<p>class MainActivity: FlutterActivity() {</p>
+<pre><code class="hljs">override fun configureFlutterEngine(flutterEngine: FlutterEngine) &#123;
+    super.configureFlutterEngine(flutterEngine)
+
+    val messenger = flutterEngine.dartExecutor.binaryMessenger
+
+    // 新建一个 Channel 对象
+    val channel = MethodChannel(messenger, &quot;your_channel_name&quot;)
+
+    // 调用 Flutter 中的方法
+    val params = mapOf(
+        &quot;msg&quot; to &quot;这是来自 Android 端的参数&quot;
+    )
+    channel.invokeMethod(&quot;your_method_name&quot;, params)
+&#125;
+</code></pre>
+<p>}</p>
+<pre><code class="hljs">
+# 九.Flutter混合栈管理
+Flutter 整个项目都是绘制在一个 Surface 画布上，而fluttet_boost 将栈统一到了原生层，通过一个单例的 flutter engine 进行绘制。每个 FlutterFragment 和 FlutterActivity 都是一个 Surface承载容器， 切换页面时就是切换 Surface 渲染显示，而对于不渲染的页面通过 Surface 截图缓存画面显示。 这样整个 Flutter 的路由就被映射到原生栈中，统一由原生页面栈管理，Flutter 内每 push 一个页面就是打开一个 Activity 。 一般情况下都会避免混合栈的相互调用 ，但是面对不得不如此为之的情况下，还是会出现问题。
+### 1.Google官方（多引擎方案）
+即每次使用一个新的FlutterEngine来渲染Widget树。虽然Flutter 2.0之后的创建FlutterEngine的开销大大降低，但是依然没有解决每个FlutterEngine是一个单独isolate。
+
+### 2.flutter_boost（单引擎方案）
+[flutter_boost](https://github.com/alibaba/flutter_boost)阿里巴巴闲鱼团队出品的一款解决Flutter栈管理的框架
+
+
+参考资料:
+[Flutter 开发文档](https://flutter.cn/docs)
+[Flutter 开发文档(英文版)](https://docs.flutter.dev/)
+
+
+
+[恋猫小郭Flutter合集](https://juejin.cn/user/817692379985752/posts)
+[android调用flutter aar_在原生项目中集成Flutter](https://blog.csdn.net/weixin_39567870/article/details/112136412)
+[Flutter文章中文版](https://flutter.cn/docs/get-started)
+[Android 项目集成 Flutter](https://juejin.cn/post/6969086158122942501)
+[在 Flutter 中使用原生控件](https://www.jianshu.com/p/607176087138)
+[详解Flutter工程创建的几种模式](https://juejin.cn/post/6844904096734904328)
+[Flutter混合开发组件化与工程化架构](http://zhengxiaoyong.com/2018/12/16/Flutter%E6%B7%B7%E5%90%88%E5%BC%80%E5%8F%91%E7%BB%84%E4%BB%B6%E5%8C%96%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%8C%96%E6%9E%B6%E6%9E%84/)
+[Flutter: 以 aar 形式嵌入 android 中的方案和原理](https://juejin.cn/post/6844904164972036103)
+[Flutter打包AAR插件之fat-aar使用教程](https://juejin.cn/post/6850037282884452360)
+[优雅地将Flutter项目打包aar上传maven](https://blog.csdn.net/qq_37299249/article/details/115012889)
+[flutter打包aar并上传Maven私服，flutter模块与原生工程解耦](https://blog.csdn.net/Ever69/article/details/120494115)
+[flutter工程化踩坑实录](https://juejin.cn/post/7004856160872300557#heading-4)
+[Android Native 工程集成 Flutter 的两种方式](https://juejin.cn/post/6844903970490548231)
+[Flutter 工程化搭建（Android端）](https://juejin.cn/post/6934886225559945247)
+[给现有 App 引入 Flutter Module](https://juejin.cn/post/6844903991923441672)
+[开门见山——Flutter 自动打包aars 并上传Maven仓库](https://juejin.cn/post/6917079172913299470)
+[Flutter 2.0 下混合开发浅析](https://juejin.cn/post/6940937798593544222)
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Fluter%E5%BC%80%E5%8F%91/" class="category-chain-item">Fluter开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Flutter与Android混编</div>
+      <div>http://example.com/2020/11/13/Flutter与Android混编/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2020年11月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/11/16/Python%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%BA%93Pillow(PIL)%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/" title="Python图像处理库Pillow(PIL)的简单使用">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Python图像处理库Pillow(PIL)的简单使用</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/08/Flutter%E4%BD%BF%E7%94%A8Provider%E8%BF%9B%E8%A1%8C%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/" title="Flutter使用Provider进行状态管理">
+                        <span class="hidden-mobile">Flutter使用Provider进行状态管理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,932 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一 依赖注入依赖注入（DI）是控制反转（Inversion of Control,IoC）的一种重要方式，IoC是将依赖对象的创建和绑定通过被依赖对象类的外部来实现。依赖注入提供一种机制，将需要依赖对象的引用传递给被依赖对象。它是面向对象的一种设计模式，其目的是为了降低耦合。举个栗子： 12345public class Person &#123;    Decorate decorate;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dagger2全面使用总结">
+<meta property="og:url" content="http://example.com/2017/02/17/Dagger2%E5%85%A8%E9%9D%A2%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一 依赖注入依赖注入（DI）是控制反转（Inversion of Control,IoC）的一种重要方式，IoC是将依赖对象的创建和绑定通过被依赖对象类的外部来实现。依赖注入提供一种机制，将需要依赖对象的引用传递给被依赖对象。它是面向对象的一种设计模式，其目的是为了降低耦合。举个栗子： 12345public class Person &#123;    Decorate decorate;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-02-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:47:08.442Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Dagger2全面使用总结 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Dagger2全面使用总结"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2017-02-17 00:00" pubdate>
+          2017年2月17日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          58 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Dagger2全面使用总结</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-依赖注入"><a href="#一-依赖注入" class="headerlink" title="一 依赖注入"></a>一 依赖注入</h1><p>依赖注入（DI）是控制反转（Inversion of Control,IoC）的一种重要方式，IoC是将依赖对象的创建和绑定通过被依赖对象类的外部来实现。依赖注入提供一种机制，将需要依赖对象的引用传递给被依赖对象。<br>它是面向对象的一种设计模式，其目的是为了降低耦合。举个栗子：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> &#123;<br>    Decorate decorate;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Person</span>()</span>&#123;<br>        decorate = <span class="hljs-keyword">new</span> Decorate(jacket,shoe);<br>    &#125;<br></code></pre></td></tr></table></figure>
+<p>这里的Person对象的初始化为实例化Decorate，如果Decorate类实例化参数增加，则必须对Person对象初始化进行修改。如果还有其他类的也是按照这种方式创建Decorate类，那么就需要修改多处，这违背了单一职责原则和开闭原则。<br>因此需要引入依赖注入来解决这个问题。依赖注入，就是将依赖注入到宿主类（或者叫目标类）中，从而解决上面所述的问题。</p>
+<h1 id="二-依赖注入实现的三种方式"><a href="#二-依赖注入实现的三种方式" class="headerlink" title="二 依赖注入实现的三种方式"></a>二 依赖注入实现的三种方式</h1><p>下面将会介绍三种简单的依赖注入方式，一般依赖注入的框架的基本原理基本一样，避免在被依赖对象中直接实例化依赖对象，而是通过其他方式引入。根据依赖注入的定义，下面例子中依赖对象为Decorate，被依赖对象为Person。</p>
+<h3 id="1-构造注入"><a href="#1-构造注入" class="headerlink" title="1. 构造注入"></a>1. 构造注入</h3><p>通过构造函数直接注入</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> &#123;<br>    <span class="hljs-keyword">private</span> Decorate decorate;<br>    <span class="hljs-keyword">public</span> Person(Decorate decorate)&#123;<br>        <span class="hljs-keyword">this</span>.decorate = decorate;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-属性注入"><a href="#2-属性注入" class="headerlink" title="2. 属性注入"></a>2. 属性注入</h3><p>通过属性来传递依赖即通过set方法</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">Decorate</span> decorate;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">setPerson</span>(<span class="hljs-params"><span class="hljs-title class_">Decorate</span> decorate</span>)&#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">decorate</span> = decorate;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<h3 id="3-通过Java注解"><a href="#3-通过Java注解" class="headerlink" title="3. 通过Java注解"></a>3. 通过Java注解</h3><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs perl">public <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>&#123;<br>    //此时并不会完成注入，还需要依赖注入框架的支持，如RoboGuice,Dagger2<br>    <span class="hljs-variable">@inject</span> Decorate decorate;<br><br>    <br><br></code></pre></td></tr></table></figure>
+<p>在Dagger2中用的就是最后一种注入方式，通过注解的方式，将依赖注入到宿主类中。</p>
+<h1 id="三-Dagger2注解使用"><a href="#三-Dagger2注解使用" class="headerlink" title="三 Dagger2注解使用"></a>三 Dagger2注解使用</h1><p>Dagger2是Dagger的升级版，是一个依赖注入框架，现在由Google接手维护。在github上Dagger2是这样定义的，Dagger2是一个Android和java快速依赖注入框架。<br>Dragger2是在编译时注解的方式实现依赖注入，是Dagger的升级版，取消了反射的使用。通过@Component的接口替代ObjectGraph&#x2F;Injector，从而使代码更精简。<br>早期的一些注入框架是通过反射机制在运行时完成注入的工作，而反射对性能影响很大，所以现在基本上是采用编译时通过工具生成相应的类文件实现的。</p>
+<h3 id="1-Dagger2的依赖引入"><a href="#1-Dagger2的依赖引入" class="headerlink" title="1.Dagger2的依赖引入"></a>1.Dagger2的依赖引入</h3><p>完成Dagger2的依赖方式有两种，分别为annotationProcessor和android-apt。android-apt是开发者自己开发的apt框架，随着谷歌Android Gradle2.2插件的发布，插件提供了annotationProcessor来替换android-apt，<br>自此基本上都使用annotationProcessor。<br>项目中通过annotationProcessor的方式进行依赖，在app的build.gradle添加：</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs clean"><span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;com.google.dagger:dagger:2.10&#x27;</span><br>annotationProcessor <span class="hljs-string">&quot;com.google.dagger:dagger-compiler:2.10&quot;</span><br><span class="hljs-keyword">implementation</span> <span class="hljs-string">&quot;org.glassfish:javax.annotation:10.0-b28&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-Inject方式注入（Inject-Component）"><a href="#2-Inject方式注入（Inject-Component）" class="headerlink" title="2.Inject方式注入（Inject+Component）"></a>2.Inject方式注入（Inject+Component）</h3><ol>
+<li>定义一个Person类，在构造函数前加上@Inject，表明支持依赖注入。<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> &#123;<br>    @Inject<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Person</span>()</span>&#123;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span>()</span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;xiaoming&quot;</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>定义接口MainActivityComponent，在接口前添加@Component，定义相应的抽象方法，方法的参数为需要注入对象的真实所在的类，方法名一般为Inject。<br>Component可以理解为Person（依赖对象）和MainActivity（被依赖对象）之间的桥梁。<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">MainActivityComponent</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">inject</span><span class="hljs-params">(MainActivity activity)</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>对项目进行Rebuild，Dagger2框架会根据MainActivityComponent自动生成DaggerMainActivityComponent(命名规则Dagger+Component名称)。<br>在MainActivity声明Person对象，并用@Inject的注解，然后通过DaggerMainActivityComponent注入Person对象。<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs scala">public <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DaggerSimpleActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AppCompatActivity</span> </span>&#123;<br><br>    <span class="hljs-keyword">private</span> static <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-type">TAG</span> = <span class="hljs-string">&quot;MainActivity&quot;</span>;<br>    <span class="hljs-meta">@Inject</span><br>    <span class="hljs-type">Person</span> person;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> void onCreate(<span class="hljs-meta">@Nullable</span> <span class="hljs-type">Bundle</span> savedInstanceState) &#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState);<br>        setContentView(<span class="hljs-type">R</span>.layout.activity_main);<br>        <span class="hljs-type">DaggerMainActivityComponent</span>.builder().build().inject(<span class="hljs-keyword">this</span>);<br>        <span class="hljs-type">Log</span>.d(<span class="hljs-type">TAG</span>,person.getName());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+执行结果:<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">MainActivity:</span> xiaoming<br></code></pre></td></tr></table></figure>
+可以看出MainActivity成功注入了Person类，下面分析是如何注入Person类的：<br>打开DaggerMainActivityComponent，可以看出其对应的路径\app\build\generated\source\apt\debug，在其目录下同时也有其他两个类Person_Factory，MainActivity_MembersInjector。<br>DaggerMainActivityComponent.java:<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> final <span class="hljs-keyword">class</span> <span class="hljs-title">DaggerMainActivityComponent</span> <span class="hljs-title">implements</span> <span class="hljs-title">MainActivityComponent</span> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">DaggerMainActivityComponent</span>()</span> &#123;<br><br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Builder <span class="hljs-title">builder</span>()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Builder();<br>    &#125;<br><br>    <span class="hljs-comment">//1.调用create实际上是调用Builder().build()方法</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> MainActivityComponent <span class="hljs-title">create</span>()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Builder().build();<br>    &#125;<br><br>    <span class="hljs-comment">//3.重写MainActivityComponent的inject方法</span><br>    @Override<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">inject</span>(<span class="hljs-params">MainActivity activity</span>)</span> &#123;<br>        injectMainActivity(activity);<br>    &#125;<br><br>    <span class="hljs-comment">//4. 调用  MainActivity_MembersInjector的injectMPerson方法将MainActivity的引用和new 创建的Person对象传入</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> MainActivity <span class="hljs-title">injectMainActivity</span>(<span class="hljs-params">MainActivity instance</span>)</span> &#123;<br>        MainActivity_MembersInjector.injectMPerson(instance, <span class="hljs-keyword">new</span> Person());<br>        <span class="hljs-keyword">return</span> instance;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> final <span class="hljs-keyword">class</span> <span class="hljs-title">Builder</span> &#123;<br>        <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Builder</span>()</span> &#123;<br>        &#125;<br><br>        <span class="hljs-comment">//2.build()会通过new关键字创建DaggerMainActivityComponent对象</span><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> MainActivityComponent <span class="hljs-title">build</span>()</span> &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> DaggerMainActivityComponent();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+在MainActivity中DaggerMainActivityComponent.builder().build()将会通过构建者实例化DaggerMainActivityComponent，<br>DaggerMainActivityComponent实现了MainActivityComponent接口.重写MainActivityComponent的inject方法.因此我们再MainActivity中调用inject方法时会走<br>4中的步骤MainActivity_MembersInjector的injectMPerson方法将MainActivity的引用和new 创建的Person对象传入.</li>
+</ol>
+<p>MainActivity_MembersInjector.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MainActivity_MembersInjector</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">MembersInjector</span>&lt;MainActivity&gt; &#123;<br>  <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Provider&lt;Person&gt; mPersonProvider;<br><br>  <span class="hljs-keyword">public</span> <span class="hljs-title function_">MainActivity_MembersInjector</span><span class="hljs-params">(Provider&lt;Person&gt; mPersonProvider)</span> &#123;<br>    <span class="hljs-built_in">this</span>.mPersonProvider = mPersonProvider;<br>  &#125;<br><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> MembersInjector&lt;MainActivity&gt; <span class="hljs-title function_">create</span><span class="hljs-params">(Provider&lt;Person&gt; mPersonProvider)</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MainActivity_MembersInjector</span>(mPersonProvider);&#125;<br><br>  <span class="hljs-meta">@Override</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">injectMembers</span><span class="hljs-params">(MainActivity instance)</span> &#123;<br>    injectMPerson(instance, mPersonProvider.get());<br>  &#125;<br><br>  <span class="hljs-comment">//1.在DaggerMainActivityComponent的injectMainActivity方法中将MainActivity对象和Person对象传入</span><br>  <span class="hljs-meta">@InjectedFieldSignature(&quot;com.base.example.dagger.simple.MainActivity.mPerson&quot;)</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">injectMPerson</span><span class="hljs-params">(MainActivity instance, Person mPerson)</span> &#123;<br>    <span class="hljs-comment">//2.这里的instance就是MainActivity,这里为MainActivity的mPerson对象赋值了刚传入的Person对象</span><br>    instance.mPerson = mPerson;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>MainActivity_MembersInjector类是实例化Person类的关键，也是注入具体的实现方式。aggerMainActivityComponent的injectMainActivity方法中将MainActivity对象和Person对象传入,<br>然后对MainActivity的mPerson对象赋值了刚传入的Person对象.因此在MainActivity就完成了Person的依赖注入.MainActivity持有了Person对象.</p>
+<h3 id="3-带Module的Inject方式（Inject-Component-Module）"><a href="#3-带Module的Inject方式（Inject-Component-Module）" class="headerlink" title="3.带Module的Inject方式（Inject+Component+Module）"></a>3.带Module的Inject方式（Inject+Component+Module）</h3><p>在上面的Person中是自己定义的类，如果是某个库中的类，我们不能够改它的源码因此是不能够去该类中添加@Inject注解了，那么注入这种类该如何注入呢，这个时候就需要Module。<br>Module可以理解为对象的实例化，向Component的提供依赖对象。下面以Person类为对象说明：<br>1 .创建一个MainModule，并用@Module注解，在类中提供Person对象的方法并用@Provider注解（取消之前Person类中的@Inject注解）</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs perl"><span class="hljs-variable">@Module</span><br>public <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MainModule</span> </span>&#123;<br>    <span class="hljs-variable">@Provides</span><br>    public Person providePerson()&#123;<br>        <span class="hljs-keyword">return</span> new Person();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol start="2">
+<li>修改MainActivityComponent，为其添加Module应用，来说明其可能需要用到MainModule中提供的对象。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component(modules = MainModule.class)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">MainActivityComponent</span> &#123;<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">inject</span><span class="hljs-params">(MainActivity activity)</span>;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>MainActivity保持不变</li>
+</ol>
+<p>执行结果:</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">MainActivity:</span> xiaoming<br></code></pre></td></tr></table></figure>
+
+<p>可以看出和上面的例子结果一样，主要不同的是增加了MainModule。我们接下来再来分析一下生成的源码.</p>
+<p>DaggerMainActivityComponent.java:</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> final <span class="hljs-keyword">class</span> <span class="hljs-title class_">DaggerMainActivityComponent</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">MainActivityComponent</span> &#123;<br>  <span class="hljs-keyword">private</span> final <span class="hljs-title class_">MainModule</span> mainModule;<br><br>  <span class="hljs-comment">//3. 对DaggerMainActivityComponent中的mainModule进行赋值</span><br>  <span class="hljs-keyword">private</span> <span class="hljs-title class_">DaggerMainActivityComponent</span>(<span class="hljs-title class_">MainModule</span> mainModuleParam) &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">mainModule</span> = mainModuleParam;<br>  &#125;<br><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title class_">Builder</span> <span class="hljs-title function_">builder</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Builder</span>();<br>  &#125;<br><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title class_">MainActivityComponent</span> <span class="hljs-title function_">create</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Builder</span>().<span class="hljs-title function_">build</span>();<br>  &#125;<br><br>  <span class="hljs-comment">//4.MainActivity中调用DaggerMainActivityComponent的inject方法将MainActivity的引用传入</span><br>  <span class="hljs-meta">@Override</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">inject</span>(<span class="hljs-params"><span class="hljs-title class_">MainActivity</span> activity</span>) &#123;<br>    <span class="hljs-title function_">injectMainActivity</span>(activity);&#125;<br><br>    <span class="hljs-comment">//调用了MainActivity_MembersInjector的injectMPerson方法传入MainActivity的引用</span><br>  <span class="hljs-keyword">private</span> <span class="hljs-title class_">MainActivity</span> <span class="hljs-title function_">injectMainActivity</span>(<span class="hljs-params"><span class="hljs-title class_">MainActivity</span> instance</span>) &#123;<br>    <span class="hljs-title class_">MainActivity</span>_MembersInjector.<span class="hljs-title function_">injectMPerson</span>(instance, <span class="hljs-title class_">MainModule</span>_ProvidePersonFactory.<span class="hljs-title function_">providePerson</span>(mainModule));<br>    <span class="hljs-keyword">return</span> instance;<br>  &#125;<br><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> final <span class="hljs-keyword">class</span> <span class="hljs-title class_">Builder</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">MainModule</span> mainModule;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">Builder</span>() &#123;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title class_">Builder</span> <span class="hljs-title function_">mainModule</span>(<span class="hljs-params"><span class="hljs-title class_">MainModule</span> mainModule</span>) &#123;<br>      <span class="hljs-variable language_">this</span>.<span class="hljs-property">mainModule</span> = <span class="hljs-title class_">Preconditions</span>.<span class="hljs-title function_">checkNotNull</span>(mainModule);<br>      <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>;<br>    &#125;<br>    <span class="hljs-comment">//1.这里通过new关键字创建了MainModule对象.</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-title class_">MainActivityComponent</span> <span class="hljs-title function_">build</span>(<span class="hljs-params"></span>) &#123;<br>      <span class="hljs-keyword">if</span> (mainModule == <span class="hljs-literal">null</span>) &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">mainModule</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MainModule</span>();<br>      &#125;<br>      <span class="hljs-comment">//2.通过new关键字创建DaggerMainActivityComponent对象将mainModule传入</span><br>      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DaggerMainActivityComponent</span>(mainModule);<br>    &#125;<br>  &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>我们看到调用MainActivity_MembersInjector.injectMPerson的时候的Person对象是通过MainModule_ProvidePersonFactory获取到的.<br>MainModule_ProvidePersonFactory.java:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MainModule_ProvidePersonFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Factory</span>&lt;Person&gt; &#123;<br>  <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> MainModule <span class="hljs-keyword">module</span>;<br><br>  <span class="hljs-keyword">public</span> <span class="hljs-title function_">MainModule_ProvidePersonFactory</span><span class="hljs-params">(MainModule <span class="hljs-keyword">module</span>)</span> &#123;<br>    <span class="hljs-built_in">this</span>.<span class="hljs-keyword">module</span> = <span class="hljs-keyword">module</span>;<br>  &#125;<br><br>  <span class="hljs-meta">@Override</span><br>  <span class="hljs-keyword">public</span> Person <span class="hljs-title function_">get</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">return</span> providePerson(<span class="hljs-keyword">module</span>);<br>  &#125;<br><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> MainModule_ProvidePersonFactory <span class="hljs-title function_">create</span><span class="hljs-params">(MainModule <span class="hljs-keyword">module</span>)</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MainModule_ProvidePersonFactory</span>(<span class="hljs-keyword">module</span>);<br>  &#125;<br><br>  <span class="hljs-comment">//1.调用MainModule的providePerson()方法返回Person对象</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Person <span class="hljs-title function_">providePerson</span><span class="hljs-params">(MainModule instance)</span> &#123;<br>    <span class="hljs-keyword">return</span> Preconditions.checkNotNull(instance.providePerson(), <span class="hljs-string">&quot;Cannot return null from a non-@Nullable @Provides method&quot;</span>);<br>  &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<h3 id="5-Module带参数"><a href="#5-Module带参数" class="headerlink" title="5.Module带参数"></a>5.Module带参数</h3><p>一般情况下大多数的类都需要传入参数的，下面看下带参数的类的实例化是如何的。</p>
+<ol>
+<li>修改Person类<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> &#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-built_in">int</span> age;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Person</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> age</span>)</span> &#123;<br>        <span class="hljs-keyword">this</span>.age = age;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span>()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;mike&quot;</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> <span class="hljs-title">getAge</span>()</span> &#123;<br>        <span class="hljs-keyword">return</span> age;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>将Person类的age参数传入<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><span class="hljs-meta">@Module</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MainModule</span> </span>&#123;<br>    <span class="hljs-keyword">int</span> age;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MainModule</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span></span>&#123;<br>        <span class="hljs-keyword">this</span>.age = age;<br>    &#125;<br>    <span class="hljs-meta">@Provides</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-function">Person <span class="hljs-title">providePerson</span><span class="hljs-params">()</span></span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Person(age);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+3 .在MainActivity中设置MainModule对象的参数<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scss">DaggerMainActivityComponent<span class="hljs-selector-class">.builder</span>()<span class="hljs-selector-class">.mainModule</span>(new MainModule(<span class="hljs-number">19</span>))<span class="hljs-selector-class">.build</span>()<span class="hljs-selector-class">.inject</span>(this);<br></code></pre></td></tr></table></figure>
+执行结果:<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">MainActivity</span>: <span class="hljs-number">19</span><br><br></code></pre></td></tr></table></figure>
+需要注意的是在无参数的时候，DaggerMainActivityComponent会提供create方法，但是有参数时，只有build方法，因为需要传入MainModule对象<br>。一般建议通过provide方法提供参数，主要是解耦和增加代码的可读性。<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><span class="hljs-meta">@Module</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MainModule</span> </span>&#123;<br>    <span class="hljs-keyword">int</span> age;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MainModule</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span></span>&#123;<br>        <span class="hljs-keyword">this</span>.age = age;<br>    &#125;<br><br>    <span class="hljs-meta">@Provides</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">provideAge</span><span class="hljs-params">()</span></span>&#123;<br>        <span class="hljs-keyword">return</span> age;<br>    &#125;<br><br>    <span class="hljs-meta">@Provides</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-function">Person <span class="hljs-title">providePerson</span><span class="hljs-params">()</span></span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Person(age);<br>    &#125;<br>    <span class="hljs-meta">@Provides</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-function">Decorate <span class="hljs-title">providerDecorate</span><span class="hljs-params">()</span></span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Decorate();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+Module中不能出现参数和返回参数一致的情况，否则会导致死循环。如：<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><span class="hljs-meta">@Provides</span><br><span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">provideAge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span></span>&#123;<br>    <span class="hljs-keyword">return</span> age;<br>&#125;<br><br></code></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="四-Inject-和-Provides-的优先级"><a href="#四-Inject-和-Provides-的优先级" class="headerlink" title="四.@Inject 和 @Provides 的优先级"></a>四.@Inject 和 @Provides 的优先级</h1><p>Dagger2 依赖查找的顺序是先查找 Module 内所有的 @Provides 提供的依赖，如果查找不到再去查找 @Inject 提供的依赖。</p>
+<ul>
+<li>步骤1：查找Module中是否存在创建该类的方法。</li>
+<li>步骤2：若存在创建类方法，查看该方法是否存在参数</li>
+<li>步骤2.1：若存在参数，则按从步骤1开始依次初始化每个参数</li>
+<li>步骤2.2：若不存在参数，则直接初始化该类实例，一次依赖注入到此结束</li>
+<li>步骤3：若不存在创建类方法，则查找Inject注解的构造函数，看构造函数是否存在参数</li>
+<li>步骤3.1：若存在参数，则从步骤1开始依次初始化每个参数</li>
+<li>步骤3.2：若不存在参数，则直接初始化该类实例，一次依赖注入到此结束</li>
+</ul>
+<h1 id="五-Scope作用域"><a href="#五-Scope作用域" class="headerlink" title="五.Scope作用域"></a>五.Scope作用域</h1><h3 id="1-Scope作用域"><a href="#1-Scope作用域" class="headerlink" title="1.Scope作用域"></a>1.Scope作用域</h3><p>scope 就是作用域的意思，在不使用@Scope的情况下，每次注入的对象都会是一个新的不同的对象，而@Scope能限制被注入的对象.<br>在MainActivity中注入两个Person对象</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Inject</span><br>Person person1;<br><span class="hljs-variable">@Inject</span><br>Person person2;<br><span class="hljs-variable">@Override</span><br>protected void <span class="hljs-built_in">onCreate</span>(<span class="hljs-variable">@Nullable</span> Bundle savedInstanceState) &#123;<br>    <span class="hljs-selector-tag">super</span><span class="hljs-selector-class">.onCreate</span>(savedInstanceState);<br>    <span class="hljs-selector-tag">setContentView</span>(R.layout.activity_main);<br>    <span class="hljs-selector-tag">DaggerMainActivityComponent</span><span class="hljs-selector-class">.builder</span>()<span class="hljs-selector-class">.mainModule</span>(new <span class="hljs-built_in">MainModule</span>(<span class="hljs-number">19</span>))<span class="hljs-selector-class">.build</span>()<span class="hljs-selector-class">.inject</span>(this);<br>    <span class="hljs-selector-tag">Log</span><span class="hljs-selector-class">.d</span>(TAG,<span class="hljs-string">&quot;person1 hash:&quot;</span>+person1.<span class="hljs-built_in">toString</span>());<br>    <span class="hljs-selector-tag">Log</span><span class="hljs-selector-class">.d</span>(TAG,<span class="hljs-string">&quot;person2 hash:&quot;</span>+person2.<span class="hljs-built_in">toString</span>());<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>运行程序可以看到可以看到person1和person2的hash值并不相同,因此说明它们是两个不同的对象.在 dagger2 中，@scope 的一个默认实现就是 @Singleton.</p>
+<h3 id="2-Singleton注解"><a href="#2-Singleton注解" class="headerlink" title="2.Singleton注解"></a>2.Singleton注解</h3><p>如果标注了Scope注解，那么注入器可能就会保持这个实例，下次注入需要这个依赖时就可以重用了.@scope 的一个默认实现就是 @Singleton.<br>@Singleton，这是一个标注了@Scope的注解</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Identifies a type that the injector only instantiates once. Not inherited.</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * @see javax.inject.Scope @Scope</span><br><span class="hljs-comment"> */</span><br><span class="hljs-variable">@Scope</span><br><span class="hljs-variable">@Documented</span><br><span class="hljs-variable">@Retention</span>(RUNTIME)<br>public <span class="hljs-variable">@interface</span> Singleton &#123;&#125;<br></code></pre></td></tr></table></figure>
+<p>从Scope文档中的示例可以看出，这个Singleton的写法并没有什么特殊的，仅仅是在文档注释写了句标记单例的类型.实际上，Scope就是作为一种类型的标记而已，而这种标记的目的是为了更好地区分作用域.<br>@Scope所描述的注解用于两个地方：</p>
+<ul>
+<li>Component类</li>
+<li>Module中用于创建实例的provideXXX方法</li>
+</ul>
+<p>使用Singleton注解来看看效果.</p>
+<ol>
+<li>在PersonModule中加入<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Module</span><br>public class PersonModule &#123;<br>    <span class="hljs-variable">@Provides</span><br>    <span class="hljs-variable">@Singleton</span>  <span class="hljs-comment">//1.添加@Singleton标明该方法产生只产生一个实例</span><br>    public Person <span class="hljs-built_in">providePerson</span>()&#123;<br>        <span class="hljs-selector-tag">return</span> <span class="hljs-selector-tag">new</span> <span class="hljs-selector-tag">Person</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>在Component中加入</li>
+</ol>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Singleton</span> <span class="hljs-comment">//2.添加@Singleton标明该Component中有Module使用了@Singleton</span><br><span class="hljs-variable">@Component</span>(modules = PersonModule.class)<br>interface ScopeComponent &#123;<br>    <span class="hljs-selector-tag">void</span> <span class="hljs-selector-tag">inject</span>(DaggerScopeActivity daggerActivity);<span class="hljs-comment">//针对这个参数对象进行依赖注入</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>添加完Singleton注解以后.再次运行程序.我们发现在MainActivity中person1和person2的hash值相同.说明他们在MainActivity中保持了单例.</p>
+<p>我们通过分析Dagger自动生成的代码来分析如何实现单例的：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> final <span class="hljs-keyword">class</span> <span class="hljs-title class_">DaggerMainActivityComponent</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">MainActivityComponent</span> &#123;<br>  <span class="hljs-keyword">private</span> <span class="hljs-title class_">Provider</span>&lt;<span class="hljs-title class_">Person</span>&gt; providePersonProvider;<br><br>  <span class="hljs-keyword">private</span> <span class="hljs-title class_">DaggerMainActivityComponent</span>(<span class="hljs-title class_">MainModule</span> mainModuleParam) &#123;<br>    <span class="hljs-comment">//2. 这里会调用initialize方法</span><br>    <span class="hljs-title function_">initialize</span>(mainModuleParam);<br>  &#125;<br><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title class_">Builder</span> <span class="hljs-title function_">builder</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Builder</span>();<br>  &#125;<br><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title class_">MainActivityComponent</span> <span class="hljs-title function_">create</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Builder</span>().<span class="hljs-title function_">build</span>();<br>  &#125;<br><br>  <span class="hljs-meta">@SuppressWarnings</span>(<span class="hljs-string">&quot;unchecked&quot;</span>)<br>  <span class="hljs-keyword">private</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">initialize</span>(<span class="hljs-params">final <span class="hljs-title class_">MainModule</span> mainModuleParam</span>) &#123;<br>    <span class="hljs-comment">//2.根据MainModule创建providePersonProvider对象</span><br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">providePersonProvider</span> = <span class="hljs-title class_">DoubleCheck</span>.<span class="hljs-title function_">provider</span>(<span class="hljs-title class_">MainModule</span>_ProvidePersonFactory.<span class="hljs-title function_">create</span>(mainModuleParam));<br>  &#125;<br><br>  <span class="hljs-meta">@Override</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">inject</span>(<span class="hljs-params"><span class="hljs-title class_">MainActivity</span> activity</span>) &#123;<br>    <span class="hljs-title function_">injectMainActivity</span>(activity);&#125;<br><br>  <span class="hljs-keyword">private</span> <span class="hljs-title class_">MainActivity</span> <span class="hljs-title function_">injectMainActivity</span>(<span class="hljs-params"><span class="hljs-title class_">MainActivity</span> instance</span>) &#123;<br>    <span class="hljs-comment">//3.providePersonProvider是单例的所以providePersonProvider.get()获取到的对象也是相同的</span><br>    <span class="hljs-title class_">MainActivity</span>_MembersInjector.<span class="hljs-title function_">injectMPerson</span>(instance, providePersonProvider.<span class="hljs-title function_">get</span>());<br>    <span class="hljs-title class_">MainActivity</span>_MembersInjector.<span class="hljs-title function_">injectMPerson2</span>(instance, providePersonProvider.<span class="hljs-title function_">get</span>());<br>    <span class="hljs-keyword">return</span> instance;<br>  &#125;<br><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> final <span class="hljs-keyword">class</span> <span class="hljs-title class_">Builder</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">MainModule</span> mainModule;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">Builder</span>() &#123;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title class_">Builder</span> <span class="hljs-title function_">mainModule</span>(<span class="hljs-params"><span class="hljs-title class_">MainModule</span> mainModule</span>) &#123;<br>      <span class="hljs-variable language_">this</span>.<span class="hljs-property">mainModule</span> = <span class="hljs-title class_">Preconditions</span>.<span class="hljs-title function_">checkNotNull</span>(mainModule);<br>      <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>;<br>    &#125;<br>    <span class="hljs-comment">//1.通过build方法会创建一个MainModule对象</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-title class_">MainActivityComponent</span> <span class="hljs-title function_">build</span>(<span class="hljs-params"></span>) &#123;<br>      <span class="hljs-keyword">if</span> (mainModule == <span class="hljs-literal">null</span>) &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">mainModule</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MainModule</span>();<br>      &#125;<br>      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DaggerMainActivityComponent</span>(mainModule);<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在创建DaggerMainActivityComponent时会调用initialize生成providePersonProvider对象.<br>MainModule_ProvidePersonFactory.java:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MainModule_ProvidePersonFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Factory</span>&lt;Person&gt; &#123;<br>  <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> MainModule <span class="hljs-keyword">module</span>;<br><br>  <span class="hljs-keyword">public</span> <span class="hljs-title function_">MainModule_ProvidePersonFactory</span><span class="hljs-params">(MainModule <span class="hljs-keyword">module</span>)</span> &#123;<br>    <span class="hljs-built_in">this</span>.<span class="hljs-keyword">module</span> = <span class="hljs-keyword">module</span>;<br>  &#125;<br><br>  <span class="hljs-meta">@Override</span><br>  <span class="hljs-keyword">public</span> Person <span class="hljs-title function_">get</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">return</span> providePerson(<span class="hljs-keyword">module</span>);<br>  &#125;<br>  <span class="hljs-comment">//1.通过new关键字创建MainModule_ProvidePersonFactory对象</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> MainModule_ProvidePersonFactory <span class="hljs-title function_">create</span><span class="hljs-params">(MainModule <span class="hljs-keyword">module</span>)</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MainModule_ProvidePersonFactory</span>(<span class="hljs-keyword">module</span>);<br>  &#125;<br><br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Person <span class="hljs-title function_">providePerson</span><span class="hljs-params">(MainModule instance)</span> &#123;<br>    <span class="hljs-keyword">return</span> Preconditions.checkNotNull(instance.providePerson(), <span class="hljs-string">&quot;Cannot return null from a non-@Nullable @Provides method&quot;</span>);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在DaggerMainActivityComponent的inject方法中providePersonProvider是单例的所以providePersonProvider.get()获取到的对象也是相同的.就算换个Scope，生成的也是一样的代码.<br>这个单例只针对同一个Component实例的情况下，毕竟Component本身也是能重复创建的,Dagger通过Singleton创建出来的单例并不保持在静态域上，而是保留在Component实例中。</p>
+<p>那在别的Activity中是否也会是使用MainActivity中的单例对象呢?<br>我们再添加一个界面SecondActivity.<br>在SecondActivity中注入两个Person对象</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Inject</span><br>Person person3;<br><span class="hljs-variable">@Inject</span><br>Person person4;<br><span class="hljs-variable">@Override</span><br>protected void <span class="hljs-built_in">onCreate</span>(<span class="hljs-variable">@Nullable</span> Bundle savedInstanceState) &#123;<br>    <span class="hljs-selector-tag">super</span><span class="hljs-selector-class">.onCreate</span>(savedInstanceState);<br>    <span class="hljs-selector-tag">setContentView</span>(R.layout.activity_main);<br>    <span class="hljs-selector-tag">DaggerMainActivityComponent</span><span class="hljs-selector-class">.builder</span>()<span class="hljs-selector-class">.mainModule</span>(new <span class="hljs-built_in">MainModule</span>(<span class="hljs-number">19</span>))<span class="hljs-selector-class">.build</span>()<span class="hljs-selector-class">.inject</span>(this);<br>    <span class="hljs-selector-tag">Log</span><span class="hljs-selector-class">.d</span>(TAG,person1+<span class="hljs-string">&quot;&quot;</span>);<br>    <span class="hljs-selector-tag">Log</span><span class="hljs-selector-class">.d</span>(TAG,person2+<span class="hljs-string">&quot;&quot;</span>);<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>重新运行程序.我们发现在SecondActivity中的person3和person4对象是相同的,但是并不和MainActivity中person1和person2的hash值相同.<br>这里也印证了我们上面的结论:用 @Singleton 确定的单例作用域应该也是在 Component 的范围内。这个范围在单个的 Component 中。<br>MainActivity 和 SecondActivity 运用了不同的 Component 即使他们都添加了@Singleton 注解 MainActivity 和 SecondActivity 中的生成的对象 也不是同一个。<br>如果在应用的Application中创建Component，在Activity中进行注入,那么被注入的对象在整个应用程序中就是单例的。</p>
+<p>**在 Dagger2 中 Scope 机制可以保证在 Scope 标记的 Component 作用域内 ，类会保持单例 **</p>
+<p>并不是只有 @Singleton  注解标记的相关类生产的实例是单例的，是所有的 Scope(自定义 Scope) 标记的相关类生产的实例 都是单例 的，只不过这个单例是有条件的 – 在 Scope 注解标记 Component 的作用域内生产的实例是单例的 。<br>Scope 机制下的单例其实和 @Singleton 的字面意义 没有一点点关系，可以把 @Singleton  换成任意单词，什么 @Dog、@Cat、@XXx 都可以，你只要保证这个注解标记的 Component 在 App 进程中为单例的，并且得到正确的实现(被正确的标记到 类构造器 或 Module 中的 @Provides 标记的方法)，那么它对应生成的类实例就是 单例 的。<br>@Singleton 之所以被默认实现，只是因为这可以让人根据它的字面意思，知道被他标记的相关生成的类实例为单例，这符合了 Java 的命名规范。<br>例如我们要创建整个应用程序中的单例对象:<br>MyApplication.Java:</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyApplication</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Application</span> &#123;<br><br>    <span class="hljs-title class_">ActivityComponent</span> activityComponent;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">onCreate</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-variable language_">super</span>.<span class="hljs-title function_">onCreate</span>();<br>        activityComponent = <span class="hljs-title class_">DaggerActivityComponent</span>.<span class="hljs-title function_">builder</span>().<span class="hljs-title function_">build</span>();<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title class_">MyApplication</span> <span class="hljs-title function_">getApplication</span>(<span class="hljs-params"><span class="hljs-title class_">Context</span> context</span>)&#123;<br>        <span class="hljs-keyword">return</span> (<span class="hljs-title class_">MyApplication</span>) context.<span class="hljs-title function_">getApplicationContext</span>();<br>    &#125;<br><br>   <span class="hljs-keyword">public</span> <span class="hljs-title class_">ActivityComponent</span> <span class="hljs-title function_">getActivityComponent</span>(<span class="hljs-params"></span>)&#123;<br>        <span class="hljs-keyword">return</span> activityComponent;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>FirstActivity.java:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs scala">public <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FirstActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AppCompatActivity</span> </span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">TextView</span> mContentTextView;<br><br>    <span class="hljs-meta">@Inject</span><br>    <span class="hljs-type">Person</span> person1;<br>    <span class="hljs-meta">@Inject</span><br>    <span class="hljs-type">Person</span> person2;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> void onCreate(<span class="hljs-type">Bundle</span> savedInstanceState) &#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState);<br>        setContentView(<span class="hljs-type">R</span>.layout.activity_singleton_and_scope);<br>        mContentTextView = (<span class="hljs-type">TextView</span>) findViewById(<span class="hljs-type">R</span>.id.contentTextView);<br>        <span class="hljs-comment">//通过Application中的Component注入</span><br>        <span class="hljs-type">MyApplication</span>.getApplication(<span class="hljs-keyword">this</span>).getActivityComponent().inject(<span class="hljs-keyword">this</span>);<br>        mContentTextView.setText(person1.hashCode() + <span class="hljs-string">&quot;\n&quot;</span> + person2.hashCode());<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>SecondActivity.java</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs scala">public <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SecondActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AppCompatActivity</span> </span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">TextView</span> mContentTextView;<br><br>    <span class="hljs-meta">@Inject</span><br>    <span class="hljs-type">Person</span> person1;<br>    <span class="hljs-meta">@Inject</span><br>    <span class="hljs-type">Person</span> person2;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> void onCreate(<span class="hljs-type">Bundle</span> savedInstanceState) &#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState);<br>        setContentView(<span class="hljs-type">R</span>.layout.activity_singleton_and_scope);<br>        mContentTextView = (<span class="hljs-type">TextView</span>) findViewById(<span class="hljs-type">R</span>.id.contentTextView);<br>        <span class="hljs-comment">//通过Application中的Component注入</span><br>        <span class="hljs-type">MyApplication</span>.getApplication(<span class="hljs-keyword">this</span>).getActivityComponent().inject(<span class="hljs-keyword">this</span>);<br>        mContentTextView.setText(person1.hashCode() + <span class="hljs-string">&quot;\n&quot;</span> + person2.hashCode());<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>按照如上修改我们就可以得到全局的单例对象.</p>
+<h3 id="3-自定义-Scope"><a href="#3-自定义-Scope" class="headerlink" title="3.自定义@Scope"></a>3.自定义@Scope</h3><p>对于Android，我们通常会定义一个针对整个APP全生命周期的@PerApp的Scope注解,通过仿照@Singleton</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Scope</span><br><span class="hljs-variable">@Documented</span><br><span class="hljs-variable">@Retention</span>(RUNTIME)<br>public <span class="hljs-variable">@interface</span> PerApp&#123;&#125;<br></code></pre></td></tr></table></figure>
+<p>你可能会发现，这个自定义的@Scope 和@Singleton代码完全一样，那@PerApp是不是也能具有实现单例模式的功能?答案是肯定的.<br>那你可能会有疑问，既然功能都是一样的，干嘛还自定义@Scope 结论就是不同的@Scope ，定义单例对象的生命周期，也就是使用范围。<br>在写代码时，程序员更加清楚什么时候创建Component，什么时候结束。</p>
+<p>自定义@Scope总结起来有以下两点好处：</p>
+<ul>
+<li><p>更好的管理ApplicationComponent和Module之间的关系，Component和Component之间的依赖和继承关系。如果关系不匹配，在编译期间会报错</p>
+</li>
+<li><p>代码可读性，让程序猿更好的了解Module中创建的类实例的使用范围。</p>
+</li>
+</ul>
+<p>@Singleton”并没有真正为你产生单列”，该注解只是保证只是在同一个Component对象中是单列而已，不同的Component进行注入，就会导致不是单例了，真正要实现全局单列，还是得靠自己控制，保证我们所有的地方都是使用同一个Component注入的对象.</p>
+<p>总结的结论：</p>
+<ul>
+<li>必须使用同一个Component对象来生成，也就是DaggerActivityComponent.builder().build()只能执行一次。</li>
+<li>Component和它的Module要使用相同的Scope。同一个Module中需要使用同样的Scope，否则相应的Component不知道使用什么Scope。</li>
+<li>有依赖关系或者包含关系的Component不能使用同样的Scope。</li>
+</ul>
+<blockquote>
+<p>注意，Scope只的单例是在Component的生命周期中相关依赖是单例的，也就是同一个Component对象注入的同类型的依赖是相同的。按上面例子，如果我们又创建了个AppComponent，它注入的InfoRepository对象与之前的肯定不是一个。<br>这里所谓的「生命周期」是与 Component 相关联的。与 Activity 等任何 Android 组件没有任何关系.</p>
+</blockquote>
+<h1 id="六-Named和-Qualifier注解"><a href="#六-Named和-Qualifier注解" class="headerlink" title="六.@Named和@Qualifier注解"></a>六.@Named和@Qualifier注解</h1><p>如果一个类有多个构造方法，或者有两个相同依赖时，它们都继承同一个父类或者实现同一个接口，那么怎么区分呢？这就要用到@Named或者@Qualifier注解了。</p>
+<h3 id="1-Named"><a href="#1-Named" class="headerlink" title="1. @Named"></a>1. @Named</h3><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Car</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">String</span> engine = <span class="hljs-string">&quot;默认引擎&quot;</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">String</span> tyre = <span class="hljs-string">&quot;默认轮胎&quot;</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">String</span> color = <span class="hljs-string">&quot;默认颜色&quot;</span>;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Car</span><span class="hljs-params">()</span> </span>&#123;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Car</span><span class="hljs-params">(<span class="hljs-type">String</span> engine)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.engine = engine;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Car</span><span class="hljs-params">(<span class="hljs-type">String</span> engine, <span class="hljs-type">String</span> tyre)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.engine = engine;<br>        <span class="hljs-keyword">this</span>.tyre = tyre;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Car</span><span class="hljs-params">(<span class="hljs-type">String</span> engine, <span class="hljs-type">String</span> tyre, <span class="hljs-type">String</span> color)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.engine = engine;<br>        <span class="hljs-keyword">this</span>.tyre = tyre;<br>        <span class="hljs-keyword">this</span>.color = color;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-type">String</span> <span class="hljs-title">make</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;改装完成车的引擎是:&quot;</span> + engine + <span class="hljs-string">&quot; 车的颜色是:&quot;</span> + color + <span class="hljs-string">&quot; 车的轮胎是:&quot;</span> + tyre;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-meta">@Module</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">QualifierModule</span> &#123;<br><br>    <span class="hljs-comment">//普通车</span><br>    <span class="hljs-meta">@Provides</span><br>    <span class="hljs-meta">@Named</span>(<span class="hljs-string">&quot;nomal&quot;</span>)<br>    <span class="hljs-keyword">public</span> <span class="hljs-title class_">Car</span> <span class="hljs-title function_">defaultCarProvides</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Car</span>();<br>    &#125;<br><br>    <span class="hljs-comment">//赛车</span><br>    <span class="hljs-meta">@Provides</span><br>    <span class="hljs-meta">@Named</span>(<span class="hljs-string">&quot;racing&quot;</span>)<br>    <span class="hljs-keyword">public</span> <span class="hljs-title class_">Car</span> <span class="hljs-title function_">racingCarProvides</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Car</span>(<span class="hljs-string">&quot;赛车引擎&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-comment">//自定义改装车</span><br>    <span class="hljs-meta">@Provides</span><br>    <span class="hljs-meta">@Named</span>(<span class="hljs-string">&quot;custom&quot;</span>)<br>    <span class="hljs-keyword">public</span> <span class="hljs-title class_">Car</span> <span class="hljs-title function_">customCarProvides</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Car</span>(<span class="hljs-string">&quot;赛车引擎&quot;</span>, <span class="hljs-string">&quot;米其林轮胎&quot;</span>, <span class="hljs-string">&quot;红色&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">public</span> <span class="hljs-selector-tag">class</span>  <span class="hljs-selector-tag">DaggerQualifierActivity</span> <span class="hljs-selector-tag">extends</span> <span class="hljs-selector-tag">AppCompatActivity</span>() &#123;<br><br>    <span class="hljs-comment">//普通车</span><br>    <span class="hljs-variable">@Inject</span><br>    <span class="hljs-variable">@Named</span>(<span class="hljs-string">&quot;nomal&quot;</span>)<br>    Car defaultCar;<br><br>    <span class="hljs-comment">//赛车</span><br>    <span class="hljs-variable">@Inject</span><br>    <span class="hljs-variable">@Named</span>(<span class="hljs-string">&quot;racing&quot;</span>)<br>    Car racingCar;<br><br>    <span class="hljs-comment">//自定义改装车</span><br>    <span class="hljs-variable">@Inject</span><br>    <span class="hljs-variable">@Named</span>(<span class="hljs-string">&quot;custom&quot;</span>)<br>    Car customCar;<br><br>  <span class="hljs-variable">@Override</span><br>    protected void <span class="hljs-built_in">onCreate</span>(Bundle savedInstanceState) &#123;<br>        <span class="hljs-selector-tag">super</span><span class="hljs-selector-class">.onCreate</span>(savedInstanceState);<br>        <span class="hljs-selector-tag">setContentView</span>(R.layout.test_activity_dagger_qualifier);<br>        <span class="hljs-selector-tag">DaggerQualifierComponent</span><span class="hljs-selector-class">.builder</span>()<span class="hljs-selector-class">.qualifierModule</span>(<span class="hljs-built_in">QualifierModule</span>())<span class="hljs-selector-class">.build</span>()<span class="hljs-selector-class">.Inject</span>(this)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="2-Qualifier"><a href="#2-Qualifier" class="headerlink" title="2.@Qualifier"></a>2.@Qualifier</h3><p>以上通过 @Named 实现的标识功能 @Qualifier 同样可以实现，但是需要我们自定义注解来完成，具体一个使用场景如下：</p>
+<p>自定义注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Qualifier</span><br><span class="hljs-meta">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> UserThirdQualifier &#123;<br>    String <span class="hljs-title function_">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> <span class="hljs-string">&quot;&quot;</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>注意，这里自定义注解需要使用 @Qualifier 进行标注。</p>
+<p>Module 类中标记</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-meta">@Module</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UserThirdModule</span> &#123;<br><br>    <span class="hljs-meta">@UserThirdQualifier</span>(<span class="hljs-string">&quot;c&quot;</span>)<br>    <span class="hljs-meta">@Provides</span><br>    <span class="hljs-title class_">UserThird</span> <span class="hljs-title function_">provideUserThird</span>(<span class="hljs-params"></span>)&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UserThird</span>(<span class="hljs-string">&quot;男&quot;</span>,<span class="hljs-number">1243</span>);<br>    &#125;<br><br>    <span class="hljs-meta">@UserThirdQualifier</span>(<span class="hljs-string">&quot;d&quot;</span>)   <br>    <span class="hljs-meta">@Provides</span><br>    <span class="hljs-title class_">UserThird</span> <span class="hljs-title function_">provideUserThirdWithoutParams</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UserThird</span>();<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>目标类</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs scala">public <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ThirdActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AppCompatActivity</span> </span>&#123;<br>    <span class="hljs-meta">@UserThirdQualifier</span>(<span class="hljs-string">&quot;c&quot;</span>)<br>    <span class="hljs-meta">@Inject</span><br>    <span class="hljs-type">UserThird</span> mUserTwoC;<br><br>    <span class="hljs-meta">@UserThirdQualifier</span>(<span class="hljs-string">&quot;d&quot;</span>)<br>    <span class="hljs-meta">@Inject</span><br>    <span class="hljs-type">UserThird</span> mUserTwoD;<br><br>    <span class="hljs-keyword">private</span> static <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-type">TAG</span> = <span class="hljs-string">&quot;SecondActivity&quot;</span>;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> void onCreate(<span class="hljs-type">Bundle</span> savedInstanceState) &#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState);<br>        setContentView(<span class="hljs-type">R</span>.layout.activity_second);<br>        <span class="hljs-type">DaggerUserThirdComponent</span>.builder().userThirdModule(<span class="hljs-keyword">new</span> <span class="hljs-type">UserThirdModule</span>()).build().injectToThirdActivity(<span class="hljs-keyword">this</span>);<br>        <span class="hljs-type">Log</span>.e(<span class="hljs-type">TAG</span>, <span class="hljs-string">&quot;onCreate: &quot;</span> + <span class="hljs-string">&quot;sex&quot;</span> + mUserTwoC.getSex() + <span class="hljs-string">&quot; number：&quot;</span> + mUserTwoC.getCarNum());<br>        mUserTwoC.setCarNum(<span class="hljs-number">46</span>);<br>        mUserTwoC.setSex(<span class="hljs-string">&quot;女&quot;</span>);<br>        <span class="hljs-type">Log</span>.e(<span class="hljs-type">TAG</span>, <span class="hljs-string">&quot;onCreate: &quot;</span> + <span class="hljs-string">&quot;sex&quot;</span> + mUserTwoC.getSex() + <span class="hljs-string">&quot; number：&quot;</span> + mUserTwoC.getCarNum());<br>        <span class="hljs-type">Log</span>.e(<span class="hljs-type">TAG</span>, <span class="hljs-string">&quot;onCreate: &quot;</span> + <span class="hljs-string">&quot;sex&quot;</span> + mUserTwoD.getSex() + <span class="hljs-string">&quot; number：&quot;</span> + mUserTwoD.getCarNum());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>同样的，以上代码需要重点关注的是 Module 类 中使用 @UserThirdQualifier 注解方法和在 目标类 中使用 @UserThirdQualifier 注解标记类的实例变量，并且 Module 中的 @UserThirdQualifier(“c”) 和 目标类中的 @UserThirdQualifier(“c”)是一 一对应的。</p>
+<h1 id="七-Dagger2-中的懒加载和重加载"><a href="#七-Dagger2-中的懒加载和重加载" class="headerlink" title="七.Dagger2 中的懒加载和重加载"></a>七.Dagger2 中的懒加载和重加载</h1><h3 id="1-Dagger2-中的懒加载"><a href="#1-Dagger2-中的懒加载" class="headerlink" title="1. Dagger2 中的懒加载"></a>1. Dagger2 中的懒加载</h3><p>智能懒加载，是Dagger2实现高性能的重要举措之一：在需要的时候才对成员变量进行初始化，可以大幅缩短应用初始化的时间。</p>
+<p>使用方法：用Lazy<T>修饰变量即可。Lazy 是泛型类，接受任何类型的参数。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs typescript">    <span class="hljs-meta">@Inject</span><br>    <span class="hljs-title class_">Lazy</span>&lt;<span class="hljs-title class_">Object</span>&gt; <span class="hljs-built_in">object</span>;<br><span class="hljs-string">``</span><span class="hljs-string">`    </span><br><span class="hljs-string">用Lazy&lt;T&gt;修饰需要被注入的对象即可。</span><br></code></pre></td></tr></table></figure>
+<p>public class Car {<br>    &#x2F;**<br>     * @Inject：@Inject有两个作用，一是用来标记需要依赖的变量，以此告诉Dagger2为它提供依赖<br>     *&#x2F;<br>    @Inject<br>    Lazy<Engine> engine;</p>
+<pre><code class="hljs">public Car() &#123;
+    DaggerCarComponent.builder().build().inject(this);
+&#125;
+
+public Engine getEngine() &#123;
+    return this.engine;
+&#125;
+
+public static void main(String ... args)&#123;
+    Car car = new Car();
+    System.out.println(car.getEngine());
+&#125;
+</code></pre>
+<p>}</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs gherkin"><span class="hljs-comment">### 2.Provider 强制重新加载</span><br><span class="hljs-meta">@Singleton</span> 标注实现的单例可以让我们每次获取的都是同一个对象（暂不细究全局/局部单例），但有时，我们希望每次都创建一个新的实例，这种情况与 <span class="hljs-meta">@Singleton</span> 完全相反。<br>Dagger2 通过 Provider 就可以实现。它的使用方法和 Lazy 很类似。<br><br>使用方法：用Provider<span class="hljs-variable">&lt;T&gt;</span>修饰变量即可。Provider是泛型类，接受任何类型的参数。 <br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">@Inject
+Provider&lt;Object&gt; object;
+</code></pre>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">用Provider<span class="hljs-tag">&lt;<span class="hljs-name">T</span>&gt;</span>修饰需要被注入的对象即可。 <br></code></pre></td></tr></table></figure>
+<p>public class Car {<br>    &#x2F;**<br>     * @Inject：@Inject有两个作用，一是用来标记需要依赖的变量，以此告诉Dagger2为它提供依赖<br>     *&#x2F;<br>    @Inject<br>    Provider<Engine> engine;</p>
+<pre><code class="hljs">public Car() &#123;
+    DaggerCarComponent.builder().build().inject(this);
+&#125;
+
+public Engine getEngine() &#123;
+    return this.engine;
+&#125;
+
+public static void main(String ... args)&#123;
+    Car car = new Car();
+    System.out.println(car.getEngine());
+&#125;
+</code></pre>
+<p>}</p>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs vhdl"><br>但是，需要注意的是 Provider 所表达的重新加载是说每次重新执行 Module 相应的 @Provides 方法，如果这个方法本身每次返回同一个对象，那么每次调用 get() 的时候，对象也会是同一个。<br><br># 八.<span class="hljs-keyword">Component</span>间依赖的两种方式<br><span class="hljs-keyword">Component</span> 管理着依赖实例，根据依赖实例之间的关系就能确定 <span class="hljs-keyword">Component</span> 的关系。在 Dagger <span class="hljs-number">2</span> 中 <span class="hljs-keyword">Component</span> 的组织关系分为两种：dependence和subcomponent，有些像组合和继承的关系。<br>- 依赖关系：一个 <span class="hljs-keyword">Component</span> 依赖其他 Compoent ，以获得其中公开的依赖实例，用 <span class="hljs-keyword">Component</span> 中的dependencies声明。<br>- 继承关系：一个 <span class="hljs-keyword">Component</span> 继承（扩展）其他的 <span class="hljs-keyword">Component</span>， 以获得其他的<span class="hljs-keyword">Component</span>中的依赖，SubComponent 就是继承关系的体现。<br>### <span class="hljs-number">1</span>.Dependence方式<br><span class="hljs-keyword">Component</span> 依赖 是通过 @<span class="hljs-keyword">Component</span> 的注解中 dependencies 选项来标识的，意思是指 该 <span class="hljs-keyword">Component</span> 依赖 dependencies 指定的 <span class="hljs-keyword">Component</span> 。<br>举个例子，看以下代码：<br>创建RetrofitUtils网络请求工具<br></code></pre></td></tr></table></figure>
+<p>public class RetrofitUtils {<br>    public String doNetWork() {<br>        return “网络请求到数据了:xxx”;<br>    }<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">创建JsonUtils解析工具<br></code></pre></td></tr></table></figure>
+<p>public class JsonUtils {<br>    &#x2F;&#x2F;解析Json数据<br>    public String parseJson(String json) {<br>        return “解析过后的Json数据:” + json;<br>    }<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">创建NetWorkModule提供RetrofitUtils和JsonUtils对象<br></code></pre></td></tr></table></figure>
+<p>@Module<br>public class NetWorkModule {<br>    &#x2F;&#x2F;向外提供JsonUrils对象<br>    @Provides<br>    JsonUtils providesGson() {<br>        return new JsonUtils();<br>    }</p>
+<pre><code class="hljs">//向外提供RetrofitUtils对象
+@Provides
+RetrofitUtils providesRetrofit() &#123;
+    return new RetrofitUtils();
+&#125;
+</code></pre>
+<p>}</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs erlang"><br>以MVP架构为例:在Presenter中我们需要用到RetrofitUtils来请求网络数据,还需要用到JsonUtils来解析数据.<br></code></pre></td></tr></table></figure>
+<p>public class Presenter {</p>
+<pre><code class="hljs">private JsonUtils mJsonUtils;
+
+private RetrofitUtils mNetWorkUtils;
+
+
+public Presenter(JsonUtils jsonUtils, RetrofitUtils netWorkUtils) &#123;
+    this.mJsonUtils = jsonUtils;
+    this.mNetWorkUtils = netWorkUtils;
+&#125;
+
+public String doNetWork() &#123;
+    String respon = mNetWorkUtils.doNetWork();//请求网络数据
+    String jsonString = mJsonUtils.parseJson(respon);//解析网路数据
+    return jsonString;
+&#125;
+</code></pre>
+<p>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">创建提供Presenter的PresenterModule<br></code></pre></td></tr></table></figure>
+<p>@Module<br>public class PresenterModule {<br>    &#x2F;&#x2F;这里的JsonUtils和RetrofitUtils 是通过PresenterComponent里dependencies &#x3D; NetWorkComponent,从NetWorkComponent里面获取的.<br>    @Provides<br>    public Presenter providesPresenter(JsonUtils jsonUtils, RetrofitUtils retrofitUtils) {<br>        return new Presenter(jsonUtils, retrofitUtils);<br>    }<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">创建NetWork依赖注入接口NetWorkComponent<br></code></pre></td></tr></table></figure>
+<p>@Component(modules &#x3D; NetWorkModule.class)<br>public interface NetWorkComponent {</p>
+<pre><code class="hljs">//将NetWorkModule中的Gson对象、WorkUtils暴露出来，以便于其他依赖于NetWorkComponent的Component调用
+JsonUtils getGson();
+
+RetrofitUtils getNetWorkUtils();
+
+//自己本身也可以座位Component进行注入
+//void inject(DaggerDependenciesActivity daggerDependenciesActivity);
+</code></pre>
+<p>}</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">创建PresenterComponent依赖注入对象:</span><br></code></pre></td></tr></table></figure>
+<p>@Component(modules &#x3D; PresenterModule.class, dependencies &#x3D; NetWorkComponent.class)<br>public interface PresenterComponent {<br>    void inject(DaggerDependenciesActivity daggerDependenciesActivity);<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs"><br>DaggerDependenciesActivity.java<br></code></pre></td></tr></table></figure>
+<p>public class DaggerDependenciesActivity extends AppCompatActivity {<br>    @Inject<br>    Presenter mPresenter;<br>    @Inject<br>    RetrofitUtils mRetrofitUtils;<br>    @Inject<br>    JsonUtils mJsonUtils;</p>
+<pre><code class="hljs">@Override
+protected void onCreate(@Nullable Bundle savedInstanceState) &#123;
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.test_activity_dagger_dependencies);
+    DaggerPresenterComponent.builder().netWorkComponent(DaggerNetWorkComponent.create()).presenterModule(new PresenterModule()).build().inject(this);
+    findViewById(R.id.btn_test).setOnClickListener(v -&gt; &#123;
+        ToastUtils.showShort(mPresenter.doNetWork());
+    &#125;);
+&#125;
+</code></pre>
+<p>}</p>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs vhdl">### <span class="hljs-number">2</span>.SubComponent<br>@SubComponent  也是管理 <span class="hljs-keyword">Component</span> 间的依赖，不同的是这种方式不需要 在被依赖的 <span class="hljs-keyword">Component</span> 中显式的声明可以获取相应类实例的方法。<br>通过 @SubComponent 来管理的 <span class="hljs-keyword">Component</span> 之间是一种 继承关系，子 <span class="hljs-keyword">Component</span> 理所当然的可以使用父 <span class="hljs-keyword">Component</span> 的可以提供的类实例<br><br>子<span class="hljs-keyword">Component</span>需要使用@Subcomponent注解，同时需要提供一个Builder接口，供父<span class="hljs-keyword">Component</span>来生成<span class="hljs-keyword">Component</span>，Builder接口中需提供一个返回子<span class="hljs-keyword">Component</span>的抽象接口方法<br>子组件可以使用父组件所有的Module实现进行依赖注入，同时在构建子组件时的代码实现方式也和构建组件依赖时不一样。<br><br>首先定义一个使用@Subcomponent注解的依赖注入组件接口：<br></code></pre></td></tr></table></figure>
+<p>@Subcomponent(modules &#x3D; {SubModule.class})<br>public interface MySubComponent {<br>    void inject(SubActivity activity);<br>}</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">它依赖的 <span class="hljs-keyword">SubModule </span>为：<br></code></pre></td></tr></table></figure>
+<p>@Module<br>public class SubModule {<br>    @Provides<br>    public Flower provideFlower() {<br>        return new Flower(“腊梅”, “红色”);<br>    }<br>}</p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs coq">如果我们想让 DetailComponent 做为 MySubComponent 的父组件，则需要在 DetailComponent 中定义一个返回 MySubComponent 的方法，方法参数为其依赖的 <span class="hljs-keyword">Module</span> 类型：<br></code></pre></td></tr></table></figure>
+<p>@DetailActivityScope<br>@Component(modules &#x3D; {DetailModule.class})<br>public interface DetailComponent {<br>    void inject(DetailActivity activity);</p>
+<pre><code class="hljs">// 定义返回子组件的方法，参数为子组件需要的module
+MySubComponent getSubComponent(SubModule module);
+</code></pre>
+<p>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs">到这里我们的子组件就实现完成了，如何使用呢？子依赖注入注入组件是不能单独直接使用的，因为编译后并不会生成类似DaggerMySubComponent的辅助类，所以需要通过父组件来获取，<br>这也是我们需要在父组件中定义返回子组件方法的原因。具体的用法如下：<br></code></pre></td></tr></table></figure>
+<p>public class SubActivity extends AppCompatActivity {<br>    @Inject<br>    Book book;</p>
+<pre><code class="hljs">@Inject
+Flower flower;
+
+public static void start(Context context) &#123;
+    context.startActivity(new Intent(context, SubActivity.class));
+&#125;
+
+@Override
+protected void onCreate(Bundle savedInstanceState) &#123;
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_sub);
+    // 创建父组件对象
+    DetailComponent detailComponent = DaggerDetailComponent.builder().detailModule(new DetailModule()).build();
+    // 得到子组件，并完成依赖注入
+    detailComponent.getSubComponent(new SubModule()).inject(this);
+
+    Log.e(&quot;SubActivity-book&quot;, book.toString());
+    Log.e(&quot;flower&quot;, flower.toString());
+&#125;
+</code></pre>
+<p>}</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">我们并没有在 <span class="hljs-keyword">SubModule </span>中定义提供 Flowerd 对象的方法，但是同过这种“继承”，MySubComponent 就可以提供 Flower 对象了.<br><br><span class="hljs-comment">### 5.依赖关系 vs 继承关系</span><br>相同点：<br>- 两者都能复用其他 Component 的依赖<br>- 有依赖关系和继承关系的 Component 不能有相同的 <span class="hljs-keyword">Scope</span><br><span class="hljs-keyword"></span><br>区别：<br>- 依赖关系中被依赖的 Component 必须显式地提供公开依赖实例的接口，而 <span class="hljs-keyword">SubComponent </span>默认继承 parent Component 的依赖。<br>- 依赖关系会生成两个独立的 DaggerXXComponent 类，而 <span class="hljs-keyword">SubComponent </span>不会生成 独立的 DaggerXXComponent 类。<br>- 在 <span class="hljs-keyword">Android </span>开发中，Activity 是 App 运行中组件，Fragment 又是 Activity 一部分，这种组件化思想适合继承关系，所以在 <span class="hljs-keyword">Android </span>中一般使用 <span class="hljs-keyword">SubComponent。</span><br><span class="hljs-keyword"></span><br><span class="hljs-comment">### 4.SubComponent 的其他问题</span><br>抽象工厂方法定义继承关系<br>除了使用 Module 的<span class="hljs-keyword">subcomponents属性定义继承关系，还可以在 </span>parent Component 中声明返回 <span class="hljs-keyword">SubComponent </span>的抽象工厂方法来定义：<br></code></pre></td></tr></table></figure>
+<p>@ManScope<br>@Component(modules &#x3D; CarModule.class)<br>public interface ManComponent {<br>    void injectMan(Man man);<br>    SonComponent sonComponent();    &#x2F;&#x2F; 这个抽象工厂方法表明 SonComponent 继承 ManComponent<br>}</p>
+<pre><code class="hljs">这种定义方式不能很明显地表明继承关系，一般推荐使用 Module 的subcomponents属性定义。
+
+&gt;Component 之间共用相同依赖，可以有两种组织关系：依赖关系与继承关系。在 Android 开发中，一般使用继承关系，以 AppComponent 作为 root Component，
+AppComponent 一般还会使用 @Singleton 作用域，而 ActivityComponent 为 SubComponent。
+
+参考资料:
+[史上最适合新手的Dagger2教程（一）基本注入](https://blog.csdn.net/u014653815/article/details/81201865)
+[Android |《看完不忘系列》之dagger](https://juejin.cn/post/6865659377957732359#heading-8)
+[深入浅出依赖注入框架Dagger2](https://blog.csdn.net/cao861544325/article/details/81070582)
+[Android -- 带你从源码角度领悟Dagger2入门到放弃（一）](https://www.cnblogs.com/wjtaigwh/p/6739614.html)
+[Android -- 带你从源码角度领悟Dagger2入门到放弃（二）](https://www.cnblogs.com/wjtaigwh/p/6740643.html)
+[Android -- 带你从源码角度领悟Dagger2入门到放弃（三）](https://www.cnblogs.com/wjtaigwh/p/6744939.html)
+[Android基础知识：Dagger2入门](https://juejin.cn/post/6844903840450347016#heading-7)
+[Dagger2从入门到放弃再到恍然大悟](https://juejin.cn/post/6847902225679958023)
+[Dagger 2 系列（一） -- 前奏篇：依赖注入的基本介绍](https://juejin.cn/post/6844903682908094471)
+[Android 神兵利器Dagger2使用详解（一）基础使用](https://blog.csdn.net/mq2553299/article/details/73065745)
+[Dagger 2 使用及原理](https://www.jianshu.com/p/9f737e477d60)
+[听说你还不会用Dagger2？Dagger2 For Android最佳实践教程](https://juejin.cn/post/6844903696417947662)
+[轻松学，听说你还没有搞懂 Dagger2](https://blog.csdn.net/briblue/article/details/75578459)
+[Dagger2的组件依赖及使用详解](https://blog.csdn.net/lylodyf/article/details/53009042)
+[Dagger2 in Android（二）进阶](http://www.chenhe.cc/p/186#i-4)
+[Dagger 2 完全解析（三），Component 的组织关系与 SubComponent](https://johnnyshieh.me/posts/dagger-subcomponent/)
+[Dagger2 Android应用：@Scope和@Subcomponent](https://cloud.tencent.com/developer/article/1179695)
+[Dagger2利器系列二：懒/重加载+Component 的组织关系](https://blog.csdn.net/lucasxu01/article/details/105645626)
+[Android | 从 Dagger2 到 Hilt 玩转依赖注入（一）](https://www.jianshu.com/p/32a17846c2b0)
+[Dagger2学习笔记4(@Singleton 与@ Scope 实现全局单例与作用域单例)](https://www.jianshu.com/p/c822faa2c083)
+[详解 Dagger2 的 @Scope 和 @Subcomponent](https://juejin.cn/post/6844903459909533710)
+[Dagger2 in Android（三）Scope与生命周期](https://juejin.cn/post/6844904201223405575)
+[Dagger 2 系列（六） -- 进阶篇：Component 依赖、@SubComponent 与多 Component 下的 Scope 使用限制](https://juejin.cn/post/6844903683843424264)
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Dagger2全面使用总结</div>
+      <div>http://example.com/2017/02/17/Dagger2全面使用总结/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2017年2月17日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2017/05/19/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%90%86%E8%AE%BA%E6%80%BB%E7%BB%93-Java%E7%89%88/" title="面向对象设计模式理论总结-Java版">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">面向对象设计模式理论总结-Java版</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2017/02/13/%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E5%BF%85%E7%9F%A5%E7%9A%84%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/" title="开发人员必知的网络基础知识总结">
+                        <span class="hidden-mobile">开发人员必知的网络基础知识总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

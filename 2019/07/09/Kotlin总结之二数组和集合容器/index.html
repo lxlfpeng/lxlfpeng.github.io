@@ -1,0 +1,809 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一 Kotlin中的数组1.数组的类型   kotlin java    IntArray int[]   ShortArray short[]   LongArray long[]   FloatArray float[]   DoubleArray double[]   CharArray char[]   2.数组的创建java创建数组的两种方式： 12int[] intArray &#x3D; ne">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kotlin总结之二数组和集合容器">
+<meta property="og:url" content="http://example.com/2019/07/09/Kotlin%E6%80%BB%E7%BB%93%E4%B9%8B%E4%BA%8C%E6%95%B0%E7%BB%84%E5%92%8C%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一 Kotlin中的数组1.数组的类型   kotlin java    IntArray int[]   ShortArray short[]   LongArray long[]   FloatArray float[]   DoubleArray double[]   CharArray char[]   2.数组的创建java创建数组的两种方式： 12int[] intArray &#x3D; ne">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/2ab9b95b7bfb5df651b3ead4a7785dec.webp">
+<meta property="article:published_time" content="2019-07-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:51:38.789Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/2ab9b95b7bfb5df651b3ead4a7785dec.webp">
+  
+  
+  
+  <title>Kotlin总结之二数组和集合容器 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Kotlin总结之二数组和集合容器"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-07-09 00:00" pubdate>
+          2019年7月9日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Kotlin总结之二数组和集合容器</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-Kotlin中的数组"><a href="#一-Kotlin中的数组" class="headerlink" title="一 Kotlin中的数组"></a>一 Kotlin中的数组</h1><h3 id="1-数组的类型"><a href="#1-数组的类型" class="headerlink" title="1.数组的类型"></a>1.数组的类型</h3><table>
+<thead>
+<tr>
+<th>kotlin</th>
+<th>java</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IntArray</td>
+<td>int[]</td>
+</tr>
+<tr>
+<td>ShortArray</td>
+<td>short[]</td>
+</tr>
+<tr>
+<td>LongArray</td>
+<td>long[]</td>
+</tr>
+<tr>
+<td>FloatArray</td>
+<td>float[]</td>
+</tr>
+<tr>
+<td>DoubleArray</td>
+<td>double[]</td>
+</tr>
+<tr>
+<td>CharArray</td>
+<td>char[]</td>
+</tr>
+</tbody></table>
+<h3 id="2-数组的创建"><a href="#2-数组的创建" class="headerlink" title="2.数组的创建"></a>2.数组的创建</h3><p>java创建数组的两种方式：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-type">int</span>[] intArray = <span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[<span class="hljs-number">6</span>]                <span class="hljs-comment">//表达式：数据类型[]   标识  =   new  数据类型[长度];</span><br><span class="hljs-type">String</span>[] strArray = &#123;<span class="hljs-string">&quot;value0&quot;</span>,<span class="hljs-string">&quot;value1&quot;</span>&#125;    <span class="hljs-comment">//表达式： 数据类型[]  标识  = &#123;value0,value1,...&#125;</span><br></code></pre></td></tr></table></figure>
+<p>在kotlin中有两种创建数组的方式:</p>
+<ul>
+<li>使用arrayOf()、arrayOfNulls()、emptyArray()等工具函数；</li>
+<li>使用Array(size:Int,init:(Int)-&gt;T)构造器；<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs haxe"><span class="hljs-comment">//创建包含指定元素的数组（相当于Java数组的静态初始化）</span><br><span class="hljs-keyword">var</span> stringArr = arrayOf(<span class="hljs-string">&quot;kotlin&quot;</span>, <span class="hljs-string">&quot;php&quot;</span>, <span class="hljs-string">&quot;python&quot;</span>, <span class="hljs-string">&quot;c&quot;</span>)<br><span class="hljs-keyword">var</span> intArr = arrayOf(<span class="hljs-number">1</span>, <span class="hljs-number">24</span>, <span class="hljs-number">20</span>, <span class="hljs-number">-3</span>)<br><br><span class="hljs-comment">//创建指定长度、元素为null的数组（相当于Java数组的动态初始化）</span><br><span class="hljs-keyword">var</span> arr2 = arrayOfNulls&lt;Double&gt;(<span class="hljs-number">9</span>)<br><span class="hljs-keyword">var</span> intArr2 = arrayOfNulls&lt;<span class="hljs-keyword">Int</span>&gt;(<span class="hljs-number">3</span>)<br><br><span class="hljs-comment">//创建长度为0的空数组</span><br><span class="hljs-keyword">var</span> arr3 = emptyArray&lt;<span class="hljs-keyword">String</span>&gt;()<br><span class="hljs-keyword">var</span> intArr3 = emptyArray&lt;<span class="hljs-keyword">Int</span>&gt;()<br><br><span class="hljs-comment">//创建指定长度、使用Lambda表达式初始化数组元素的数组</span><br><span class="hljs-keyword">var</span> strArr4=<span class="hljs-keyword">Array</span>(<span class="hljs-number">6</span>,&#123;<span class="hljs-string">&quot;kotlin&quot;</span>&#125;)<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="3-访问数组的元素"><a href="#3-访问数组的元素" class="headerlink" title="3.访问数组的元素"></a>3.访问数组的元素</h3><p>[] 可以用于访问数组的元素，实际上 [] 被进行了操作符的重载，调用的是 Array 类的 setter 和 getter 方法:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs stylus">val arr = <span class="hljs-built_in">arrayOf</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>)<br>arr<span class="hljs-selector-attr">[1]</span>           <span class="hljs-comment">//结果:1</span><br>arr<span class="hljs-selector-class">.get</span>(<span class="hljs-number">1</span>)       <span class="hljs-comment">//结果:1</span><br><span class="hljs-comment">// arr[10]       //报错ArrayIndexOutOfBoundsException</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>[] 虽然调用的是 setter 和 getter 方法，但是编译成字节码时会被进行优化，变成直接访问数组的内存地址，所以不会造成性能损失。</p>
+</blockquote>
+<h3 id="4-修改数组元素"><a href="#4-修改数组元素" class="headerlink" title="4.修改数组元素"></a>4.修改数组元素</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">val</span> intArr = intArrayOf(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>)<br><span class="hljs-attribute">intArr</span>[<span class="hljs-number">1</span>] = <span class="hljs-number">0</span>           //与java一样，可以这样修改数据<br><span class="hljs-attribute">intArr</span>.set(<span class="hljs-number">2</span>,<span class="hljs-number">1</span>)         //kotlin可以通过set函数进行修改数据<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-遍历数组元素"><a href="#5-遍历数组元素" class="headerlink" title="5.遍历数组元素"></a>5.遍历数组元素</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs stylus">val intArr = <span class="hljs-built_in">intArrayOf</span>(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>)<br><span class="hljs-function"><span class="hljs-title">for</span><span class="hljs-params">(item in intArr)</span></span>&#123;<br>    <span class="hljs-built_in">println</span>(item)                   <span class="hljs-comment">//遍历intArr里面的元素，item就是元素本身</span><br>&#125;<br><span class="hljs-keyword">for</span> (index <span class="hljs-keyword">in</span> intArr.indices)&#123;<br>    <span class="hljs-built_in">println</span>(intArr<span class="hljs-selector-attr">[index]</span>)          <span class="hljs-comment">//遍历initArr索引的元素，从0开始</span><br>    <span class="hljs-built_in">println</span>(intArr<span class="hljs-selector-class">.get</span>(index))      <span class="hljs-comment">//可以通过get(索引)来获取元素</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="二-集合"><a href="#二-集合" class="headerlink" title="二.集合"></a>二.集合</h1><h3 id="1-只读集合和可变集合"><a href="#1-只读集合和可变集合" class="headerlink" title="1.只读集合和可变集合"></a>1.只读集合和可变集合</h3><p>Kotlin将集合分为<code>只读集合</code>和<code>可变集合</code>。<br><img src="/images/2ab9b95b7bfb5df651b3ead4a7785dec.webp" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>**只读集合:**源自最基础的集合接口：kotlin.collections.Collection。该接口可以对集合进行一些基本操作，但无任何添加和移除元素的方法。</li>
+<li>**可变集合:**实现 kotlin.collections.MutableCollection 接口才可以修改集合的数据。MutableCollection 接口继承自 Collection，并提供添加、移除和清空集合元素的方法。<blockquote>
+<p>可变集合一般都带有 “Mutable” 前缀修饰，意味着能对集合中的元素进行修改。</p>
+</blockquote>
+</li>
+</ul>
+<p>Kotlin 标准库提供了基本集合类型的实现：<code> set、list 以及 map</code>。</p>
+<h3 id="2-集合的创建"><a href="#2-集合的创建" class="headerlink" title="2.集合的创建"></a>2.集合的创建</h3><table>
+<thead>
+<tr>
+<th>集合类型</th>
+<th>只读集合</th>
+<th>可变集合</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>List</td>
+<td>listOf</td>
+<td>mutableList、arrayListOf</td>
+</tr>
+<tr>
+<td>Set</td>
+<td>setOf</td>
+<td>mutableSetOf、hashSetOf、linkedSetOf、sortedSetOf</td>
+</tr>
+<tr>
+<td>Map</td>
+<td>mapOf</td>
+<td>mutableMapOf、hashMapOf、linkeMapOf、sortedMapOf</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>集合类存放的都是对象的引用，而非对象本身，通常说的集合中的对象指的是集合中对象的引用。</p>
+</blockquote>
+<h5 id="1-只读集合的创建"><a href="#1-只读集合的创建" class="headerlink" title="(1.)只读集合的创建"></a>(1.)只读集合的创建</h5><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">val emptyList = listOf&lt;<span class="hljs-type">Int</span>&gt;()       //创建空的list集合<br>val emptySet = <span class="hljs-keyword">setOf</span>&lt;<span class="hljs-type">Int</span>&gt;()         //创建空的<span class="hljs-keyword">set</span>集合 <br>val emptyMap = mapOf&lt;<span class="hljs-type">Int</span>,<span class="hljs-type">Int</span>&gt;()     //创建空的map集合<br><br>val list1 = listOf(&quot;kotlin&quot;,&quot;java&quot;) //该函数返回不可变的List集合。该函数可接受<span class="hljs-number">0</span>个或多个参数，这些参数将作为集合的元素。<br>val set2 = <span class="hljs-keyword">setOf</span>(&quot;kotlin&quot;,&quot;java&quot;)   //该函数返回不可变的<span class="hljs-keyword">Set</span>集合。该函数可以接受<span class="hljs-number">0</span>个或多个参数，这些参数将作为集合的元素。<br>val map2 = mapOf(&quot;key&quot; <span class="hljs-keyword">to</span> &quot;value&quot;)  //该函数返回不可变的Map集合。该函数可接受<span class="hljs-number">0</span>个或多个key-<span class="hljs-keyword">value</span>对，这些key-<span class="hljs-keyword">value</span>对将作为Map的元素。<br>    <br></code></pre></td></tr></table></figure>
+<h5 id="2-可变集合的创建"><a href="#2-可变集合的创建" class="headerlink" title="(2.)可变集合的创建"></a>(2.)可变集合的创建</h5><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">val</span> emptyMutableList = mutableListOf&lt;<span class="hljs-built_in">Int</span>&gt;()     <span class="hljs-comment">//创建空的list集合</span><br><span class="hljs-keyword">val</span> emptyMutableSet = mutableSetOf&lt;<span class="hljs-built_in">Int</span>&gt;()       <span class="hljs-comment">//创建空的set集合</span><br><span class="hljs-keyword">val</span> emptyMutableMap = mutableMapOf&lt;<span class="hljs-built_in">Int</span>,<span class="hljs-built_in">Int</span>&gt;()   <span class="hljs-comment">//创建空的map集合</span><br><br><span class="hljs-keyword">val</span> initMutableList = mutableListOf(<span class="hljs-number">1</span>)          <span class="hljs-comment">//该函数返回可变的MutableList集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</span><br><span class="hljs-keyword">val</span> initMutableSet = mutableSetOf(<span class="hljs-number">2</span>)            <span class="hljs-comment">//该函数返回可变的MutableSet集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</span><br><span class="hljs-keyword">val</span> initMutableMap = mutableMapOf(<span class="hljs-number">1</span> to <span class="hljs-number">1</span>)       <span class="hljs-comment">//该函数返回可变的MutableMap集合。该函数可接受0个或多个key-value对，这些key-value对将作为Map的元素。</span><br></code></pre></td></tr></table></figure>
+<h3 id="3-Set集合"><a href="#3-Set集合" class="headerlink" title="3.Set集合"></a>3.Set集合</h3><h5 id="1-Set集合的创建"><a href="#1-Set集合的创建" class="headerlink" title="(1.)Set集合的创建"></a>(1.)Set集合的创建</h5><ul>
+<li>setOf()：该函数返回不可变的Set集合。该函数可以接受0个或多个参数，这些参数将作为集合的元素。</li>
+<li>mutableSetOf()：该函数返回可变的MutableSet集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</li>
+<li>hashSetOf()：该函数返回可变的HashSet集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</li>
+<li>linkedSetOf()：该函数返回可变的LinkedHashSet集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</li>
+<li>sortedSetOf()：该函数返回可变的TreeSet集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</li>
+</ul>
+<h5 id="2-Set集合的操作"><a href="#2-Set集合的操作" class="headerlink" title="(2.)Set集合的操作"></a>(2.)Set集合的操作</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-comment">//创建不可变集合，返回值是Set</span><br><span class="hljs-selector-tag">var</span> set = <span class="hljs-built_in">setOf</span>(<span class="hljs-string">&quot;Java&quot;</span>, <span class="hljs-string">&quot;Kotlin&quot;</span>, <span class="hljs-string">&quot;Go&quot;</span>)<br><span class="hljs-comment">//判断是否所有元素的长度都大于4</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(set.all &#123; it.length &gt; <span class="hljs-number">4</span> &#125;)</span></span><br><span class="hljs-comment">//判断是否任一元素的长豆都大于4</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(set.any &#123; it.length &gt; <span class="hljs-number">4</span> &#125;)</span></span><br><span class="hljs-comment">//以Lambda表达式的值为key，集合元素为value，组成Map集合</span><br>val map = set<span class="hljs-selector-class">.associateBy</span> &#123; <span class="hljs-string">&quot;学习&quot;</span> + it + <span class="hljs-string">&quot;语言&quot;</span> &#125;<br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(map)</span></span><br><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(<span class="hljs-string">&quot;Java&quot;</span> in set)</span></span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(<span class="hljs-string">&quot;Go&quot;</span> !in set)</span></span><br><br><span class="hljs-comment">//返回删除Set集合前面两个元素后的集合</span><br>val dropedList = set<span class="hljs-selector-class">.drop</span>(<span class="hljs-number">2</span>)<br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(dropedList)</span></span><br><br><span class="hljs-comment">//对Set集合元素进行过滤：要求集合元素包含li</span><br>val fliteredList = set<span class="hljs-selector-class">.filter</span> &#123; <span class="hljs-string">&quot;li&quot;</span> <span class="hljs-keyword">in</span> it &#125;<br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(fliteredList)</span></span><br><br><span class="hljs-comment">//查找Set集合中包含li的元素，如果找到就返回该元素，否则就返回null</span><br>val foundStr1 = set<span class="hljs-selector-class">.find</span> &#123; <span class="hljs-string">&quot;li&quot;</span> <span class="hljs-keyword">in</span> it &#125;<br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(foundStr1)</span></span><br><br><span class="hljs-comment">//查找Set集合中的所有字符串拼接在一起</span><br>val foldedList = set<span class="hljs-selector-class">.fold</span>(<span class="hljs-string">&quot;&quot;</span>, &#123; acc, e -&gt; acc + e &#125;)<br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(foldedList)</span></span><br><br><span class="hljs-comment">//查找某个元素的出现位置</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(set.indexOf(<span class="hljs-string">&quot;Go&quot;</span>)</span></span>)<br><br><span class="hljs-comment">//将每个集合元素映射成新值，返回所有新值组成的Set集合</span><br>val mappedList = set<span class="hljs-selector-class">.map</span> &#123; <span class="hljs-string">&quot;学习&quot;</span> + it + <span class="hljs-string">&quot;编程&quot;</span> &#125;<br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(mappedList)</span></span><br><br><span class="hljs-comment">//获取最大值</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(set.max()</span></span>)<br><br><span class="hljs-comment">//获取最小值</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(set.min()</span></span>)<br><br><span class="hljs-comment">//反转集合顺序</span><br>val reversedList = set<span class="hljs-selector-class">.reversed</span>()<br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(reversedList)</span></span><br><br>val bSet = <span class="hljs-built_in">setOf</span>(<span class="hljs-string">&quot;Lua&quot;</span>, <span class="hljs-string">&quot;Erlang&quot;</span>, <span class="hljs-string">&quot;Kotlin&quot;</span>)<br><span class="hljs-comment">//计算两个集合的交集</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(set intersect bSet)</span></span><br><span class="hljs-comment">//计算两个集合的并集</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(set union bSet)</span></span><br><span class="hljs-comment">//集合相加，相当于并集</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(set + bSet)</span></span><br><span class="hljs-comment">//集合相减，减去公共的元素</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(set - bSet)</span></span><br></code></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-literal">false</span><br><span class="hljs-literal">true</span><br>&#123;学习Java语言=Java, 学习Kotlin语言=Kotlin, 学习Go语言=Go&#125;<br><span class="hljs-literal">true</span><br><span class="hljs-literal">false</span><br><span class="hljs-string">[Go]</span><br><span class="hljs-string">[Kotlin]</span><br>Kotlin<br>JavaKotlinGo<br><span class="hljs-number">2</span><br><span class="hljs-string">[学习Java编程, 学习Kotlin编程, 学习Go编程]</span><br>Kotlin<br>Go<br><span class="hljs-string">[Go, Kotlin, Java]</span><br><span class="hljs-string">[Kotlin]</span><br><span class="hljs-string">[Java, Kotlin, Go, Lua, Erlang]</span><br><span class="hljs-string">[Java, Kotlin, Go, Lua, Erlang]</span><br><span class="hljs-string">[Java, Go]</span><br>Kotlin规定以infix修饰的方法，能以运算符的方式进行调用。<br></code></pre></td></tr></table></figure>
+
+<h5 id="3-遍历Set集合"><a href="#3-遍历Set集合" class="headerlink" title="(3.)遍历Set集合"></a>(3.)遍历Set集合</h5><p>Kotlin也支持使用for-in循环遍历Set，与遍历数组的方式基本相同:</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">var languages = <span class="hljs-keyword">setOf</span>(&quot;Java&quot;, &quot;Kotlin&quot;, &quot;Python&quot;)<br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">language</span> <span class="hljs-keyword">in</span> languages) &#123;<br>    println(<span class="hljs-keyword">language</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">Java</span><br><span class="hljs-attribute">Kotlin</span><br><span class="hljs-attribute">Python</span><br></code></pre></td></tr></table></figure>
+<p>Set集合可使用接口中定义的forEach()方法来遍历集合:</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">var languages = <span class="hljs-keyword">setOf</span>(&quot;Java&quot;, &quot;Kotlin&quot;, &quot;Python&quot;)<br>languages.<span class="hljs-keyword">forEach</span> &#123; println(it) &#125;<br></code></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">Java</span><br><span class="hljs-attribute">Kotlin</span><br><span class="hljs-attribute">Python</span><br></code></pre></td></tr></table></figure>
+<p>由于setOf()方法返回的Set集合是有序的，所以可以通过索引来遍历Set集合，Set集合提供了indices方法返回其索引的区间:</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">var languages = <span class="hljs-keyword">setOf</span>(&quot;Java&quot;, &quot;Kotlin&quot;, &quot;Python&quot;)<br><span class="hljs-keyword">for</span> (i <span class="hljs-keyword">in</span> languages.indices) &#123;<br>    println(languages.elementAt(i))<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">Java</span><br><span class="hljs-attribute">Kotlin</span><br><span class="hljs-attribute">Python</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="4-可变Set集合"><a href="#4-可变Set集合" class="headerlink" title="(4.)可变Set集合"></a>(4.)可变Set集合</h5><p>setOf()函数返回的额集合是不可变集合；使用mutableSetof()、hashSetOf()、linkedSetOf()、sortedSetOf()函数返回的集合都是可变的。可变Set集合除了set集合常见的操作还支持其他的操作；<br><strong>集合添加元素</strong><br>Set提供了add(element:E)方法来添加元素，每调用该方法一次，就会向Set中添加一个元素，Set的长度也会自动加1。也提供了addAll(elements:Collection<E>)方法来批量添加多个元素。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-comment">//定义一个可变的Set</span><br><span class="hljs-selector-tag">var</span> languages = <span class="hljs-built_in">mutableSetOf</span>(<span class="hljs-string">&quot;Java&quot;</span>)<br><span class="hljs-comment">//添加一个元素</span><br>languages<span class="hljs-selector-class">.add</span>(<span class="hljs-string">&quot;Go&quot;</span>)<br>languages<span class="hljs-selector-class">.add</span>(<span class="hljs-string">&quot;Lua&quot;</span>)<br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(languages)</span></span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(languages.count()</span></span>)<br>languages<span class="hljs-selector-class">.addAll</span>(<span class="hljs-built_in">setOf</span>(<span class="hljs-string">&quot;Swift&quot;</span>, <span class="hljs-string">&quot;Kotlin&quot;</span>))<br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(languages)</span></span><br></code></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">[<span class="hljs-keyword">Java, </span>Go, Lua]<br><span class="hljs-number">3</span><br>[<span class="hljs-keyword">Java, </span>Go, Lua, <span class="hljs-keyword">Swift, </span>Kotlin]<br></code></pre></td></tr></table></figure>
+<p><strong>集合删除元素</strong><br>Set提供了如下方法来删除元素：</p>
+<ul>
+<li>remove(element:E)：删除指定元素，删除成功则返回true。</li>
+<li>removeAll(elements:Collection<E>)：批量删除Set集合中的多个元素。</li>
+<li>retainAll(elements:Collection<E>)：只保留Set集合中与elements集合共有的元素。</li>
+<li>clear()：清空集合。<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-selector-tag">var</span> languages = <span class="hljs-built_in">mutableSetOf</span>(<span class="hljs-string">&quot;Java&quot;</span>, <span class="hljs-string">&quot;OC&quot;</span>, <span class="hljs-string">&quot;PHP&quot;</span>, <span class="hljs-string">&quot;Perl&quot;</span>, <span class="hljs-string">&quot;Ruby&quot;</span>, <span class="hljs-string">&quot;Go&quot;</span>) <span class="hljs-comment">//定义一个可变的Set</span><br>languages<span class="hljs-selector-class">.remove</span>(<span class="hljs-string">&quot;PHP&quot;</span>)                                                 <span class="hljs-comment">//删除&quot;PHP&quot;</span><br>languages<span class="hljs-selector-class">.remove</span>(<span class="hljs-string">&quot;Perl&quot;</span>)                                                <span class="hljs-comment">//再次删除&quot;Perl&quot;</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(languages)</span></span><br>languages<span class="hljs-selector-class">.removeAll</span>(<span class="hljs-built_in">setOf</span>(<span class="hljs-string">&quot;Ruby&quot;</span>, <span class="hljs-string">&quot;Go&quot;</span>))                                <span class="hljs-comment">//批量删除多个元素</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(languages)</span></span><br>languages<span class="hljs-selector-class">.clear</span>()                                                       <span class="hljs-comment">//清空Set集合</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(languages.count()</span></span>)<br></code></pre></td></tr></table></figure>
+输出结果：<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[Java, OC, Ruby, Go]</span><br><span class="hljs-string">[Java, OC]</span><br><span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>Kotlin的MutableIterator才相当于Java的Iterator。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="5-List集合"><a href="#5-List集合" class="headerlink" title="5.List集合"></a>5.List集合</h3><h5 id="1-List集合的创建"><a href="#1-List集合的创建" class="headerlink" title="(1.)List集合的创建"></a>(1.)List集合的创建</h5><ul>
+<li>listOf()：该函数返回不可变的List集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</li>
+<li>listOfNotNull()：该函数返回不可变的List集合。该函数与前一个函数的唯一区别是,该函数会自动去掉传入的一系列参数中的null值。</li>
+<li>mutableListOf()：该函数返回可变的MutableList集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</li>
+<li>arrayListOf()：该函数返回可变的ArrayList集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</li>
+</ul>
+<h5 id="2-List集合的方法"><a href="#2-List集合的方法" class="headerlink" title="(2.)List集合的方法"></a>(2.)List集合的方法</h5><p>List除了支持Set所支持的操作外，还增加了通过索引操作集合元素的方法。</p>
+<ul>
+<li>get：带operator修饰的方法，因此可用”[]”运算符访问集合元素。</li>
+<li>indexOf：返回集合元素在List中的索引。</li>
+<li>lastIndexOf：返回集合元素在List中最后一次的出现位置。</li>
+<li>subList：返回List集合的子集合。<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-selector-tag">var</span> list1 = <span class="hljs-built_in">listOf</span>(<span class="hljs-string">&quot;Java&quot;</span>, <span class="hljs-string">&quot;Kotlin&quot;</span>, null, <span class="hljs-string">&quot;Go&quot;</span>)  <span class="hljs-comment">//创建不可变集合，返回值是List</span><br><span class="hljs-keyword">for</span> (<span class="hljs-selector-tag">i</span> <span class="hljs-keyword">in</span> list1.indices) &#123;<br>    <span class="hljs-built_in">println</span>(list1<span class="hljs-selector-attr">[i]</span>)<br>&#125;<br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(list1.indexOf(<span class="hljs-string">&quot;Kotlin&quot;</span>)</span></span>)                 <span class="hljs-comment">//获取指定元素的出现位置</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(list1.subList(<span class="hljs-number">1</span>, <span class="hljs-number">3</span>)</span></span>)                     <span class="hljs-comment">//获取List的子集合</span><br></code></pre></td></tr></table></figure>
+输出结果：<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs 1c">Java<br>Kotlin<br><span class="hljs-literal">null</span><br>Go<br><span class="hljs-number">1</span><br>[Kotlin<span class="hljs-punctuation">,</span> <span class="hljs-literal">null</span>]<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="3-可变List集合的方法"><a href="#3-可变List集合的方法" class="headerlink" title="(3.)可变List集合的方法"></a>(3.)可变List集合的方法</h5><p>可变的List除了支持可变的Set所支持的方法外，还增加了根据索引执行插入、删除、替换的方法。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-selector-tag">var</span> list1 = <span class="hljs-built_in">mutableListOf</span>(<span class="hljs-string">&quot;Java&quot;</span>, <span class="hljs-string">&quot;Kotlin&quot;</span>, null, <span class="hljs-string">&quot;Go&quot;</span>) <span class="hljs-comment">//创建不可变集合，返回值是List</span><br>list1<span class="hljs-selector-class">.add</span>(<span class="hljs-number">2</span>, <span class="hljs-string">&quot;Java&quot;</span>)                                    <span class="hljs-comment">//在索引2处插入一个新元素</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(list1)</span></span><br>list1<span class="hljs-selector-class">.removeAt</span>(<span class="hljs-number">1</span>)                                       <span class="hljs-comment">//删除索引1处的元素</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(list1)</span></span><br>list1<span class="hljs-selector-attr">[1]</span> = <span class="hljs-string">&quot;Python&quot;</span>                                     <span class="hljs-comment">//将索引1处的元素替换为&quot;Python&quot;</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(list1)</span></span><br>list1<span class="hljs-selector-class">.clear</span>()                                           <span class="hljs-comment">//清空List集合的所有元素</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(list1.count()</span></span>)<br></code></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">[<span class="hljs-keyword">Java, </span>Kotlin, <span class="hljs-keyword">Java, </span>null, Go]<br>[<span class="hljs-keyword">Java, </span><span class="hljs-keyword">Java, </span>null, Go]<br>[<span class="hljs-keyword">Java, </span>Python, null, Go]<br><span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<h3 id="6-Map集合"><a href="#6-Map集合" class="headerlink" title="6.Map集合"></a>6.Map集合</h3><h5 id="1-Map集合的创建"><a href="#1-Map集合的创建" class="headerlink" title="(1.)Map集合的创建"></a>(1.)Map集合的创建</h5><ul>
+<li>mapOf()：该函数返回不可变的Map集合。该函数可接受0个或多个key-value对，这些key-value对将作为Map的元素。</li>
+<li>mutableMapOf()：该函数返回可变的MutableMap集合。该函数可接受0个或多个key-value对，这些key-value对将作为Map的元素。</li>
+<li>hashMapOf()：该函数返回可变的HashMap集合。该函数可接受0个或多个key-value对，这些key-value对将作为Map的元素。</li>
+<li>linkedMapOf()：该函数返回可变的LinkedHashMap集合。该函数可接受0个或多个key-value对，这些key-value对将作为Map的元素。</li>
+<li>sortedMapOf()：该函数返回可变的TreeMap集合。该函数可接受0个或多个key-value对，这些key-value对将作为Map的元素。</li>
+</ul>
+<h5 id="2-Map集合的操作"><a href="#2-Map集合的操作" class="headerlink" title="(2.)Map集合的操作"></a>(2.)Map集合的操作</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-selector-tag">var</span> map = <span class="hljs-built_in">mapOf</span>(<span class="hljs-string">&quot;Java&quot;</span> to <span class="hljs-number">86</span>, <span class="hljs-string">&quot;Kotlin&quot;</span> to <span class="hljs-number">92</span>, <span class="hljs-string">&quot;Go&quot;</span> to <span class="hljs-number">78</span>)<span class="hljs-comment">//创建不可变集合，返回值是Map</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(map.all &#123; it.key.length &gt; <span class="hljs-number">4</span> &amp;&amp; it.value &gt; <span class="hljs-number">80</span> &#125;)</span></span><span class="hljs-comment">//判断是否所有key-value对的key的长度都大于4，value都大于80</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(map.any &#123; it.key.length &gt; <span class="hljs-number">4</span> &amp;&amp; it.value &gt; <span class="hljs-number">80</span> &#125;)</span></span><span class="hljs-comment">//判断是否任一key-value对的key的长豆都大于4、value都大于80</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(<span class="hljs-string">&quot;Java&quot;</span> in map)</span></span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(<span class="hljs-string">&quot;Go&quot;</span> !in map)</span></span><br>val filteredMap = map<span class="hljs-selector-class">.filter</span> &#123; <span class="hljs-string">&quot;li&quot;</span> <span class="hljs-keyword">in</span> it<span class="hljs-selector-class">.key</span> &#125;<span class="hljs-comment">//对Map集合元素进行过滤：要求key包含li</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(filteredMap)</span></span><br>val mappedList = map<span class="hljs-selector-class">.map</span> &#123; <span class="hljs-string">&quot;$&#123;it.key&#125;有$&#123;it.value&#125;节课&quot;</span> &#125;<span class="hljs-comment">//将每个key-value对映射成新值，返回所有新值组成的Map集合</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(mappedList)</span></span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(map.maxBy &#123; it.key &#125;)</span></span><span class="hljs-comment">//根据key获取最大值</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(map.minBy &#123; it.value &#125;)</span></span><span class="hljs-comment">//根据value获取最小值</span><br><span class="hljs-selector-tag">var</span> bMap= <span class="hljs-built_in">mapOf</span>(<span class="hljs-string">&quot;Lua&quot;</span> to <span class="hljs-number">67</span>,<span class="hljs-string">&quot;Erlang&quot;</span> to <span class="hljs-number">73</span>,<span class="hljs-string">&quot;Kotlin&quot;</span> to <span class="hljs-number">92</span>)<br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(map+bMap)</span></span><span class="hljs-comment">//求并集</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(map-bMap)</span></span><span class="hljs-comment">//集合相减</span><br></code></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-literal">false</span><br><span class="hljs-literal">true</span><br><span class="hljs-literal">true</span><br><span class="hljs-literal">false</span><br>&#123;<span class="hljs-attribute">Kotlin</span>=92&#125;<br>[Java有86节课, Kotlin有92节课, Go有78节课]<br><span class="hljs-attribute">Kotlin</span>=92<br><span class="hljs-attribute">Go</span>=78<br>&#123;<span class="hljs-attribute">Java</span>=86, <span class="hljs-attribute">Kotlin</span>=92, <span class="hljs-attribute">Go</span>=78, <span class="hljs-attribute">Lua</span>=67, <span class="hljs-attribute">Erlang</span>=73&#125;<br>&#123;<span class="hljs-attribute">Java</span>=86, <span class="hljs-attribute">Kotlin</span>=92, <span class="hljs-attribute">Go</span>=78&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="3-Map集合的遍历"><a href="#3-Map集合的遍历" class="headerlink" title="(3.)Map集合的遍历"></a>(3.)Map集合的遍历</h5><p>Map集合由多个key-value对组成，因此遍历Map集合时既可以通过对key-value对进行遍历，也可先遍历key，再通过key来获取对应的value进行遍历。<br>下面是对Map集合遍历的几种方式：</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs processing">var <span class="hljs-built_in">map</span> = <span class="hljs-title function_">mapOf</span>(<span class="hljs-string">&quot;Java&quot;</span> to <span class="hljs-number">86</span>, <span class="hljs-string">&quot;Kotlin&quot;</span> to <span class="hljs-number">92</span>, <span class="hljs-string">&quot;Go&quot;</span> to <span class="hljs-number">76</span>)<span class="hljs-comment">//创建不可变集合，返回值是Map</span><br><span class="hljs-comment">//遍历Map的key-value对，entris元素返回key-value对组成的Set</span><br><span class="hljs-keyword">for</span> (en in <span class="hljs-built_in">map</span>.<span class="hljs-property">entries</span>) &#123;<br>    <span class="hljs-built_in">println</span>(<span class="hljs-string">&quot;$&#123;en.key&#125;-&gt;$&#123;en.value&#125;&quot;</span>)<br>&#125;<br><span class="hljs-comment">//先遍历Map的key，再通过key获取value</span><br><span class="hljs-keyword">for</span> (<span class="hljs-built_in">key</span> in <span class="hljs-built_in">map</span>.<span class="hljs-property">keys</span>) &#123;<br>    <span class="hljs-built_in">println</span>(<span class="hljs-string">&quot;$&#123;key&#125;-&gt;$&#123;map[key]&#125;&quot;</span>)<br>&#125;<br><span class="hljs-comment">//直接用for-in循环遍历Map</span><br><span class="hljs-keyword">for</span> ((<span class="hljs-built_in">key</span>, value) in <span class="hljs-built_in">map</span>) &#123;<br>    <span class="hljs-built_in">println</span>(<span class="hljs-string">&quot;$&#123;key&#125;-&gt;$&#123;value&#125;&quot;</span>)<br>&#125;<br><span class="hljs-built_in">map</span>.<span class="hljs-property">forEach</span>(&#123; <span class="hljs-built_in">println</span>(<span class="hljs-string">&quot;$&#123;it.key&#125;-&gt;$&#123;it.value&#125;&quot;</span>) &#125;)<span class="hljs-comment">//用Lambda表达式遍历Map</span><br></code></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs xl">J<span class="hljs-function"><span class="hljs-title">ava</span>-&gt;</span><span class="hljs-number">86</span><br>K<span class="hljs-function"><span class="hljs-title">otlin</span>-&gt;</span><span class="hljs-number">92</span><br>G<span class="hljs-function"><span class="hljs-title">o</span>-&gt;</span><span class="hljs-number">76</span><br><br>J<span class="hljs-function"><span class="hljs-title">ava</span>-&gt;</span><span class="hljs-number">86</span><br>K<span class="hljs-function"><span class="hljs-title">otlin</span>-&gt;</span><span class="hljs-number">92</span><br>G<span class="hljs-function"><span class="hljs-title">o</span>-&gt;</span><span class="hljs-number">76</span><br><br>J<span class="hljs-function"><span class="hljs-title">ava</span>-&gt;</span><span class="hljs-number">86</span><br>K<span class="hljs-function"><span class="hljs-title">otlin</span>-&gt;</span><span class="hljs-number">92</span><br>G<span class="hljs-function"><span class="hljs-title">o</span>-&gt;</span><span class="hljs-number">76</span><br><br>J<span class="hljs-function"><span class="hljs-title">ava</span>-&gt;</span><span class="hljs-number">86</span><br>K<span class="hljs-function"><span class="hljs-title">otlin</span>-&gt;</span><span class="hljs-number">92</span><br>G<span class="hljs-function"><span class="hljs-title">o</span>-&gt;</span><span class="hljs-number">76</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="4-可变的Map集合操作"><a href="#4-可变的Map集合操作" class="headerlink" title="(4.)可变的Map集合操作"></a>(4.)可变的Map集合操作</h5><p>可变的Map为操作key-value对提供了如下方法：</p>
+<ul>
+<li>clear()：清空所有的key-value对。</li>
+<li>put(key:K,value:V)：放入key-value对。如果原来已有key，value将被覆盖。</li>
+<li>putAll(form:Map&lt;out K,V&gt;)：批量放入多个key-value对。</li>
+<li>remove(key:K)：删除key-value对。<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-selector-tag">var</span> mutableMap = <span class="hljs-built_in">mutableMapOf</span>(<span class="hljs-string">&quot;OC&quot;</span> to <span class="hljs-number">96</span>, <span class="hljs-string">&quot;PHP&quot;</span> to <span class="hljs-number">3400</span>, <span class="hljs-string">&quot;Perl&quot;</span> to <span class="hljs-number">4300</span>, <span class="hljs-string">&quot;Ruby&quot;</span> to <span class="hljs-number">5600</span>, <span class="hljs-string">&quot;Go&quot;</span> to <span class="hljs-number">5600</span>)<br>mutableMap<span class="hljs-selector-attr">[<span class="hljs-string">&quot;Swift&quot;</span>]</span> = <span class="hljs-number">9000</span><span class="hljs-comment">//以方括号语法放入key-value对</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(mutableMap)</span></span><br>mutableMap<span class="hljs-selector-class">.put</span>(<span class="hljs-string">&quot;OC&quot;</span>, <span class="hljs-number">8600</span>)<span class="hljs-comment">//以put方法放入key-value对</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(mutableMap)</span></span><br>mutableMap<span class="hljs-selector-class">.remove</span>(<span class="hljs-string">&quot;PHP&quot;</span>)<span class="hljs-comment">//删除key为&quot;PHP&quot;的key-value对</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(mutableMap)</span></span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(mutableMap.size)</span></span><br>mutableMap<span class="hljs-selector-class">.clear</span>()<span class="hljs-comment">//删除所有元素</span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(mutableMap)</span></span><br><span class="hljs-function"><span class="hljs-title">println</span><span class="hljs-params">(mutableMap.size)</span></span><br></code></pre></td></tr></table></figure>
+输出结果：<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&#123;<span class="hljs-attribute">OC</span>=96, <span class="hljs-attribute">PHP</span>=3400, <span class="hljs-attribute">Perl</span>=4300, <span class="hljs-attribute">Ruby</span>=5600, <span class="hljs-attribute">Go</span>=5600, <span class="hljs-attribute">Swift</span>=9000&#125;<br>&#123;<span class="hljs-attribute">OC</span>=8600, <span class="hljs-attribute">PHP</span>=3400, <span class="hljs-attribute">Perl</span>=4300, <span class="hljs-attribute">Ruby</span>=5600, <span class="hljs-attribute">Go</span>=5600, <span class="hljs-attribute">Swift</span>=9000&#125;<br>&#123;<span class="hljs-attribute">OC</span>=8600, <span class="hljs-attribute">Perl</span>=4300, <span class="hljs-attribute">Ruby</span>=5600, <span class="hljs-attribute">Go</span>=5600, <span class="hljs-attribute">Swift</span>=9000&#125;<br>5<br>&#123;&#125;<br>0<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p>参考自：<br><a target="_blank" rel="noopener" href="https://www.kotlincn.net/docs/reference/constructing-collections.html">kotlin官方文档</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Kotlin/" class="category-chain-item">Kotlin</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Kotlin总结之二数组和集合容器</div>
+      <div>http://example.com/2019/07/09/Kotlin总结之二数组和集合容器/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年7月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/07/10/CI-CD%E5%B7%A5%E5%85%B7%E4%B9%8BJenkins/" title="CI-CD工具之Jenkins">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CI-CD工具之Jenkins</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/07/04/Linux%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/" title="Linux系统基础总结">
+                        <span class="hidden-mobile">Linux系统基础总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

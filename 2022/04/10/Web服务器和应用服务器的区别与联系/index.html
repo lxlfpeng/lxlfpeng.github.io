@@ -1,0 +1,784 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Web服务器与应用服务器Web服务器简介什么是Web服务器WEB即超文本（hypertext）、超媒体（hypermedia）和超文本传输协议（HTTP），获取这些静态资源实际上是在请求服务器上的文件。这些文件都一直保存在服务器的磁盘上一个固定的文件路径，并生成一个对应的地址。HTML页面就是WEB的数据元素，处理这些数据元素的应用软件就叫WEB服务器，WEB服务器常与客户端打交道，它要处理的主要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web服务器和应用服务器的区别与联系">
+<meta property="og:url" content="http://example.com/2022/04/10/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%92%8C%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E8%81%94%E7%B3%BB/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Web服务器与应用服务器Web服务器简介什么是Web服务器WEB即超文本（hypertext）、超媒体（hypermedia）和超文本传输协议（HTTP），获取这些静态资源实际上是在请求服务器上的文件。这些文件都一直保存在服务器的磁盘上一个固定的文件路径，并生成一个对应的地址。HTML页面就是WEB的数据元素，处理这些数据元素的应用软件就叫WEB服务器，WEB服务器常与客户端打交道，它要处理的主要">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-04-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:41:12.860Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Web服务器和应用服务器的区别与联系 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Web服务器和应用服务器的区别与联系"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-04-10 00:00" pubdate>
+          2022年4月10日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          34 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Web服务器和应用服务器的区别与联系</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Web服务器与应用服务器"><a href="#Web服务器与应用服务器" class="headerlink" title="Web服务器与应用服务器"></a>Web服务器与应用服务器</h1><h3 id="Web服务器简介"><a href="#Web服务器简介" class="headerlink" title="Web服务器简介"></a>Web服务器简介</h3><h5 id="什么是Web服务器"><a href="#什么是Web服务器" class="headerlink" title="什么是Web服务器"></a>什么是Web服务器</h5><p>WEB即超文本（hypertext）、超媒体（hypermedia）和超文本传输协议（HTTP），获取这些静态资源实际上是在请求服务器上的文件。这些文件都一直保存在服务器的磁盘上一个固定的文件路径，并生成一个对应的地址。HTML页面就是WEB的数据元素，处理这些数据元素的应用软件就叫WEB服务器，WEB服务器常与客户端打交道，它要处理的主要信息有：session、request、response、HTML、JS、CS等。</p>
+<h5 id="常用的Web服务器"><a href="#常用的Web服务器" class="headerlink" title="常用的Web服务器"></a>常用的Web服务器</h5><ul>
+<li>Nginx</li>
+<li>Apache</li>
+<li>Jetty （也支持动态页面处理，但主要还是静态页面）</li>
+<li>IIS</li>
+</ul>
+<h3 id="应用服务器简介"><a href="#应用服务器简介" class="headerlink" title="应用服务器简介"></a>应用服务器简介</h3><h5 id="什么是应用服务器"><a href="#什么是应用服务器" class="headerlink" title="什么是应用服务器"></a>什么是应用服务器</h5><p>应用服务器是为客户端提供对业务逻辑的访问这种服务器，根据客户端的请求会将数据转化为动态内容，一般还需要数据库的支持，应用服务器的搭建很多时候依赖于应用程序的开发语言，各种编程语言生态下对应不同的软件， 比如使用Java语言开发的项目通常选择 Tomcat或者接jboss来作为程序运行的应用服务器，而使用python语言开发Web应用，一般会选用Django等python框架下的软件，来作为它的应用服务器。</p>
+<p>#####常用的应用服务器</p>
+<ul>
+<li>Tomcat</li>
+<li>Jboss</li>
+<li>WebLogic</li>
+</ul>
+<blockquote>
+<p>有的应用服务器也提供http服务，如Tomcat，所以可以说，Tomcat是Web服务器也是应用服务器。</p>
+</blockquote>
+<h3 id="Web服务器和应用服务器的区别及联系"><a href="#Web服务器和应用服务器的区别及联系" class="headerlink" title="Web服务器和应用服务器的区别及联系"></a>Web服务器和应用服务器的区别及联系</h3><p>WEB服务器一般是通用的，而应用服务器一般是专用的，如Tomcat只处理JAVA应用程序而不能处理ASPX或PHP。而Apache是一个WEB服务器（HTTP服务器），它的数据源可以是配置在Tomcat中的JAVA应用，也可以是ASPX应用。 Web服务器只负责处理HTTP协议，只能发送静态页面的内容。而JSP，ASP，PHP等动态内容需要通过CGI、FastCGI、ISAPI等接口交给其他程序去处理，这个其他程序就是应用服务器。</p>
+<ul>
+<li>Web服务器只处理静态html。走http协议。客户端为浏览器。</li>
+<li>应用服务器主要是控制客户端和服务端的业务逻辑，通信格式不限制（如json、html或任何文件），也是走http协议。经常用来处理动态内容。客户端可以是浏览器，也可以是其他应用服务器，手机app等。Web服务器可以算是应用服务器的一个子集。</li>
+</ul>
+<blockquote>
+<p>现在很多Web服务器通过加载插件也支持动态页面的处理，应用服务器本身也支持静态页面的处理。两者有很多重合的地方，现在也有人叫Web应用服务器。随着Web技术的火热，两者很多功能融合了，但是概念上还是有差异。</p>
+</blockquote>
+<p>这里通过分析Nginx(Web服务器)和Tomcat(应用服务器)来展示二者之间的区别:</p>
+<p><strong>Tomcat的功能职责</strong> ：<br>Tomcat运行在JVM之上，它和HTTP服务器一样，绑定IP地址并监听TCP端口，同时还包含以下指责：</p>
+<ul>
+<li>管理Servlet程序的生命周期。</li>
+<li>将URL映射到指定的Servlet进行处理。</li>
+<li>与Servlet程序合作处理HTTP请求——根据HTTP请求生成HttpServletResponse对象并传递给Servlet进行处理，将Servlet中的HttpServletResponse对象生成的内容返回给浏览器。</li>
+</ul>
+<p><strong>Nginx的功能职责：</strong></p>
+<ul>
+<li>动静态资源分离——运用Nginx的反向代理功能分发请求：所有动态资源的请求交给Tomcat，而静态资源的请求（例如图片、视频、CSS、JavaScript文件等）则直接由Nginx返回到浏览器，这样能大大减轻Tomcat的压力。</li>
+<li>负载均衡，当业务压力增大时，可能一个Tomcat的实例不足以处理，那么这时可以启动多个Tomcat实例进行水平扩展，而Nginx的负载均衡功能可以把请求通过算法分发到各个不同的实例进行处理。</li>
+</ul>
+<p><strong>两者的区别：</strong><br>Apache&#x2F;Nginx叫做Http server ;而Tomcat 则是一个application Server，或者说是一个servlet&#x2F;jsp应用容器（python无法直接运行在Tomcat上，java可以） 一个 HTTP Server 关心的是 HTTP 协议层面的传输和访问控制，所以在 Apache&#x2F;Nginx 上你可以看到代理、负载均衡等功能。客户端通过 HTTP Server 访问服务器上存储的资源（HTML 文件、图片文件等等）。<br>而应用服务器，则是一个应用执行的容器。它首先需要支持开发语言的 Runtime（对于 Tomcat 来说，就是 Java），保证应用能够在应用服务器上正常运行。其次，需要支持应用相关的规范，例如类库、安全方面的特性。对于 Tomcat 来说，就是需要提供 JSP&#x2F;Sevlet 运行需要的标准类库、Interface 等。为了方便，应用服务器往往也会集成 HTTP Server 的功能，但是不如专业的 HTTP Server 那么强大，所以应用服务器往往是运行在 HTTP Server 的背后，执行应用，将动态的内容转化为静态的内容之后，通过 HTTP Server 分发到客户端。</p>
+<h3 id="Web服务器与应用服务器的选择"><a href="#Web服务器与应用服务器的选择" class="headerlink" title="Web服务器与应用服务器的选择"></a>Web服务器与应用服务器的选择</h3><ul>
+<li>如果完全服务静态页面选择Web服务器（如一个静态博客网站） </li>
+<li>如果有动态页面处理可以选择应用服务器，或者结合使用。大一点的网站推荐两者都使用，前后端分离，静态页面交给Web服务器，业务逻辑使用应用服务器。（如一个网上购物系统）</li>
+</ul>
+<h3 id="Web服务器选择Apache还是Nginx"><a href="#Web服务器选择Apache还是Nginx" class="headerlink" title="Web服务器选择Apache还是Nginx"></a>Web服务器选择Apache还是Nginx</h3><p>Apache HTTP Server(简称Apache)是世界使用排名第一的Web服务器软件，音译为阿帕奇，是Apache软件基金会的一个开放源码Web服务器，可以运行几乎所有的计算机平台，其次开放的API接口，任何组织和个人都可以在它上面扩展和增加各种需要功能，<br>达到为自己量身定制的功能。再次是因为推出的时间比较久，所有相关文档很齐全，甚至在windows平台很多爱好者都为它开发了各种图形界面，因为如此它迅速占领了70%的Web服务器市场。<br>Nginx，Nginx (“engine x”) 是一个高性能的 HTTP 和 反向代理服务器，也是一个 IMAP&#x2F;POP3&#x2F;SMTP 代理服务器。<br>Nginx 是由 Igor Sysoev 为俄罗斯访问量第二的 Rambler.ru 站点开发的。其次它和Apache一样是开源的，BSD-like 协议下发行。它最强劲也最具有竞争性为其高性能和反向代理，这两项在该领域独领风骚。<br>在互联网初期，网站大小不是很大，访问量都很轻量，一个网站的访问量一天最多就几万IP，这个时候Apache完全可以满足需要，人们更多的是为它开发各种模块，像重写模块，访问控制列表，缓存模块等等。但是随着互联网的飞速发展，网站我访问量以指数增长，大型网站的除了加大硬件投入外，典型的Web服务器Apache这时候也力不从心了，于是Nginx开始崛起，最初的设计是俄罗斯工程师为大型网站解决高并发设计的。所以注定了高并发是它永恒的优点。再次就是反向代理，现在大型网站分工详细，哪些服务器处理数据流，哪些处理静态文件，这些谁指挥，一般都是用Nginx反向代理到内网服务器，这样就起到了负载均衡分流的作用。再次Nginx高度模块化的设计，编写模块相对简单。<br>而Apache比Nginx又有什么优势呢，很多中小型网站都在用Apache，非常重要的原因是他出现时间较长，稳定，文档丰富，再次在重写方面相对Nginx更强大，模块超多，基本只要你能想到的，就有人开发过。<br>面对这些优缺点，该如何取舍呢?尽管Nginx正在一步步取代Apache，市场份额也在不断增加，但是做为一个网站管理员，还是需要从如下几个方面作为出发点来选择适合自身的Web服务器。</p>
+<ol>
+<li>网站并发。如果是中小型网站，建议选用Apache;如果大型并发，而且需要反向代理，选择Nginx那是正确的选择。</li>
+<li>如果需要大量用到重写模块，建议选用Apache。</li>
+<li>系统资源有限，但是自身技术很强大，建议用Nginx，因为Nginx对系统资源暂用极小，同资源下比Apache高了差不多10倍之多。</li>
+</ol>
+<h1 id="Docker安装Apache服务器"><a href="#Docker安装Apache服务器" class="headerlink" title="Docker安装Apache服务器"></a>Docker安装Apache服务器</h1><h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">docker pull httpd</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="创建容器"><a href="#创建容器" class="headerlink" title="创建容器"></a>创建容器</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">docker</span> run -di --name httpd -p <span class="hljs-number">9000</span>:<span class="hljs-number">80</span> httpd<br></code></pre></td></tr></table></figure>
+<ul>
+<li>-p 9000:80 :将容器的9000端口映射到主机的80端口</li>
+</ul>
+<h3 id="容器文件映射到宿主机"><a href="#容器文件映射到宿主机" class="headerlink" title="容器文件映射到宿主机"></a>容器文件映射到宿主机</h3><ol>
+<li>创建目录，用于映射目录:<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk">mkdir -p <span class="hljs-regexp">/root/</span>dcoker<span class="hljs-regexp">/apache/</span>www <br>mkdir -p <span class="hljs-regexp">/root/</span>dcoker<span class="hljs-regexp">/apache/</span>logs <br>mkdir -p <span class="hljs-regexp">/root/</span>dcoker<span class="hljs-regexp">/apache/</span>conf<br></code></pre></td></tr></table></figure></li>
+</ol>
+<ul>
+<li>www目录将映射为apache容器配置的应用程序目录</li>
+<li>logs目录将映射为apache容器的日志目录</li>
+<li>conf目录里的配置文件将映射为apache容器的配置文件</li>
+</ul>
+<ol start="2">
+<li>拷贝容器内Apache 默认配置文件到本地当前目录下的 conf 目录，容器 ID 可以通过 docker ps 查看</li>
+</ol>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ruby">docker cp 容器<span class="hljs-variable constant_">ID</span><span class="hljs-symbol">:/usr/local/apache2/conf/httpd</span>.conf /root/dcoker/apache/conf<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>删除临时容器</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 关闭该容器</span><br>docker stop httpd<br><span class="hljs-comment"># 删除该容器</span><br>docker <span class="hljs-built_in">rm</span> httpd<br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>创建容器</li>
+</ol>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle">docker run -p <span class="hljs-number">9000</span>:<span class="hljs-number">80</span> --privileged=<span class="hljs-keyword">true</span> --name zhuzq-apache -v <span class="hljs-regexp">/root/</span>dcoker<span class="hljs-regexp">/apache/</span>www<span class="hljs-regexp">/:/u</span>sr<span class="hljs-regexp">/local/</span>apache2<span class="hljs-regexp">/htdocs/</span> -v <span class="hljs-regexp">/root/</span>dcoker<span class="hljs-regexp">/apache/</span>conf<span class="hljs-regexp">/httpd.conf:/u</span>sr<span class="hljs-regexp">/local/</span>apache2<span class="hljs-regexp">/conf/</span>httpd.conf -v <span class="hljs-regexp">/root/</span>dcoker<span class="hljs-regexp">/apache/</span>logs:<span class="hljs-regexp">/usr/</span>local<span class="hljs-regexp">/apache2/</span>logs/ -d httpd<br></code></pre></td></tr></table></figure>
+
+<p><strong>命令说明：</strong></p>
+<ul>
+<li>-p 9000:80 :将容器的9000端口映射到主机的80端口</li>
+<li>-v &#x2F;root&#x2F;dcoker&#x2F;apache&#x2F;www&#x2F;:&#x2F;usr&#x2F;local&#x2F;apache2&#x2F;htdocs&#x2F; :将主机中当前目录下的www目录挂载到容器的&#x2F;usr&#x2F;local&#x2F;apache2&#x2F;htdocs&#x2F;</li>
+<li>-v &#x2F;root&#x2F;dcoker&#x2F;apache&#x2F;conf&#x2F;httpd.conf:&#x2F;usr&#x2F;local&#x2F;apache2&#x2F;conf&#x2F;httpd.conf :将主机中当前目录下的conf&#x2F;httpd.conf文件挂载到容器的&#x2F;usr&#x2F;local&#x2F;apache2&#x2F;conf&#x2F;httpd.conf</li>
+<li>-v &#x2F;root&#x2F;dcoker&#x2F;apache&#x2F;logs&#x2F;:&#x2F;usr&#x2F;local&#x2F;apache2&#x2F;logs&#x2F; :将主机中当前目录下的logs目录挂载到容器的&#x2F;usr&#x2F;local&#x2F;apache2&#x2F;logs&#x2F;</li>
+<li>–name zhuzq-apache, zhuzq-apache为容器名称</li>
+</ul>
+<h1 id="docker安装nginx"><a href="#docker安装nginx" class="headerlink" title="docker安装nginx"></a>docker安装nginx</h1><h3 id="搜索nginx镜像"><a href="#搜索nginx镜像" class="headerlink" title="搜索nginx镜像"></a>搜索nginx镜像</h3><p>获取nginx镜像列表</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">docker search nginx</span><br></code></pre></td></tr></table></figure>
+<h3 id="拉取nginx镜像"><a href="#拉取nginx镜像" class="headerlink" title="拉取nginx镜像"></a>拉取nginx镜像</h3><p>拉取nginx镜像到本地(注：默认选取官方最新镜像)，其它版本可以去<a target="_blank" rel="noopener" href="https://hub.docker.com/">DockerHub</a>查询</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">docker pull nginx</span><br></code></pre></td></tr></table></figure>
+<h3 id="运行nginx镜像"><a href="#运行nginx镜像" class="headerlink" title="运行nginx镜像"></a>运行nginx镜像</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">docker</span> run --name nginx -p <span class="hljs-number">7000</span>:<span class="hljs-number">80</span>  -d nginx<br></code></pre></td></tr></table></figure>
+<ul>
+<li>–name 指定容器名称，此处我指定的是nginx</li>
+<li>-p 指定主机与容器内部的端口号映射关系，格式 -p [宿主机端口号]：[容器内部端口]，此处我使用了主机7000端口，映射容器80端口</li>
+<li>-d 指定容器以守护进程方式在后台运行</li>
+</ul>
+<h3 id="挂载配置文件到主机"><a href="#挂载配置文件到主机" class="headerlink" title="挂载配置文件到主机"></a>挂载配置文件到主机</h3><p>由于我们是通过Docker将nginx安装在容器中,因此如果要对nginx的配置进行修改,需要进入到docker容器中去进行。另外还可以将docker容器的文件目录挂在到宿主机中,就可以在宿主机中进行修改了。</p>
+<h4 id="进入Nginx容器修改配置"><a href="#进入Nginx容器修改配置" class="headerlink" title="进入Nginx容器修改配置"></a>进入Nginx容器修改配置</h4><ol>
+<li>执行命令进入到nginx容器内部，<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs awk">docker exec -it nginx容器ID <span class="hljs-regexp">/bin/</span>bash<br>```          <br>``nginx -t ``查看nginx配置文件的位置<br><br><span class="hljs-number">2</span>. 修改配置文件<br>- nginx配置文件都在<span class="hljs-regexp">/etc/</span>nginx目录下。<br>- 默认首页html文件目录为<span class="hljs-regexp">/usr/</span>share<span class="hljs-regexp">/nginx/</span>html。<br>- 日志文件位于<span class="hljs-regexp">/var/</span>log/nginx。<br><br>&gt;每次都进入到nginx容器内部修改。适合改动少，简单使用的情况<br><span class="hljs-comment">#### 将nginx容器内部配置文件挂载到主机</span><br><span class="hljs-number">1</span>. 宿主机创建Nginx配置文件夹<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="创建挂载目录"><a href="#创建挂载目录" class="headerlink" title="创建挂载目录"></a>创建挂载目录</h1><p>mkdir -p &#x2F;usr&#x2F;nginx&#x2F;conf<br>mkdir -p &#x2F;var&#x2F;log&#x2F;nginx<br>mkdir -p &#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stata">2. 容器中的nginx.<span class="hljs-keyword">conf</span>文件和<span class="hljs-keyword">conf</span>.<span class="hljs-keyword">d</span>文件夹复制到宿主机<br><br></code></pre></td></tr></table></figure>
+<h1 id="生成容器-上一步生成了则不用再生成容器了"><a href="#生成容器-上一步生成了则不用再生成容器了" class="headerlink" title="生成容器(上一步生成了则不用再生成容器了)"></a>生成容器(上一步生成了则不用再生成容器了)</h1><p>docker run –name nginx -p 7000:80 -d nginx</p>
+<h1 id="将容器nginx-conf文件复制到宿主机"><a href="#将容器nginx-conf文件复制到宿主机" class="headerlink" title="将容器nginx.conf文件复制到宿主机"></a>将容器nginx.conf文件复制到宿主机</h1><p>docker cp nginx:&#x2F;etc&#x2F;nginx&#x2F;nginx.conf &#x2F;usr&#x2F;nginx&#x2F;conf&#x2F;nginx.conf</p>
+<h1 id="将容器conf-d文件夹下内容复制到宿主机"><a href="#将容器conf-d文件夹下内容复制到宿主机" class="headerlink" title="将容器conf.d文件夹下内容复制到宿主机"></a>将容器conf.d文件夹下内容复制到宿主机</h1><p>docker cp nginx:&#x2F;etc&#x2F;nginx&#x2F;conf.d &#x2F;usr&#x2F;nginx&#x2F;conf&#x2F;conf.d</p>
+<h1 id="将容器中的html文件夹复制到宿主机"><a href="#将容器中的html文件夹复制到宿主机" class="headerlink" title="将容器中的html文件夹复制到宿主机"></a>将容器中的html文件夹复制到宿主机</h1><p>docker cp nginx:&#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html &#x2F;usr&#x2F;share&#x2F;nginx</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">3.</span> 停止并删除旧的容器<br></code></pre></td></tr></table></figure>
+<h1 id="直接执行docker-rm-nginx或者以容器id方式关闭容器"><a href="#直接执行docker-rm-nginx或者以容器id方式关闭容器" class="headerlink" title="直接执行docker rm nginx或者以容器id方式关闭容器"></a>直接执行docker rm nginx或者以容器id方式关闭容器</h1><h1 id="找到nginx对应的容器id"><a href="#找到nginx对应的容器id" class="headerlink" title="找到nginx对应的容器id"></a>找到nginx对应的容器id</h1><p>docker ps -a</p>
+<h1 id="关闭该容器"><a href="#关闭该容器" class="headerlink" title="关闭该容器"></a>关闭该容器</h1><p>docker stop nginx</p>
+<h1 id="删除该容器"><a href="#删除该容器" class="headerlink" title="删除该容器"></a>删除该容器</h1><p>docker rm nginx</p>
+<h1 id="或者删除正在运行的nginx容器"><a href="#或者删除正在运行的nginx容器" class="headerlink" title="或者删除正在运行的nginx容器"></a>或者删除正在运行的nginx容器</h1><p>docker rm -f nginx</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">4.</span> 创建新的Nginx容器并运行<br></code></pre></td></tr></table></figure>
+<p>docker run <br>-p 7000:80 <br>–name nginx <br>-v &#x2F;usr&#x2F;nginx&#x2F;conf&#x2F;nginx.conf:&#x2F;etc&#x2F;nginx&#x2F;nginx.conf <br>-v &#x2F;usr&#x2F;nginx&#x2F;conf&#x2F;conf.d:&#x2F;etc&#x2F;nginx&#x2F;conf.d <br>-v &#x2F;var&#x2F;log&#x2F;nginx:&#x2F;var&#x2F;log&#x2F;nginx <br>-v &#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html:&#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html <br>-d nginx:latest</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">单行模式:</span><br></code></pre></td></tr></table></figure>
+<p>docker run -p 7000:80 –name nginx -v &#x2F;usr&#x2F;nginx&#x2F;conf&#x2F;nginx.conf:&#x2F;etc&#x2F;nginx&#x2F;nginx.conf -v &#x2F;usr&#x2F;nginx&#x2F;conf&#x2F;conf.d:&#x2F;etc&#x2F;nginx&#x2F;conf.d -v &#x2F;var&#x2F;log&#x2F;nginx:&#x2F;var&#x2F;log&#x2F;nginx -v &#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html:&#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html -d nginx:latest</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs awk">参数解释:<br>* –name nginx                                          :启动容器的名字<br>* -d                                                   :后台运行<br>* -p <span class="hljs-number">9002</span>:<span class="hljs-number">80</span>                                           :将容器的 <span class="hljs-number">9002</span>(后面那个) 端口映射到主机的 <span class="hljs-number">80</span>(前面那个) 端口      |<br>* -v <span class="hljs-regexp">/usr/</span>nginx<span class="hljs-regexp">/conf/</span>nginx.conf:<span class="hljs-regexp">/etc/</span>nginx/nginx.conf :挂载nginx.conf配置文件<br>* -v <span class="hljs-regexp">/usr/</span>nginx<span class="hljs-regexp">/conf/</span>conf.d:<span class="hljs-regexp">/etc/</span>nginx/conf.d         :挂载nginx配置文件<br>* -v <span class="hljs-regexp">/var/</span>log<span class="hljs-regexp">/nginx:/</span>var<span class="hljs-regexp">/log/</span>nginx                    :挂载nginx日志文件<br>* -v <span class="hljs-regexp">/usr/</span>share<span class="hljs-regexp">/nginx/</span>html:<span class="hljs-regexp">/usr/</span>share<span class="hljs-regexp">/nginx/</span>html            :挂载nginx内容<br>* nginx:latest                                         :本地运行的版本<br><br>&gt;将nginx容器内部配置文件挂载到主机，之后就可以在主机对应目录修改即可,适合频繁修改，复杂使用的情况。<br><br><span class="hljs-comment"># Docker安装Tomcat</span><br><span class="hljs-comment">### 下载和安装Tomcat容器</span><br><br><span class="hljs-number">1</span>. 拉取Tomcat镜像<br><br></code></pre></td></tr></table></figure>
+<p>docker pull tomcat</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br><span class="hljs-bullet">2.</span> 启动Tomcat容器<br><br></code></pre></td></tr></table></figure>
+<p>docker run –name tomcat -d -p 8080:8080 tomcat</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br><span class="hljs-quote">&gt; -d 表示后台运行，并返回后台容器，</span><br><span class="hljs-quote">&gt; -p 表示端口号，前一个8080是指我们访问tomcat时的端口号，</span><br><span class="hljs-quote">&gt; 后一个8080是tomcat启动的一个容器在[<span class="hljs-string">docker</span>](<span class="hljs-link">https://so.csdn.net/so/search?q=docker&amp;spm=1001.2101.3001.7020</span>)中运行的端口号， 指定端口号为了更明确的访问tomcat。</span><br><br><span class="hljs-section">### 解决404问题</span><br><br>当Tomcat版本过高时，根据IP地址和端口号访问可能会出现404，是因为webapps文件夹下内容为空，内容都在webapps.dist 目录下，解决办法如下：<br><br><span class="hljs-bullet">1.</span> 进入Tomcat容器<br><br></code></pre></td></tr></table></figure>
+<p>docker exec -it tomcat &#x2F;bin&#x2F;bash</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br><span class="hljs-bullet">2.</span> 将webapps.dist下的内容全部移动到webapps中<br><br></code></pre></td></tr></table></figure>
+<p>rm -r webapps<br>mv webapps.dist webapps<br>exit</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br><span class="hljs-number">3.</span> 再次访问页面成功。<br><br>### 容器文件映射到本地目录（挂载）<br><br>拷贝容器内 Tomcat 配置文件和日志到本地准备映射<br><br></code></pre></td></tr></table></figure>
+<p>mkdir tomcat<br>docker cp tomcat:&#x2F;usr&#x2F;local&#x2F;tomcat&#x2F;conf &#x2F;root&#x2F;tomcat&#x2F;conf<br>docker cp tomcat:&#x2F;usr&#x2F;local&#x2F;tomcat&#x2F;logs &#x2F;root&#x2F;tomcat&#x2F;logs<br>docker cp tomcat:&#x2F;usr&#x2F;local&#x2F;tomcat&#x2F;webapps &#x2F;root&#x2F;tomcat&#x2F;webapps</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs"><br>停止tomcat，并删除容器<br><br></code></pre></td></tr></table></figure>
+<p>docker stop tomcat<br>docker rm tomcat</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs"><br>创建并运行tomcat容器<br><br></code></pre></td></tr></table></figure>
+<p>docker run -d -p 8080:8080 –name tomcat -v &#x2F;root&#x2F;tomcat&#x2F;webapps:&#x2F;usr&#x2F;local&#x2F;tomcat&#x2F;webapps -v &#x2F;root&#x2F;tomcat&#x2F;conf:&#x2F;usr&#x2F;local&#x2F;tomcat&#x2F;conf -v &#x2F;root&#x2F;tomcat&#x2F;logs:&#x2F;usr&#x2F;local&#x2F;tomcat&#x2F;logs tomcat</p>
+<pre><code class="hljs">
+参数解释:
+* --name tomcat                                        :启动容器的名字
+* -d                                                   :后台运行
+* -p 8081:8080                                         :将容器的 8080 端口映射到主机的 8081端口
+* -v /root/tomcat/webapps:/usr/local/tomcat/webapps    :挂载容器webapps目录到宿主机
+* -v /root/tomcat/conf:/usr/local/tomcat/conf          :挂载容器conf目录到宿主机
+* -v /root/tomcat/webapps:/usr/local/tomcat/webapps    :挂载容器webapps目录到宿主机
+* tomcat                                               :本地运行的版本
+
+# 参考资料
+[Nginx和Apache和Tomcat的区别及优缺点](https://blog.csdn.net/weixin_44221613/article/details/88410701)
+[tomcat、nginx、apache、tengine都是什么，及其作用](https://www.cnblogs.com/isme-zjh/p/11381456.html)
+[一文看懂Tomcat、Nginx和Apache的区别](https://blog.csdn.net/g6U8W7p06dCO99fQ3/article/details/118560517)
+[Apache、Nginx、Tomcat的区别](https://blog.csdn.net/focus_lyh/article/details/122463976)
+[一文看懂web服务器、应用服务器、web容器、反向代理服务器区别与联系](https://blog.51cto.com/mingongge/5181928)
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="category-chain-item">服务器</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Web服务器和应用服务器的区别与联系</div>
+      <div>http://example.com/2022/04/10/Web服务器和应用服务器的区别与联系/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年4月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/05/10/%E5%B1%80%E5%9F%9F%E7%BD%91%E6%B7%BB%E5%8A%A0DNS%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9B%E8%A1%8C%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90/" title="局域网添加DNS服务器进行域名解析">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">局域网添加DNS服务器进行域名解析</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/01/25/Android%E5%B7%A5%E7%A8%8B%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" title="Android工程编码规范">
+                        <span class="hidden-mobile">Android工程编码规范</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

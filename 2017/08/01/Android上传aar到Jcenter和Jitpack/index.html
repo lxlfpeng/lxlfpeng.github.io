@@ -1,0 +1,718 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.上传项目到Jcenter1.注册jcenter账号进入注册地址选择右边sign up here 进行注册,建议直接使用github账号授权登录。(qq，网易等邮箱很多时候收不到验证码，所以要想成功完成注册最好用google邮箱) 2.创建Repository（仓库）注册成功之后创建Repository，作为存放开源库的仓库，最好选择为公共仓库（public），仓库名称和仓库类型为maven，仓">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android上传aar到Jcenter和Jitpack">
+<meta property="og:url" content="http://example.com/2017/08/01/Android%E4%B8%8A%E4%BC%A0aar%E5%88%B0Jcenter%E5%92%8CJitpack/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.上传项目到Jcenter1.注册jcenter账号进入注册地址选择右边sign up here 进行注册,建议直接使用github账号授权登录。(qq，网易等邮箱很多时候收不到验证码，所以要想成功完成注册最好用google邮箱) 2.创建Repository（仓库）注册成功之后创建Repository，作为存放开源库的仓库，最好选择为公共仓库（public），仓库名称和仓库类型为maven，仓">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/5d02a57b10ae75ab984e58b782de1e6d.webp">
+<meta property="og:image" content="http://example.com/images/eea73bb55e14215bcc1b521decb3916b.webp">
+<meta property="og:image" content="http://example.com/images/54c34cd1b58ef0dbf9131b20178fa31f.webp">
+<meta property="og:image" content="http://example.com/images/ade53e475358a7f14a17f70e0b489d84.webp">
+<meta property="og:image" content="http://example.com/images/69ddabfe7b26d894d314945643df52c7.webp">
+<meta property="og:image" content="http://example.com/images/be301d1f3b878377e53655ad2b6473fc.webp">
+<meta property="og:image" content="http://example.com/images/8495782680729379a9b1ec7268453cc9.webp">
+<meta property="og:image" content="http://example.com/images/c9d4181728269298376675d92ac73b24.webp">
+<meta property="og:image" content="http://example.com/images/7ea1a9d3e1c2233c4dd1cf3cb4034cb9.webp">
+<meta property="og:image" content="http://example.com/images/29dee4c9795fbd1f3e7b158ccf81037a.webp">
+<meta property="og:image" content="http://example.com/images/4f0d6a6fa9e6f2f3d636e1ae3aa8840f.webp">
+<meta property="og:image" content="http://example.com/images/540beb26db7ed47d9a84227d985ce4eb.webp">
+<meta property="og:image" content="http://example.com/images/e081706c7b396f98659b89776455a1d8.webp">
+<meta property="og:image" content="http://example.com/images/c402e7bb54fa2c1eb585e4d0107673f2.webp">
+<meta property="og:image" content="http://example.com/images/1e932235725ba95013dd6cd10cc3f304.webp">
+<meta property="og:image" content="http://example.com/images/742f63e3c02cdb2458d4a4c2cd47b04c.webp">
+<meta property="article:published_time" content="2017-07-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:23:47.574Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/5d02a57b10ae75ab984e58b782de1e6d.webp">
+  
+  
+  
+  <title>Android上传aar到Jcenter和Jitpack - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Android上传aar到Jcenter和Jitpack"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2017-08-01 00:00" pubdate>
+          2017年8月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Android上传aar到Jcenter和Jitpack</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-上传项目到Jcenter"><a href="#一-上传项目到Jcenter" class="headerlink" title="一.上传项目到Jcenter"></a>一.上传项目到Jcenter</h1><h3 id="1-注册jcenter账号"><a href="#1-注册jcenter账号" class="headerlink" title="1.注册jcenter账号"></a>1.注册jcenter账号</h3><p>进入<a target="_blank" rel="noopener" href="https://bintray.com/">注册地址</a>选择右边sign up here 进行注册,建议直接使用github账号授权登录。(qq，网易等邮箱很多时候收不到验证码，所以要想成功完成注册最好用google邮箱)<br><img src="/images/5d02a57b10ae75ab984e58b782de1e6d.webp" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h3 id="2-创建Repository（仓库）"><a href="#2-创建Repository（仓库）" class="headerlink" title="2.创建Repository（仓库）"></a>2.创建Repository（仓库）</h3><p>注册成功之后创建Repository，作为存放开源库的仓库，最好选择为公共仓库（public），仓库名称和仓库类型为maven，仓库名称在后面上传时需要用到。<br><img src="/images/eea73bb55e14215bcc1b521decb3916b.webp" srcset="/img/loading.gif" lazyload><br><img src="/images/54c34cd1b58ef0dbf9131b20178fa31f.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="3-获取-API-Key"><a href="#3-获取-API-Key" class="headerlink" title="3.获取 API Key"></a>3.获取 API Key</h3><p>登录bintray， Edit profile -&gt; API Key 可以获取上传的秘钥key，后面上传项目的时候需要使用。<br><img src="/images/ade53e475358a7f14a17f70e0b489d84.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="4-配置引入-bintray-release插件"><a href="#4-配置引入-bintray-release插件" class="headerlink" title="4.配置引入 bintray-release插件"></a>4.配置引入 bintray-release插件</h3><p>项目根目录build.gradle配置，加入bintray-release插件</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">buildscript</span> &#123;<br>       ...<br>    <span class="hljs-keyword">repositories</span> &#123;<br>       ...<br>    &#125;<br>    <span class="hljs-keyword">dependencies</span> &#123;<br>       ...<br>        <span class="hljs-keyword">classpath</span> <span class="hljs-string">&#x27;com.novoda:bintray-release:0.9.2&#x27;</span><br>    &#125;<br>&#125;<br><span class="hljs-keyword">allprojects</span> &#123;<br>    <span class="hljs-keyword">repositories</span> &#123;<br>     ...<br>    &#125;<br>    <span class="hljs-comment">//解决lib中中文乱码问题</span><br>    tasks.withType(Javadoc) &#123; <br>        <span class="hljs-keyword">options</span>.addStringOption(<span class="hljs-string">&#x27;Xdoclint:none&#x27;</span>, <span class="hljs-string">&#x27;-quiet&#x27;</span>)<br>        <span class="hljs-keyword">options</span>.addStringOption(<span class="hljs-string">&#x27;encoding&#x27;</span>, <span class="hljs-string">&#x27;UTF-8&#x27;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>开源库目录build.gradle配置，每个配置描述都已经给出，完成这两个步骤，就可以准备上传开源库到jcenter了</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs gradle">apply plugin: <span class="hljs-string">&#x27;com.android.library&#x27;</span><br>apply plugin: <span class="hljs-string">&#x27;com.novoda.bintray-release&#x27;</span><span class="hljs-comment">//添加 bintray-release 配置</span><br>android &#123;<br>    ...<br>    defaultConfig &#123;<br>    ...    <br>    &#125;<br>    buildTypes &#123;  <br>    &#125;<br>    compileOptions &#123;<br>        <span class="hljs-keyword">sourceCompatibility</span> = <span class="hljs-number">1.8</span><br>        <span class="hljs-keyword">targetCompatibility</span> = <span class="hljs-number">1.8</span><br>    &#125;<br>&#125;<br><span class="hljs-keyword">dependencies</span> &#123;<br>    ...<br>&#125;<br><span class="hljs-comment">//添加</span><br>publish &#123;<br>    userOrg = <span class="hljs-string">&#x27;lxlfpeng&#x27;</span><span class="hljs-comment">//bintray.com用户名</span><br>    repoName = <span class="hljs-string">&#x27;RecordingButton&#x27;</span>   <span class="hljs-comment">// bintray上仓库的名字</span><br>    groupId = <span class="hljs-string">&#x27;com.lagua&#x27;</span><span class="hljs-comment">//jcenter上的路径</span><br>    artifactId = <span class="hljs-string">&#x27;RecordingButton&#x27;</span><span class="hljs-comment">//项目名称</span><br>    publishVersion = <span class="hljs-string">&#x27;1.0.0&#x27;</span><span class="hljs-comment">//版本号</span><br>    desc = <span class="hljs-string">&#x27;Make flow layouts simpler&#x27;</span><span class="hljs-comment">// 描述</span><br>    website = <span class="hljs-string">&#x27;https://github.com/lxlfpeng/RecordingButton.git&#x27;</span><span class="hljs-comment">//一般填github 项目地址,一定是要有效的地址</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-上传开源库"><a href="#5-上传开源库" class="headerlink" title="5.上传开源库"></a>5.上传开源库</h3><h5 id="1-在项目根目录下执行上传命令"><a href="#1-在项目根目录下执行上传命令" class="headerlink" title="(1.)在项目根目录下执行上传命令"></a>(1.)在项目根目录下执行上传命令</h5><p><img src="/images/69ddabfe7b26d894d314945643df52c7.webp" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-comment"># window 下执行</span><br>gradlew clean build bintrayUpload <span class="hljs-attribute">-PbintrayUser</span>=Xxxx <span class="hljs-attribute">-PbintrayKey</span>=Xxxxxxxxx <span class="hljs-attribute">-PdryRun</span>=<span class="hljs-literal">false</span><br><br><span class="hljs-comment"># linux 下执行</span><br>./gradlew clean build bintrayUpload <span class="hljs-attribute">-PbintrayUser</span>=Xxxx <span class="hljs-attribute">-PbintrayKey</span>=xxxxxxxxx <span class="hljs-attribute">-PdryRun</span>=<span class="hljs-literal">false</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="2-上传命令解析"><a href="#2-上传命令解析" class="headerlink" title="(2.)上传命令解析"></a>(2.)上传命令解析</h5><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">gradlew clean build bintrayUpload <span class="hljs-string">//</span>根命令<br>-PbintrayUser=Xxxxxxxxx  <span class="hljs-string">//jcenter</span> 账号用户名<br>-PbintrayKey=Xxxxxxxxx  <span class="hljs-string">//</span>文章开头获取的API Key<br>-PdryRun=<span class="hljs-literal">false</span> <span class="hljs-string">//</span>配置参数，<span class="hljs-literal">true</span> 执行所以细节但是不上传开源库，<span class="hljs-literal">false</span>上传开源库<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="二-添加到Jcenter中央仓库"><a href="#二-添加到Jcenter中央仓库" class="headerlink" title="二.添加到Jcenter中央仓库"></a>二.添加到Jcenter中央仓库</h1><h3 id="1-Add-to-JCenter"><a href="#1-Add-to-JCenter" class="headerlink" title="1. Add to JCenter"></a>1. Add to JCenter</h3><p>上传成功之后就可以打开项目详情，选择 Add to JCenter 就可以申请添加到 JCenter 了，如下图所示：经过上面的步骤，我确实已经把开源库上传到Jcenter了，但是我们还不能引用，要想引用上传的开源库还得提交人工审核，人工审核通过会收到站内message，并且开源库中的Add to Jcenter 也会消失。<br><img src="/images/be301d1f3b878377e53655ad2b6473fc.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="2-审核期间引用"><a href="#2-审核期间引用" class="headerlink" title="2. 审核期间引用"></a>2. 审核期间引用</h3><p>在工程(projrct)的build.gradle文件中，添加maven支持<br><img src="/images/8495782680729379a9b1ec7268453cc9.webp" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs fsharp"><span class="hljs-keyword">allprojects</span> &#123;<br>    <span class="hljs-keyword">repositories</span> &#123;<br>       <span class="hljs-operator">...</span><br>        <span class="hljs-keyword">maven</span> &#123; url <span class="hljs-symbol">&#x27;https</span><span class="hljs-operator">:</span><span class="hljs-comment">//dl.bintray.com/lxlfpeng/xxxxx&#x27; &#125;</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在moudle的build.gradle文件中,添加依赖</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs clean">dependencies &#123;<br>    ...<br>    <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;com.xx:xx:1.0.0&#x27;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="三-Jcenter托管项目版本更新"><a href="#三-Jcenter托管项目版本更新" class="headerlink" title="三.Jcenter托管项目版本更新"></a>三.Jcenter托管项目版本更新</h1><h3 id="1-提交版本"><a href="#1-提交版本" class="headerlink" title="1.提交版本"></a>1.提交版本</h3><p>开源库有bug，或者我们进行迭代，就会涉及到版本更新，那就只需要修改开源库目录build.gradle配置中的版本号，其他配置保持不变，再次执行上传开源库命令就可以达到版本更新的目的。</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs axapta">publish &#123;<br>    userOrg = <span class="hljs-string">&#x27;maoqitian&#x27;</span><span class="hljs-comment">//bintray.com用户名</span><br>    repoName = <span class="hljs-string">&#x27;maolibrary&#x27;</span>   <span class="hljs-comment">// bintray上仓库的名字</span><br>    groupId = <span class="hljs-string">&#x27;com.mao&#x27;</span><span class="hljs-comment">//jcenter上的路径</span><br>    artifactId = <span class="hljs-string">&#x27;flexibleflowlayout&#x27;</span><span class="hljs-comment">//项目名称</span><br>    publishVersion = <span class="hljs-string">&#x27;2.0.0&#x27;</span><span class="hljs-comment">//版本号</span><br>    <span class="hljs-keyword">desc</span> = <span class="hljs-string">&#x27;Make flow layouts simpler&#x27;</span><span class="hljs-comment">// 描述</span><br>    website = <span class="hljs-string">&#x27;https://github.com/maoqitian/FlowLayout&#x27;</span><span class="hljs-comment">//一般填github 项目地址,一定是要有效的地址</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-审核通过"><a href="#2-审核通过" class="headerlink" title="2.审核通过"></a>2.审核通过</h3><p>审核通过会发送站内message，同时Add to jCenter按钮消失，并且可以通过访问<a target="_blank" rel="noopener" href="https://jcenter.bintray.com/%E4%BD%A0%E7%9A%84groupId%E6%9F%A5%E7%9C%8B%E3%80%82">https://jcenter.bintray.com/你的groupId查看。</a></p>
+<h1 id="四-Jcenter托管项目问题相关"><a href="#四-Jcenter托管项目问题相关" class="headerlink" title="四.Jcenter托管项目问题相关"></a>四.Jcenter托管项目问题相关</h1><h3 id="1-上传成功后jcenter项目首页不显示pom"><a href="#1-上传成功后jcenter项目首页不显示pom" class="headerlink" title="1.上传成功后jcenter项目首页不显示pom"></a>1.上传成功后jcenter项目首页不显示pom</h3><p><strong>问题：</strong><br>上传成功后jcenter项目首页不显示pom，点击add to jcenter弹出以下错误提示：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">Please fix <span class="hljs-keyword">the</span> following <span class="hljs-keyword">before</span> submitting <span class="hljs-keyword">a</span> JCenter inclusion request: - Add <span class="hljs-keyword">a</span> POM <span class="hljs-built_in">file</span> <span class="hljs-built_in">to</span> <span class="hljs-keyword">the</span> latest <span class="hljs-built_in">version</span> <span class="hljs-keyword">of</span> your package.<br></code></pre></td></tr></table></figure>
+<p>原因是:是由于编码问题导致javadoc生成失败导致。</p>
+<p><strong>解决：</strong><br>方式一：在Project的build.gradle中配置以下语句：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs stylus">allprojects &#123;<br>    repositories &#123;<br>        <span class="hljs-built_in">google</span>()<br>        <span class="hljs-built_in">jcenter</span>()<br>    &#125;<br>    <span class="hljs-comment">// 新增</span><br>    tasks<span class="hljs-selector-class">.withType</span>(Javadoc) &#123; <br>        options<span class="hljs-selector-class">.addStringOption</span>(<span class="hljs-string">&#x27;Xdoclint:none&#x27;</span>, <span class="hljs-string">&#x27;-quiet&#x27;</span>)<br>        options<span class="hljs-selector-class">.addStringOption</span>(<span class="hljs-string">&#x27;encoding&#x27;</span>, <span class="hljs-string">&#x27;UTF-8&#x27;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>方式二：拆分上传命令：</p>
+<ol>
+<li>在Terminal执行<code>gradlew clean build</code>命令。</li>
+<li>先右击执行generatePomFileForReleasePublication task，再右击执行publishReleasePublicationToMavenLocal task，具体操作看图：<br><img src="/images/c9d4181728269298376675d92ac73b24.webp" srcset="/img/loading.gif" lazyload></li>
+<li>在Terminal中执行<code>gradlew bintrayUpload -PbintrayUser=username -PbintrayKey=API Key -PdryRun=false</code>命令。</li>
+</ol>
+<h3 id="2-Lint检查报错"><a href="#2-Lint检查报错" class="headerlink" title="2.Lint检查报错"></a>2.Lint检查报错</h3><p><strong>问题：</strong><br>Lint检查报错，导致Build &amp; Upload失败。</p>
+<p><strong>解决：</strong><br>方式一：需要自行根据错误信息修正Error级别的问题。<br>方式二：为Library项目的build.gradle配置以下Lint选项实现，–该方式摘自网络，未验证：</p>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs fsharp"><span class="hljs-keyword">android</span> &#123;<br> <br>    <span class="hljs-operator">...</span><br> <br>    <span class="hljs-keyword">lintOptions</span> &#123;<br>        abortOnError <span class="hljs-literal">false</span> <span class="hljs-comment">// 即使有报错也不会停止打包</span><br>        checkReleaseBuilds <span class="hljs-literal">false</span> <span class="hljs-comment">// 打包Release版本的时候也不进行Lint检测</span><br>    &#125;<br>    <br>    <span class="hljs-operator">...</span><br>    <br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="3-网络问题导致的上传失败"><a href="#3-网络问题导致的上传失败" class="headerlink" title="3.网络问题导致的上传失败"></a>3.网络问题导致的上传失败</h3><p><strong>问题：</strong></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">*</span> What went wrong:<br>Execution failed for task &#x27;:utils:bintrayUpload&#x27;.<br><span class="hljs-quote">&gt; javax.net.ssl.SSLPeerUnverifiedException: peer not authenticated</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">* What went wrong:<br>Execution failed <span class="hljs-keyword">for</span> task <span class="hljs-string">&#x27;:utils:bintrayUpload&#x27;</span>.<br>&gt; org.apache.<span class="hljs-keyword">http</span>.conn.HttpHostConnectException: Connection <span class="hljs-built_in">to</span> <span class="hljs-keyword">http</span>://<span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">8888</span> refused<br></code></pre></td></tr></table></figure>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">* What went wrong:<br>Execution failed <span class="hljs-keyword">for</span> task <span class="hljs-string">&#x27;:utils:bintrayUpload&#x27;</span>.<br>&gt; org.apache.<span class="hljs-keyword">http</span>.NoHttpResponseException: The target server failed <span class="hljs-built_in">to</span> respond<br></code></pre></td></tr></table></figure>
+<p><strong>解决：</strong></p>
+<ol>
+<li>关闭代理软件，重启网络。</li>
+<li>关闭由上传操作自动开启的Java客户端（Mac上会出现，其他设备不清楚）。</li>
+</ol>
+<h1 id="五-上传项目到Jitpack"><a href="#五-上传项目到Jitpack" class="headerlink" title="五.上传项目到Jitpack"></a>五.上传项目到Jitpack</h1><h3 id="1-准备好项目以及要发布的开源库"><a href="#1-准备好项目以及要发布的开源库" class="headerlink" title="1.准备好项目以及要发布的开源库"></a>1.准备好项目以及要发布的开源库</h3><p>上传到JitPack的开源库默认使用项目的名称，而不是要发布的开源库的名称，所以尽量给项目起一个比较优雅的名字（这里我们使用同名）。<br><img src="/images/7ea1a9d3e1c2233c4dd1cf3cb4034cb9.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="2-配置gradle插件"><a href="#2-配置gradle插件" class="headerlink" title="2.配置gradle插件"></a>2.配置gradle插件</h3><p>用到一个的插件**<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=https://github.com/dcendents/android-maven-gradle-plugin">android-maven-gradle-plugin</a>**</p>
+<ol>
+<li><p>在项目的build.gradle添加<code>classpath &#39;com.github.dcendents:android-maven-gradle-plugin:1.5&#39;</code>。</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">buildscript</span> &#123;<br>   ...<br>    <span class="hljs-keyword">repositories</span> &#123;<br>        google()<br>        jcenter()<br>    &#125;<br>    <span class="hljs-keyword">dependencies</span> &#123;<br>        <span class="hljs-keyword">classpath</span> <span class="hljs-string">&#x27;com.android.tools.build:gradle:3.5.2&#x27;</span><br>        <span class="hljs-keyword">classpath</span> <span class="hljs-string">&#x27;com.github.dcendents:android-maven-gradle-plugin:1.5&#x27;</span><br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">allprojects</span> &#123;<br>  ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="/images/29dee4c9795fbd1f3e7b158ccf81037a.webp" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>在要上传的library的build.gralde文件添加如下代码：</p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs sqf"><span class="hljs-built_in">apply</span> plugin: <span class="hljs-string">&#x27;com.android.library&#x27;</span><br><span class="hljs-comment">// JitPack Maven</span><br><span class="hljs-built_in">apply</span> plugin: <span class="hljs-string">&#x27;com.github.dcendents.android-maven&#x27;</span><br><span class="hljs-comment">// Your Group</span><br><span class="hljs-built_in">group</span>=<span class="hljs-string">&#x27;com.github.username&#x27;</span><br>android &#123;<br>  ...<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>将项目上传到github。</p>
+</li>
+</ol>
+<h3 id="3-在github主页，创建一个Release或Tag"><a href="#3-在github主页，创建一个Release或Tag" class="headerlink" title="3.在github主页，创建一个Release或Tag"></a>3.在github主页，创建一个Release或Tag</h3><p><img src="/images/4f0d6a6fa9e6f2f3d636e1ae3aa8840f.webp" srcset="/img/loading.gif" lazyload alt="image.png"><br><img src="/images/540beb26db7ed47d9a84227d985ce4eb.webp" srcset="/img/loading.gif" lazyload alt="image.png"><br><img src="/images/e081706c7b396f98659b89776455a1d8.webp" srcset="/img/loading.gif" lazyload alt="image.png"><br><img src="/images/c402e7bb54fa2c1eb585e4d0107673f2.webp" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h3 id="4-将项目的仓库提交到jitpack-io"><a href="#4-将项目的仓库提交到jitpack-io" class="headerlink" title="4.将项目的仓库提交到jitpack.io"></a>4.将项目的仓库提交到<a target="_blank" rel="noopener" href="https://jitpack.io/">jitpack.io</a></h3><p><img src="/images/1e932235725ba95013dd6cd10cc3f304.webp" srcset="/img/loading.gif" lazyload alt="image.png"><br>版本提交完成后，JitPack会自动生成引用该library的配置信息:<br><img src="/images/742f63e3c02cdb2458d4a4c2cd47b04c.webp" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="https://www.maoqitian.com/2019/09/03/%E5%BC%80%E6%BA%90%E5%BA%93%E4%B8%8A%E4%BC%A0-jcenter/">开源库上传 jcenter</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/b09871d84fc1">AS上传Library到JCenter 教程+踩坑记录</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6f04943efd3d">亲测android Studio发布Lib到jCenter</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/csdn576038874/article/details/79308391">如何一步一步的将自己的开源项目上传到jcenter</a><br><a target="_blank" rel="noopener" href="https://juejin.im/post/5df10c116fb9a0165936e0b7">如何上传Android库项目的到JCenter</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Android上传aar到Jcenter和Jitpack</div>
+      <div>http://example.com/2017/08/01/Android上传aar到Jcenter和Jitpack/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2017年8月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2017/08/02/%E6%BC%AB%E8%B0%88Http%E5%92%8CHttps/" title="漫谈Http和Https">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">漫谈Http和Https</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2017/06/11/Okhttp3.0%E9%85%8D%E7%BD%AE%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%AD%BE%E5%90%8DHttps%E8%AF%81%E4%B9%A6/" title="Okhttp3.0配置支持第三方签名Https证书">
+                        <span class="hidden-mobile">Okhttp3.0配置支持第三方签名Https证书</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

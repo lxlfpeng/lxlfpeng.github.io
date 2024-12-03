@@ -1,0 +1,739 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.什么是pagingJetpack Paging提供了列表中分页数据加载的解决方案，已经被广泛熟知和使用，目前这个库升级到了3.0版本。Paging3 基于Kotlin协程进行了重写，兼容Flow、Rxjava、LiveData等多种API方式。  每一页的数据会缓存至内存中，以此保证处理分页数据时更有效的使用系统资源 内置请求重复数据删除功能，确保应用有效地使用网络带宽和系统资源 支持Kotl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AndroidJetpack分页组件paging3">
+<meta property="og:url" content="http://example.com/2021/09/02/AndroidJetpack%E5%88%86%E9%A1%B5%E7%BB%84%E4%BB%B6paging3/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.什么是pagingJetpack Paging提供了列表中分页数据加载的解决方案，已经被广泛熟知和使用，目前这个库升级到了3.0版本。Paging3 基于Kotlin协程进行了重写，兼容Flow、Rxjava、LiveData等多种API方式。  每一页的数据会缓存至内存中，以此保证处理分页数据时更有效的使用系统资源 内置请求重复数据删除功能，确保应用有效地使用网络带宽和系统资源 支持Kotl">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:28:15.254Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>AndroidJetpack分页组件paging3 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="AndroidJetpack分页组件paging3"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-09-02 00:00" pubdate>
+          2021年9月2日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          18 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">AndroidJetpack分页组件paging3</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-什么是paging"><a href="#一-什么是paging" class="headerlink" title="一.什么是paging"></a>一.什么是paging</h1><p>Jetpack Paging提供了列表中分页数据加载的解决方案，已经被广泛熟知和使用，目前这个库升级到了3.0版本。Paging3 基于Kotlin协程进行了重写，兼容Flow、Rxjava、LiveData等多种API方式。</p>
+<ul>
+<li>每一页的数据会缓存至内存中，以此保证处理分页数据时更有效的使用系统资源</li>
+<li>内置请求重复数据删除功能，确保应用有效地使用网络带宽和系统资源</li>
+<li>支持Kotlin协程、Flow、LiveData以及RxJava</li>
+<li>内置错误处理支持，如刷新和重试功能。</li>
+</ul>
+<h1 id="二-引入依赖"><a href="#二-引入依赖" class="headerlink" title="二.引入依赖"></a>二.引入依赖</h1><figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs clean"><span class="hljs-comment">//java</span><br><span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;androidx.paging:paging-runtime:3.0.0-alpha07&#x27;</span><br><span class="hljs-comment">//kotlin</span><br><span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;androidx.paging:paging-runtime-ktx:3.0.0-alpha07&#x27;</span><br></code></pre></td></tr></table></figure>
+<h1 id="三-初步使用"><a href="#三-初步使用" class="headerlink" title="三.初步使用"></a>三.初步使用</h1><h3 id="1-配置数据源"><a href="#1-配置数据源" class="headerlink" title="1. 配置数据源"></a>1. 配置数据源</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ArticleDataSource</span> : <span class="hljs-type">PagingSource</span>&lt;<span class="hljs-type">Int, DemoReqData.DataBean.DatasBean</span>&gt;() &#123;<br>    <span class="hljs-keyword">override</span> <span class="hljs-keyword">suspend</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">load</span><span class="hljs-params">(params: <span class="hljs-type">LoadParams</span>&lt;<span class="hljs-type">Int</span>&gt;)</span></span>: LoadResult&lt;<span class="hljs-built_in">Int</span>, DemoReqData.DataBean.DatasBean&gt; &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-comment">//param.key页码未定义置为1 默认加载第1页数据。</span><br>            <span class="hljs-keyword">var</span> currentPage = params.key ?: <span class="hljs-number">1</span><br>            <span class="hljs-comment">//仓库层请求数据</span><br>            Log.d(<span class="hljs-string">&quot;PagingSource&quot;</span>, <span class="hljs-string">&quot;请求第<span class="hljs-subst">$&#123;currentPage&#125;</span>页&quot;</span>)<br>            <span class="hljs-keyword">var</span> demoReqData = RetrofitService.api.getArticleListData(currentPage)<br>            <span class="hljs-comment">//数据获取成功返回LoadResult数据</span><br>            LoadResult.Page(<br>                    <span class="hljs-comment">//需要加载的数据</span><br>                    <span class="hljs-keyword">data</span> = demoReqData.<span class="hljs-keyword">data</span>.datas,<br>                    <span class="hljs-comment">//如果可以往上加载更多就设置该参数，否则不设置</span><br>                    prevKey = <span class="hljs-literal">null</span>,<br>                    <span class="hljs-comment">//加载下一页的key 如果传null就说明到底了</span><br>                    nextKey = <span class="hljs-keyword">if</span> (currentPage &lt; demoReqData.<span class="hljs-keyword">data</span>?.pageCount ?: <span class="hljs-number">0</span>) &#123;<br>                        <span class="hljs-comment">//当前页码 小于 总页码 页面加1</span><br>                        currentPage + <span class="hljs-number">1</span><br>                    &#125; <span class="hljs-keyword">else</span> &#123;<br>                        <span class="hljs-literal">null</span><br>                    &#125;<br>            )<br>        &#125; <span class="hljs-keyword">catch</span> (e: Exception) &#123;<br>            Log.d(<span class="hljs-string">&quot;PagingSource&quot;</span>, <span class="hljs-string">&quot;----error---&gt;<span class="hljs-subst">$&#123;e.message&#125;</span>&quot;</span>)<br>            LoadResult.Error(throwable = e)<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="2-生成可观察的数据集"><a href="#2-生成可观察的数据集" class="headerlink" title="2.生成可观察的数据集"></a>2.生成可观察的数据集</h3><p>观察数据集包括 LiveData 、Flow 以及 RxJava 中的 Observable 和 Flowable，其中，RxJava 需要单独引入扩展库去支持的。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">PagingViewModel</span> : <span class="hljs-type">ViewModel</span>()  &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">getArticleData</span><span class="hljs-params">()</span></span>: Flow&lt;PagingData&lt;DemoReqData.DataBean.DatasBean&gt;&gt; = Pager(PagingConfig(pageSize = <span class="hljs-number">1</span>)) &#123;<br>        ArticleDataSource()<br>    &#125;.flow<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>PagerConfig 可以提供分页的参数，比如每一页的加载数、初始加载数和最大数等。</li>
+<li>pagingSourceFactory 和 remoteMediator 都是数据源，我们使用其中的一个即可。</li>
+</ul>
+<p>PagingData是数据源和RecyclerView Adapter之间的一个桥梁，每一页数据就是一个PagingData首先创建Flow&lt;PagingData<XXX>&gt;,可以通过Pager().flow()去实现<br>，可以传入PagingConfig到Pager中去设置一些分页的参数，比如：</p>
+<ul>
+<li><p>pageSize : 每一页的数据量</p>
+</li>
+<li><p>prefetchDistance : 预取数据的距离，也就是距离最后一个item多远时开始加载下一页数据，默认是一页的数据量ppagesize，也就是说你获取到N页数据之后会自动开始获取第N+1页的数据，如果设置为0那么loadmore的效果就会消失</p>
+</li>
+<li><p>initialLoadSize : 初始化加载的数量，默认为pagesize * 3</p>
+</li>
+</ul>
+<p>Flow<PagingData>有一个方便的cachedIn()方法，使我们可以将内容缓存Flow<PagingData>在CoroutineScope中，如果我们放在viewmodel中，<br>这样我们就可以在配置被更改之后，activity能够接收到原有的数据而不用重新开始获取，如果你要在flow上用map等操作符的时候，要确保cachedIn()是在最后面的，<br>如果没有缓存，那么在切换横竖屏的时候就会重新开始请求.</p>
+<h3 id="3-创建Adapter"><a href="#3-创建Adapter" class="headerlink" title="3.创建Adapter"></a>3.创建Adapter</h3><p>用Paging库时需要recyclerview的adapter继承PagingDataAdapter</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-comment">// 首先构造方法里需要传入diffutil的callback</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">PagingWanAdapter</span> : <span class="hljs-type">PagingDataAdapter</span>&lt;<span class="hljs-type">ArticleDataListData.DataBean.DatasBean, PagingWanAdapter.CustomViewHolder</span>&gt;(ArticleDiffCallback()) &#123;<br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onBindViewHolder</span><span class="hljs-params">(holder: <span class="hljs-type">CustomViewHolder</span>, position: <span class="hljs-type">Int</span>)</span></span> &#123;<br>        <span class="hljs-keyword">val</span> dataBean = getItem(position)<br>        holder.txtInfo.text = dataBean?.desc<br>    &#125;<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onCreateViewHolder</span><span class="hljs-params">(parent: <span class="hljs-type">ViewGroup</span>, viewType: <span class="hljs-type">Int</span>)</span></span>: CustomViewHolder &#123;<br>        <span class="hljs-keyword">val</span> view = LayoutInflater.from(parent.context).inflate(R.layout.test_item_paging, parent, <span class="hljs-literal">false</span>)<br>        <span class="hljs-keyword">return</span> CustomViewHolder(view)<br>    &#125;<br><br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">CustomViewHolder</span>(itemView: View) : RecyclerView.ViewHolder(itemView) &#123;<br>        <span class="hljs-keyword">val</span> txtInfo: TextView = itemView.findViewById(R.id.txt_view)<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">//这是判断item是否需要更新的部分</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ArticleDiffCallback</span> : <span class="hljs-type">DiffUtil.ItemCallback</span>&lt;<span class="hljs-type">ArticleDataListData.DataBean.DatasBean</span>&gt;() &#123;<br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">areItemsTheSame</span><span class="hljs-params">(oldItem: <span class="hljs-type">ArticleDataListData</span>.<span class="hljs-type">DataBean</span>.<span class="hljs-type">DatasBean</span>, newItem: <span class="hljs-type">ArticleDataListData</span>.<span class="hljs-type">DataBean</span>.<span class="hljs-type">DatasBean</span>)</span></span>: <span class="hljs-built_in">Boolean</span> &#123;<br>        <span class="hljs-keyword">return</span> oldItem.id == newItem.id<br>    &#125;<br>    <span class="hljs-meta">@SuppressLint(<span class="hljs-string">&quot;DiffUtilEquals&quot;</span>)</span><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">areContentsTheSame</span><span class="hljs-params">(oldItem: <span class="hljs-type">ArticleDataListData</span>.<span class="hljs-type">DataBean</span>.<span class="hljs-type">DatasBean</span>, newItem: <span class="hljs-type">ArticleDataListData</span>.<span class="hljs-type">DataBean</span>.<span class="hljs-type">DatasBean</span>)</span></span>: <span class="hljs-built_in">Boolean</span> &#123;<br>        <span class="hljs-keyword">return</span> oldItem == newItem<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>paging3的设计理念是不建议对列表数据直接修改；而是对数据源进行操作，数据源的变化会自动更新到列表；<br>DiffUtil.ItemCallback 就是用来比对数据变化，从而决定更新对应UI；并执行条目动画；</p>
+<ul>
+<li><p>areItemsTheSame<br>比对新旧条目是否是同一个条目；<br>一般比对条目的唯一标示id即可，谨慎对待，如果条目不同则可能不会更新UI；</p>
+</li>
+<li><p>areContentsTheSame<br>当上面的方法确定是同一个条目之后，这里比对条目的内容是否一样，不一样则会更新条目UI<br>建议这里的比对把UI展示的数据都写上，写漏了会导致UI不更新对应字段；</p>
+</li>
+<li><p>getChangePayload （可选）<br>用于条目内部的局部刷新；</p>
+</li>
+</ul>
+<h3 id="4-在界面中使用"><a href="#4-在界面中使用" class="headerlink" title="4.在界面中使用"></a>4.在界面中使用</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">PagingHomeMainActivity</span> : <span class="hljs-type">AppCompatActivity</span>(), CoroutineScope <span class="hljs-keyword">by</span> MainScope() &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">val</span> btnLoadData <span class="hljs-keyword">by</span> lazy &#123;<br>        findViewById&lt;Button&gt;(R.id.btn_load_data)<br>    &#125;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">val</span> rlvData <span class="hljs-keyword">by</span> lazy &#123;<br>        findViewById&lt;RecyclerView&gt;(R.id.rlv_data)<br>    &#125;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">val</span> mPagingWanAdapter: PagingWanAdapter <span class="hljs-keyword">by</span> lazy &#123;<br>        PagingWanAdapter()<br>    &#125;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">val</span> mPagingViewModel: PagingViewModel <span class="hljs-keyword">by</span> lazy &#123;<br>        ViewModelProvider(<span class="hljs-keyword">this</span>).<span class="hljs-keyword">get</span>(PagingViewModel::<span class="hljs-keyword">class</span>.java)<br>    &#125;<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(savedInstanceState: <span class="hljs-type">Bundle</span>?)</span></span> &#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState)<br>        setContentView(R.layout.test_activity_paging_home_main)<br>        rlvData.adapter = mPagingWanAdapter<br>        btnLoadData.setOnClickListener &#123;<br>            launch &#123;<br>                <span class="hljs-comment">// 在activity中订阅pager的数据流，并且通过submitData方法把数据传给adapter</span><br>                mPagingViewModel?.getArticleData()?.collectLatest &#123;<br>                    <span class="hljs-comment">//  mPagingData=it</span><br>                <span class="hljs-comment">// 把数据转化成itemview然后让adapter刷新ui</span><br>                    mPagingWanAdapter.submitData(it)<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onDestroy</span><span class="hljs-params">()</span></span> &#123;<br>        <span class="hljs-keyword">super</span>.onDestroy()<br>        cancel()<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<h1 id="四-注意事项"><a href="#四-注意事项" class="headerlink" title="四.注意事项"></a>四.注意事项</h1><h3 id="1-调整预取阈值"><a href="#1-调整预取阈值" class="headerlink" title="1.调整预取阈值"></a>1.调整预取阈值</h3><p>构建Pager时，使用到PagingConfig，其中有一个属性值为prefetchDistance，用于表示距离底部多少条数据开始预加载，设置0则表示滑到底部才加载。默认值为分页大小。<br>若要让用户对加载无感，适当增加预取阈值即可。比如调整到分页大小的5倍。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">PagingViewModel</span> : <span class="hljs-type">ViewModel</span>() &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">getArticleData</span><span class="hljs-params">()</span></span> = Pager(PagingConfig(pageSize = <span class="hljs-number">10</span>, prefetchDistance = <span class="hljs-number">50</span>)) &#123;<br>        ArticleDataSource()<br>    &#125;.flow.cachedIn(viewModelScope)<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="2-Paging的加载状态"><a href="#2-Paging的加载状态" class="headerlink" title="2.Paging的加载状态"></a>2.Paging的加载状态</h3><p>想要监听数据获取的状态在PagingDataAdapter里有两个方法</p>
+<ul>
+<li><p>addDataRefreshListener 这个方法是当新的PagingData被提交并且显示的回调</p>
+</li>
+<li><p>addLoadStateListener这个相较于上面那个比较复杂，listener中的回调会返回一个CombinedLoadStates对象</p>
+</li>
+</ul>
+<p>上面我们在Activity中创建了dataRecycleViewAdapter来显示页面数据，我们可以使用addLoadStateListener方法添加加载状态的监听事件，如下所示：</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs livescript">mPagingWanAdapter.addLoadStateListener &#123;<br>    <span class="hljs-keyword">when</span> (<span class="hljs-literal">it</span>.refresh) &#123;<br>        <span class="hljs-keyword">is</span> LoadState.NotLoading -&gt; &#123;<br>            Log.d(TAG, <span class="hljs-string">&quot;is NotLoading&quot;</span>)<br>        &#125;<br>        <span class="hljs-keyword">is</span> LoadState.Loading -&gt; &#123;<br>            Log.d(TAG, <span class="hljs-string">&quot;is Loading&quot;</span>)<br>        &#125;<br>        <span class="hljs-keyword">is</span> LoadState.<span class="hljs-built_in">Error</span> -&gt; &#123;<br>            Log.d(TAG, <span class="hljs-string">&quot;is Error&quot;</span>)<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>状态返回的参数 CombinedLoadStates，包含了</p>
+<ul>
+<li><p>refresh:刷新(在初始化刷新的使用)</p>
+</li>
+<li><p>prepend:向前加载更多</p>
+</li>
+<li><p>append:向后加载更多(在加载更多的时候使用)</p>
+</li>
+<li><p>source:数据源</p>
+</li>
+<li><p>mediator:调解员<br>每个行为分为3中状态：</p>
+</li>
+<li><p>LoadState.Loading 加载中 (加载数据时候回调)</p>
+</li>
+<li><p>LoadState.NotLoading 没有加载中 (加载数据前和加载数据完成后回调)</p>
+</li>
+<li><p>LoadState.Error 加载失败 （加载数据失败回调）</p>
+</li>
+</ul>
+<p>也就是说如果监测的是it.refresh，当加载第二页第三页的时候，状态是监听不到的，这里只以it.refresh为例。</p>
+<p>监听方式除了addLoadStateListener外，还可以直接使用loadStateFlow的方式，由于flow内部是一个挂起函数 所以我们需要在协程中执行(,代码如下所示:</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs livescript">lifecycleScope.launch &#123;<br>    mPagingWanAdapter.loadStateFlow.collectLatest &#123;<br>        <span class="hljs-keyword">when</span> (<span class="hljs-literal">it</span>.refresh) &#123;<br>            <span class="hljs-keyword">is</span> LoadState.NotLoading -&gt; &#123;<br> <br>            &#125;<br>            <span class="hljs-keyword">is</span> LoadState.Loading -&gt; &#123;<br> <br>            &#125;<br>            <span class="hljs-keyword">is</span> LoadState.<span class="hljs-built_in">Error</span> -&gt; &#123;<br> <br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="3-刷新和重试"><a href="#3-刷新和重试" class="headerlink" title="3.刷新和重试"></a>3.刷新和重试</h3><h5 id="1-使用第三方刷新库"><a href="#1-使用第三方刷新库" class="headerlink" title="(1.) 使用第三方刷新库"></a>(1.) 使用第三方刷新库</h5><p>在下拉刷新控制的下拉监听中直接调用adapter.refresh()方法就可以完成刷新了，那什么时候关闭刷新动画呢，需要调用adapter.loadStateFlow.collectLatest方法来监听</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs perl">lifecycleScope.launchWhenCreated &#123;<br>            <span class="hljs-variable">@OptIn</span>(ExperimentalCoroutinesApi::<span class="hljs-class"><span class="hljs-keyword">class</span>)</span><br><span class="hljs-class">            <span class="hljs-title">adapter</span>.<span class="hljs-title">loadStateFlow</span>.<span class="hljs-title">collectLatest</span> </span>&#123;<br>                <span class="hljs-keyword">if</span>(it.refresh !is LoadState.Loading)&#123;<br>                    refreshView.finishRefresh()<br>                &#125;<br>            &#125;<br>        &#125;<br></code></pre></td></tr></table></figure>
+<p>收集流的状态，如果是不是Loading状态的说明加载完成了，可以关闭动画了。</p>
+<h5 id="2-使用PagingDataAdapter添加刷新和加载更多"><a href="#2-使用PagingDataAdapter添加刷新和加载更多" class="headerlink" title="(2.)使用PagingDataAdapter添加刷新和加载更多"></a>(2.)使用PagingDataAdapter添加刷新和加载更多</h5><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>使用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>fun withLoadStateHeader(header: LoadStateAdapter&lt;*&gt; )</td>
+<td>头部添加状态适配器</td>
+</tr>
+<tr>
+<td>fun withLoadStateFooter(footer: LoadStateAdapter&lt;*&gt; )</td>
+<td>底部添加状态适配器</td>
+</tr>
+<tr>
+<td>fun withLoadStateHeaderAndFooter(header: LoadStateAdapter&lt;*&gt;, footer: LoadStateAdapter&lt;*&gt; )</td>
+<td>头尾都添加状态适配器</td>
+</tr>
+</tbody></table>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs stylus">class <span class="hljs-built_in">ArticleLoadStateAdapter</span>(val retrycallback: () -&gt; Unit) : LoadStateAdapter&lt;ArticleLoadStateAdapter.ArticleLoadStateViewHolder&gt;() &#123;<br><br><br>    class <span class="hljs-built_in">ArticleLoadStateViewHolder</span>(itemView: View) : RecyclerView<span class="hljs-selector-class">.ViewHolder</span>(itemView) &#123;<br>        val pbLoading = itemView.findViewById&lt;ProgressBar&gt;(R<span class="hljs-selector-class">.id</span>.pb_loading)<br>        val btnerror = itemView.findViewById&lt;Button&gt;(R<span class="hljs-selector-class">.id</span>.btn_error)<br>        val txtEnd = itemView.findViewById&lt;TextView&gt;(R<span class="hljs-selector-class">.id</span>.txt_end)<br>    &#125;<br><br>    override fun <span class="hljs-built_in">onBindViewHolder</span>(holder: ArticleLoadStateViewHolder, loadState: LoadState) &#123;<br>        when (loadState) &#123;<br>            is LoadState<span class="hljs-selector-class">.Error</span> -&gt; &#123;<br>                LogTest<span class="hljs-selector-class">.d</span>(<span class="hljs-string">&quot;LoadState.Error&quot;</span>)<br>                holder<span class="hljs-selector-class">.pbLoading</span><span class="hljs-selector-class">.visibility</span> = View<span class="hljs-selector-class">.GONE</span><br>                holder<span class="hljs-selector-class">.btnerror</span><span class="hljs-selector-class">.visibility</span> = View<span class="hljs-selector-class">.VISIBLE</span><br>                holder<span class="hljs-selector-class">.txtEnd</span><span class="hljs-selector-class">.visibility</span> = View<span class="hljs-selector-class">.GONE</span><br>                holder<span class="hljs-selector-class">.btnerror</span><span class="hljs-selector-class">.setOnClickListener</span> &#123;<br>                    <span class="hljs-built_in">retrycallback</span>()<br>                &#125;<br>            &#125;<br>            is LoadState<span class="hljs-selector-class">.Loading</span> -&gt; &#123;<br>                LogTest<span class="hljs-selector-class">.d</span>(<span class="hljs-string">&quot;LoadState.Loading&quot;</span>)<br>                holder<span class="hljs-selector-class">.pbLoading</span><span class="hljs-selector-class">.visibility</span> = View<span class="hljs-selector-class">.VISIBLE</span><br>                holder<span class="hljs-selector-class">.btnerror</span><span class="hljs-selector-class">.visibility</span> = View<span class="hljs-selector-class">.GONE</span><br>                holder<span class="hljs-selector-class">.txtEnd</span><span class="hljs-selector-class">.visibility</span> = View<span class="hljs-selector-class">.GONE</span><br>            &#125;<br>            is LoadState<span class="hljs-selector-class">.NotLoading</span> -&gt; &#123;<br>                LogTest<span class="hljs-selector-class">.d</span>(<span class="hljs-string">&quot;LoadState.NotLoading&quot;</span>)<br>                holder<span class="hljs-selector-class">.pbLoading</span><span class="hljs-selector-class">.visibility</span> = View<span class="hljs-selector-class">.GONE</span><br>                holder<span class="hljs-selector-class">.btnerror</span><span class="hljs-selector-class">.visibility</span> = View<span class="hljs-selector-class">.GONE</span><br>                holder<span class="hljs-selector-class">.txtEnd</span><span class="hljs-selector-class">.visibility</span> = View<span class="hljs-selector-class">.VISIBLE</span><br>            &#125;<br>        &#125;<br>    &#125;<br><br>    override fun <span class="hljs-built_in">onCreateViewHolder</span>(parent: ViewGroup, loadState: LoadState): ArticleLoadStateViewHolder &#123;<br>        val rootView = LayoutInflater<span class="hljs-selector-class">.from</span>(parent.context)<span class="hljs-selector-class">.inflate</span>(R<span class="hljs-selector-class">.layout</span><span class="hljs-selector-class">.test_item_loadstate</span>, parent, false)<br>        return <span class="hljs-built_in">ArticleLoadStateViewHolder</span>(rootView)<br>    &#125;<br><br><span class="hljs-comment">//    override fun displayLoadStateAsItem(loadState: LoadState): Boolean &#123;</span><br><span class="hljs-comment">//       // return super.displayLoadStateAsItem(loadState)</span><br><span class="hljs-comment">//        return true</span><br><span class="hljs-comment">//    &#125;</span><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>参考资料:<br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6911620350581145614">Android Paging3 LoadStateAdapter显示已加载完所有数据</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>AndroidJetpack分页组件paging3</div>
+      <div>http://example.com/2021/09/02/AndroidJetpack分页组件paging3/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年9月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/09/29/%E4%BD%BF%E7%94%A8Getx%E6%A1%86%E6%9E%B6%E7%AE%80%E5%8C%96Flutter%E5%BC%80%E5%8F%91/" title="使用Getx框架简化Flutter开发">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">使用Getx框架简化Flutter开发</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/08/20/Web%E5%89%8D%E7%AB%AF%E5%90%8E%E7%AB%AF%E6%B8%B2%E6%9F%93/" title="Web前端后端渲染">
+                        <span class="hidden-mobile">Web前端后端渲染</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

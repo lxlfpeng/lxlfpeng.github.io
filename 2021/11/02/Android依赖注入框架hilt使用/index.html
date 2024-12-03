@@ -1,0 +1,841 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.什么是HiltHilt 是Google 最新的依赖注入框架，其基于Dagger研发。Hilt可以说是专门为Android 打造，提供了一种将Dagger依赖项注入到Android应用程序的标准方法，而且创建了一些标准的组件和作用域，这些组件会自动集成到Android应用程序的各个生命周期中，以简化开发者的上手难度。 二. 引入Hilt1.AndroidStudio版本需要AndroidStud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android依赖注入框架hilt使用">
+<meta property="og:url" content="http://example.com/2021/11/02/Android%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%A1%86%E6%9E%B6hilt%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.什么是HiltHilt 是Google 最新的依赖注入框架，其基于Dagger研发。Hilt可以说是专门为Android 打造，提供了一种将Dagger依赖项注入到Android应用程序的标准方法，而且创建了一些标准的组件和作用域，这些组件会自动集成到Android应用程序的各个生命周期中，以简化开发者的上手难度。 二. 引入Hilt1.AndroidStudio版本需要AndroidStud">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-11-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:26:19.275Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Android依赖注入框架hilt使用 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Android依赖注入框架hilt使用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-11-02 00:00" pubdate>
+          2021年11月2日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Android依赖注入框架hilt使用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-什么是Hilt"><a href="#一-什么是Hilt" class="headerlink" title="一.什么是Hilt"></a>一.什么是Hilt</h1><p>Hilt 是Google 最新的依赖注入框架，其基于Dagger研发。Hilt可以说是专门为Android 打造，提供了一种将Dagger依赖项注入到Android应用程序的标准方法，而且创建了一些标准的组件和作用域，这些组件会自动集成到Android应用程序的各个生命周期中，以简化开发者的上手难度。</p>
+<h1 id="二-引入Hilt"><a href="#二-引入Hilt" class="headerlink" title="二. 引入Hilt"></a>二. 引入Hilt</h1><h3 id="1-AndroidStudio版本"><a href="#1-AndroidStudio版本" class="headerlink" title="1.AndroidStudio版本"></a>1.AndroidStudio版本</h3><p>需要AndroidStudio4.0版本及以上以上</p>
+<h3 id="2-项目根目录build-gradle添加依赖"><a href="#2-项目根目录build-gradle添加依赖" class="headerlink" title="2.项目根目录build.gradle添加依赖"></a>2.项目根目录build.gradle添加依赖</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">buildscript</span> &#123;<br>    ...<br>    <span class="hljs-keyword">dependencies</span> &#123;<br>        ...<br>        <span class="hljs-keyword">classpath</span> <span class="hljs-string">&#x27;com.google.dagger:hilt-android-gradle-plugin:2.28-alpha&#x27;</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="3-在module下的build-gradle添加以下依赖项："><a href="#3-在module下的build-gradle添加以下依赖项：" class="headerlink" title="3.在module下的build.gradle添加以下依赖项："></a>3.在module下的build.gradle添加以下依赖项：</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs gradle">...<br>apply plugin: <span class="hljs-string">&#x27;kotlin-kapt&#x27;</span><br>apply plugin: <span class="hljs-string">&#x27;dagger.hilt.android.plugin&#x27;</span><br><br>android &#123;<br>  ...<br>  <span class="hljs-comment">//Hilt 使用 Java 8 功能。如需在项目中启用 Java 8  </span><br>  compileOptions &#123;<br>    <span class="hljs-keyword">sourceCompatibility</span> JavaVersion.VERSION_1_8<br>    <span class="hljs-keyword">targetCompatibility</span> JavaVersion.VERSION_1_8<br>  &#125;<br>&#125;<br><br><span class="hljs-keyword">dependencies</span> &#123;<br>    implementation <span class="hljs-string">&quot;com.google.dagger:hilt-android:2.28-alpha&quot;</span><br>    kapt <span class="hljs-string">&quot;com.google.dagger:hilt-android-compiler:2.28-alpha&quot;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="三-初步使用Hilt"><a href="#三-初步使用Hilt" class="headerlink" title="三.初步使用Hilt"></a>三.初步使用Hilt</h1><h3 id="1-初始化Hilt"><a href="#1-初始化Hilt" class="headerlink" title="1.初始化Hilt"></a>1.初始化Hilt</h3><p>所有使用 Hilt 的应用都必须包含一个带有 @HiltAndroidApp 注释的 Application 类。在Application的上面必须使用这个注解才可以开启hilt依赖注入。</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs perl"><span class="hljs-variable">@HiltAndroidApp</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ExampleApplication</span><span class="hljs-attr"> : Application()</span> </span>&#123; ... &#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-Hilt注入对象"><a href="#2-Hilt注入对象" class="headerlink" title="2.Hilt注入对象"></a>2.Hilt注入对象</h3><p>Inject注解和Dagger2中一样有两个作用:</p>
+<ul>
+<li>注解在构造函数中， 表示该类可以进行注入。</li>
+<li>注解在成员变量上， 表示该成员变量使用进行注入。</li>
+</ul>
+<p>提供依赖项:</p>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs delphi"><span class="hljs-comment">//@Inject注解在类上，去标记Hilt如何去提供实例。</span><br><span class="hljs-keyword">class</span> AnalyticsAdapter @Inject <span class="hljs-function"><span class="hljs-keyword">constructor</span><span class="hljs-params">()</span> <span class="hljs-comment">&#123; ... &#125;</span></span><br></code></pre></td></tr></table></figure>
+
+<p>获取依赖项:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@AndroidEntryPoint</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ExampleActivity</span> : <span class="hljs-type">AppCompatActivity</span>() &#123;<br>  <span class="hljs-comment">// 标记Hilt要给该类提供实例  </span><br>  <span class="hljs-meta">@Inject</span> <br>  <span class="hljs-keyword">lateinit</span> <span class="hljs-keyword">var</span> analytics: AnalyticsAdapter<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(savedInstanceState: <span class="hljs-type">Bundle</span>?)</span></span> &#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState)<br>        setContentView(R.layout.activity_hilt_test)<br>        Log.d(<span class="hljs-string">&quot;TAG&quot;</span>,analytics.hashCode().toString())<br>    &#125;<br><br>  ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>运行项目可以看到，并没有手动实例化AnalyticsAdapter对象，而是通过依赖注入框架进行的实例化。</p>
+<blockquote>
+<p>注:由 Hilt 注入的字段不能用私有修饰符进行修饰。使用 Hilt 注入私有字段会导致编译错误。</p>
+</blockquote>
+<h3 id="2-Hitl默认组件种类"><a href="#2-Hitl默认组件种类" class="headerlink" title="2.Hitl默认组件种类"></a>2.Hitl默认组件种类</h3><p>上文说到在 Application 类中设置了 Hilt 件后，Hilt 可以为带有 @AndroidEntryPoint 的组件注入其依赖项。</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs perl"><span class="hljs-variable">@AndroidEntryPoint</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ExampleActivity</span><span class="hljs-attr"> : AppCompatActivity()</span> </span>&#123; ... &#125;<br></code></pre></td></tr></table></figure>
+<p>如果对Dagger2有所了解的朋友，肯定会对Compenent不陌生。Compenent的作用就是将依赖提供项注入到需要使用的地方。前文说过Hitl实际是对Dagger2的封装。在上文例子中并没有用Compenent进行注入就可以进行依赖项实例化。其中的原因就是Hitl默认实现了部分组件的Compenent，可以直接让使用，节省代码。也就说Hilt大幅简化了Dagger2的用法，使得不用通过@Component注解去编写桥接层的逻辑，但是也因此限定了注入功能只能从几个Android固定的入口点开始。 只需要在类上增加 @AndroidEntryPoint 即可支持以下类的注入</p>
+<table>
+<thead>
+<tr>
+<th>Hilt Compenent</th>
+<th>注入器面向的对象</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ApplicationComponent</td>
+<td>Application</td>
+</tr>
+<tr>
+<td>ActivityRetainedComponent</td>
+<td>ViewModel（请参阅JetPack-ViewModel扩展）</td>
+</tr>
+<tr>
+<td>ActivityComponent</td>
+<td>Activity</td>
+</tr>
+<tr>
+<td>FragmentComponent</td>
+<td>Fragment</td>
+</tr>
+<tr>
+<td>ViewComponent</td>
+<td>View</td>
+</tr>
+<tr>
+<td>ViewWithFragmentComponent</td>
+<td>View 与 @WithFragmentBindings</td>
+</tr>
+<tr>
+<td>ServiceComponent</td>
+<td>Service</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>注:如果Fragment使用，那么包含Fragment的Activity必须也要用该注解，如果View使用， 对应的Fragment和Activity也必须使用。</p>
+</blockquote>
+<h3 id="3-Hitl组件-Compenent-的生命周期"><a href="#3-Hitl组件-Compenent-的生命周期" class="headerlink" title="3.Hitl组件(Compenent)的生命周期"></a>3.Hitl组件(Compenent)的生命周期</h3><p>在之前Dagger-Android中，必须创建诸如ActivityScope，FragmentScope之类的范围注释，以管理对象的生命周期， 而Hitl只要使用@InstallIn的注解，就可以委托Hilt帮管理生命周期，Hilt 会按照相应 Android 类的生命周期自动创建和销毁生成的组件类的实例。</p>
+<p>|生成的组件 Component        |		创建时机 |	销毁时机 |<br>|-|-|-|-|<br>|ApplicationComponent	   | Application#onCreate()	|Application#onDestroy()|<br>|ActivityRetainedComponent | Activity#onCreate()	|Activity#onDestroy()   |<br>|ActivityComponent	       | Activity#onCreate()    |Activity#onDestroy()   |<br>|FragmentComponent	       | Fragment#onAttach()    |Fragment#onDestroy()   |<br>|ViewComponent	           | View#super()           |视图销毁时              |<br>|ViewWithFragmentComponent | View#super()	        |视图销毁时              |<br>|ServiceComponent	       | Service#onCreate()  	|Service#onDestroy()    |</p>
+<blockquote>
+<p>注:ActivityRetainedComponent是用于ViewModle的，了解ViewModle的应该知道 ViewModel在页面配置更改后(例如屏幕旋转)仍然存在，因此它在第一次调用 Activity#onCreate() 时创建，在最后一次调用 Activity#onDestroy() 时销毁。</p>
+</blockquote>
+<h3 id="5-Hitl组件作用域"><a href="#5-Hitl组件作用域" class="headerlink" title="5.Hitl组件作用域"></a>5.Hitl组件作用域</h3><p>默认情况下，Hilt 中的所有绑定都未限定作用域，这意味着，每当应用注入时，Hilt 都会创建所需类型的一个新实例。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@AndroidEntryPoint</span><br>class <span class="hljs-attribute">ExampleActivity </span>: <span class="hljs-built_in">AppCompatActivity</span>() &#123;<br><br>  <span class="hljs-variable">@Inject</span> lateinit var <span class="hljs-attribute">analytics</span>: AnalyticsAdapter<br>  <span class="hljs-variable">@Inject</span> lateinit var <span class="hljs-attribute">analytics2</span>: AnalyticsAdapter<br><br>    override fun <span class="hljs-built_in">onCreate</span>(<span class="hljs-attribute">savedInstanceState</span>: Bundle?) &#123;<br>        <span class="hljs-selector-tag">super</span><span class="hljs-selector-class">.onCreate</span>(savedInstanceState)<br>        <span class="hljs-selector-tag">setContentView</span>(R.layout.activity_hilt_test)<br>        <span class="hljs-selector-tag">Log</span><span class="hljs-selector-class">.d</span>(<span class="hljs-string">&quot;TAG&quot;</span>,analytics.<span class="hljs-built_in">hashCode</span>().<span class="hljs-built_in">toString</span>())<br>        <span class="hljs-selector-tag">Log</span><span class="hljs-selector-class">.d</span>(<span class="hljs-string">&quot;TAG&quot;</span>,analytics2.<span class="hljs-built_in">hashCode</span>().<span class="hljs-built_in">toString</span>())<br>    &#125;<br><br>  ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>运行代码会发现analytics和analytics2是两个不同的对象，但是如果想要analytics和analytics2在ExampleActivity指向同一个对象。那么就要对组件的作用域进行限定， Hilt 也允许将绑定的作用域限定为特定组件。Hilt 只为绑定作用域限定到的组件的每个实例创建一次限定作用域的绑定，对该绑定的所有请求共享同一实例。</p>
+<table>
+<thead>
+<tr>
+<th>Android 类</th>
+<th>生成的组件</th>
+<th>作用域</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Application</td>
+<td>ApplicationComponent</td>
+<td>@Singleton</td>
+</tr>
+<tr>
+<td>View Model</td>
+<td>ActivityRetainedComponent</td>
+<td>@ActivityRetainedScope</td>
+</tr>
+<tr>
+<td>Activity</td>
+<td>ActivityComponent</td>
+<td>@ActivityScoped</td>
+</tr>
+<tr>
+<td>Fragment</td>
+<td>FragmentComponent</td>
+<td>@FragmentScoped</td>
+</tr>
+<tr>
+<td>View</td>
+<td>ViewComponent</td>
+<td>@ViewScoped</td>
+</tr>
+<tr>
+<td>带有 @WithFragmentBindings  注释的 View</td>
+<td>ViewWithFragmentComponent</td>
+<td>@ViewScoped</td>
+</tr>
+<tr>
+<td>Service</td>
+<td>ServiceComponent</td>
+<td>@ServiceScoped</td>
+</tr>
+</tbody></table>
+<p>例如上面例子中将组件作用域限定为@ActivityScoped:</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@ActivityScoped</span><br>class AnalyticsAdapter <span class="hljs-variable">@Inject</span> <span class="hljs-built_in">constructor</span>() &#123; ... &#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@AndroidEntryPoint</span><br>class <span class="hljs-attribute">ExampleActivity </span>: <span class="hljs-built_in">AppCompatActivity</span>() &#123;<br><br>  <span class="hljs-variable">@Inject</span> lateinit var <span class="hljs-attribute">analytics</span>: AnalyticsAdapter<br>  <span class="hljs-variable">@Inject</span> lateinit var <span class="hljs-attribute">analytics2</span>: AnalyticsAdapter<br><br>    override fun <span class="hljs-built_in">onCreate</span>(<span class="hljs-attribute">savedInstanceState</span>: Bundle?) &#123;<br>        <span class="hljs-selector-tag">super</span><span class="hljs-selector-class">.onCreate</span>(savedInstanceState)<br>        <span class="hljs-selector-tag">setContentView</span>(R.layout.activity_hilt_test)<br>        <span class="hljs-selector-tag">Log</span><span class="hljs-selector-class">.d</span>(<span class="hljs-string">&quot;TAG&quot;</span>,analytics.<span class="hljs-built_in">hashCode</span>().<span class="hljs-built_in">toString</span>())<br>        <span class="hljs-selector-tag">Log</span><span class="hljs-selector-class">.d</span>(<span class="hljs-string">&quot;TAG&quot;</span>,analytics2.<span class="hljs-built_in">hashCode</span>().<span class="hljs-built_in">toString</span>())<br>    &#125;<br><br>  ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>运行代码会发现analytics和analytics2是两个相同的对象，它们会在该Activity中保持单例。相应的，如果要使用全局的单例对象，将 AnalyticsService 的作用域限定为 ApplicationComponent即可。 Dagger 允许绑定作用域到特定组件，如上表所示，在指定组件范围内，实例都只会创建一次，并且对该绑定的所有请求都将共享同一实例。</p>
+<h1 id="四-Hilt注入无法修改构造函数的对象"><a href="#四-Hilt注入无法修改构造函数的对象" class="headerlink" title="四.Hilt注入无法修改构造函数的对象"></a>四.Hilt注入无法修改构造函数的对象</h1><p>有时，类不能通过构造函数注入，比如接口， 第三方库， Builder模式构造的对象等。在hilt中可以通过module模块向 Hilt 提供绑定信息， Hilt 模块是一个带有 @Module 注释的类。与 Dagger 模块一样，它会告知 Hilt 如何提供某些类型的实例。与 Dagger 模块不同的是， 必须使用 @InstallIn 为 Hilt 模块添加注解，以告知 Hilt 每个module模块将用在或安装在哪个 Android 类中。在模块中需要了解 如下三个注解:</p>
+<ul>
+<li>@Module:   标记这是一个module.可以通过module模块向 Hilt 提供绑定信息。</li>
+<li>@Provides: 标记方法， 提供依赖返回值。</li>
+<li>@Binds:    标记抽象方法或者接口， 返回接口类型。</li>
+</ul>
+<blockquote>
+<p>在 Hilt 模块中提供的依赖项可以在生成的所有与 Hilt 模块安装到的 Android 类关联的组件中使用。</p>
+</blockquote>
+<h3 id="1-Module和-Provides为第三方类提供注入"><a href="#1-Module和-Provides为第三方类提供注入" class="headerlink" title="1.@Module和@Provides为第三方类提供注入"></a>1.@Module和@Provides为第三方类提供注入</h3><p>如果某个类来自外部库，如 Retrofit、OkHttpClient 或 Room 数据库等类，或者必须使用构建器模式创建实例，也无法通过构造函数@Inject注入。则可以为Hilt创建一个模块，在 Hilt 模块内创建一个函数，并使用 @Provides 为该函数添加注解提供对象。</p>
+<ol>
+<li>假如无法在AnalyticsAdapter的构造函数上面通过@Inject注入:<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs delphi"><span class="hljs-keyword">class</span> AnalyticsAdapter  <span class="hljs-function"><span class="hljs-keyword">constructor</span><span class="hljs-params">()</span></span><br></code></pre></td></tr></table></figure></li>
+<li>创建module提供依赖:<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Module</span><br><span class="hljs-meta">@InstallIn(ActivityComponent::class)</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">AnalyticsAdapterModule</span> &#123;<br>    <span class="hljs-meta">@Provides</span><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">provideAnalyticsAnalyticsAdapter</span><span class="hljs-params">()</span></span>: AnalyticsAdapter &#123;<br>        <span class="hljs-keyword">return</span> AnalyticsAdapter()<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>进行依赖注入，并使用<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@AndroidEntryPoint</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ExampleActivity</span> : <span class="hljs-type">AppCompatActivity</span>() &#123;<br><br>  <span class="hljs-meta">@Inject</span> <br>  <span class="hljs-keyword">lateinit</span> <span class="hljs-keyword">var</span> analytics: AnalyticsAdapter<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(savedInstanceState: <span class="hljs-type">Bundle</span>?)</span></span> &#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState)<br>        setContentView(R.layout.activity_hilt_test)<br>        Log.d(<span class="hljs-string">&quot;TAG&quot;</span>,analytics.hashCode().toString())<br>    &#125;<br><br>  ...<br>&#125;<br></code></pre></td></tr></table></figure>
+带有 @Provides注解的函数会向 Hilt 提供以下信息：</li>
+</ol>
+<ul>
+<li>函数返回类型会告知 Hilt 函数提供哪个类型的实例。</li>
+<li>函数参数会告知 Hilt 相应类型的依赖项。</li>
+<li>函数主体会告知 Hilt 如何提供相应类型的实例。每当需要提供该类型的实例时，Hilt 都会执行函数主体。</li>
+</ul>
+<h3 id="1-Module和-Binds为接口或抽象类提供注入"><a href="#1-Module和-Binds为接口或抽象类提供注入" class="headerlink" title="1.@Module和@Binds为接口或抽象类提供注入"></a>1.@Module和@Binds为接口或抽象类提供注入</h3><p>@Binds 注释会告知 Hilt 在需要提供接口的实例时要使用哪种实现。带有@Binds注解的函数会向 Hilt 提供以下信息：</p>
+<ul>
+<li>函数返回类型会告知 Hilt 函数提供哪个接口的实例。</li>
+<li>函数参数会告知 Hilt 要提供哪种实现。</li>
+</ul>
+<p>例如上面例子中AnalyticsService 类是一个接口，则您无法通过构造函数注入它，而应向 Hilt 提供绑定信息，方法是在 Hilt 模块内创建一个带有 @Binds 注释的抽象函数。</p>
+<ol>
+<li><p>接口类:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">IAnalyticsService</span> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">analyticsMethods</span><span class="hljs-params">()</span></span><br>&#125;<br><br></code></pre></td></tr></table></figure></li>
+<li><p>接口的实现类:</p>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs delphi"><span class="hljs-keyword">class</span> AnalyticsServiceImpl @Inject <span class="hljs-function"><span class="hljs-keyword">constructor</span><span class="hljs-params">()</span>:</span> IAnalyticsService <span class="hljs-comment">&#123;</span><br><span class="hljs-comment">    //实现接口方法</span><br><span class="hljs-comment">    override fun analyticsMethods() &#123;</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">    &#125;</span><br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>module提供依赖的类:</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Module</span><br><span class="hljs-variable">@InstallIn</span>(<span class="hljs-attribute">ActivityComponent</span>::class)<br>abstract class AnalyticsModule &#123;<br><br>  <span class="hljs-variable">@Binds</span><br>  abstract fun <span class="hljs-built_in">bindAnalyticsService</span>(<br>    <span class="hljs-attribute">analyticsServiceImpl</span>: AnalyticsServiceImpl<br>  ): AnalyticsService<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>在Activity依赖注入对象</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@AndroidEntryPoint</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">HiltModuleActivity</span> : <span class="hljs-type">AppCompatActivity</span>() &#123;<br>    <span class="hljs-meta">@Inject</span><br>    <span class="hljs-keyword">lateinit</span> <span class="hljs-keyword">var</span> iAnalyticsService: IAnalyticsService<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">val</span> textView: TextView <span class="hljs-keyword">by</span> lazy &#123; findViewById&lt;TextView&gt;(R.id.textView_info) &#125;<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(savedInstanceState: <span class="hljs-type">Bundle</span>?)</span></span> &#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState)<br>        setContentView(R.layout.test_activity_hilt_module)<br>        textView.text = iAnalyticsService.hashCode().toString()<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="五-Hilt限定构造方法"><a href="#五-Hilt限定构造方法" class="headerlink" title="五.Hilt限定构造方法"></a>五.Hilt限定构造方法</h1><p>如果一个类有多个构造方法，那么依赖注入的时候要用到哪个初始化函数进行初始化呢?这时就要用到@Qualifiers限定注解了,Dagger2中@Named也可以实现该功能。</p>
+<p>例如:有一个Car类在构造的时候传入name生成对应品牌的车辆,要造BYD和BMW的车,在注入Car的时候就可以用@Qualifiers注解进行区分:</p>
+<ol>
+<li>创建car类:<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs delphi"><span class="hljs-keyword">class</span> Car <span class="hljs-function"><span class="hljs-keyword">constructor</span><span class="hljs-params">(<span class="hljs-keyword">var</span> brand: <span class="hljs-keyword">String</span>)</span> <span class="hljs-comment">&#123;</span></span><br><span class="hljs-comment"><span class="hljs-function">    fun getCarBrand(): String = brand</span></span><br><span class="hljs-comment"><span class="hljs-function">&#125;</span></span><br></code></pre></td></tr></table></figure></li>
+<li>创建BYD和BMW限定注解:<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Qualifier</span><br><span class="hljs-variable">@Retention</span>(AnnotationRetention.BINARY)<br>annotation class BMWCarQualifier<br></code></pre></td></tr></table></figure></li>
+</ol>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Qualifier</span><br><span class="hljs-variable">@Retention</span>(AnnotationRetention.BINARY)<br>annotation class BYDCarQualifier<br></code></pre></td></tr></table></figure>
+<ol start="3">
+<li>创建module<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Module</span><br><span class="hljs-meta">@InstallIn(ActivityComponent::class)</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">CarModule</span> &#123;<br>    <span class="hljs-meta">@BMWCarQualifier</span><br>    <span class="hljs-meta">@Provides</span><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">provideBYDCar</span><span class="hljs-params">()</span></span>: Car &#123;<br>        <span class="hljs-keyword">return</span> Car(<span class="hljs-string">&quot;比亚迪&quot;</span>)<br>    &#125;<br><br>    <span class="hljs-meta">@BYDCarQualifier</span><br>    <span class="hljs-meta">@Provides</span><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">provideBMWCar</span><span class="hljs-params">()</span></span>: Car &#123;<br>        <span class="hljs-keyword">return</span> Car(<span class="hljs-string">&quot;宝马&quot;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>注入注解进行使用:<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@AndroidEntryPoint</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">HiltModuleActivity</span> : <span class="hljs-type">AppCompatActivity</span>() &#123;<br><br>    <span class="hljs-meta">@BMWCarQualifier</span><br>    <span class="hljs-meta">@Inject</span><br>    <span class="hljs-keyword">lateinit</span> <span class="hljs-keyword">var</span> bmWcar: Car<br><br>    <span class="hljs-meta">@BYDCarQualifier</span><br>    <span class="hljs-meta">@Inject</span><br>    <span class="hljs-keyword">lateinit</span> <span class="hljs-keyword">var</span> bydcar: Car<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">val</span> textView: TextView <span class="hljs-keyword">by</span> lazy &#123; findViewById&lt;TextView&gt;(R.id.textView_info) &#125;<br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(savedInstanceState: <span class="hljs-type">Bundle</span>?)</span></span> &#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState)<br>        setContentView(R.layout.test_activity_hilt_module)<br>        <span class="hljs-keyword">val</span> sb = StringBuilder()<br>        sb.append(<span class="hljs-string">&quot;car:&quot;</span> + bydcar.getCarBrand() + <span class="hljs-string">&quot; hashCode:&quot;</span> + bydcar.hashCode().toString() + <span class="hljs-string">&quot;\n&quot;</span>)<br>        sb.append(<span class="hljs-string">&quot;car:&quot;</span> + bmWcar.getCarBrand() + <span class="hljs-string">&quot; hashCode:&quot;</span> + bmWcar.hashCode().toString() + <span class="hljs-string">&quot;\n&quot;</span>)<br>        textView.text = sb.toString()<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>运行代码发现通过@Qualifiers注解成功的对依赖注入对象进行了分类。</p>
+<h1 id="六-Hilt结合JetPack其他组件使用"><a href="#六-Hilt结合JetPack其他组件使用" class="headerlink" title="六.Hilt结合JetPack其他组件使用"></a>六.Hilt结合JetPack其他组件使用</h1><p>作为Google推荐的依赖注入组件，目前Hilt 可以与ViewModel配合使用:</p>
+<ol>
+<li><p>导入依赖</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs clean">   <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02&#x27;</span><br>   kapt <span class="hljs-string">&#x27;androidx.hilt:hilt-compiler:1.0.0-alpha02&#x27;</span><br>   <span class="hljs-comment">//viewModel的数据恢复，可以不导入，这里只是为了演示</span><br>   <span class="hljs-keyword">implementation</span> <span class="hljs-string">&quot;androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0&quot;</span><br><span class="hljs-comment">//便于 使用ViewModel-ktx扩展</span><br>   <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;androidx.activity:activity:1.1.0&#x27;</span><br>   <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;androidx.fragment:fragment-ktx:1.2.5&#x27;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>ViewModel</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs scala">public <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TestViewModel</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ViewModel</span> </span>&#123;<br>    <span class="hljs-meta">@ViewModelInject</span><br>    public <span class="hljs-type">TestViewModel</span>() &#123;<br><br>    &#125;<br>    public void test()&#123;<br>        <span class="hljs-type">Log</span>.e(<span class="hljs-string">&quot;petterp&quot;</span>,<span class="hljs-string">&quot;我是测试方法&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>ViewModel创建按构造方法</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">class</span> <span class="hljs-symbol">TestViewModel</span> @<span class="hljs-symbol">ViewModelInject</span> <span class="hljs-symbol">constructor</span>(<br>    <span class="hljs-symbol">private</span> <span class="hljs-symbol">val</span> <span class="hljs-symbol">repository: <span class="hljs-symbol">TestRepository</span>,</span><br><span class="hljs-symbol">    </span>@<span class="hljs-symbol">Assisted</span> <span class="hljs-symbol">val</span> <span class="hljs-symbol">savedState: <span class="hljs-symbol">SavedStateHandle</span></span><br>) : <span class="hljs-symbol">ViewModel</span>() &#123;<br>    fun test() &#123;<br>        repository.test()<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>TestRepository</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@ActivityScoped</span><br>class TestRepository <span class="hljs-variable">@Inject</span> <span class="hljs-built_in">constructor</span>() &#123;<br>    <span class="hljs-selector-tag">fun</span> <span class="hljs-selector-tag">test</span>() &#123;<br>        <span class="hljs-selector-tag">Log</span><span class="hljs-selector-class">.e</span>(<span class="hljs-string">&quot;petterp&quot;</span>, <span class="hljs-string">&quot;一个测试方法&quot;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>创建一个MainActivty</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@AndroidEntryPoint</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MainActivity</span> : <span class="hljs-type">AppCompatActivity</span>() &#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">val</span> viewModel <span class="hljs-keyword">by</span> viewModels&lt;TestViewModel&gt;()<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(savedInstanceState: <span class="hljs-type">Bundle</span>?)</span></span> &#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState)<br>        viewModel.test()<br>    &#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://developer.android.google.cn/codelabs/android-hilt?hl=zh_cn#0">在 Android 应用中使用 Hilt</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/petterp/article/details/106771203">Hilt-依赖注入框架上手指南</a></p>
+<p><a target="_blank" rel="noopener" href="https://developer.android.google.cn/training/dependency-injection/hilt-android?hl=zh_cn">使用 Hilt 实现依赖项注入</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000039039120?utm_source=tag-newest">Android Jetpack架构组件(十二)之Hilt</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43662090/article/details/107839517">Android Hilt</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/guolin_blog/article/details/109787732">Jetpack新成员，一篇文章带你玩转Hilt和依赖注入</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6847902220223152136#heading-9">Dagger Hilt 初探</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6912014711932321806#heading-4">Jetpack Hilt</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6953883719954382878#heading-20">Hilt 的使用以及遇到的问题</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6953913131026350110#heading-6">快速上手Google 提供的依赖注入框架 「Hilt」</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/f32beb3614e5">Android Hilt使用教程（包含实例)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_45485851/article/details/110128769">Android Jetpack系列—Hilt</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43662090/article/details/107839517">Android Hilt</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u011215710/article/details/107230043">Dagger Hilt 初探</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a301a8d93583">依赖注入库Hilt的使用和理解，一篇就够了</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43662090/article/details/107839517">Android Hilt</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6845166891325997069#heading-5">上手指南 | Jetpack Hilt 依赖注入框架</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Android依赖注入框架hilt使用</div>
+      <div>http://example.com/2021/11/02/Android依赖注入框架hilt使用/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年11月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/12/30/Jetpack-Compose%E4%B9%8B%E4%B8%80%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/" title="Jetpack-Compose之一基础使用">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Jetpack-Compose之一基础使用</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/10/19/Android%E5%AD%98%E5%82%A8%E4%B9%8BMediaStore%E7%9A%84%E4%BD%BF%E7%94%A8/" title="Android存储之MediaStore的使用">
+                        <span class="hidden-mobile">Android存储之MediaStore的使用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

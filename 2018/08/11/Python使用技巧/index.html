@@ -1,0 +1,977 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Python拼接字符串的几种方式123456&quot;&quot;&quot;1. 使用加号“+”连接字符串    用加号“+”连接两个字符串，连接后这两个字符串将连接成一个字符串。但需注意的是，不能用“+”连接字符串和数字，需要把数字使用str()函数转换成字符串，或者直接在数字两侧加带引号，再进行连接、&quot;&quot;&quot;  1234str11 &#x3D; &quot;hello&amp;q">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python使用技巧">
+<meta property="og:url" content="http://example.com/2018/08/11/Python%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Python拼接字符串的几种方式123456&quot;&quot;&quot;1. 使用加号“+”连接字符串    用加号“+”连接两个字符串，连接后这两个字符串将连接成一个字符串。但需注意的是，不能用“+”连接字符串和数字，需要把数字使用str()函数转换成字符串，或者直接在数字两侧加带引号，再进行连接、&quot;&quot;&quot;  1234str11 &#x3D; &quot;hello&amp;q">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/48304ba5e6f9fe08f3fa1abda7d326ab.webp">
+<meta property="article:published_time" content="2018-08-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:38:58.229Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/48304ba5e6f9fe08f3fa1abda7d326ab.webp">
+  
+  
+  
+  <title>Python使用技巧 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Python使用技巧"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-08-11 00:00" pubdate>
+          2018年8月11日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          57 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Python使用技巧</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Python拼接字符串的几种方式"><a href="#Python拼接字符串的几种方式" class="headerlink" title="Python拼接字符串的几种方式"></a>Python拼接字符串的几种方式</h1><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">1. 使用加号“+”连接字符串</span><br><span class="hljs-string"></span><br><span class="hljs-string">    用加号“+”连接两个字符串，连接后这两个字符串将连接成一个字符串。但需注意的是，</span><br><span class="hljs-string">不能用“+”连接字符串和数字，需要把数字使用str()函数转换成字符串，或者直接在数字两侧加带引号，再进行连接、</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs makefile">str11 = <span class="hljs-string">&quot;hello&quot;</span><br>str12 = <span class="hljs-string">&quot;world&quot;</span><br>str13 = str11 + str12<br>print(str13)         <span class="hljs-comment"># helloworld</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-string">&quot;&quot;&quot; 注： 但在python中，尽量少用加号“+”连接字符串，原因如下：在python中，String对象是定长对象，一旦创建，长度就不可变化，若是使用+号连接两个字符串，则会新开辟一段长度总和长度的内存，再将两个字符串memcpy进去。如果要连接N个String对象，则要进行N-1次内存申请和拷贝。 官方推荐的是使用字符串的join方法，该方法对于连接一个list或tuple中的元素非常有效，它会先统计所有元素的长度，申请内存，然后拷贝。 &quot;&quot;&quot;</span><br></code></pre></td></tr></table></figure>
+</blockquote>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">2. 使用逗号连接字符串</span><br><span class="hljs-string">    python可用逗号“，”将多个字符串连接为一个元组，再通过join()方法将元组中的各个元素连接为一个字符串，</span><br><span class="hljs-string">从而达到连接字符串的目的。若是直接将字符串逗号连接后print，字符串之间会多一个空格。</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs routeros">str21 = <span class="hljs-string">&quot;hello&quot;</span><br>str22 = <span class="hljs-string">&quot;world&quot;</span><br>str23 = str21, str22<br><br><span class="hljs-built_in">print</span>(str21, str22)       # hello world<br><br><span class="hljs-built_in">print</span>(str23)              # (<span class="hljs-string">&#x27;hello&#x27;</span>, <span class="hljs-string">&#x27;world&#x27;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;&#x27;</span>.join(str23))<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">3. 直接连接字符串</span><br><span class="hljs-string">    python独有的方法。只要把两个字符串放在一起，无论中间有空白或没有空白，</span><br><span class="hljs-string">两个字符串将自动连接为一个字符串(空格不会自动去掉).</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs axapta"><span class="hljs-keyword">print</span>(<span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-string">&quot;world&quot;</span>)      <span class="hljs-meta"># helloworld</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">4. 格式化方式拼接（ % ， format）</span><br><span class="hljs-string">   符号“%”,&#123;&#125; 连接一个字符串和一组变量，字符串中的特殊标记会被自动用右边变量组中的变量进行替换.</span><br><span class="hljs-string">（字符串之间会有空格隔开）</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;%s %s %s&#x27;</span> % (<span class="hljs-string">&#x27;我&#x27;</span>, <span class="hljs-string">&#x27;是&#x27;</span>, <span class="hljs-string">&#x27;中国人&#x27;</span>))     <span class="hljs-comment"># 我 是 中国人</span><br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;&#123;&#125; &#123;&#125; &#123;&#125;&quot;</span>.<span class="hljs-built_in">format</span>(<span class="hljs-string">&#x27;我&#x27;</span>, <span class="hljs-string">&#x27;是&#x27;</span>, <span class="hljs-string">&#x27;中国人&#x27;</span>))<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">5. 通过join()函数连接字符串</span><br><span class="hljs-string">   利用字符串函数 join()，它是 split() 方法的逆方法。这个函数接收一个列表，</span><br><span class="hljs-string">然后用字符串依次连接列表中每一个元素，其类似方法2的最后一步</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs axapta">lists = [<span class="hljs-string">&#x27;hello&#x27;</span>, <span class="hljs-string">&#x27;world&#x27;</span>]<br><span class="hljs-keyword">print</span>(<span class="hljs-string">&#x27;_&#x27;</span>.<span class="hljs-keyword">join</span>(lists))       <span class="hljs-meta"># hello_world</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="在Python中，是否有方法删除字符串中除字母以外的所有字符？"><a href="#在Python中，是否有方法删除字符串中除字母以外的所有字符？" class="headerlink" title="在Python中，是否有方法删除字符串中除字母以外的所有字符？"></a>在Python中，是否有方法删除字符串中除字母以外的所有字符？</h1><p>使用regex的解决方案在这里非常简单：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> re<br>newstring = re.replace(<span class="hljs-string">r&quot;[^a-zA-Z]+&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, string)<br></code></pre></td></tr></table></figure>
+<p>其中，string是字符串，newstring是没有非字母字符的字符串。这样做的目的是用空字符串替换不是字母的每个字符，从而删除它。</p>
+<p>正则表达式</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">import</span> re<br>cop = re.compile(<span class="hljs-string">&quot;[^\u4e00-\u9fa5^a-z^A-Z^0-9]&quot;</span>) <span class="hljs-comment"># 匹配不是中文、大小写、数字的其他字符</span><br>string1 = <span class="hljs-string">&#x27;<span class="hljs-variable">@ad</span>&amp;*jfad张132（www）。。。&#x27;</span><br>string1 = cop.sub(<span class="hljs-string">&#x27;&#x27;</span>, string1) <span class="hljs-comment">#将string1中匹配到的字符替换成空字符</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="Python字符串去除空格和回车"><a href="#Python字符串去除空格和回车" class="headerlink" title="Python字符串去除空格和回车"></a>Python字符串去除空格和回车</h1><h2 id="1、去除Python字符串中的空格"><a href="#1、去除Python字符串中的空格" class="headerlink" title="1、去除Python字符串中的空格"></a>1、去除Python字符串中的空格</h2><p><strong>strip</strong> ： 用来去除头尾字符、空白符(包括<code>\n</code>、<code>\r</code>、<code>\t</code>、<code>&#39; &#39;</code>，即：换行、回车、制表符、空格)</p>
+<p><strong>lstrip</strong> ：用来去除开头字符、空白符(包括<code>\n</code>、<code>\r</code>、<code>\t</code>、<code>&#39; &#39;</code>，即：换行、回车、制表符、空格)</p>
+<p><strong>rstrip</strong> ：用来去除结尾字符、空白符(包括<code>\n</code>、<code>\r</code>、<code>\t</code>、<code>&#39; &#39;</code>，即：换行、回车、制表符、空格)</p>
+<p>使用示例：</p>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs hsp"><span class="hljs-keyword">print</span>(<span class="hljs-string">&quot;   cjavapy   &quot;</span>.strip())            <span class="hljs-meta"># returns <span class="hljs-string">&quot;cjavapy&quot;</span>  </span><br><span class="hljs-keyword">print</span>(<span class="hljs-string">&quot;   cjavapy   &quot;</span>.lstrip())           <span class="hljs-meta"># returns <span class="hljs-string">&quot;cjavapy   &quot;</span>  </span><br><span class="hljs-keyword">print</span>(<span class="hljs-string">&quot;   cjavapy   &quot;</span>.rstrip())           <span class="hljs-meta"># returns <span class="hljs-string">&quot;   cjavapy&quot;</span>  </span><br><span class="hljs-keyword">print</span>(<span class="hljs-string">&quot;  c javapy py  &quot;</span>.replace(<span class="hljs-string">&#x27; &#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>)) <span class="hljs-meta"># returns <span class="hljs-string">&quot;cjavapy&quot;</span></span><br></code></pre></td></tr></table></figure>
+
+<h2 id="2、去除Python字符串中换行符-r-n"><a href="#2、去除Python字符串中换行符-r-n" class="headerlink" title="2、去除Python字符串中换行符(\r,\n)"></a>2、去除Python字符串中换行符(\r,\n)</h2><p><code>\r</code>和<code>\n</code>都是以前的那种打字机传承来的。</p>
+<p><code>\r</code> 代表回车，也就是打印头归位，回到某一行的开头。</p>
+<p><code>\n</code>代表换行，就是走纸，下一行。</p>
+<p>linux只用<code>\n</code>换行。</p>
+<p>win下用<code>\r\n</code>表示换行。</p>
+<p>使用 <code>.strip()</code>只能够去除字符串首尾的换行符，不能够去除中间的换行符，还需要使用 <code>.replace()</code>来替换<code>\r</code>和<code>\n</code>换行符。</p>
+<p>1）去除换行符</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">.<span class="hljs-built_in">replace</span>(<span class="hljs-string">&#x27;\n&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>).<span class="hljs-built_in">replace</span>(<span class="hljs-string">&#x27;\r&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>2）去除制表符(\t)</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">.<span class="hljs-built_in">replace</span>(<span class="hljs-string">&#x27;\t&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>3）其它特殊字符去除，也使用同样.replace()的方法替换即可</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs less"># 去除首位字符串空格,中间空格，回车符，换行符<br><span class="hljs-selector-tag">print</span>(str.<span class="hljs-built_in">strip</span>().<span class="hljs-built_in">replace</span>(<span class="hljs-string">&#x27; &#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>).<span class="hljs-built_in">replace</span>(<span class="hljs-string">&#x27;\n&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>).<span class="hljs-built_in">replace</span>(<span class="hljs-string">&#x27;\r&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>))<br></code></pre></td></tr></table></figure>
+
+<h1 id="python中实现字符串分割的方法有哪些？"><a href="#python中实现字符串分割的方法有哪些？" class="headerlink" title="python中实现字符串分割的方法有哪些？"></a>python中实现字符串分割的方法有哪些？</h1><p><strong>方法一：str.split</strong></p>
+<p>split() 方法可以实现将一个字符串按照指定的分隔符切分成多个子串，通过该分割操作后，会返回一个列表。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-attribute">s</span>=<span class="hljs-string">&#x27;abc&#x27;</span><br><span class="hljs-attribute">s</span>=s.split(&#x27;&#x27;)<br><span class="hljs-built_in">print</span>(list(filter(lambdax:x!=<span class="hljs-string">&#x27;&#x27;</span>,s)))<br></code></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong> split()一次只可以使用一个符号进行字符串分割操作，</p>
+<p><strong>方法二：re.split</strong></p>
+<p>如若需要在一个字符串中进行多个字符的分割，可以使用import re模块进行字符串多种字符的分割。</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs perl">&gt;&gt;&gt;e=<span class="hljs-string">&quot;852317006<span class="hljs-variable">@qq</span>.com&quot;</span><br>&gt;&gt;&gt;importre<br>&gt;&gt;&gt;re.<span class="hljs-keyword">split</span>(<span class="hljs-string">&#x27;@|\.&#x27;</span>,e)<br>[<span class="hljs-string">&#x27;852317006&#x27;</span>,<span class="hljs-string">&#x27;qq&#x27;</span>,<span class="hljs-string">&#x27;com&#x27;</span>]<br></code></pre></td></tr></table></figure>
+
+<p><strong>方法三：str.partition</strong></p>
+<p>利用字符串函数partition或者rpartition实现字符串分割。</p>
+<p>将目标字符串分割为两个部分，返回一个三元元组（head,sep,tail），包含分割符。</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs axapta">&gt;&gt;&gt;<span class="hljs-built_in">str</span><br><span class="hljs-string">&#x27;abc,123efg,567&#x27;</span><br>&gt;&gt;&gt;<span class="hljs-built_in">str</span>.partition(<span class="hljs-string">&#x27;,&#x27;</span>)<br>(<span class="hljs-string">&#x27;abc&#x27;</span>,<span class="hljs-string">&#x27;,&#x27;</span>,<span class="hljs-string">&#x27;123efg,567&#x27;</span>)<br>&gt;&gt;&gt;<span class="hljs-built_in">str</span>.rpartition(<span class="hljs-string">&#x27;,&#x27;</span>)<br>(<span class="hljs-string">&#x27;abc,123efg&#x27;</span>,<span class="hljs-string">&#x27;,&#x27;</span>,<span class="hljs-string">&#x27;567&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<h1 id="python读取文件夹下所有文件"><a href="#python读取文件夹下所有文件" class="headerlink" title="python读取文件夹下所有文件"></a>python读取文件夹下所有文件</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">readDir</span>(<span class="hljs-params">dirPath</span>):<br>    <span class="hljs-keyword">if</span> dirPath[-<span class="hljs-number">1</span>] == <span class="hljs-string">&#x27;/&#x27;</span>:<br>        <span class="hljs-built_in">print</span> <span class="hljs-string">u&#x27;文件夹路径末尾不能加/&#x27;</span><br>        <span class="hljs-keyword">return</span><br>    allFiles = []<br>    <span class="hljs-keyword">if</span> os.path.isdir(dirPath):<br>        fileList = os.listdir(dirPath)<br>        <span class="hljs-keyword">for</span> f <span class="hljs-keyword">in</span> fileList:<br>            f = dirPath+<span class="hljs-string">&#x27;/&#x27;</span>+f<br>            <span class="hljs-keyword">if</span> os.path.isdir(f):<br>                subFiles = readDir(f)<br>                allFiles = subFiles + allFiles <span class="hljs-comment">#合并当前目录与子目录的所有文件路径</span><br>            <span class="hljs-keyword">else</span>:<br>                allFiles.append(f)<br>        <span class="hljs-keyword">return</span> allFiles<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;Error,not a dir&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="Python-下载图片的三种方法"><a href="#Python-下载图片的三种方法" class="headerlink" title="Python 下载图片的三种方法"></a>Python 下载图片的三种方法</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os<br>os.makedirs(<span class="hljs-string">&#x27;./image/&#x27;</span>, exist_ok=<span class="hljs-literal">True</span>)<br>IMAGE_URL = <span class="hljs-string">&quot;http://image.nationalgeographic.com.cn/2017/1122/20171122113404332.jpg&quot;</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">urllib_download</span>():<br>    <span class="hljs-keyword">from</span> urllib.request <span class="hljs-keyword">import</span> urlretrieve<br>    urlretrieve(IMAGE_URL, <span class="hljs-string">&#x27;./image/img1.png&#x27;</span>)     <br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">request_download</span>():<br>    <span class="hljs-keyword">import</span> requests<br>    r = requests.get(IMAGE_URL)<br>    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;./image/img2.png&#x27;</span>, <span class="hljs-string">&#x27;wb&#x27;</span>) <span class="hljs-keyword">as</span> f:<br>        f.write(r.content)                      <br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">chunk_download</span>():<br>    <span class="hljs-keyword">import</span> requests<br>    r = requests.get(IMAGE_URL, stream=<span class="hljs-literal">True</span>)    <br>    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;./image/img3.png&#x27;</span>, <span class="hljs-string">&#x27;wb&#x27;</span>) <span class="hljs-keyword">as</span> f:<br>        <span class="hljs-keyword">for</span> chunk <span class="hljs-keyword">in</span> r.iter_content(chunk_size=<span class="hljs-number">32</span>):<br>            f.write(chunk)<br><br>urllib_download()<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;download img1&#x27;</span>)<br>request_download()<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;download img2&#x27;</span>)<br>chunk_download()<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;download img3&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<h1 id="如何在Python中获取当前时间戳？"><a href="#如何在Python中获取当前时间戳？" class="headerlink" title="如何在Python中获取当前时间戳？"></a>如何在Python中获取当前时间戳？</h1><p>在Python中，有多种方法可以获得当前时间戳。如果希望在Python中获得时间戳，可以使用来自模块time、datetime或calendar的函数。</p>
+<p><strong>使用模块time</strong></p>
+<p>模块time是提供各种与时间相关的功能。其中之一是time，它返回从历元开始的秒数。</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs applescript">import <span class="hljs-built_in">time</span>;<br>ts = <span class="hljs-built_in">time</span>.<span class="hljs-built_in">time</span>()<br>print(ts)<br><span class="hljs-comment"># 1553577699.47 `</span><br></code></pre></td></tr></table></figure>
+<p><strong>使用模块datetime</strong></p>
+<p>模块datetime提供了以更面向对象的方式操作日期和时间的类。其中之一是date .datetime。现在返回历元之后的秒数。</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs coffeescript"><span class="hljs-keyword">import</span> datetime;<br>ts = datetime.datetime.now().timestamp()<br><span class="hljs-built_in">print</span>(ts)<br><span class="hljs-comment"># 1553577699.47</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>使用模块calendar</strong></p>
+<p>获取当前时间戳的另一种方法是从多个模块组合多个函数。Python还提供calendar模块。在本例中，我们将使用函数calendar。转换表示当前时间的元组。</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs coffeescript"><span class="hljs-keyword">import</span> calendar;<br><span class="hljs-keyword">import</span> time;<br>ts = calendar.timegm(time.gmtime())<br><span class="hljs-built_in">print</span>(ts)<br><span class="hljs-comment"># 1553577699`</span><br></code></pre></td></tr></table></figure>
+
+<p>几种常见的时间格式，因为返回的是字符串，有时可以通过列表索引的方式截取需要的部分：</p>
+<p><strong>2020-03-01 14:15:59</strong></p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs perl">import <span class="hljs-keyword">time</span><br>time.strftime(<span class="hljs-string">&quot;<span class="hljs-variable">%Y</span>-<span class="hljs-variable">%m</span>-<span class="hljs-variable">%d</span> <span class="hljs-variable">%H</span>:<span class="hljs-variable">%M</span>:<span class="hljs-variable">%S</span>&quot;</span>)<br><span class="hljs-number">12</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>2020-03-01</strong></p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs perl">import <span class="hljs-keyword">time</span><br>time.strftime(<span class="hljs-string">&quot;<span class="hljs-variable">%Y</span>-<span class="hljs-variable">%m</span>-<span class="hljs-variable">%d</span>&quot;</span>)<br><span class="hljs-number">12</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>2020&#x2F;03&#x2F;01</strong></p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs perl">import <span class="hljs-keyword">time</span><br>time.strftime(<span class="hljs-string">&quot;<span class="hljs-variable">%Y</span>/<span class="hljs-variable">%m</span>/<span class="hljs-variable">%d</span>&quot;</span>)<br><span class="hljs-number">12</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>20200301</strong></p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><span class="hljs-keyword">import</span> <span class="hljs-built_in">time</span><br><span class="hljs-built_in">time</span>.strftime(<span class="hljs-string">&quot;%Y%m%d&quot;</span>)<br><span class="hljs-number">12</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>14:15:59</strong></p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs perl">import <span class="hljs-keyword">time</span><br>time.strftime(<span class="hljs-string">&quot;<span class="hljs-variable">%H</span>:<span class="hljs-variable">%M</span>:<span class="hljs-variable">%S</span>&quot;</span>)<br><span class="hljs-number">12</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>141559</strong></p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><span class="hljs-keyword">import</span> <span class="hljs-built_in">time</span><br><span class="hljs-built_in">time</span>.strftime(<span class="hljs-string">&quot;%H%M%S&quot;</span>)<br><span class="hljs-number">12</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>Mar 01, 2020 Sun</strong></p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs perl">import <span class="hljs-keyword">time</span><br>time.strftime(<span class="hljs-string">&quot;<span class="hljs-variable">%b</span> <span class="hljs-variable">%d</span>, <span class="hljs-variable">%Y</span> <span class="hljs-variable">%a</span>&quot;</span>)<br><span class="hljs-number">12</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>2020&#x2F;03&#x2F;01 Sun</strong></p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs perl">import <span class="hljs-keyword">time</span><br>time.strftime(<span class="hljs-string">&quot;<span class="hljs-variable">%Y</span>/<span class="hljs-variable">%m</span>/<span class="hljs-variable">%d</span> <span class="hljs-variable">%a</span>&quot;</span>)<br><span class="hljs-number">12</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>2020年03月01日</strong></p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs routeros">import time<br>time.strftime(<span class="hljs-string">&quot;%Y&#123;y&#125;%m&#123;m&#125;%d&#123;d&#125;&quot;</span>).format(<span class="hljs-attribute">y</span>=<span class="hljs-string">&quot;年&quot;</span>, <span class="hljs-attribute">m</span>=<span class="hljs-string">&quot;月&quot;</span>, <span class="hljs-attribute">d</span>=<span class="hljs-string">&quot;日&quot;</span>)<br>12<br></code></pre></td></tr></table></figure>
+
+<p><strong>02:38:42 PM</strong></p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs perl">import <span class="hljs-keyword">time</span><br>time.strftime(<span class="hljs-string">&quot;<span class="hljs-variable">%I</span>:<span class="hljs-variable">%M</span>:<span class="hljs-variable">%S</span> <span class="hljs-variable">%p</span>&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<h3 id="秒级"><a href="#秒级" class="headerlink" title="秒级"></a>秒级</h3><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">import</span> <span class="hljs-type">time</span><br><br>now = <span class="hljs-type">time</span>.time() #返回<span class="hljs-type">float</span>数据<br>#  获取当前时间戳<span class="hljs-comment">---秒级级</span><br>print(<span class="hljs-type">int</span>(now))<br></code></pre></td></tr></table></figure>
+
+<h3 id="毫秒级"><a href="#毫秒级" class="headerlink" title="毫秒级"></a>毫秒级</h3><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">import</span> <span class="hljs-type">time</span><br><br>now = <span class="hljs-type">time</span>.time() #返回<span class="hljs-type">float</span>数据<br><br>#毫秒级时间戳<br>print(<span class="hljs-type">int</span>(round(now * <span class="hljs-number">1000</span>)))<br></code></pre></td></tr></table></figure>
+
+<h1 id="python-字符串里是否包含列表里的字符串"><a href="#python-字符串里是否包含列表里的字符串" class="headerlink" title="python 字符串里是否包含列表里的字符串"></a>python 字符串里是否包含列表里的字符串</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> <span class="hljs-built_in">any</span>(list_element  <span class="hljs-keyword">in</span> <span class="hljs-built_in">str</span> <span class="hljs-keyword">for</span> list_element <span class="hljs-keyword">in</span> <span class="hljs-built_in">list</span>):<br>    <span class="hljs-keyword">pass</span><br><span class="hljs-keyword">else</span>:<br>    <span class="hljs-keyword">pass</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="在python的dict中判断key是否存在"><a href="#在python的dict中判断key是否存在" class="headerlink" title="在python的dict中判断key是否存在"></a>在python的dict中判断key是否存在</h1><p>方法一：使用自带函数实现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">dict</span> = &#123;<span class="hljs-string">&#x27;a&#x27;</span>: &#123;&#125;, <span class="hljs-string">&#x27;b&#x27;</span>: &#123;&#125;, <span class="hljs-string">&#x27;c&#x27;</span>: &#123;&#125;&#125;<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">dict</span>.__contains__(<span class="hljs-string">&quot;b&quot;</span>))         返回：<span class="hljs-literal">True</span><br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">dict</span>.__contains__(<span class="hljs-string">&quot;d&quot;</span>))         返回：<span class="hljs-literal">False</span><br></code></pre></td></tr></table></figure>
+<p>第二种方法：使用in方法</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-comment">#生成一个字典</span><br>d = &#123;<span class="hljs-string">&#x27;a&#x27;</span>:&#123;&#125;, <span class="hljs-string">&#x27;b&#x27;</span>:&#123;&#125;, <span class="hljs-string">&#x27;c&#x27;</span>:&#123;&#125;&#125;<br><span class="hljs-comment">#打印返回值，其中d.keys()是列出字典所有的key</span><br><span class="hljs-built_in">print</span> <span class="hljs-string">&#x27;a&#x27;</span> <span class="hljs-keyword">in</span> d.keys()<br><span class="hljs-built_in">print</span> <span class="hljs-string">&#x27;a&#x27;</span> <span class="hljs-keyword">in</span> d<br></code></pre></td></tr></table></figure>
+<p>字典的<code>in</code>关系表达式允许我们查询字典中一个键是否存在。</p>
+<p>语法</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">key in dict</span><br></code></pre></td></tr></table></figure>
+
+<p>示例</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs routeros">d = &#123;<span class="hljs-string">&#x27;名字&#x27;</span>: <span class="hljs-string">&#x27;王路飞&#x27;</span>, <span class="hljs-string">&#x27;标志&#x27;</span>: <span class="hljs-string">&#x27;草帽&#x27;</span>, <span class="hljs-string">&#x27;武器&#x27;</span>: <span class="hljs-string">&#x27;拖鞋&#x27;</span>&#125;<br><span class="hljs-built_in">print</span>(d[<span class="hljs-string">&#x27;名字&#x27;</span>])<br><span class="hljs-comment"># 判断&#x27;绝招&#x27;(key)是否在字典d中</span><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;绝招&#x27;</span> <span class="hljs-keyword">in</span> d)<br><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-string">&#x27;绝招&#x27;</span> <span class="hljs-keyword">in</span> d:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;&quot;绝招&quot;(key)不在字典d中&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs vbnet">王路飞<br><span class="hljs-literal">False</span><br><span class="hljs-string">&quot;绝招&quot;</span>(<span class="hljs-keyword">key</span>)不在字典d中<br></code></pre></td></tr></table></figure>
+
+<h1 id="运行python脚本时传入参数的几种方法"><a href="#运行python脚本时传入参数的几种方法" class="headerlink" title="运行python脚本时传入参数的几种方法"></a>运行python脚本时传入参数的几种方法</h1><p><strong>如果在运行python脚本时需要传入一些参数，例如<code>name</code>与age，可以使用如下方式。</strong></p>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs delphi">python script.py <span class="hljs-string">&#x27;逍遥子,乔峰,孙悟空&#x27;</span>  <span class="hljs-number">888</span><br>python test.py --<span class="hljs-keyword">name</span> <span class="hljs-string">&#x27;逍遥子,乔峰,孙悟空&#x27;</span> --age <span class="hljs-number">888</span><br></code></pre></td></tr></table></figure>
+
+<p>这三种格式对应不同的参数解析方式，分别为**<code>sys.argv</code>、<code>argparse、</code> <code>tf.app.run，</code>** 前两者是python自带的功能，后者是<code>tensorflow</code>提供的便捷方式。</p>
+<h3 id="1-sys-argv"><a href="#1-sys-argv" class="headerlink" title="1.sys.argv"></a>1.<strong><code>sys.argv</code></strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined">特点:最简单,数据格式为列表,获取到的数据有点乱<br></code></pre></td></tr></table></figure>
+
+<p>代码:</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs clean"># -*- coding: utf<span class="hljs-number">-8</span> -*-<br><span class="hljs-keyword">import</span> sys<br>arg=sys.argv<br>print(arg)<br><br># 执行:python test.py <span class="hljs-number">123</span> <span class="hljs-number">456</span> <span class="hljs-number">789</span><br># [<span class="hljs-string">&#x27;test.py&#x27;</span>, <span class="hljs-string">&#x27;123&#x27;</span>, <span class="hljs-string">&#x27;456&#x27;</span>, <span class="hljs-string">&#x27;789&#x27;</span>]<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-argparse"><a href="#2-argparse" class="headerlink" title="2.argparse"></a>2.<strong><code>argparse</code></strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined">特点:简单,可以定义输入类型和默认值,获取到的数据整洁<br></code></pre></td></tr></table></figure>
+
+<p>代码:</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"># -*- coding: utf<span class="hljs-number">-8</span> -*-<br><span class="hljs-keyword">import</span> argparse<br><br>parser = argparse.ArgumentParser(description=<span class="hljs-string">&#x27;manual to this script&#x27;</span>)<br><span class="hljs-keyword">parser</span>.add_argument(&quot;--name&quot;, <span class="hljs-keyword">type</span>=str, default=&quot;0&quot;, help=<span class="hljs-string">&#x27;input name&#x27;</span>)<br><span class="hljs-keyword">parser</span>.add_argument(&quot;--age&quot;, <span class="hljs-keyword">type</span>=<span class="hljs-type">int</span>, default=<span class="hljs-number">32</span>,help=<span class="hljs-string">&#x27;input total age&#x27;</span>)<br>args = <span class="hljs-keyword">parser</span>.parse_args()<br>print(args.name)<br>print(args.age)<br><br># 执行:python test.py <span class="hljs-comment">--name &#x27;逍遥子,乔峰,孙悟空&#x27; --age 888</span><br># 逍遥子,乔峰,孙悟空<br># <span class="hljs-number">888</span><br><br>add_argument() 方法详解:<br>    <span class="hljs-type">name</span> <span class="hljs-keyword">or</span> flags - 一个命名或者一个选项字符串的列表，例如 foo 或 -f, <span class="hljs-comment">--foo。</span><br>    action - 当参数在命令行中出现时使用的动作基本类型。<br>    nargs - 命令行参数应当消耗的数目。<br>    const - 被一些 action 和 nargs 选择所需求的常数。<br>    <span class="hljs-keyword">default</span> - 当参数未在命令行中出现时使用的值。<br>    <span class="hljs-keyword">type</span> - 命令行参数应当被转换成的类型。<br>    choices - 可用的参数的容器。<br>    required - 此命令行选项是否可省略 （仅选项可用）。<br>    help - 一个此选项作用的简单描述。<br>    metavar - 在使用方法消息中使用的参数值示例。<br>    dest - 被添加到 parse_args() 所返回对象上的属性名。<br></code></pre></td></tr></table></figure>
+
+<p><em>注意:<code>parser.add_argument</code> 方法的<code>type</code>参数理论上可以是任何合法的类型， 但有些参数传入格式比较麻烦，例如list，所以一般使用<code>bool</code>, <code>int</code>, <code>str</code>, <code>float</code>这些基本类型就行了，更复杂的需求可以通过<code>str</code>传入，然后手动解析。<code>bool</code>类型的解析比较特殊，传入任何值都会被解析成<code>True</code>，传入空值时才为<code>False.</code></em></p>
+<h3 id="3-tf-app-run"><a href="#3-tf-app-run" class="headerlink" title="3.tf.app.run"></a>3.<strong>tf.app.run</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined">特点:定义比较麻烦,和argparser功能基本一样,可以定义输入类型和默认值<br></code></pre></td></tr></table></figure>
+
+<p>代码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># -*- coding: utf-8 -*-</span><br><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br>tf.app.flags.DEFINE_string(<span class="hljs-string">&#x27;name&#x27;</span>, <span class="hljs-literal">None</span>, <span class="hljs-string">&#x27;input name&#x27;</span>)<br>tf.app.flags.DEFINE_integer(<span class="hljs-string">&#x27;age&#x27;</span>, <span class="hljs-number">5</span>, <span class="hljs-string">&#x27;input total age&#x27;</span>)<br><br>FLAGS = tf.app.flags.FLAGS<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>(<span class="hljs-params">_</span>):<br>    <span class="hljs-built_in">print</span>(FLAGS.name)<br>    <span class="hljs-built_in">print</span>(FLAGS.age)<br><br><span class="hljs-keyword">if</span> __name__==<span class="hljs-string">&quot;__main__&quot;</span>:<br>    tf.app.run()<br></code></pre></td></tr></table></figure>
+
+<h1 id="三种方法获取Python-列表最后一个元素"><a href="#三种方法获取Python-列表最后一个元素" class="headerlink" title="三种方法获取Python 列表最后一个元素"></a>三种方法获取Python 列表最后一个元素</h1><p>三种方法获取Python 列表最后一个元素</p>
+<figure class="highlight python-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python-repl"><span class="hljs-meta prompt_">&gt;&gt;&gt;</span> <span class="language-python">list1 = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]</span><br><span class="hljs-meta prompt_">&gt;&gt;&gt;</span> <span class="language-python"><span class="hljs-built_in">print</span>(list1[<span class="hljs-built_in">len</span>(list1)-<span class="hljs-number">1</span>])</span><br>5<br><span class="hljs-meta prompt_">&gt;&gt;&gt;</span> <span class="language-python"><span class="hljs-built_in">print</span>(list1[-<span class="hljs-number">1</span>])</span><br>5<br><span class="hljs-meta prompt_">&gt;&gt;&gt;</span> <span class="language-python"><span class="hljs-built_in">print</span>(list1.pop())</span><br>5<br><span class="hljs-meta prompt_">&gt;&gt;&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="Python导入类的三种方法"><a href="#Python导入类的三种方法" class="headerlink" title="Python导入类的三种方法"></a>Python导入类的三种方法</h1><h3 id="导入模块就是为了使用模块中的类"><a href="#导入模块就是为了使用模块中的类" class="headerlink" title="导入模块就是为了使用模块中的类"></a>导入模块就是为了使用模块中的类</h3><hr>
+<blockquote>
+<p>当我们在写代码时，经常会遇到一种情况：我们要用到的一些功能已经在别的模块里定义过了，如果我们重新写一遍这个功能必然会使得代码冗长且效率低下。于是我们使用导入的方法将其它模块里的功能导入到自己的代码里，让我们在编写代码时能够使用。</p>
+</blockquote>
+<hr>
+<h3 id="导入整个模块（所有类）"><a href="#导入整个模块（所有类）" class="headerlink" title="导入整个模块（所有类）"></a>导入整个模块（所有类）</h3><p>导入整个模块的语句为：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-keyword">import</span> ModuleName<br></code></pre></td></tr></table></figure>
+
+<p>通常这个模块就是要导入的那个类所在的文件<code>*.py</code>，所以调用类的方法为:</p>
+<ol>
+<li><code>object = ModuleName.ClassName()</code></li>
+<li><code>object.属性</code></li>
+<li><code>object.方法</code></li>
+</ol>
+<p>导入整个模块时将这个模块里所有的类都导入了，所以都可以调用。我们在导入时就一定要知道我们需要的这个类或方法属于这个模块。</p>
+<hr>
+<h3 id="导入单个或多个类"><a href="#导入单个或多个类" class="headerlink" title="导入单个或多个类"></a>导入单个或多个类</h3><p>导入单个或多个类的语句为：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">from</span> <span class="hljs-title class_">ModuleName</span> <span class="hljs-keyword">import</span> <span class="hljs-title class_">ClassName1</span>,<span class="hljs-title class_">ClassName2</span>,...<br></code></pre></td></tr></table></figure>
+
+<p>调用类的属性和方法的语句为：</p>
+<ol>
+<li><code>object = ClassName()</code></li>
+<li><code>object.属性</code></li>
+<li><code>object.方法</code></li>
+</ol>
+<p>在这种方法中，若导入的类名相同，则后面导入的类将会覆盖前面导入的类。</p>
+<hr>
+<h3 id="导入模块中所有的类："><a href="#导入模块中所有的类：" class="headerlink" title="导入模块中所有的类："></a>导入模块中所有的类：</h3><p>导入模块中所有的类的语句为：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">from</span> <span class="hljs-title class_">ModuleName</span> <span class="hljs-keyword">import</span> *<br></code></pre></td></tr></table></figure>
+
+<p>调用类的属性和方法的语句为：</p>
+<ol>
+<li><code>object = ClassName()</code></li>
+<li><code>object.属性</code></li>
+<li><code>object.方法</code></li>
+</ol>
+<p>在这种方法中，若导入的模块中含有名字相同的类，则类与类之间也会产生覆盖。</p>
+<hr>
+<p><strong>总结一句话：就是当你只导入一个模块，没有导入模块中的类的时候，如果想用这个模块中的类来创建对象，一定要加上模块名；如果是按照模块中的类来导入的，那就只使用类名创建对象就好了。</strong></p>
+<h1 id="【Python】json与string相互转化"><a href="#【Python】json与string相互转化" class="headerlink" title="【Python】json与string相互转化"></a>【Python】json与string相互转化</h1><p>1 json-&gt;string</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-comment"># -*- coding: utf-8 -*-</span><br>import json<br><br>student = &#123;<span class="hljs-string">&quot;id&quot;</span>:<span class="hljs-string">&quot;123&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;122&quot;</span>, <span class="hljs-string">&quot;age&quot;</span>:18&#125;<br><span class="hljs-built_in">print</span>(type(student))<br><span class="hljs-built_in">print</span>(student)<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;-&#x27;</span><span class="hljs-number">*10</span>)<br><br>result = json.dumps(student)<br><span class="hljs-built_in">print</span>(type(result))<br><span class="hljs-built_in">print</span>(result)<br>123456789101112<br></code></pre></td></tr></table></figure>
+
+<p>2 string-&gt;json</p>
+<p>2.2 json类</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-keyword">import</span> json<br><span class="hljs-title">str</span> = &#x27;&#123;<span class="hljs-string">&quot;key&quot;</span>: <span class="hljs-string">&quot;wwww&quot;</span>, <span class="hljs-string">&quot;word&quot;</span>: <span class="hljs-string">&quot;qqqq&quot;</span>&#125;&#x27;<br><span class="hljs-title">j</span> = json.loads(str)<br><span class="hljs-title">print</span>(j)<br><span class="hljs-title">print</span>(<span class="hljs-class"><span class="hljs-keyword">type</span>(<span class="hljs-title">j</span>))</span><br><span class="hljs-number">12345</span><br></code></pre></td></tr></table></figure>
+
+<p>2.1 ast类</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs stylus">import ast <br><span class="hljs-selector-tag">a</span> = <span class="hljs-string">&quot;&#123;1: &#x27;a&#x27;, 2: &#x27;b&#x27;&#125;&quot;</span><br><span class="hljs-selector-tag">b</span> = ast<span class="hljs-selector-class">.literal_eval</span>(a)<br><span class="hljs-function"><span class="hljs-title">type</span><span class="hljs-params">(b)</span></span><br>dict<br></code></pre></td></tr></table></figure>
+
+<h1 id="Python开启一个简单的Http文件服务器"><a href="#Python开启一个简单的Http文件服务器" class="headerlink" title="Python开启一个简单的Http文件服务器"></a>Python开启一个简单的Http文件服务器</h1><p>有时你需临时搭建一个简单的 Web Server，但你又不想去安装 Apache、Nginx 等这类功能较复杂的 HTTP 服务程序时。这时可以使用 Python 内建的 SimpleHTTPServer 模块快速搭建一个简单的 HTTP 服务器。</p>
+<p>SimpleHTTPServer 模块可以把你指定目录中的文件和文件夹以一个简单的 Web 页面的方式展示出来<br>熟悉Python的朋友们都知道，python自带了一个Simple HTTP Server，可以使用一行代码完成文件的局域网共享操作。<br>首先进入你需要设置的http服务器目录 (我以自己电脑路径：F:&#x2F;Working~Study) ，即进入到该目录下，然后：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs vim">python2: <span class="hljs-keyword">python</span> -<span class="hljs-keyword">m</span> SimpleHTTPServer port<br><span class="hljs-keyword">python3</span>: <span class="hljs-keyword">python</span> -<span class="hljs-keyword">m</span> http.server port<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>在需要发送的文件的路径上打开cmd，输入<code>python -m http.server 8080（端口可以自定义）--bind 0.0.0.0</code><br>-m表示的是以模块引入，m表示module，在这里的作用是让编译器自行查找http.server的文件位置；当然也可以找到这个模块的绝对路径再直接用python …运行，但这样会变得很麻烦,如果需要</li>
+<li>在接收端浏览器中直接访问<code>主机地址:8080</code>即可查看发送的文件，点击需要的文件下载</li>
+</ol>
+<p>通过一行代码，我们完成了文件共享的http服务，但这个服务有几个问题，仅提供了下载功能无法上传，最重要的是没有权限控制功能，这就极其不安全了！</p>
+<p>有时你需临时搭建一个简单的 Web Server，但你又不想去安装 Apache、Nginx 等这类功能较复杂的 HTTP 服务程序时。这时可以使用 Python 内建的 SimpleHTTPServer 模块快速搭建一个简单的 HTTP 服务器。</p>
+<p>SimpleHTTPServer 模块可以把你指定目录中的文件和文件夹以一个简单的 Web 页面的方式展示出来</p>
+<h1 id="Python-Ftp服务器搭建"><a href="#Python-Ftp服务器搭建" class="headerlink" title="Python Ftp服务器搭建"></a>Python Ftp服务器搭建</h1><p>模块安装<br>python没有内置ftp模块，但要使用它却很简单，我们只需要简单的通过pip安装即可：<br>pip install pyftpdlib</p>
+<p>简单共享<br>模块安装完成后，我们找到需要共享的目录，然后启动cmd后，输入：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">python</span> -m pyftpdlib -p <span class="hljs-number">21</span><br></code></pre></td></tr></table></figure>
+<p>之后浏览器登陆<a href="ftp://ip:port,这样就开启了一个最简单的ftp共享服务。">ftp://ip:port,这样就开启了一个最简单的ftp共享服务。</a></p>
+<p>有时当你想快速搭建一个 <code>FTP</code> 服务器来临时实现文件上传下载时，这是特别有用的。我们这里利用 <code>Python</code> 的 <code>Pyftpdlib</code> 模块可以快速的实现一个 <code>FTP</code> 服务器的功能。</p>
+<p>首先安装 <code>Pyftpdlib</code> 模块</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">sudo</span> pip install pyftpdlib</span><br></code></pre></td></tr></table></figure>
+
+<p>通过 <code>Python</code> 的 <code>-m</code> 选项将 <code>Pyftpdlib</code> 模块作为一个简单的独立服务器来运行，假设我们需要共享目录 <code>/Users/Mike/Docker</code>，只需要以下这个命令行就可以轻松实现：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-keyword">cd</span> <span class="hljs-string">/Users/Mike/Docker</span><br>python -m pyftpdlib<br></code></pre></td></tr></table></figure>
+
+<p>至此一个简单的 <code>FTP</code> 服务器已经搭建完成，访问 <code>ftp://IP:PORT</code> 即可。例如类似下面的 URL：</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">ftp:</span><span class="hljs-comment">//192.168.100.49:2121</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>默认 IP 为本机所有可用 IP，端口为 2121。</li>
+<li>默认登陆方式为匿名。</li>
+<li>默认权限是只读。</li>
+</ul>
+</blockquote>
+<p>如果你要建一个有认证且可写的 <code>FTP</code> 服务器，可使用类似以下指令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">python -m pyftpdlib -i 192.168.100.49 -w -d /tmp/ -u mike -P 123456</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>小插曲：测试时一直使用密码 <code>000000</code> 这样的弱密码做认证密码，在客户端登陆时一直提示认证失败。看来 <code>Pyftpdlib</code> 模块还做了基本的安全策略哟，不错的！</p>
+</blockquote>
+<p>常用可选参数说明:</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs diff"><span class="hljs-deletion">-i 指定IP地址（默认为本机所有可用 IP 地址）</span><br><span class="hljs-deletion">-p 指定端口（默认为 2121）</span><br><span class="hljs-deletion">-w 写权限（默认为只读）</span><br><span class="hljs-deletion">-d 指定目录 （默认为当前目录）</span><br><span class="hljs-deletion">-u 指定登录用户名</span><br><span class="hljs-deletion">-P 指定登录密码</span><br></code></pre></td></tr></table></figure>
+
+
+<h1 id="Python调用系统命令的四种方法（os-system、os-popen、commands、subprocess）"><a href="#Python调用系统命令的四种方法（os-system、os-popen、commands、subprocess）" class="headerlink" title="Python调用系统命令的四种方法（os.system、os.popen、commands、subprocess）"></a>Python调用系统命令的四种方法（os.system、os.popen、commands、subprocess）</h1><h3 id="一、os-system方法"><a href="#一、os-system方法" class="headerlink" title="一、os.system方法"></a>一、os.system方法</h3><p>这个方法是直接调用标准C的system() 函数，仅仅在一个子终端运行系统命令，而不能获取命令执行后的返回信息。</p>
+<p>os.system[cmd]的返回值。如果执行成功，那么会返回0，表示命令执行成功。否则，则是执行错误。</p>
+<p>使用os.system返回值是脚本的退出[状态码]，该方法在调用完shell脚本后，返回一个16位的二进制数，低位为杀死所调用脚本的信号号码，高位为脚本的退出状态码。</p>
+<p>os.system()返回值为0 linux命令返回值也为0。</p>
+<p>os.system()返回值为256，十六位[二进制]数示为：00000001，00000000，高八位转成十进制为 1 对应 linux命令返回值 1。</p>
+<p>os.system()返回值为512，十六位二进制数示为：00000010，00000000，高八位转成十进制为 2 对应 linux命令返回值 2。</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">import os<br><span class="hljs-built_in">result</span> = os.<span class="hljs-keyword">system</span>(<span class="hljs-string">&#x27;cat /etc/passwd&#x27;</span>)<br>print(<span class="hljs-built_in">result</span>)      <br><span class="hljs-comment"># 0</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="二、os-popen方法"><a href="#二、os-popen方法" class="headerlink" title="二、os.popen方法"></a>二、os.popen方法</h3><p>os.popen()方法不仅执行命令而且返回执行后的信息对象(常用于需要获取执行命令后的返回信息)，是通过一个管道文件将结果返回。通过 os.popen() 返回的是 file read 的对象，对其进行读取 read() 的操作可以看到执行的输出。</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs lua">import <span class="hljs-built_in">os</span><br>result = <span class="hljs-built_in">os</span>.<span class="hljs-built_in">popen</span>(<span class="hljs-string">&#x27;cat /etc/passwd&#x27;</span>)<br><span class="hljs-built_in">print</span>(result.<span class="hljs-built_in">read</span>())<br></code></pre></td></tr></table></figure>
+<p>当然还有其它类似命令：</p>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs moonscript"><span class="hljs-keyword">import</span> <span class="hljs-built_in">os</span><br><span class="hljs-built_in">os</span>.system(<span class="hljs-string">&quot;ls&quot;</span>)<br><span class="hljs-built_in">os</span>.system(<span class="hljs-string">&quot;cd test &amp;&amp; mkdir test1&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<h3 id="三、commands模块"><a href="#三、commands模块" class="headerlink" title="三、commands模块"></a>三、commands模块</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs stylus">import commands<br>status = commands<span class="hljs-selector-class">.getstatus</span>(<span class="hljs-string">&#x27;cat /etc/passwd&#x27;</span>)<br><span class="hljs-function"><span class="hljs-title">print</span><span class="hljs-params">(status)</span></span><br>output = commands<span class="hljs-selector-class">.getoutput</span>(<span class="hljs-string">&#x27;cat /etc/passwd&#x27;</span>)<br><span class="hljs-function"><span class="hljs-title">print</span><span class="hljs-params">(output)</span></span><br>(status, output) = commands<span class="hljs-selector-class">.getstatusoutput</span>(<span class="hljs-string">&#x27;cat /etc/passwd&#x27;</span>)<br><span class="hljs-function"><span class="hljs-title">print</span><span class="hljs-params">(status, output)</span></span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>commands模块在Python3中已废弃。</p>
+</blockquote>
+<h3 id="四、subprocess模块"><a href="#四、subprocess模块" class="headerlink" title="四、subprocess模块"></a>四、subprocess模块</h3><p>Subprocess是一个功能强大的子进程管理模块，是替换os.system,os.spawn* 等方法的一个模块。<br>当执行命令的参数或者返回中包含了中文文字，那么建议使用subprocess。</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">import subprocess<br>res = subprocess.Popen(<span class="hljs-string">&#x27;cat /etc/passwd&#x27;</span>, <span class="hljs-built_in">shell</span>=True, <span class="hljs-keyword">stdout</span>=subprocess.PIPE, <span class="hljs-keyword">stderr</span>=subprocess.STDOUT) <span class="hljs-comment"># 使用管道</span><br>print res.<span class="hljs-keyword">stdout</span>.<span class="hljs-built_in">read</span>()  <span class="hljs-comment"># 标准输出</span><br><span class="hljs-keyword">for</span> <span class="hljs-built_in">line</span> <span class="hljs-keyword">in</span> res.<span class="hljs-keyword">stdout</span>.readlines():<br>    print <span class="hljs-built_in">line</span><br>res.<span class="hljs-keyword">stdout</span>.<span class="hljs-built_in">close</span>()         <span class="hljs-comment"># 关闭</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="五、总结："><a href="#五、总结：" class="headerlink" title="五、总结："></a>五、总结：</h3><p>os.system：获取程序执行命令的返回值。<br>os.popen： 获取程序执行命令的输出结果。<br>commands：获取返回值和命令的输出结果。</p>
+<h1 id="python通过正则匹配指定字符开头与结束提取中间内容"><a href="#python通过正则匹配指定字符开头与结束提取中间内容" class="headerlink" title="python通过正则匹配指定字符开头与结束提取中间内容"></a>python通过正则匹配指定字符开头与结束提取中间内容</h1><h2 id="一、提取包含始末字符"><a href="#一、提取包含始末字符" class="headerlink" title="一、提取包含始末字符"></a>一、提取包含始末字符</h2><p>1、起始字符串固定</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">a</span> = re.findall(<span class="hljs-string">&#x27;起始字符串.*结束字符串&#x27;</span>,str)<br></code></pre></td></tr></table></figure>
+
+<p>2、起始字符串不固定（即从首字符串提取到固定的字符串结束），用^指定从首字符串开始</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">a</span> = re.findall(<span class="hljs-string">&#x27;^.*结束字符串&#x27;</span>,str)<br></code></pre></td></tr></table></figure>
+
+<h2 id="二、不包含始末字符串"><a href="#二、不包含始末字符串" class="headerlink" title="二、不包含始末字符串"></a>二、不包含始末字符串</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment">#方法1</span><br><span class="hljs-attr">a</span> = re.findall(<span class="hljs-string">&#x27;(?&lt;=始字符串).*?(?=末字符串)&#x27;</span>,str)<br><span class="hljs-comment">#方法2</span><br><span class="hljs-attr">a</span> = re.findall(<span class="hljs-string">&#x27;始字符串(.*?)末字符串&#x27;</span>,str)<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>在 re.findall()的方法中 ‘始字符串. <em>末字符串’ 可以匹配到相同的值直到最后一个值；如果参数为 ‘始字符串.</em> ?末字符串’则只匹配到第一个值。</li>
+<li>其实使用.*和.+都能提取特定始末字符串中间的内容，下面顺便说下两者的区别。</li>
+</ol>
+<h2 id="三、-和-正则提取的区别"><a href="#三、-和-正则提取的区别" class="headerlink" title="三、.*和.+正则提取的区别"></a>三、.*和.+正则提取的区别</h2><p>.：匹配任意字符<br>*：匹配0个或多个字符<br>?：非贪婪模式，在符合的条件下，尽可能少的匹配(尽可能短的匹配)</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stylus">str2 = <span class="hljs-string">&quot;aabab&quot;</span><br><span class="hljs-selector-tag">a</span> = re<span class="hljs-selector-class">.findall</span>(<span class="hljs-string">&#x27;a.*?b&#x27;</span>,str2)	#结果：<span class="hljs-selector-attr">[<span class="hljs-string">&#x27;aab&#x27;</span>, <span class="hljs-string">&#x27;ab&#x27;</span>]</span><br><span class="hljs-selector-tag">b</span> = re<span class="hljs-selector-class">.findall</span>(<span class="hljs-string">&#x27;a.+?b&#x27;</span>,str2)	#结果：<span class="hljs-selector-attr">[<span class="hljs-string">&#x27;aab&#x27;</span>]</span><br></code></pre></td></tr></table></figure>
+
+<p>.<em>?：匹配aab和ab ，因为</em>可以匹配0个字符，所以可以匹配得到ab<br>.+?：匹配aab，因为+必须a和b中间至少有一个字符，所以排除了ab</p>
+<h2 id="四、起始有无-的区别"><a href="#四、起始有无-的区别" class="headerlink" title="四、起始有无^的区别"></a>四、起始有无^的区别</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">str2</span> = <span class="hljs-string">&quot;aabab&quot;</span><br><span class="hljs-attr">c</span> = re.findall(<span class="hljs-string">&#x27;.*&#x27;</span>,str2)	<span class="hljs-comment">#结果：[&#x27;aabab&#x27;, &#x27;&#x27;]</span><br><span class="hljs-attr">d</span> = re.findall(<span class="hljs-string">&#x27;^.*&#x27;</span>,str2)	<span class="hljs-comment">#结果：[&#x27;aabab&#x27;]</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="五、pandas对具体列的内容通过正则表达式进行数据提取"><a href="#五、pandas对具体列的内容通过正则表达式进行数据提取" class="headerlink" title="五、pandas对具体列的内容通过正则表达式进行数据提取"></a>五、<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=pandas&spm=1001.2101.3001.7020">pandas</a>对具体列的内容通过正则表达式进行数据提取</h2><ol>
+<li>使用前要确保该列的类型统一，str或者float格式，最好事先通过astype强制转换一下</li>
+<li>df[‘新列名’]&#x3D;df[‘提取的列名’].str.extract(‘正则表达式’, expand &#x3D; True)</li>
+</ol>
+<h2 id="六、遇到的报错"><a href="#六、遇到的报错" class="headerlink" title="六、遇到的报错"></a>六、遇到的报错</h2><p>报错：pattern contains no capture groups<br>（翻译：模式不包含捕获组）<br>解决：根据docs ，您需要为 str.extract 指定一个捕获组(即括号)好，提取。</p>
+<p>参考文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/ZhangHT97/p/13427325.html">https://www.cnblogs.com/ZhangHT97/p/13427325.html</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/YouJeffrey/p/15209895.html">https://www.cnblogs.com/YouJeffrey/p/15209895.html</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/dudu3332/article/details/111555572">https://blog.csdn.net/dudu3332/article/details/111555572</a></p>
+<h1 id="python之Pyftpdlib第三方库在本机搭建FTP服务器"><a href="#python之Pyftpdlib第三方库在本机搭建FTP服务器" class="headerlink" title="python之Pyftpdlib第三方库在本机搭建FTP服务器"></a>python之Pyftpdlib第三方库在本机搭建FTP服务器</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>1、在同一个局域网的多台电脑，传递文件时可以通过搭建web服务器，设置目录浏览的方式快速分享。如果上传就比较麻烦了，通过QQ&#x2F;微信会产生很多文件记录，通过teamviewer太慢，其实FTP服务器倒是一个不错的选择。</p>
+<p>2、FTP服务器软件在日常开发中，基本不会用到。还涉及 macOS、 Windows的环境差异，非常麻烦。虽然有免费开源的 filezzila，配置还是很繁琐的。</p>
+<p>3、Python语言 + <strong>pyftpdlib</strong> 库实现局域网文件互传：一般来说，开发机都会安装Python环境，再安装 <strong>pyftpdlib</strong> 库就可以搭建在本地计算机搭建一个FTP服务。从而实现局域网内的文件互传。</p>
+<p>4、通常Linux主机都是使用vsftp，pureftp来搭建FTP服务器，但配置很复杂。如果在工作中或者项目上只是临时使用FTP服务器，可以用python的 <strong>pyftpdlib</strong> 库。</p>
+<h2 id="下载与安装"><a href="#下载与安装" class="headerlink" title="下载与安装"></a>下载与安装</h2><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> pyftpdlib<br></code></pre></td></tr></table></figure>
+
+<h2 id="FTP服务器环境搭建"><a href="#FTP服务器环境搭建" class="headerlink" title="FTP服务器环境搭建"></a>FTP服务器环境搭建</h2><h3 id="1、一行代码实现FTP服务器："><a href="#1、一行代码实现FTP服务器：" class="headerlink" title="1、一行代码实现FTP服务器："></a>1、一行代码实现FTP服务器：</h3><p>通过Python的 <strong>-m</strong> 选项作为一个简单的独立服务器来运行，当你想快速共享一个目录的时候，这是特别有用的。</p>
+<p>在需要共享的目录下打开终端执行如下命令即可把当前目录共享出去（匿名登录）</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">python -m pyftpdlib</span><br></code></pre></td></tr></table></figure>
+<p>至此，一个简单的FTP服务器已经搭建完成，访问 <a href="ftp://127.0.0.1:2121/">ftp://127.0.0.1:2121</a> 即可，如下：（默认FTP的IP为 127.0.0.1 、端口为 2121 ）</p>
+<h3 id="2、命令行可选参数："><a href="#2、命令行可选参数：" class="headerlink" title="2、命令行可选参数："></a>2、命令行可选参数：</h3><ul>
+<li>** -i** ： 指定IP地址（默认为本机的IP地址）</li>
+<li><strong>-p</strong> ： 指定端口（默认为2121）</li>
+<li><strong>-w</strong> ：写权限（默认为只读）</li>
+<li><strong>-d</strong> ： 指定目录 （默认为当前目录）</li>
+<li><strong>-u</strong> ：指定用户名登录</li>
+<li><strong>-P</strong> ：设置登录密码</li>
+</ul>
+<h4 id="带参数命令行方式运行FTP服务器："><a href="#带参数命令行方式运行FTP服务器：" class="headerlink" title="带参数命令行方式运行FTP服务器："></a>带参数命令行方式运行FTP服务器：</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">python -m pyftpdlib -w -d <span class="hljs-selector-attr">[PATH]</span> -u <span class="hljs-selector-attr">[USER]</span> -<span class="hljs-selector-tag">P</span> <span class="hljs-selector-attr">[PASSWORD]</span><br></code></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">python</span> -m pyftpdlib -w -d ~/Desktop -u admin -P <span class="hljs-number">123456</span><br></code></pre></td></tr></table></figure>
+<h2 id="搭建一个功能强大完善的FTP服务"><a href="#搭建一个功能强大完善的FTP服务" class="headerlink" title="搭建一个功能强大完善的FTP服务"></a>搭建一个功能强大完善的FTP服务</h2><h3 id="1、上述的一行命令已经可以实现一个简单的FTP服务器，但是要搭建一个功能强大完善的FTP服务所涉及到的配置较多，这时需要使用-Pyftpdlib-库提供的-API-来编写。"><a href="#1、上述的一行命令已经可以实现一个简单的FTP服务器，但是要搭建一个功能强大完善的FTP服务所涉及到的配置较多，这时需要使用-Pyftpdlib-库提供的-API-来编写。" class="headerlink" title="1、上述的一行命令已经可以实现一个简单的FTP服务器，但是要搭建一个功能强大完善的FTP服务所涉及到的配置较多，这时需要使用 Pyftpdlib 库提供的 API 来编写。"></a>1、上述的一行命令已经可以实现一个简单的FTP服务器，但是要搭建一个功能强大完善的FTP服务所涉及到的配置较多，这时需要使用 <strong>Pyftpdlib</strong> 库提供的 API 来编写。</h3><h3 id="2、名词解释："><a href="#2、名词解释：" class="headerlink" title="2、名词解释："></a>2、名词解释：</h3><p><strong>pyftpdlib.ftpservers.FTPServer</strong>  : 接收客户端连接，然后分发给对应的程序。</p>
+<p><strong>pyftpdlib.handlers.FTPHandler</strong>  : 一个表示服务器协议解释器的类，每次出现一个新的连接FTPServer将创建一个新的FTPHandler实例来处理当前PI会话。</p>
+<p><strong>pyftpdlib.handlers.ActiveDIP</strong> 和 <strong>pyftpdlib.handlers.PassiveDIP</strong>  : 主动模式和被动模式的基础类。</p>
+<p><strong>pyftpdlib.handlers.DTPHandler</strong>  : 这个类处理的是数据传输进程。</p>
+<p><strong>pyftpdlib.authorizers.DummyAuthorizer</strong>  : 处理FTP的认证和权限的处理类，用于处理用户密码，获取用户的家目录和权限，DummyAuthorizer 是基础的认证模块的类，提供平台无关接口的基础授权程序类<br>用于管理虚拟用户。</p>
+<p><strong>pyftpdlib.filesystems.AbstractedFS</strong>  : 类用于与文件系统交互，提供了一个高级的，跨平台接口兼容Windows和UNIX风格文件系统。</p>
+<h3 id="3、实例如下："><a href="#3、实例如下：" class="headerlink" title="3、实例如下："></a>3、实例如下：</h3><p><a href="javascript:void(0);" title="复制代码"><img src="/images/48304ba5e6f9fe08f3fa1abda7d326ab.webp" srcset="/img/loading.gif" lazyload alt="复制代码"></a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python3</span><br><span class="hljs-comment"># coding:utf-8</span><br><br><span class="hljs-keyword">from</span> pyftpdlib.authorizers <span class="hljs-keyword">import</span> DummyAuthorizer<br><span class="hljs-keyword">from</span> pyftpdlib.handlers <span class="hljs-keyword">import</span> FTPHandler<br><span class="hljs-keyword">from</span> pyftpdlib.servers <span class="hljs-keyword">import</span> FTPServer<br><span class="hljs-keyword">import</span> os<br><br><span class="hljs-keyword">global</span> author<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">ftp_server</span>(<span class="hljs-params">username, password, directory</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    启动一个ftp的server进程</span><br><span class="hljs-string"></span><br><span class="hljs-string">    :param username: 需要添加用户的用户名</span><br><span class="hljs-string">    :param password: 用户的密码</span><br><span class="hljs-string">    :param directory: 用户的家目录，也就是FTP服务器的数据目录</span><br><span class="hljs-string">    :return:</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br><br>    <span class="hljs-comment"># 如果目录不存在，就创建目录</span><br><br>    <span class="hljs-keyword">global</span> author<br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> os.path.exists(directory):<br>        os.mkdir(directory)<br><br>    <span class="hljs-keyword">try</span>:<br>        <span class="hljs-comment"># 实例化DummyAuthorizer来创建ftp用户</span><br>        author = DummyAuthorizer()<br>        <span class="hljs-comment"># 参数：用户名，密码，目录，权限</span><br>        author.add_user(username, password, directory, perm=<span class="hljs-string">&quot;elradfmw&quot;</span>)<br><br>        <span class="hljs-comment"># 匿名登录</span><br>        <span class="hljs-comment"># authorizer.add_anonymous(directory)</span><br>    <span class="hljs-keyword">except</span> OSError <span class="hljs-keyword">as</span> e:<br>        <span class="hljs-keyword">if</span> <span class="hljs-string">&quot;Address already in use&quot;</span> <span class="hljs-keyword">in</span> e:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;21号端口被占用&quot;</span>)<br><br>    <span class="hljs-comment"># 初始化ftp句柄</span><br>    handler = FTPHandler<br>    handler.authorizer = author<br><br>    <span class="hljs-comment"># 添加被动端口范围</span><br>    handler.passive_ports = <span class="hljs-built_in">range</span>(<span class="hljs-number">2000</span>, <span class="hljs-number">2400</span>)<br><br>    <span class="hljs-comment"># 启动server，本地执行，监听21号端口（参数：IP，端口，handler）</span><br>    server = FTPServer((<span class="hljs-string">&#x27;0.0.0.0&#x27;</span>, <span class="hljs-number">21</span>), handler)<br>    server.serve_forever()<br><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    ftp_server(username=<span class="hljs-string">&quot;zhanghao&quot;</span>, password=<span class="hljs-string">&quot;aixocm&quot;</span>, directory=<span class="hljs-string">&quot;/data/zhanghao&quot;</span>)<br></code></pre></td></tr></table></figure>
+<h3 id="6、用户权限："><a href="#6、用户权限：" class="headerlink" title="6、用户权限："></a>6、用户权限：</h3><p><strong>读取权限：</strong></p>
+<ul>
+<li>“e” ：更改目录（CWD，CDUP命令）</li>
+<li>“l” ：列表文件（LIST，NLST，STAT，MLSD，MLST，SIZE命令）</li>
+<li>“r” ：从服务器检索文件（RETR命令）</li>
+</ul>
+<p><strong>写入权限：</strong></p>
+<ul>
+<li>“a” ：将数据追加到现有文件（APPE命令）</li>
+<li>“d” ：删除文件或目录（DELE，RMD命令）</li>
+<li>“f” ：重命名文件或目录（RNFR，RNTO命令）</li>
+<li>“m” ：创建目录（MKD命令）</li>
+<li>“w” ：将文件存储到服务器（STOR，STOU命令）</li>
+<li>“M”：更改文件模式&#x2F;权限（SITE CHMOD命令）</li>
+<li>“T”：更改文件修改时间（SITE MFMT命令）</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Python/" class="category-chain-item">Python</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Python使用技巧</div>
+      <div>http://example.com/2018/08/11/Python使用技巧/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2018年8月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/03/18/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93HTML%E3%80%81CSS%E3%80%81Javascript/" title="前端开发基础总结HTML、CSS、Javascript">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">前端开发基础总结HTML、CSS、Javascript</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/07/22/%E4%BD%BF%E7%94%A8Pyinstaller%E5%B0%86Python%E6%BA%90%E4%BB%A3%E7%A0%81%E6%89%93%E5%8C%85%E6%88%90%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6/" title="使用Pyinstaller将Python源代码打包成可执行文件">
+                        <span class="hidden-mobile">使用Pyinstaller将Python源代码打包成可执行文件</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

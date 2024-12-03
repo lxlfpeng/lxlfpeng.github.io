@@ -1,0 +1,754 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.Compose状态管理绪论状态是什么?状态指的是Ui的形态，例如按钮控件的文字、颜色的状态等等，在软件编程中我们会用一个状态值去保存该状态。传统的Android视图层次结构中，界面是通过一个个的View， 例如:ImageView、TextView等搭建而成，然后通过findViewById找到对应的View的引用后，设置它的内部状态值，例如设置TextView的文本，当UI的状态值改变时，基">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jetpack-Compose之二状态管理">
+<meta property="og:url" content="http://example.com/2022/01/07/Jetpack-Compose%E4%B9%8B%E4%BA%8C%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.Compose状态管理绪论状态是什么?状态指的是Ui的形态，例如按钮控件的文字、颜色的状态等等，在软件编程中我们会用一个状态值去保存该状态。传统的Android视图层次结构中，界面是通过一个个的View， 例如:ImageView、TextView等搭建而成，然后通过findViewById找到对应的View的引用后，设置它的内部状态值，例如设置TextView的文本，当UI的状态值改变时，基">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/d768c945c42086a9b3f8def4ee61b882.webp">
+<meta property="article:published_time" content="2022-01-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:56:57.156Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/d768c945c42086a9b3f8def4ee61b882.webp">
+  
+  
+  
+  <title>Jetpack-Compose之二状态管理 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Jetpack-Compose之二状态管理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-01-07 00:00" pubdate>
+          2022年1月7日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          41 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Jetpack-Compose之二状态管理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-Compose状态管理绪论"><a href="#一-Compose状态管理绪论" class="headerlink" title="一.Compose状态管理绪论"></a>一.Compose状态管理绪论</h1><p>状态是什么?状态指的是Ui的形态，例如按钮控件的文字、颜色的状态等等，在软件编程中我们会用一个状态值去保存该状态。传统的Android视图层次结构中，界面是通过一个个的View， 例如:ImageView、TextView等搭建而成，然后通过findViewById找到对应的View的引用后，设置它的内部状态值，例如设置TextView的文本，当UI的状态值改变时，基于XML的UI框架会自动刷新UI来显示正确的状态。Compose 是声明式的 UI，在组合函数中这些状态值描述了这个UI组件的状态，所以想更改一个UI的状态，只能用<code>新的状态值去重新调用该组件的可组合函数</code>，状态值的更新就对应着重组(重绘)的发生(刷新该UI)。 也就是说Compose 主要是根据状态的改变进行重组的，实际上Compose的UI变化本质是：”状态(State) 驱动”，即控件UI的变化原因是控件UI的状态发生了变化，需要加入状态并对相关的状态进行管理。</p>
+<p><strong>对状态变化做出反应是 Compose 的核心。Compose 应用程序通过调用 Composable 函数将数据转换为 UI。如果您的数据发生变化，您可以使用新数据调用这些函数，从而创建更新的 UI。Compose 提供了用于观察应用程序数据变化的工具，这些工具会自动调用您的函数——这称为重构。Compose 还会查看单个可组合组件需要哪些数据，以便它只需要重新组合数据已更改的组件，并且可以跳过组合未受影响的组件。 在底层，Compose 使用自定义 Kotlin 编译器插件，因此当底层数据发生变化时，可以重新调用可组合函数以更新 UI 层次结构。 例如，当你调用Greeting(“Android”)的MyScreenContent可组合的功能，你是硬编码的输入(“Android”)，所以Greeting将添加到UI树一次，永远不会改变，即使身体MyScreenContent被重构。 要将内部状态添加到可组合，请使用该mutableStateOf函数，它提供可组合的可变内存。为了不让每次重组都有不同的状态，请记住使用remember. 而且，如果在屏幕上的不同位置有多个可组合实例，每个副本将获得自己的状态版本。您可以将内部状态视为类中的私有变量。 可组合函数将自动订阅它。如果状态发生变化，读取这些字段的可组合项将被重新组合。</strong><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/Mr_Tony/article/details/118858756">节选自</a></p>
+<h1 id="二-Compose重组-Recomposition"><a href="#二-Compose重组-Recomposition" class="headerlink" title="二.Compose重组(Recomposition)"></a>二.Compose重组(Recomposition)</h1><h3 id="1-什么是Compose重组-Recomposition"><a href="#1-什么是Compose重组-Recomposition" class="headerlink" title="1.什么是Compose重组(Recomposition)"></a>1.什么是Compose重组(Recomposition)</h3><p>在命令式界面模型中，如需更改某个控件的状态，可以在该控件上调用 setter()等方法通过改变其属性来更改其内部状态。 在 Compose 中，可以使用新数据再次调用可组合函数，这样就会导致可组合函数进行重组(重绘)，系统会根据新数据重新调用绘制函数绘制出新的UI。简单来说重组实际上就是当状态值改变后，再次调用可组合函数进行的绘制过程，是否重组的判断条件是与 @Composable 元素绑定的数据是否发生了变化。</p>
+<h3 id="2-Compose智能重组"><a href="#2-Compose智能重组" class="headerlink" title="2.Compose智能重组"></a>2.Compose智能重组</h3><p>上文说到当状态变化时需要再次调用可组合函数触发UI重组，但是如果是一个很庞大的 Composable 层级结构，当只针对于层级中的某一部分发生改变时，不可能对该层级中所有的UI都进行重组，这样会带来很多多余的性能损耗。因此仅仅只需要针对依赖该状态的UI元素进行重组生成新的UI即可，与状态修改无关的UI元素，让其保持之前生成的实例。Compose 为了保证重组性能引入了”局部重组，也叫智能重组”:Compose 编译器会在 @Composable 元素初始化的时候，对每一个元素做标记，当关联状态变化时，然后根据状态是否修改来智能的选择需要被重组的元素。</p>
+<p>重组需要注意的地方:</p>
+<ul>
+<li>重组意味着系统会重新调用 @Composable 元素方法的执行，而重组可能会随时且非常频繁的发生，所有的 @Composable 组合函数的执行都是乱序和并行的。</li>
+<li>应避免修改可组合 lambda 中的变量的代码，因为此类代码并非线程安全代码，而且可能被多次调用应该禁止此类变量的写入操作。</li>
+<li>可能在重组过程中，Local 变量可能会失效，动态计算方法会调用很多次。</li>
+</ul>
+<h3 id="3-Compose重组的最小范围"><a href="#3-Compose重组的最小范围" class="headerlink" title="3.Compose重组的最小范围"></a>3.Compose重组的最小范围</h3><p>在Compose中重组的范围主要受两种因素影响:</p>
+<ul>
+<li>只有会受到 state 变化影响的代码块才会参与到重组，不依赖 state 的代码不参与重组。</li>
+<li>只有非inline函数才有资格成为重组的最小范围， 这是因为Compose 在编译期分析出会受到某 state 变化影响的代码块，并记录其引用，当此 state 变化时，会根据引用找到这些代码块并标记为 Invalid。在下一渲染帧到来之前 Compose 会触发 recomposition，并在重组过程中执行 invalid 代码块。</li>
+</ul>
+<h3 id="4-Compose重组是乐观的操作"><a href="#4-Compose重组是乐观的操作" class="headerlink" title="4.Compose重组是乐观的操作"></a>4.Compose重组是乐观的操作</h3><p>只要Compose认为可组合项中的数据或状态发生了改变，就会开始重组。重组是个乐观的操作，所以Compose会预计在下一次改变发生前完成重组。但是如果在重组完成前再次发生变化时，Compose会取消当前的重组，并使用新数据重新开始重组。 并且取消重组后，Compose 会从重组中舍弃界面树。如有任何附带效应依赖于显示的界面，那么即使取消了组成操作，也会应用该附带效应。这可能会导致应用状态不一致。需要确保所有可组合函数和 lambda 都幂等且没有附带效应，以处理乐观的重组。</p>
+<h1 id="三-在Compose重组中保存状态值-remember"><a href="#三-在Compose重组中保存状态值-remember" class="headerlink" title="三.在Compose重组中保存状态值(remember)"></a>三.在Compose重组中保存状态值(remember)</h1><p>上文说到Compose声明式UI不像以前可以通过setText会自动更新UI，它需要向可组合函数传入新的状态值来触发重组，从而生成新的UI。Compose提供了remember，remember的作用是将该状态存储在 Composition 中，当重组发生的时候会自动丢弃原先的对象转而使用改变状态后的值。remember 既可用于存储可变对象，又可用于存储不可变对象。remember 会将对象存储在组合中，当调用 remember 的可组合项从组合中移除后，它会忘记该对象。</p>
+<blockquote>
+<p>虽然 remember 可帮助您在重组后保持状态，但不会帮助您在配置例如旋转屏幕等情况更改后保持状态。在这种情况下，必须使用 rememberSaveable。rememberSaveable 会自动保存可保存在 Bundle 中的任何值。对于其他值，您可以将其传入自定义 Saver 对象。</p>
+</blockquote>
+<h1 id="四-在Compose中创建可观察的状态-MutableState"><a href="#四-在Compose中创建可观察的状态-MutableState" class="headerlink" title="四.在Compose中创建可观察的状态(MutableState)"></a>四.在Compose中创建可观察的状态(MutableState)</h1><p>在Compose实际编程中，当数据发生变更后，怎么去通知刷新界面?Compose通过可观察的状态，来触发可组合函数的重组。Compose将状态的显示与状态的存储和更改解耦，通过观察者模式来驱动界面变化。<br>mutableStateOf 会创建可观察的 MutableState<T>:</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">interface</span> <span class="hljs-symbol">MutableState</span>&lt;<span class="hljs-symbol">T</span>&gt; : <span class="hljs-symbol">State</span>&lt;<span class="hljs-symbol">T</span>&gt; &#123;<br>    <span class="hljs-keyword">override</span> var value: T<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>value如有任何更改，系统会通知所有订阅了该可观察对象的可组合函数，并触发它们的重组。简单来说就是只要对 MutableState 的 value 进行改变就会引起用到该状态的 composable 方法重组。<br>例如:</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-title">var</span> <span class="hljs-class"><span class="hljs-keyword">data</span> = remember &#123; <span class="hljs-title">mutableStateOf</span>(&quot;&quot;)&#125;</span><br></code></pre></td></tr></table></figure>
+<p>上述代码中data就是一个MutableState对象，每当data.value值发生改变的时候，系统就会重组ui。</p>
+<p>在可组合项中声明 MutableState 对象的方法有三种：</p>
+<ul>
+<li><code>val mutableState = remember &#123; mutableStateOf(default) &#125;</code></li>
+<li><code>var value by remember &#123; mutableStateOf(default) &#125;</code></li>
+<li><code>val (value, setValue) = remember &#123; mutableStateOf(default) &#125;</code></li>
+</ul>
+<p>这三种写法是等效的，以语法糖的形式针对状态的不同用法提供。</p>
+<blockquote>
+<p>Compose 的核心内容就是响应 state 状态的改变，Compose 通过调用 Composable 函数可以将 state 展示在 UI 上，Compose 本身也提供了MutableState等工具去观察 state 的变化，从而可以自动地回调重组UI。</p>
+</blockquote>
+<p>MutableState需要结合remember进行使用，remember 将该状态存储在 Composition 中，当重组发生的时候会自动丢弃原先的对象转而使用改变状态后的值。只要对 MutableState 的 value 进行改变就会引起用到该状态的 composable 方法重组。<br>例如:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs stylus">@Composable<br>fun <span class="hljs-built_in">Greeting</span>() &#123;<br>    <span class="hljs-selector-tag">var</span> info by remember &#123; <span class="hljs-built_in">mutableStateOf</span>(<span class="hljs-string">&quot;&quot;</span>) &#125;<br>    <span class="hljs-built_in">Column</span>(modifier = Modifier<span class="hljs-selector-class">.padding</span>(<span class="hljs-number">16</span>.dp)) &#123;<br>        <span class="hljs-keyword">if</span> (info<span class="hljs-selector-class">.isNotEmpty</span>()) &#123;<br>            <span class="hljs-built_in">Text</span>(<span class="hljs-selector-tag">text</span> = info)<br>        &#125;<br>        <span class="hljs-built_in">OutlinedTextField</span>(<br>            value = info,<br>            onValueChange = &#123;<br>                info = it<br>            &#125;,<br>            <span class="hljs-selector-tag">label</span> = &#123; <span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;标题&quot;</span>) &#125;<br>        )<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>这里的功能很简单，就是在 OutlinedTextField 中用键盘输入的内容如果不为空就能够实时显示在上方，主要是通过 <code>var info by remember &#123; mutableStateOf(&quot;&quot;) &#125;</code> 来进行通知改变的，当 变量的值发生了改变的时候，Compose 就会刷新使用到这个变量的组件，对应的组件状态也会发生改变，所以在使用 Compose 的时候只需要更新数据就可以了。</p>
+<blockquote>
+<p>但是 remember 只能在重组的时候保存状态，一旦其他情况如屏幕旋转等 Configuration 发生改变的时候 remember 就无能为力了，这时候就需要使用 rememberSaveable。只要是 Bundle 类型的数据，rememberSaveable 就能够自动保存。</p>
+</blockquote>
+<h1 id="五-使用rememberSaveable保存状态及恢复态"><a href="#五-使用rememberSaveable保存状态及恢复态" class="headerlink" title="五.使用rememberSaveable保存状态及恢复态"></a>五.使用rememberSaveable保存状态及恢复态</h1><p>remember可以帮助我们在界面重组的时候保存状态，而rememberSaveable可以帮助我们存储配置更改(重新创建activity或进程)时的状态。使用rememberSaveable来存储UI的状态变量， 可以在activity或进程重新创建、可组合函数的重绘过程中保存状态。</p>
+<h3 id="1-Parcelize"><a href="#1-Parcelize" class="headerlink" title="1.Parcelize"></a>1.Parcelize</h3><p>所有能被添加到Bundle中的数据都会自动保存。如果你想保存一些无法被添加到Bundle中的数据，可以用下列方法：对该对象的类加上注解 @Parcelize。<br>例如下面的代码定义了一个Persion数据类型实现了Parcelable接口，就可以使用rememberSaveable保存状态:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Parcelize</span><br><span class="hljs-keyword">data</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Persion</span>(<span class="hljs-keyword">val</span> name: String, <span class="hljs-keyword">val</span> country: String) : Parcelable<br><br><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">PersionScreen</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">var</span> selectedCity = rememberSaveable &#123; mutableStateOf(Persion(<span class="hljs-string">&quot;zhangsan&quot;</span>, <span class="hljs-string">&quot;china&quot;</span>))&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-MapSaver"><a href="#2-MapSaver" class="headerlink" title="2.MapSaver"></a>2.MapSaver</h3><p>如果不方便使用@Parcelize，可以用mapSaver自定义转换规则，把一个对象转变成一系列键值对，这些键值对可以存入Bundle</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">data</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Persion</span>(<span class="hljs-keyword">val</span> name: String, <span class="hljs-keyword">val</span> country: String)<br><br><span class="hljs-keyword">val</span> PersionSaver = run &#123;<br>    <span class="hljs-keyword">val</span> nameKey = <span class="hljs-string">&quot;Name&quot;</span><br>    <span class="hljs-keyword">val</span> countryKey = <span class="hljs-string">&quot;Country&quot;</span><br>    mapSaver(<br>        save = &#123; mapOf(nameKey to it.name, countryKey to it.country) &#125;,<br>        restore = &#123; Persion(it[nameKey] <span class="hljs-keyword">as</span> String, it[countryKey] <span class="hljs-keyword">as</span> String) &#125;<br>    )<br>&#125;<br><br><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">PersionScreen</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">var</span> selectedPersion = rememberSaveable(stateSaver = PersionSaver) &#123;<br>        mutableStateOf(Persion(<span class="hljs-string">&quot;zhangsan&quot;</span>, <span class="hljs-string">&quot;china&quot;</span>))<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-ListSaver"><a href="#3-ListSaver" class="headerlink" title="3.ListSaver"></a>3.ListSaver</h3><p>如果不想定义键值，可以用listSaver替代，它默认用索引作为键值</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs angelscript">data <span class="hljs-keyword">class</span> <span class="hljs-symbol">Persion</span>(<span class="hljs-symbol">val</span> <span class="hljs-symbol">name: <span class="hljs-symbol">String</span>, <span class="hljs-symbol">val</span></span> <span class="hljs-symbol">country: <span class="hljs-symbol">String</span></span>)<br><br><span class="hljs-symbol">val</span> <span class="hljs-symbol">PersionSaver</span> = <span class="hljs-symbol">listSaver</span>&lt;<span class="hljs-symbol">City, <span class="hljs-symbol">Any</span></span>&gt;(<br>    <span class="hljs-symbol">save</span> = &#123; listOf(it.name, it.country) &#125;,<br>    restore = &#123; Persion(it[<span class="hljs-number">0</span>] as String, it[<span class="hljs-number">1</span>] as String) &#125;<br>)<br><br>@Composable<br>fun PersionScreen() &#123;<br>    var selectedPersion = rememberSaveable(stateSaver = PersionSaver) &#123;<br>        mutableStateOf(Persion(<span class="hljs-string">&quot;zhangsan&quot;</span>, <span class="hljs-string">&quot;china&quot;</span>))<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="六-Compose支持的其他状态工具-Livedata、Flow、RxJava-转换为状态"><a href="#六-Compose支持的其他状态工具-Livedata、Flow、RxJava-转换为状态" class="headerlink" title="六.Compose支持的其他状态工具(Livedata、Flow、RxJava 转换为状态)"></a>六.Compose支持的其他状态工具(Livedata、Flow、RxJava 转换为状态)</h1><p>Jetpack Compose并不强制开发者使用<code>MutableState&lt;T&gt;</code>来管理状态，它还支持其他类型的可观察对象。 但是在使用这些其他类型的对象时，必须转型为State<T>类型，好让Jetpack Compose能在它们变化时自动给重绘相关组件，例如使用 LiveData 就要在 Composable 方法使用它之前转换成 tate 类型，可以使用<code>LiveData&lt;T&gt;.observeAsState()</code>。<br>常见的可观察对象如:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#(kotlinx.coroutines.flow.StateFlow).collectAsState(kotlin.coroutines.CoroutineContext)">LiveData</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary">Flow</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/rxjava2/package-summary">RxJava2</a><br>这三个框架是安卓常用的三个响应式开发框架，都支持转化为State对象，以 LiveData 举例，如下代码可以转化为一个 State：<figure class="highlight julia"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs julia"><span class="hljs-keyword">import</span> androidx.compose.material.<span class="hljs-built_in">Text</span><br><span class="hljs-keyword">import</span> androidx.compose.runtime.livedata.observeAsState<br><br>val value: <span class="hljs-built_in">String</span>? by liveData.observeAsState()<br><span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Value is <span class="hljs-variable">$value</span>&quot;</span>)<br></code></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p>另外，如果你使用的是自定义的可观察类型，可以通过为Jetpack Compose新增一个扩展方法的形式来使用它们。</p>
+</blockquote>
+<p>注意:</p>
+<ul>
+<li>State 类型的变量作为可组合函数的入参后，该变量的改变会自动触发该组件的重绘。</li>
+<li>如果用其他类型的可观察变量作为入参，比如LiveData，必须先转型为State<T>。你可以用扩展函数来实现这一点，比如LiveData<T>.observeAsState()</li>
+<li>可变对象不能作为Compose中的状态变量，比如 ArrayList<T> 或 mutableListOf()，在 Compose 中将可变对象(如 ArrayList<T> 或 mutableListOf())用作状态会导致用户在您的应用中看到不正确或陈旧的数据。</li>
+<li>可变对象并不是可观察的对象，不可观察的可变对象(如 ArrayList<T> 或可变数据类)不能由 Compose 观察，因而 Compose 不能在它们发生变化时触发重组。你可以用State&lt;List<T>&gt;替代，或者干脆用不可变的对象如listOf()。</li>
+</ul>
+<blockquote>
+<p>建议使用可观察的数据存储器(如 State&lt;List<T>&gt;)和不可变的 listOf()，而不是使用不可观察的可变对象。</p>
+</blockquote>
+<h1 id="七-有状态和无状态组合函数"><a href="#七-有状态和无状态组合函数" class="headerlink" title="七.有状态和无状态组合函数"></a>七.有状态和无状态组合函数</h1><p>Compose使用 remember 存储内部状态，使可组合函数变成有状态的。 使用 remember、rememberSaveState 方法保存状态的组合项是有状态组合，反之则是无状态组合。也就是说一个UI组合中包含了状态就是有状态组合，如果不包含状态就是无状态组合。<br>无状态组合:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">HelloScreen</span><span class="hljs-params">()</span></span>&#123;<br>    Text(<span class="hljs-string">&quot;Hello Compose!&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>有状态组合:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">CounterScreen</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">var</span> count <span class="hljs-keyword">by</span> remember &#123; mutableStateOf(<span class="hljs-number">0</span>) &#125;<br>    Button(onClick = &#123; count++ &#125;) &#123;<br>        Text(<span class="hljs-string">&quot;I&#x27;ve been clicked <span class="hljs-variable">$count</span> times&quot;</span>)<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>Compose使用 remember 存储内部状态，使可组合函数变成有状态的。 无状态的可组合函数不持有任何状态变量，例如上面例子中的HelloScreen。上面的例子中，CounterScreen 就是个有状态的可组合函数，其内部持有并自动修改count属性的值。 这在调用者不需要控制组件的状态的情况下非常有用。但是这样的可组合函数不容易复用和测试。解决方法是可以通过状态提升来解决这样的问题。</p>
+<h1 id="八-状态提升"><a href="#八-状态提升" class="headerlink" title="八.状态提升"></a>八.状态提升</h1><h3 id="1-可组合函数状态提升"><a href="#1-可组合函数状态提升" class="headerlink" title="1.可组合函数状态提升"></a>1.可组合函数状态提升</h3><p>Compose中的状态提升是一种编程范式，指把可组合函数的状态变量提升到它的调用者里，来使该可组合函数本身是无状态的。Compose通用的状态提升方法是将一个状态变量用两个参数替代：</p>
+<ul>
+<li>value: T: 当前要展示的状态变量值。</li>
+<li>onValueChange: (T) -&gt; Unit: 该状态变量发生改变的事件，T是建议的新值。<blockquote>
+<p>当然，Compose并不限制你一定用onValueChange，可以用lambda表达式自定义你需要的事件形式。</p>
+</blockquote>
+</li>
+</ul>
+<p>状态提升有一些重要的特征</p>
+<ul>
+<li>单一数据源: 通过提升状态而不是复制状态，可以确保状态来源是唯一的，有助于减少bug</li>
+<li>封装性: 只有有状态的可组合函数才能修改状态。</li>
+<li>可共享的: 被提升的状态变量可以同时用于多个可组合函数。比如上例中，我们希望在多个可组合函数中使用name变量。</li>
+<li>可拦截的: 可组合函数的调用者接收到状态变量的改变这一事件后，可以选择忽略本次事件，或者修改该事件。</li>
+<li>解耦的: 被提升的状态变量可以存储在任意位置，比如ViewModel中。</li>
+</ul>
+<p>如下代码是官方关于状态提升的代码：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">HelloScreen</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-comment">//1.状态  等待事件向上流动修改状态。</span><br>    <span class="hljs-keyword">var</span> name <span class="hljs-keyword">by</span> rememberSaveable &#123; mutableStateOf(<span class="hljs-string">&quot;&quot;</span>) &#125;<br><br>    HelloContent(name = name, onNameChange = &#123; name = it &#125;)<br>&#125;<br><br><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">HelloContent</span><span class="hljs-params">(name: <span class="hljs-type">String</span>, onNameChange: (<span class="hljs-type">String</span>) -&gt; <span class="hljs-type">Unit</span>)</span></span> &#123;<br>    Column(modifier = Modifier.padding(<span class="hljs-number">16.</span>dp)) &#123;<br>        Text(<br>            text = <span class="hljs-string">&quot;Hello, <span class="hljs-variable">$name</span>&quot;</span>,<br>            modifier = Modifier.padding(bottom = <span class="hljs-number">8.</span>dp),<br>            style = MaterialTheme.typography.h5<br>        )<br>        OutlinedTextField(<br>            value = name,<br>            <span class="hljs-comment">//2.事件,触发之后向上流动去修改1中的状态</span><br>            onValueChange = onNameChange,<br>            label = &#123; Text(<span class="hljs-string">&quot;Name&quot;</span>) &#125;<br>        )<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>本例代码中 HelloContent 是无状态的，它的状态被提升到了 HelloScreen 中，HelloContent 有name和onNameChange两个参数，name 是状态，通过 HelloScreen 组合项传给 HelloContent而 HelloContent 中发生的更改它也不能自己进行处理，必须将更改传给HelloScreen进行处理并重组界面。 通过状态提升，HelloContent更容易复用和测试，同时和它的状态变量是如何保存的解耦开来。这种解耦意味着当我们修改或者替换HelloScreen时，不用修改HelloContent的实现。</p>
+<p><img src="/images/d768c945c42086a9b3f8def4ee61b882.webp" srcset="/img/loading.gif" lazyload></p>
+<p>以上的逻辑也叫做：状态下降，事件上升。上例中，状态量从HelloScreen流向HelloContent，而事件则反向传递。 遵循这种编程模式，你可以将展示UI的可组合函数与存储状态变量解耦开来。</p>
+<p>提升状态的三条原则:</p>
+<ul>
+<li>状态变量至少被提升到所有使用了该状态变量的可组合函数的最近的调用者处。</li>
+<li>状态变量应该被提升到它有可能被改变的最高层次。</li>
+<li>如果两个状态变量会被同一个事件所更改，它们应该被一起提升。</li>
+</ul>
+<blockquote>
+<p>你可以把状态提升得更高，但最低也不能低于这三条准则，否则就很难维护单向数据流的概念。</p>
+</blockquote>
+<h3 id="2-单向数据流"><a href="#2-单向数据流" class="headerlink" title="2.单向数据流"></a>2.单向数据流</h3><ol>
+<li><code>状态(state)</code>: 任何可以随时间变化的值。</li>
+<li><code>事件(event)</code>: 通知程序发生了什么事情。</li>
+<li><code>单向数据流模式(unidirectional data flow)</code>: 指的是向下传递状态，向上传递事件的设计模式。</li>
+</ol>
+<p>上文这种状态向下传递，事件向上传递的方式被叫作单向数据流，在 Compose 应用中使用的常见可观察类型包括 State、LiveData、StateFlow、Flow 和 Observable。通过状态订阅<code>val name  = mutableStateOf(&quot;Hello World!&quot;)</code>name.value可以被订阅，值的更新可引起组件重绘。在 Jetpack Compose 中，状态和事件是分开的。状态表示可更改的值，而事件表示有情况发生的通知。通过将状态与事件分开，可以将状态的显示与状态的存储和更改方式解耦。动态的 @Composable 元素由上层传递的数据所控制，交互事件通过 Block 的方式再传回上层，通过在上层更新数据，从而实现 UI 的动态更新。数据传递是自上而下的，交互事件的传递是自下而上的。</p>
+<p>按照这种逻辑，如果我们需要用到ViewModel来管理状态，则需要在 ViewModel 中定义可变的数据，同时定义好修改数据的方法，把数据自上而下传递到实际的 UI 中，然后将 UI 的交互事件向上传递，通过执行最上层 ViewModel 中修改数据的方法，更新数据。</p>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="https://docs.compose.net.cn/">compose资料</a><br><a target="_blank" rel="noopener" href="https://developer.android.com/jetpack/compose/documentation?hl=zh-cn">Compose UI官方文档</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/user/4125023359205742/posts">Android全新UI编程 - Jetpack Compose 超详细教程</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/93d8a384a8a0">JetPack Compose 之 state</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/lbs458499563">Jetpack-Compose 学习笔记</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_37667770/article/details/114542808">Jetpack-Compose</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/Mr_Tony/article/details/118858756">Compose的State(九)</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/ljjliujunjie123/article/details/120935611">Compose系列 三 状态管理</a><br><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000041149397">Android Compose 的使用</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/428047484">JetPack Compose从初探到实战</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903999347359751">原创|Android Jetpack Compose 最全上手指南</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6877056735018745863">Android Jetpack Compose 超快速上手指南</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/JetpackCompose/" class="category-chain-item">JetpackCompose</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Jetpack-Compose之二状态管理</div>
+      <div>http://example.com/2022/01/07/Jetpack-Compose之二状态管理/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年1月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/01/10/%E9%BB%91%E8%8B%B9%E6%9E%9C%E5%BC%95%E5%AF%BC%E8%BD%AF%E4%BB%B6%E4%B9%8BOpenCore/" title="黑苹果引导软件之OpenCore">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">黑苹果引导软件之OpenCore</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/12/30/Jetpack-Compose%E4%B9%8B%E4%B8%80%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/" title="Jetpack-Compose之一基础使用">
+                        <span class="hidden-mobile">Jetpack-Compose之一基础使用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

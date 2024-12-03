@@ -1,0 +1,710 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="实现即时通讯IM的方式一. 使用第三方IM服务对于短平快的公司，完全可以采用第三方SDK来实现。国内IM的第三方服务商有很多，类似云信、环信、融云、LeanCloud，当然还有其它的很多，这里就不一一举例了，感兴趣的小伙伴可以自行查阅下。第三方服务商IM底层协议基本上都是TCP。他们的IM方案很成熟，有了它们，我们甚至不需要自己去搭建IM后台，什么都不需要去考虑。如果你甚至连UI都不需要自己做，这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android即时通讯Im开发总结">
+<meta property="og:url" content="http://example.com/2022/09/23/Android%E5%8D%B3%E6%97%B6%E9%80%9A%E8%AE%AFIm%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="实现即时通讯IM的方式一. 使用第三方IM服务对于短平快的公司，完全可以采用第三方SDK来实现。国内IM的第三方服务商有很多，类似云信、环信、融云、LeanCloud，当然还有其它的很多，这里就不一一举例了，感兴趣的小伙伴可以自行查阅下。第三方服务商IM底层协议基本上都是TCP。他们的IM方案很成熟，有了它们，我们甚至不需要自己去搭建IM后台，什么都不需要去考虑。如果你甚至连UI都不需要自己做，这">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:23:36.825Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Android即时通讯Im开发总结 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Android即时通讯Im开发总结"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-23 00:00" pubdate>
+          2022年9月23日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Android即时通讯Im开发总结</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="实现即时通讯IM的方式"><a href="#实现即时通讯IM的方式" class="headerlink" title="实现即时通讯IM的方式"></a>实现即时通讯IM的方式</h1><h3 id="一-使用第三方IM服务"><a href="#一-使用第三方IM服务" class="headerlink" title="一. 使用第三方IM服务"></a>一. 使用第三方IM服务</h3><p>对于短平快的公司，完全可以采用第三方SDK来实现。国内IM的第三方服务商有很多，类似云信、环信、融云、LeanCloud，当然还有其它的很多，这里就不一一举例了，感兴趣的小伙伴可以自行查阅下。<br>第三方服务商IM底层协议基本上都是TCP。他们的IM方案很成熟，有了它们，我们甚至不需要自己去搭建IM后台，什么都不需要去考虑。如果你甚至连UI都不需要自己做，这些第三方有各自一套IM的UI，拿来就可以直接用。<br>但是缺点也很明显，定制化程度不太高，很多东西我们不可控。当然还有一个最最重要的一点，就是太贵了…作为真正社交为主打的APP，仅此一点，就足以让我们望而却步。 当然，如果IM对于APP只是一个辅助功能，那么用第三方服务也无可厚非。<br>主流的第三方IM服务:</p>
+<ul>
+<li>环信IM。</li>
+<li>融云IM。</li>
+<li>野火IM(半开源)。</li>
+</ul>
+<h3 id="二-自己实现"><a href="#二-自己实现" class="headerlink" title="二. 自己实现"></a>二. 自己实现</h3><p>自己实现大约有三种方案:</p>
+<ul>
+<li>客户端不断通过http轮询服务端获取消息(不建议)。</li>
+<li>使用第三方推送服务将消息推送到客户端(不建议)。</li>
+<li>自己使用长连接技术保持和服务端的连接获取到消息(建议)。</li>
+</ul>
+<h4 id="1-客户端轮询"><a href="#1-客户端轮询" class="headerlink" title="1. 客户端轮询"></a>1. 客户端轮询</h4><p>客户端不断的查询服务器，检索新内容。这种方式的缺点十分明显，如果轮询频率过快，会大量消耗网络带宽和电池；</p>
+<h4 id="2-第三方消息推送"><a href="#2-第三方消息推送" class="headerlink" title="2. 第三方消息推送"></a>2. 第三方消息推送</h4><p>利用推送的及时性来做im也是可以的。<br>在推送这一分支领域有许许多多的第三方推送服务，例如：极光，个推等。<br><strong>优点</strong>：集成方便。<br><strong>缺点</strong>：大量推送数据后，付费服务是在所难免。而且因为是通用共享云，所以你的服务质量是否有保证，也就不能要求太多了，必竟你一毛钱也没出或者也不打算出。</p>
+<h4 id="3-客户端和服务端长连接"><a href="#3-客户端和服务端长连接" class="headerlink" title="3. 客户端和服务端长连接"></a>3. 客户端和服务端长连接</h4><h1 id="三-长连接"><a href="#三-长连接" class="headerlink" title="三.长连接"></a>三.长连接</h1><h3 id="1-传输协议的选择"><a href="#1-传输协议的选择" class="headerlink" title="1.传输协议的选择"></a>1.传输协议的选择</h3><ul>
+<li>基于Scoket原生：代表框架 CocoaAsyncSocket。</li>
+<li>基于WebScoket：代表框架 SocketRocket。</li>
+<li>基于MQTT：代表框架 MQTTKit。</li>
+<li>基于XMPP：代表框架 XMPPFramework。</li>
+</ul>
+<h3 id="2-IM传输格式的选择"><a href="#2-IM传输格式的选择" class="headerlink" title="2.IM传输格式的选择"></a>2.IM传输格式的选择</h3><h5 id="1-JSON"><a href="#1-JSON" class="headerlink" title="(1.)JSON"></a>(1.)JSON</h5><h5 id="2-Protobuf"><a href="#2-Protobuf" class="headerlink" title="(2.)Protobuf"></a>(2.)Protobuf</h5><p>ProtoBuf是Google的一个开源项目。作用于数据存储、数据通信和语言无关平台无关，扩展便捷。它是一个灵活、高效、自动化的序列化和结构化数据格式，比XML协议的数据格式更小，更快和更简单。<br>你可以定义你想要的数据结构，然后使用ProtoBuf提供的编译器生成相应平台的源代码，编译器自动化会生成读写你结构化数据代码，然后可以把源码应用于各种语言，你甚至可以在更新数据结构情况下不破坏已经部署基于老格式编译程序。<br>Google Protocol Buffers 简称 Protobuf，类似 json 或 XML，是一种序列化结构数据的机制，但是比它们更小、更快、更简单。同时支持多语言，跨平台。 目前主要有两个大版本：proto2 和 proto3。 其中 proto2 支持 Java、Python、 Objective-C、和 C++。 proto3 增加了对Go、JavaNano、Ruby、和 C#的支持。</p>
+<p><strong>优点</strong>:</p>
+<ul>
+<li>传输效率快（序列化后体积较小）</li>
+<li>支持跨平台多语言</li>
+<li>序列化&#x2F;反序列化速度很快</li>
+</ul>
+<p><strong>缺点</strong>:</p>
+<ul>
+<li>可读性较差（二进制格式）</li>
+<li>缺乏自描述</li>
+<li>使用不太方便（貌似找不到支持原生c语言的protobuf，大都是经过别人编译后的库）</li>
+</ul>
+<p><strong>适用场景</strong>:</p>
+<ul>
+<li>数据量大并且要求传输效率较高的场景。</li>
+</ul>
+<h4 id="3-重连机制-心跳"><a href="#3-重连机制-心跳" class="headerlink" title="3. 重连机制(心跳)"></a>3. 重连机制(心跳)</h4><h1 id="四-推送"><a href="#四-推送" class="headerlink" title="四.推送"></a>四.推送</h1><h3 id="1-自己做推送进行保活-不建议保活难度大且随着系统升级会失效"><a href="#1-自己做推送进行保活-不建议保活难度大且随着系统升级会失效" class="headerlink" title="1.自己做推送进行保活(不建议保活难度大且随着系统升级会失效)"></a>1.自己做推送进行保活(不建议保活难度大且随着系统升级会失效)</h3><h3 id="2-使用第三方推送"><a href="#2-使用第三方推送" class="headerlink" title="2.使用第三方推送"></a>2.使用第三方推送</h3><ul>
+<li>极光推送</li>
+<li>个推</li>
+<li>友盟推送</li>
+<li>阿里推送</li>
+</ul>
+<p><strong>优点</strong>:</p>
+<ul>
+<li>集成方便</li>
+</ul>
+<p><strong>缺点</strong>:</p>
+<ul>
+<li>收费</li>
+<li>sdk推动黑产行为</li>
+</ul>
+<h3 id="3-开源框架"><a href="#3-开源框架" class="headerlink" title="3.开源框架"></a>3.开源框架</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/xuexiangjys/XPush">XPush</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/taoweiji/MixPush">MixPush</a></li>
+</ul>
+<p>参考资料：<br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903815846559757">开源一个自用的Android IM库，基于Netty+TCP+Protobuf实现</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u011518806/article/details/83586692?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522161128240716780255282263%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=161128240716780255282263&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_v2~rank_v29-2-83586692.pc_search_result_cache&utm_term=%E5%8D%B3%E6%97%B6%E9%80%9A%E8%AE%AF&spm=1018.2226.3001.4187">即时通讯</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/74649303">自已开发IM有那么难吗？手把手教你自撸一个Andriod版简易IM (有源码)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/smile__dream/article/details/105681018">Android 开源的IM SDK，基于Netty+TCP+Protobuf+Okhttp设计思路实现的一款可定制化的开源库</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6850037279839387662#heading-6">跟我一起开发商业级IM（1）—— 技术选型及协议定义</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6858448694644703246#heading-12">跟我一起开发商业级IM（2）—— 接口定义及封装</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2dbb360886a8">iOS即时通讯，从入门到“放弃”？</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/elesos/article/details/82021493?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522161128240716780255282263%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=161128240716780255282263&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_v2~rank_v29-4-82021493.pc_search_result_cache&utm_term=%E5%8D%B3%E6%97%B6%E9%80%9A%E8%AE%AF&spm=1018.2226.3001.4187">即时通信（IM）和实时通信（RTC）的区别</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/netease_im/article/details/80804071?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522161128363316780274130920%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=161128363316780274130920&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_v2~rank_v29-11-80804071.pc_search_result_cache&utm_term=Android%20IM&spm=1018.2226.3001.4187">Android 即时通讯开发小结（一）</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/ca4aeabf55f6">通讯协议与即时通讯</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6862238253194412039">Android Protobuf 使用初探</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903555493527565">即时通讯IM技术领域提高篇</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6920147277906444301">IM即时通讯</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8cd908148f9e">IM 即时通讯技术在多应用场景下的技术实现，以及性能调优（ iOS 视角）（附 PPT 与 2 个半小时视频）</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.52im.net/thread-281-1-1.html">为什么说基于TCP的移动端IM仍然需要心跳保活？</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Android即时通讯Im开发总结</div>
+      <div>http://example.com/2022/09/23/Android即时通讯Im开发总结/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年9月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/10/03/Android%E9%A1%B9%E7%9B%AEGadle%E7%BB%9F%E4%B8%80%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/" title="Android项目Gadle统一依赖管理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Android项目Gadle统一依赖管理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/09/18/Android%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1Services%E5%92%8CWorkManager%E6%80%BB%E7%BB%93/" title="Android后台任务Services和WorkManager总结">
+                        <span class="hidden-mobile">Android后台任务Services和WorkManager总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

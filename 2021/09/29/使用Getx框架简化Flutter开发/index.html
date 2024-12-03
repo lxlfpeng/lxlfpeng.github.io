@@ -1,0 +1,866 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一. GetX的作用GetX 是 Flutter 上的一个轻量且强大的解决方案,包含了以下的功能.  页面状态管理(跨页面交互) 路由管理 国际化、主题的适配 全局BuildContext 无Context弹窗 依赖注入  二. GetX安装GetX 1. 引入GetX依赖在pubspec.yaml文件中添加Getx依赖: 1get: ^4.x.x 2. GetX入口配置各模块导包，均使用下面包即">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Getx框架简化Flutter开发">
+<meta property="og:url" content="http://example.com/2021/09/29/%E4%BD%BF%E7%94%A8Getx%E6%A1%86%E6%9E%B6%E7%AE%80%E5%8C%96Flutter%E5%BC%80%E5%8F%91/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一. GetX的作用GetX 是 Flutter 上的一个轻量且强大的解决方案,包含了以下的功能.  页面状态管理(跨页面交互) 路由管理 国际化、主题的适配 全局BuildContext 无Context弹窗 依赖注入  二. GetX安装GetX 1. 引入GetX依赖在pubspec.yaml文件中添加Getx依赖: 1get: ^4.x.x 2. GetX入口配置各模块导包，均使用下面包即">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:55:46.665Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>使用Getx框架简化Flutter开发 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="使用Getx框架简化Flutter开发"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-09-29 00:00" pubdate>
+          2021年9月29日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          61 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">使用Getx框架简化Flutter开发</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-GetX的作用"><a href="#一-GetX的作用" class="headerlink" title="一. GetX的作用"></a>一. GetX的作用</h1><p>GetX 是 Flutter 上的一个轻量且强大的解决方案,包含了以下的功能.</p>
+<ul>
+<li>页面状态管理(跨页面交互)</li>
+<li>路由管理</li>
+<li>国际化、主题的适配</li>
+<li>全局BuildContext 无Context弹窗</li>
+<li>依赖注入</li>
+</ul>
+<h1 id="二-GetX安装"><a href="#二-GetX安装" class="headerlink" title="二. GetX安装"></a>二. GetX安装</h1><p><a target="_blank" rel="noopener" href="https://pub.dev/packages/get">GetX</a></p>
+<h3 id="1-引入GetX依赖"><a href="#1-引入GetX依赖" class="headerlink" title="1. 引入GetX依赖"></a>1. 引入GetX依赖</h3><p>在pubspec.yaml文件中添加Getx依赖:</p>
+<figure class="highlight gml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gml">get: ^<span class="hljs-number">4.</span><span class="hljs-variable language_">x</span>.<span class="hljs-variable language_">x</span><br></code></pre></td></tr></table></figure>
+<h3 id="2-GetX入口配置"><a href="#2-GetX入口配置" class="headerlink" title="2. GetX入口配置"></a>2. GetX入口配置</h3><p>各模块导包，均使用下面包即可</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">import &#x27;package:<span class="hljs-keyword">get</span>/<span class="hljs-keyword">get</span>.dart&#x27;;<br></code></pre></td></tr></table></figure>
+<p>只需要将MaterialApp改成GetMaterialApp便可以使用GetX提供的相关功能.</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs scala">void main() &#123;<br>  runApp(<span class="hljs-type">MyApp</span>());<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyApp</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>&#123;<br>  <span class="hljs-meta">@override</span><br>  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-type">GetMaterialApp</span>(<br>      home: <span class="hljs-type">HomePage</span>(),<br>    );<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>GetMaterialApp还可以配置如下设置:</p>
+<ul>
+<li>initialRoute: ‘&#x2F;‘, &#x2F;&#x2F;根路由</li>
+<li>getPages: Pages.routes, &#x2F;&#x2F; 配置路由</li>
+<li>defaultTransition:</li>
+<li>Utils.isIOS() ? Transition.native : Transition.rightToLeft, &#x2F;&#x2F; 转场动画</li>
+<li>themeMode: ThemeMode.system, &#x2F;&#x2F; 主题</li>
+</ul>
+<h1 id="三-GetX控制器GetxController"><a href="#三-GetX控制器GetxController" class="headerlink" title="三. GetX控制器GetxController"></a>三. GetX控制器GetxController</h1><p>在介绍状态管理之前我们下来认识Get里面的一个重要的功能Controller.</p>
+<h3 id="1-GetxController的作用"><a href="#1-GetxController的作用" class="headerlink" title="1.GetxController的作用"></a>1.GetxController的作用</h3><p>在开发中如果把UI代码、业务逻辑都放在一起处理，这样对项目的架构、代码的可读性、后期的维护都会造成严重的影响，<br>因此我们需要将逻辑代码写在Controller里面,使得UI代码与业务逻辑分离开来.GetX为我们提供了GetxController,我们只需要继承GetxController<br>就可以实现我们自定义的控制器.</p>
+<h3 id="2-GetxController的简单使用"><a href="#2-GetxController的简单使用" class="headerlink" title="2.GetxController的简单使用"></a>2.GetxController的简单使用</h3><h5 id="1-定义控制器继承自GetxController"><a href="#1-定义控制器继承自GetxController" class="headerlink" title="(1.)定义控制器继承自GetxController"></a>(1.)定义控制器继承自GetxController</h5><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">GetxController</span> </span>&#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="2-Widget中注入实例化控制器并使用"><a href="#2-Widget中注入实例化控制器并使用" class="headerlink" title="(2. )Widget中注入实例化控制器并使用"></a>(2. )Widget中注入实例化控制器并使用</h5><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HomePage</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>&#123;<br>   <br>  <span class="hljs-type">MyController</span> controller = <span class="hljs-type">Get</span>.put&lt;<span class="hljs-type">MyController</span>&gt;(<span class="hljs-type">MyController</span>()); <br><br>  <span class="hljs-meta">@override</span><br>  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) &#123;<br>    <span class="hljs-comment">//MyController controller = Get.put&lt;MyController&gt;(MyController()); (由于StatelessWidget不会多次调用build方法因此可以在build方法里面注入Controller)</span><br>  &#125;  <br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>Get提供了一个简单而强大的依赖管理器，通过依赖注入就能检索到 Controller 并使用，不需要提供上下文，不像其他的状态管理方案需要在 inheritedWidget 的子节点进行。<br>Get.put可以使任何一个子路由使用依赖。所以，如果我们需要访问其他类中的同一个实例，我们可以使用Get.find。当有多个控制器时，使用Get.find也可以指定使用某个具体的控制器。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HomePage</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>&#123;<br>  <span class="hljs-type">MyController</span> controller = <span class="hljs-type">Get</span>.put&lt;<span class="hljs-type">MyController</span>&gt;(<span class="hljs-type">MyController</span>());<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SecondPage</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>&#123;<br>  <span class="hljs-type">MyController</span> controller = <span class="hljs-type">Get</span>.find&lt;<span class="hljs-type">MyController</span>&gt;(); <br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>Get.put()方法详解</strong></p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs maxima">S <span class="hljs-built_in">put</span>&lt;S&gt;(S dependency,<br>        &#123;String? tag,<br>        bool <span class="hljs-built_in">permanent</span> = <span class="hljs-literal">false</span>,<br>        InstanceBuilderCallback&lt;S&gt;? builder&#125;) =&gt;<br>    GetInstance().<span class="hljs-built_in">put</span>&lt;S&gt;(dependency, tag: tag, <span class="hljs-built_in">permanent</span>: <span class="hljs-built_in">permanent</span>);<br></code></pre></td></tr></table></figure>
+<ul>
+<li>dependency 是必传的参数,表示要注入的类.</li>
+<li>tag 在注入多个相同类型的类时,用tag进行区分,比如有两个商品实例，就需要使用tag区分不同的实例。</li>
+<li>permanent 代表是否不销毁。通常Get.put()的实例的生命周期和 put 所在的 Widget 生命周期绑定，如果在全局 （main 方法里）put，那么这个实例就一直存在。如果在一个<br>Widget 里 put ，那么这个那么这个 Widget 从内存中删除，这个实例也会被销毁。</li>
+</ul>
+<p><strong>Get.lazyPut方法详解</strong><br>懒加载一个依赖，只有在使用时才会被实例化。适用于不确定是否会被使用的依赖或者计算高昂的依赖。类似 Kotlin 的 Lazy 代理。</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs coffeescript">Get.lazyPut&lt;LazyController&gt;(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> LazyController());<br></code></pre></td></tr></table></figure>
+<p>LazyController 在这时候并不会被创建，而是等到你使用LazyController的时候才会被 initialized，也就是执行下面代码的时候才 initialized：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">Get.find&lt;LazyController&gt;()<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+<p>在使用后，使用时的 Wdiget 的生命周期结束，也就是这个 Widgetdispose，这个实例就会被销毁。</p>
+<blockquote>
+<p>如果在一个 Widget 里 Get.find，然后退出这个 widget，此时这个实例也会被销毁，再进入另一个路由的 Widget，再次 find，GetX会打印错误信息，提醒没有 put<br>。即使全局注入，也一样。可以理解为，Get.lazyPut 注入的实例的生命周期是和在Get.find时的上下文所绑定。</p>
+</blockquote>
+<h3 id="3-GetxController的生命周期"><a href="#3-GetxController的生命周期" class="headerlink" title="3.GetxController的生命周期"></a>3.GetxController的生命周期</h3><p>GetxController也有生命周期的：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SimpleController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">GetxController</span> </span>&#123;<br>    <span class="hljs-meta">@override</span><br>    void onInit() &#123;<br>      <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> implement onInit</span><br>      print(<span class="hljs-string">&quot;初始化&quot;</span>);<br>      <span class="hljs-keyword">super</span>.onInit();<br>    &#125;<br>    <br>    <span class="hljs-meta">@override</span><br>    void onReady() &#123;<br>      <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> implement onReady</span><br>      print(<span class="hljs-string">&quot;加载完成&quot;</span>);<br>      <span class="hljs-keyword">super</span>.onReady();<br>    &#125;<br>    <br>    <span class="hljs-meta">@override</span><br>    void onClose() &#123;<br>      <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> implement onClose</span><br>      print(<span class="hljs-string">&quot;控制器被释放&quot;</span>);<br>      <span class="hljs-keyword">super</span>.onClose();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>onInit：组件在内存分配后会被马上调用，可以在这个方法对 controller 做一些初始化工作。</li>
+<li>onReady：上一篇我们介绍过，这里是在 onInit 一帧后被调用，适合做一些导航进入的事件，例如对话框提示、SnackBar 或异步网络请求。</li>
+<li>onClose：在 onDelete 方法前调用、用于销毁 controller 使用的资源，例如关闭事件监听，关闭流对象，或者销毁可能造成内存泄露的对象，例如<br>TextEditingController，AniamtionController。也适用于将数据进行离线持久化。</li>
+</ul>
+<h3 id="4-GetxController实现跨页面交互"><a href="#4-GetxController实现跨页面交互" class="headerlink" title="4.GetxController实现跨页面交互"></a>4.GetxController实现跨页面交互</h3><p>例如在A界面处理数据，需要再B界面显示的时候，或者C界面，或者D界面。只要注入了控制器。在其他界面就能拿到A界面的数据。 A界面通过Get.put注入Controller;<br>此刻A界面跳到B Get.to(BPage)； B在跳到C Get.to(CPage)； C在跳到D Get.to(DPage)；D页面需要A界面的数据,可以通过 Get.find找到A界面里注入的Controller进行操作.</p>
+<blockquote>
+<p>Get.put可以使任何一个子路由使用该依赖。所以，如果需要访问其他类中的同一个实例，可以使用Get.find。</p>
+</blockquote>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HomePage</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>&#123;<br>  <span class="hljs-type">Controller</span> controller = <span class="hljs-type">Get</span>.put(<span class="hljs-type">Controller</span>());<br>&#125;<br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SecondPage</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>&#123;<br>  <span class="hljs-type">Controller</span> controller = <span class="hljs-type">Get</span>.find(); <br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="5-GetxController资源释放"><a href="#5-GetxController资源释放" class="headerlink" title="5.GetxController资源释放"></a>5.GetxController资源释放</h3><h5 id="1-GetxController资源释放"><a href="#1-GetxController资源释放" class="headerlink" title="(1.)GetxController资源释放"></a>(1.)GetxController资源释放</h5><p>在我们使用GetX的时候，并没有写代码来对GetxController进行释放，如果用了getx的那一套路由跳转api（Get.to、Get.toName…）之类.在组件被销毁的时候GetxController<br>也会被销毁.在页面中使用GetxController,并且在注入Controller之前在这里打印了一句：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SimplePage</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>&#123;<br>  <span class="hljs-meta">@override</span><br>  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) &#123;<br>    print(&#x27;<span class="hljs-type">SimplePage</span>--&gt;build&#x27;);<br>    <span class="hljs-type">Controller</span> controller = <span class="hljs-type">Get</span>.put(<span class="hljs-type">Controller</span>());<br>    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(<br>        ...    <br>    )<br><br></code></pre></td></tr></table></figure>
+<p>再次打开这个页面，控制台输出：</p>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xl"><span class="hljs-function"><span class="hljs-title">flutter</span>: SimplePage--&gt;</span>build<br>flutter: SimpleController--onInit<br>[GETX] <span class="hljs-string">&quot; SimpleController&quot;</span> has been initialized<br>flutter: SimpleController--onReady<br>S<span class="hljs-function"><span class="hljs-title">implePage</span>-build-&gt;</span>S<span class="hljs-function"><span class="hljs-title">impleController</span>-onInit-&gt;</span>SimpleController-onReady<br></code></pre></td></tr></table></figure>
+<p>关闭当前页面返回：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-selector-attr">[GETX]</span> CLOSE TO ROUTE /SimplePage<br>flutter: SimpleController<span class="hljs-attr">--onClose</span><br><span class="hljs-selector-attr">[GETX]</span> <span class="hljs-string">&quot;SimpleController&quot;</span> <span class="hljs-built_in">onClose</span>() called<br><span class="hljs-selector-attr">[GETX]</span> <span class="hljs-string">&quot;SimpleController&quot;</span> deleted from memory<br><span class="hljs-selector-attr">[GETX]</span> Instance <span class="hljs-string">&quot;SimpleController&quot;</span> already removed.<br></code></pre></td></tr></table></figure>
+
+<p>可以看到SimpleController已经被删除。</p>
+<p>通过上面我们知道跳转页面的时候，GetX会拿你到页面信息存储起来，加以管理，如果不使用GetX提供的路由跳转,在组件销毁时,<br>那么这个GetxController会无法释放.也就是说 GetX虽然各个功能均可单独引用使用，但是状态管理和路由是搭配的，如果没有使用 route_manager<br>组件，那么状态管理的生命周期就会失效。put的Controller在不使用的时候不会再被删除，而变成了应用状态常驻内存里。</p>
+<h5 id="2-GetxController资源未销毁解决"><a href="#2-GetxController资源未销毁解决" class="headerlink" title="(2.)GetxController资源未销毁解决"></a>(2.)GetxController资源未销毁解决</h5><p>未使用GetX提供的路由跳转：直接使用原生路由api的跳转操作,这样会直接导致GetX无法感知对应页面GetxController的生命周期，会导致其无法释放.</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs arcade">Navigator.<span class="hljs-built_in">push</span>(<br>    context,<br>    MaterialPageRoute(builder: <span class="hljs-function">(<span class="hljs-params">context</span>) =&gt;</span> XxxxPage()),<br>);<br></code></pre></td></tr></table></figure>
+
+<p>解决方案是使用StatefulWidget，在这种情况，无法感知生命周期，就需要使用StatefulWidget生命周期在dispose回调处，把当前GetxController从整个GetxController管理链中删除即可:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs scala"><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SimplePage</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatefulWidget</span> </span>&#123;<br>  <span class="hljs-meta">@override</span><br>  _SimplePageState createState() =&gt; _SimplePageState();<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">_SimplePageState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">State&lt;SimplePage&gt;</span> </span>&#123;<br>  <span class="hljs-keyword">final</span> <span class="hljs-type">SimpleController</span> _controller = <span class="hljs-type">Get</span>.put(<span class="hljs-type">SimpleController</span>());<br><br>  <span class="hljs-meta">@override</span><br>  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(<br>      ....<br>    );<br>  &#125;<br><br>  <span class="hljs-meta">@override</span><br>  void dispose() &#123;<br>    <span class="hljs-type">Get</span>.delete&lt;<span class="hljs-type">SimpleController</span>&gt;();<span class="hljs-comment">//将GetxController销毁</span><br>    <span class="hljs-keyword">super</span>.dispose();<br>  &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SimpleController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">GetxController</span> </span>&#123;<br> <br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="四-GetX状态管理"><a href="#四-GetX状态管理" class="headerlink" title="四. GetX状态管理"></a>四. GetX状态管理</h1><h3 id="1-GetBuilder实现状态管理"><a href="#1-GetBuilder实现状态管理" class="headerlink" title="1.GetBuilder实现状态管理"></a>1.GetBuilder实现状态管理</h3><h5 id="1-GetBuilder的使用"><a href="#1-GetBuilder的使用" class="headerlink" title="(1)GetBuilder的使用"></a>(1)GetBuilder的使用</h5><ol>
+<li>用计数器示例来演示一下GetBuilder的基本使用：<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CounterController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">GetxController</span> </span>&#123;<br>  int _counter = <span class="hljs-number">0</span>;<br>  int get counter =&gt; _counter;<br><br>  void increment() &#123;<br>    _counter++;<br>    update();<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+这是一个控制器，有 UI 需要的数据counter和用户点击一次加1的方法。</li>
+<li>在UI 层一个展示的文本和一个按钮：<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-type">HomePage</span> extends <span class="hljs-type">StatelessWidget</span> &#123;</span><br><span class="hljs-class">  @override</span><br><span class="hljs-class">  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> <span class="hljs-title">context</span>) &#123;</span><br><span class="hljs-class">    return <span class="hljs-type">GetBuilder</span>&lt;<span class="hljs-type">CounterController</span>&gt;(</span><br><span class="hljs-class">        <span class="hljs-title">init</span>: <span class="hljs-type">CounterController</span>(),//如果在加载变量的时候使用<span class="hljs-type">Get</span>.put()生成了<span class="hljs-type">CounterController</span>对象，<span class="hljs-type">GetBuilder</span>会自动查找该对象，就可以不使用init参数初始化<span class="hljs-type">Controller</span></span><br><span class="hljs-class">        builder: (<span class="hljs-title">controller</span>) &#123;</span><br><span class="hljs-class">          return <span class="hljs-type">Scaffold</span>(</span><br><span class="hljs-class">            <span class="hljs-title">appBar</span>: <span class="hljs-type">AppBar</span>(<span class="hljs-title">title</span>: <span class="hljs-type">Text</span>(&#x27;计数器&#x27;)),</span><br><span class="hljs-class">            body: <span class="hljs-type">Center</span>(</span><br><span class="hljs-class">              <span class="hljs-title">child</span>: <span class="hljs-type">Text</span>(<span class="hljs-title">controller</span>.<span class="hljs-title">counter</span>.<span class="hljs-title">toString</span>()),</span><br><span class="hljs-class">            ),</span><br><span class="hljs-class">            floatingActionButton: <span class="hljs-type">FloatingActionButton</span>(</span><br><span class="hljs-class">              <span class="hljs-title">onPressed</span>: () &#123;</span><br><span class="hljs-class">                controller.increment();</span><br><span class="hljs-class">              &#125;,</span><br><span class="hljs-class">              child: <span class="hljs-type">Icon</span>(<span class="hljs-type">Icons</span>.<span class="hljs-title">add</span>),</span><br><span class="hljs-class">            ),</span><br><span class="hljs-class">          );</span><br><span class="hljs-class">        &#125;);</span><br><span class="hljs-class">  &#125;</span><br><span class="hljs-class">&#125;</span><br></code></pre></td></tr></table></figure>
+使用了GetBuilder这个 Widget 包裹了页面，在 init初始化CounterController,然后每次点击，都会更新builder对应的 Widget，GetxController通过update()更新GetBuilder。<br>这看起来和别状态管理框架并无不同，有时只想重新 build 需要变化的部分，遵循最小原则，那么我们改下GetBuilder的位置，只包裹 Text:</li>
+<li>局部刷新:<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">class</span> <span class="hljs-selector-tag">HomePage</span> <span class="hljs-selector-tag">extends</span> <span class="hljs-selector-tag">StatelessWidget</span> &#123;<br>  <span class="hljs-variable">@override</span><br>  Widget <span class="hljs-built_in">build</span>(BuildContext context) &#123;<br>    <span class="hljs-selector-tag">print</span>(<span class="hljs-string">&#x27;HomePage--build&#x27;</span>);<br>    <span class="hljs-selector-tag">return</span> <span class="hljs-selector-tag">Scaffold</span>(<br>      <span class="hljs-attribute">appBar</span>: <span class="hljs-built_in">AppBar</span>(<span class="hljs-attribute">title</span>: <span class="hljs-built_in">Text</span>(<span class="hljs-string">&#x27;计数器&#x27;</span>)),<br>      <span class="hljs-attribute">body</span>: <span class="hljs-built_in">Center</span>(<br>        <span class="hljs-attribute">child</span>: GetBuilder&lt;CounterController&gt;(<br>            <span class="hljs-attribute">init</span>: <span class="hljs-built_in">CounterController</span>(),<br>            <span class="hljs-attribute">builder</span>: (controller) &#123;<br>              return <span class="hljs-built_in">Text</span>(controller.counter.<span class="hljs-built_in">toString</span>());<br>            &#125;),<br>      ),<br>      <span class="hljs-attribute">floatingActionButton</span>: <span class="hljs-built_in">FloatingActionButton</span>(<br>        <span class="hljs-attribute">onPressed</span>: () &#123;<br>           Get.find&lt;CounterController&gt;().<span class="hljs-built_in">increment</span>();<br>        &#125;,<br>        <span class="hljs-attribute">child</span>: <span class="hljs-built_in">Icon</span>(Icons.add),<br>      ),<br>    );<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>GetX强大的一点的就表现出来了，按钮和文本并不在父子组件，并且和GetBuilder不在一个作用域，但是我们依然能正确得到Controller.</p>
+<h5 id="2-GetxBuilder局部更新UniqueID"><a href="#2-GetxBuilder局部更新UniqueID" class="headerlink" title="(2.)GetxBuilder局部更新UniqueID"></a>(2.)GetxBuilder局部更新UniqueID</h5><p>在开发的过程中会碰到一种情况，就是多个地方引用了同一个属性，但我只想单独更新某一个地方，那么就可以用UniqueID来进行区分。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BuilderController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">GetxController</span> </span>&#123;<br>  int count = <span class="hljs-number">0</span>;<br><br>  addCount() &#123;<br>    count++;<br>    update();<br>  &#125;<br><br>  addJimCount() &#123;<br>    count++;<br>    update([<span class="hljs-string">&quot;jim&quot;</span>]);<span class="hljs-comment">//只更新jim对应id的builder</span><br>  &#125;<br><br>  addTomCount() &#123;<br>    count++;<br>    update([<span class="hljs-string">&quot;tom&quot;</span>]);<span class="hljs-comment">//只更新tom对应id的builder</span><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>注意update([‘counter’]里添加了 id 数组，这样就只更新这个 id 对应的GetBuilder:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GetxBuilderTest</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>&#123;<br>  <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">GetxBuilderTest</span>(&#123;Key? key&#125;) : <span class="hljs-title function_ invoke__">super</span>(<span class="hljs-attr">key</span>: key);<br><br>  @override<br>  Widget <span class="hljs-title function_ invoke__">build</span>(BuildContext context) &#123;<br>    <span class="hljs-keyword">var</span> controller = Get.<span class="hljs-title function_ invoke__">put</span>(<span class="hljs-title function_ invoke__">BuilderController</span>());<br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">Scaffold</span>(<br>      <span class="hljs-attr">appBar</span>: <span class="hljs-title function_ invoke__">AppBar</span>(<br>        <span class="hljs-attr">title</span>: <span class="hljs-title function_ invoke__">Text</span>(<span class="hljs-string">&quot;展示GetxBuilder的使用&quot;</span>),<br>      ),<br>      <span class="hljs-attr">body</span>: <span class="hljs-title function_ invoke__">Center</span>(<br>        <span class="hljs-attr">child</span>: <span class="hljs-title function_ invoke__">Column</span>(<br>          <span class="hljs-attr">mainAxisAlignment</span>: MainAxisAlignment.center,<br>          <span class="hljs-attr">children</span>: [<br>            GetBuilder&lt;BuilderController&gt;(<span class="hljs-attr">builder</span>: (value) &#123;<br>              <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">Text</span>(<span class="hljs-string">&quot;count:&quot;</span> + value.count.<span class="hljs-title function_ invoke__">toString</span>());<br>            &#125;),<br>            GetBuilder&lt;BuilderController&gt;(<br>                <span class="hljs-attr">id</span>: <span class="hljs-string">&quot;jim&quot;</span>,<br>                <span class="hljs-attr">builder</span>: (value) &#123;<br>                  <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">Text</span>(<span class="hljs-string">&quot;count:&quot;</span> + value.count.<span class="hljs-title function_ invoke__">toString</span>());<br>                &#125;),<br>            GetBuilder&lt;BuilderController&gt;(<br>                id: <span class="hljs-string">&quot;tom&quot;</span>,<br>                builder: (value) &#123;<br>                  <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">Text</span>(<span class="hljs-string">&quot;count:&quot;</span> + value.count.<span class="hljs-title function_ invoke__">toString</span>());<br>                &#125;),<br>            <span class="hljs-title function_ invoke__">ElevatedButton</span>(<br>                <span class="hljs-attr">onPressed</span>: () &#123;<br>                  controller.<span class="hljs-title function_ invoke__">addCount</span>();<br>                &#125;,<br>                child: <span class="hljs-title function_ invoke__">Text</span>(<span class="hljs-string">&quot;增加计数器&quot;</span>)),<br>            <span class="hljs-title function_ invoke__">ElevatedButton</span>(<br>                <span class="hljs-attr">onPressed</span>: () &#123;<br>                  controller.<span class="hljs-title function_ invoke__">addJimCount</span>();<br>                &#125;,<br>                child: <span class="hljs-title function_ invoke__">Text</span>(<span class="hljs-string">&quot;增加Jim计数器&quot;</span>)),<br>            <span class="hljs-title function_ invoke__">ElevatedButton</span>(<br>                <span class="hljs-attr">onPressed</span>: () &#123;<br>                  controller.<span class="hljs-title function_ invoke__">addTomCount</span>();<br>                &#125;,<br>                child: <span class="hljs-title function_ invoke__">Text</span>(<span class="hljs-string">&quot;增加Tom计数器&quot;</span>)),<br>          ],<br>        ),<br>      ),<br>    );<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="2-响应式状态管理OBX"><a href="#2-响应式状态管理OBX" class="headerlink" title="2.响应式状态管理OBX"></a>2.响应式状态管理OBX</h3><h5 id="1-OBX基本使用"><a href="#1-OBX基本使用" class="headerlink" title="(1)OBX基本使用"></a>(1)OBX基本使用</h5><ol>
+<li>用计数器示例来演示一下OBX的基本使用：<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CounterController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">GetxController</span> </span>&#123;<br>  <span class="hljs-comment">// 使用 Rx 和 Darts 泛型，Rx &lt; type &gt;</span><br>    <span class="hljs-keyword">final</span> count =<span class="hljs-number">0.</span>obs;<br>      <br>    <span class="hljs-comment">// 每次点击增加1</span><br>    void increment() &#123;<br>      print(<span class="hljs-string">&quot;++&quot;</span>)<br>      <span class="hljs-comment">// 必须使用 .value 修饰具体的值</span><br>      <span class="hljs-keyword">this</span>.count.value++;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+这是一个控制器，有 UI 需要的数据counter和用户点击一次加1的方法。</li>
+<li>在UI 层进行数据的增加和页面的更新：<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HomePage</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>&#123;<br>  <span class="hljs-comment">//注入化控制器</span><br>  <span class="hljs-type">CounterController</span> controller =<br>      <span class="hljs-type">Get</span>.put&lt;<span class="hljs-type">CounterController</span>&gt;(<span class="hljs-type">CounterController</span>());<br>  <span class="hljs-meta">@override</span><br>  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(<br>      appBar: <span class="hljs-type">AppBar</span>(<br>        title: <span class="hljs-type">Text</span>(<span class="hljs-string">&quot;OBX状态管理&quot;</span>),<br>        centerTitle: <span class="hljs-literal">true</span>,<br>      ),<br>      body: <span class="hljs-type">Column</span>(<br>        crossAxisAlignment: <span class="hljs-type">CrossAxisAlignment</span>.center,<br>        children: [<br>          <span class="hljs-comment">//没有使用Obx(()=&gt;包裹 每当改变计数时，就不会更新Text()。</span><br>          <span class="hljs-type">Text</span>(&#x27;$&#123;controller.count&#125;次&#x27;),<br>          <span class="hljs-comment">// 使用Obx(()=&gt;包裹,每当改变计数时，就更新Text()。</span><br>          <span class="hljs-type">Obx</span>(() =&gt; <span class="hljs-type">Text</span>(&#x27;$&#123;controller.count.value&#125; 次&#x27;)),<br>          <span class="hljs-type">MaterialButton</span>(<br>              onPressed: () &#123;<br>                <span class="hljs-comment">// 直接调用函数</span><br>                controller.increment();<br>              &#125;,<br>              child: <span class="hljs-type">Text</span>(<span class="hljs-string">&quot;点击增加&quot;</span>))<br>        ],<br>      ),<br>    );<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h5 id="1-对象转Obx对象"><a href="#1-对象转Obx对象" class="headerlink" title="(1.)对象转Obx对象"></a>(1.)对象转Obx对象</h5><p>Obx是一种响应式的状态管理,和GetBuilder不同,不需要需要手动调用 update() 更新状态的变化，在Obx包裹的对象属性发生变化时视图会自动更新渲染。<br>将一个对象编程Obx响应式对象有三种方式:<br>第一种是使用 Rx { Type }。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-keyword">final</span> name = RxString(<span class="hljs-string">&#x27;&#x27;</span>);<br><span class="hljs-keyword">final</span> isLogged = RxBool(<span class="hljs-keyword">false</span>);<br><span class="hljs-keyword">final</span> count = RxInt(<span class="hljs-number">0</span>);<br><span class="hljs-keyword">final</span> balance = RxDouble(<span class="hljs-number">0.0</span>);<br><span class="hljs-keyword">final</span> items = RxList&lt;<span class="hljs-built_in">String</span>&gt;([]);<br><span class="hljs-keyword">final</span> myMap = RxMap&lt;<span class="hljs-built_in">String</span>, <span class="hljs-built_in">int</span>&gt;(&#123;&#125;);<br></code></pre></td></tr></table></figure>
+<p>第二种是使用 Rx 和 Darts 泛型，Rx &lt; type &gt;</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs swift"><span class="hljs-keyword">final</span> name <span class="hljs-operator">=</span> <span class="hljs-type">Rx</span>&lt;string&gt;(&#x27;&#x27;);<br><span class="hljs-keyword">final</span> isLogged <span class="hljs-operator">=</span> <span class="hljs-type">Rx</span>&lt;bool&gt;(<span class="hljs-literal">false</span>);<br><span class="hljs-keyword">final</span> count <span class="hljs-operator">=</span> <span class="hljs-type">Rx</span>&lt;int&gt;(<span class="hljs-number">0</span>);<br><span class="hljs-keyword">final</span> balance <span class="hljs-operator">=</span> <span class="hljs-type">Rx</span>&lt;double&gt;(<span class="hljs-number">0.0</span>);<br><span class="hljs-keyword">final</span> number <span class="hljs-operator">=</span> <span class="hljs-type">Rx</span>&lt;num&gt;(<span class="hljs-number">0</span>)<br><span class="hljs-keyword">final</span> items <span class="hljs-operator">=</span> <span class="hljs-type">Rx</span>&lt;<span class="hljs-type">List</span>&lt;string&gt;&gt;([]);<br><span class="hljs-keyword">final</span> myMap <span class="hljs-operator">=</span> <span class="hljs-type">Rx</span>&lt;<span class="hljs-type">Map</span>&lt;string, int&gt;&gt;(&#123;&#125;);<br><span class="hljs-keyword">final</span> user <span class="hljs-operator">=</span> <span class="hljs-type">Rx</span>&lt;<span class="hljs-type">User</span>&gt;();<span class="hljs-comment">// 自定义类</span><br></code></pre></td></tr></table></figure>
+<p>第三种方法更实用、更简单也是首选，就是把.obs 作为你的变量的后缀:</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-keyword">final</span> name = <span class="hljs-string">&#x27;&#x27;</span>.obs;<br><span class="hljs-keyword">final</span> isLogged = <span class="hljs-keyword">false</span>.obs;<br><span class="hljs-keyword">final</span> count = <span class="hljs-number">0.</span>obs;<br><span class="hljs-keyword">final</span> balance = <span class="hljs-number">0.0</span>.obs;<br><span class="hljs-keyword">final</span> number = <span class="hljs-number">0.</span>obs;<br><span class="hljs-keyword">final</span> items = &lt;<span class="hljs-built_in">String</span>&gt;[].obs;<br><span class="hljs-keyword">final</span> myMap = &lt;<span class="hljs-built_in">String</span>, <span class="hljs-built_in">int</span>&gt;&#123;&#125;.obs;<br><span class="hljs-keyword">final</span> user = User().obs;<span class="hljs-comment">// 自定义类</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="2-Obx变量为类时更新状态"><a href="#2-Obx变量为类时更新状态" class="headerlink" title="(2.)Obx变量为类时更新状态:"></a>(2.)Obx变量为类时更新状态:</h5><p>只有当响应式变量的值发生变化时，才会会执行刷新操作，当某个变量初始值为：1，再赋值为：1，并不会执行刷新操作.<br>将整个类对象设置为响应类型，当你改变了类其中一个变量，然后执行更新操作，只要包裹了该响应类变量的Obx()，都会实行刷新操作.<br>如果我们需要观察的数据是一个有许多属性的类.如何进行管理呢?</p>
+<ol>
+<li>我们将使整个类成为可观察的，而不是每个属性。<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">User</span>&#123;<br>    User(&#123;<span class="hljs-keyword">this</span>.name = <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-keyword">this</span>.age = <span class="hljs-number">0</span>&#125;);<br>    String name;<br>    int age;<br>&#125;<br><br><span class="hljs-comment">// controller</span><br><span class="hljs-keyword">final</span> user = User().obs;<br></code></pre></td></tr></table></figure></li>
+<li>有两种方式可以更新对象变量.<br>方式一:<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">user</span>.<span class="hljs-keyword">update</span>( (<span class="hljs-keyword">user</span>) &#123; // 这个参数是你要更新的类本身。<br>    <span class="hljs-keyword">user</span>.name = <span class="hljs-string">&#x27;张三&#x27;</span>;<br>    <span class="hljs-keyword">user</span>.age = <span class="hljs-number">18</span>;<br>&#125;);<br></code></pre></td></tr></table></figure>
+方式二:<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">user</span>(<span class="hljs-built_in">User</span>(<span class="hljs-attribute">name</span>: <span class="hljs-string">&#x27;李四&#x27;</span>, <span class="hljs-attribute">age</span>: <span class="hljs-number">35</span>));<br></code></pre></td></tr></table></figure></li>
+<li>获取Obx的值的方式也有两种:<br>方式一:通过value这种方式获取<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">Obx(<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span> <span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Name $&#123;user.value.name&#125;: Age: $&#123;user.value.age&#125;&quot;</span>));<br></code></pre></td></tr></table></figure>
+方式二:<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">Obx(<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span> <span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Name $&#123;user().name&#125;: Age: $&#123;user().age&#125;&quot;</span>));<br></code></pre></td></tr></table></figure>
+当你定义了一个响应式变量，该响应式变量改变时，包裹该响应式变量的Obx()方法才会执行刷新操作，其它的未包裹该响应式变量的Obx()方法并不会执行刷新操作.</li>
+</ol>
+<h5 id="3-Obx使用Workers回调"><a href="#3-Obx使用Workers回调" class="headerlink" title="(3.)Obx使用Workers回调"></a>(3.)Obx使用Workers回调</h5><p>响应式不只这些好处，还有一个 Workers ，将协助我们在事件发生时触发特定的回调，也就是 RxJava 的一些操作符；</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PersonController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">GetxController</span> </span>&#123;<br>  <span class="hljs-keyword">var</span> person = Person(<span class="hljs-number">20</span>, <span class="hljs-string">&quot;张三&quot;</span>).obs;<br>  <span class="hljs-meta">@override</span><br>  <span class="hljs-keyword">void</span> onInit() &#123;<br>    <span class="hljs-keyword">super</span>.onInit();<br>    <span class="hljs-comment">/// <span class="language-markdown">每次更改都会回调</span></span><br>    ever&lt;Person&gt;(person, (person) =&gt; <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;<span class="hljs-subst">$person</span> has been changed&quot;</span>));<br><br>    <span class="hljs-comment">/// <span class="language-markdown">第一次更改回调</span></span><br>    once&lt;Person&gt;(person, (person) =&gt; <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;<span class="hljs-subst">$person</span> was changed once&quot;</span>));<br><br>    <span class="hljs-comment">/// <span class="language-markdown">更改后3秒回调</span></span><br>    debounce&lt;Person&gt;(person, (person) =&gt; <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;debouce<span class="hljs-subst">$person</span>&quot;</span>), time: <span class="hljs-built_in">Duration</span>(seconds: <span class="hljs-number">3</span>));<br><br>    <span class="hljs-comment">///<span class="language-markdown">3秒内更新回调一次</span></span><br>    interval&lt;Person&gt;(person, (person) =&gt; <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;interval <span class="hljs-subst">$person</span>&quot;</span>), time: <span class="hljs-built_in">Duration</span>(seconds: <span class="hljs-number">3</span>));<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>我们可以利用 Workers ，实现比如防抖函数，在搜索的时候使用，节流函数，在点击事件的时候使用。</p>
+<h3 id="3-GetxBuilder和Obx总结"><a href="#3-GetxBuilder和Obx总结" class="headerlink" title="3.GetxBuilder和Obx总结"></a>3.GetxBuilder和Obx总结</h3><h5 id="1-区别"><a href="#1-区别" class="headerlink" title="(1)区别"></a>(1)区别</h5><p>-Obx是响应式变量变化，Obx自动刷新；GetBuilder需要使用update手动调用刷新</p>
+<ul>
+<li>响应式变量，因为使用的是StreamBuilder，会消耗一定资源</li>
+<li>GetBuilder内部实际上是对StatefulWidget的封装，所以占用资源极小</li>
+</ul>
+<h5 id="2-使用场景"><a href="#2-使用场景" class="headerlink" title="(2.)使用场景:"></a>(2.)使用场景:</h5><ul>
+<li>一般来说，对于大多数场景都是可以使用响应式变量的</li>
+<li>但是，在一个包含了大量对象的List，都使用响应式变量，将生成大量的GetStream，必将对内存造成较大的压力，该情况下，就要考虑使用简单状态管理了</li>
+</ul>
+<p>总的来说：推荐GetBuilder和update配合的写法</p>
+<ul>
+<li>GetBuilder内置回收GetxController的功能，能避免一些无法自动回收GetxController的坑爹问题</li>
+<li>使用GetBuilder的自动回收：GetBuilder需要设置assignId: true；或使用插件一键Wrap Widget：GetBuilder（Auto Dispose）</li>
+<li>使用Obx，相关变量定义初始化以及实体更新和常规写法不同，会对初次接触该框架的人，造成很大的困扰</li>
+<li>getx插件现已支持一键Wrap Widget生成GetBuilder，可以一定程度上提升你的开发效率</li>
+</ul>
+<p>响应式编程虽好，但是对 RAM 的消耗比较大，因为他们的实现都是流，如果创建一个有80个对象的 List ，每个对象都有几个流，打开dart inspect，查看一个 StreamBuilder<br>的消耗量，我们就会明白这不是一个好的方法。而 GetBuilder 在 RAM 中是非常高效的，几乎没有比他更高效的方法。所以这些使用方式在使用过程中要斟酌。</p>
+<h1 id="五-GetX依赖注入"><a href="#五-GetX依赖注入" class="headerlink" title="五.GetX依赖注入"></a>五.GetX依赖注入</h1><h3 id="1-Binding的使用"><a href="#1-Binding的使用" class="headerlink" title="1.Binding的使用"></a>1.Binding的使用</h3><p>上文中我们知道在页面中使用Controller需要先进行Get.put操作.但是每一个界面都这样操作,这种手动注入的方式麻烦不说还很难进行统一管理.为了更好的是组件中使用Controller我们可以用到Getx提供的Binding功能可以实现自动注入功能.<br>Binding 类是一个将依赖注入进行分离，Binding模块在路由跳转时,统一对界面通过懒注入的方式将binding模块的GetXController注入到界面中，简单说，就是把UI 中的 控制器实例化部分抽离出来了，抽离时需要实现 Bindings 类<br>可以统一管理复杂模块的多个GetXController,可以将路由、状态管理器和依赖管理器完全集成<br>当一个路由从栈中移除时，所有与它相关的控制器、变量和对象的实例都会从内存中移除。如果使用的是流或定时器，它们会自动关闭，不必单独进行内存管理处理。Bindings 类是一个解耦依赖注入的类，同时 “<br>Binding “ 路由到状态管理器和依赖管理器。 这使得 GetX 可以知道当使用某个控制器时，哪个页面正在显示，并知道在哪里以及如何销毁它。</p>
+<h3 id="2-如何使用Bindings"><a href="#2-如何使用Bindings" class="headerlink" title="2.如何使用Bindings"></a>2.如何使用Bindings</h3><h5 id="1-第一步：-创建一个控制器"><a href="#1-第一步：-创建一个控制器" class="headerlink" title="(1)第一步： 创建一个控制器"></a>(1)第一步： 创建一个控制器</h5><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CounterController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">GetxController</span> </span>&#123;<br>  int _counter = <span class="hljs-number">0</span>;<br>  int get counter =&gt; _counter;<br>  void increment() &#123;<br>    _counter++;<br>    update();<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="2-第二步：-创建一个类并实现-Binding，如果有多个控制器，就在这实例化多个"><a href="#2-第二步：-创建一个类并实现-Binding，如果有多个控制器，就在这实例化多个" class="headerlink" title="(2)第二步： 创建一个类并实现 Binding，如果有多个控制器，就在这实例化多个"></a>(2)第二步： 创建一个类并实现 Binding，如果有多个控制器，就在这实例化多个</h5><p>&#x2F;&#x2F; 创建bindings</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs perl"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TestBingding</span> <span class="hljs-title">implements</span> <span class="hljs-title">Bindings</span> </span>&#123;<br>  <span class="hljs-variable">@override</span><br>  void dependencies() &#123;<br>    Get.lazyPut&lt;CounterController&gt;(() =&gt; CounterController());<br>    <span class="hljs-regexp">//</span> 。。。 还可以添加其它控制器<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="3-第三步：-绑定到路由中"><a href="#3-第三步：-绑定到路由中" class="headerlink" title="(3)第三步： 绑定到路由中"></a>(3)第三步： 绑定到路由中</h5><p>我们要使用该 Binding 来建立路由管理器、依赖关系和状态之间的连接。 这里有两种方式，如果使用的是命名路由表：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">GetMaterialApp</span>(<br>      ...<br>      <span class="hljs-attribute">getPages</span>: [<br>        <span class="hljs-built_in">GetPage</span>(<br>            <span class="hljs-attribute">name</span>: <span class="hljs-string">&quot;/binding&quot;</span>,<br>            <span class="hljs-attribute">page</span>: () =&gt; <span class="hljs-built_in">GetXBingdingPage</span>(),<br>            <span class="hljs-attribute">binding</span>: <span class="hljs-built_in">TestBingding</span>()),<br>      ],<br>    )<br></code></pre></td></tr></table></figure>
+<p>如果是直接跳转：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">Get</span><span class="hljs-selector-class">.to</span>(<span class="hljs-built_in">GetXBingdingPage</span>(), <span class="hljs-attribute">binding</span>: <span class="hljs-built_in">TestBingding</span>());<br></code></pre></td></tr></table></figure>
+<h5 id="4-第四步：Widget-中使用"><a href="#4-第四步：Widget-中使用" class="headerlink" title="(4)第四步：Widget 中使用"></a>(4)第四步：Widget 中使用</h5><p>使用 Get.find() ,可以处理一个UI中有多个控制器的情况，如果你只有一个控制器，可以选择使用GeView.</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GetXBingdingPage</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>&#123;<br>  <span class="hljs-meta">@override</span><br>  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) &#123;<br>    <span class="hljs-keyword">var</span> controller = <span class="hljs-type">Get</span>.find&lt;<span class="hljs-type">BindingController</span>&gt;();<br>    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(<br>      appBar: <span class="hljs-type">AppBar</span>(<br>        title: <span class="hljs-type">Text</span>(<span class="hljs-string">&quot;Bingding使用&quot;</span>),<br>      ),<br>      body: <span class="hljs-type">Column</span>(<br>        children: [<br>          <span class="hljs-type">GetBuilder</span>&lt;<span class="hljs-type">CounterController</span>&gt;(builder: (value) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-type">Text</span>(<span class="hljs-string">&quot;count:&quot;</span> + value.count.toString());<br>          &#125;),<br>          <span class="hljs-type">ElevatedButton</span>(<br>              onPressed: () &#123;<br>                controller.addCount();<br>              &#125;,<br>              child: <span class="hljs-type">Text</span>(<span class="hljs-string">&quot;点击增加数字&quot;</span>))<br>        ],<br>      ),<br>    );<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>请注意使用binding自动注入时,建议使用使用getx的命名路由方式,不建议在Get.to()方法里面进行binding绑定因为如果存在多个页面跳转到存在binding页面，每个Get.to()方法都需要绑定 这样极其容易出bug.</p>
+</blockquote>
+<h3 id="3-GetView"><a href="#3-GetView" class="headerlink" title="3.GetView"></a>3.GetView</h3><p>上面使用注入依赖解耦了，但是获取还是略显不方便，GetX 也为我们考虑到了。使用GetView代替StatelessWidget,可以直接使用 controller.变量调用,<br>前提条件就是只能用于有一个controller控制器</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SimplePage</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">GetView&lt;CounterController&gt;</span> </span>&#123;<br>  <span class="hljs-meta">@override</span><br>  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(<br>      body: <span class="hljs-type">Center</span>(<br>        child: <span class="hljs-type">Obx</span>(() =&gt; <span class="hljs-type">Text</span>(controller.counter.value)),<br>      ),<br>      floatingActionButton: <span class="hljs-type">FloatingActionButton</span>(<br>        onPressed: () &#123;<br>          controller.increment();<br>        &#125;,<br>        child: <span class="hljs-type">Icon</span>(<span class="hljs-type">Icons</span>.add),<br>      ),<br>    );<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>首先，你需要将你的class 继承自 GetxView<T>(T 为你的Controller)</p>
+<p>GetxView<HomeController> 会自动帮你把 Controller 注入到 view 中，你可以简单理解为它自动帮你执行了以下步骤</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">final controller <span class="hljs-operator">=</span> Get.find&lt;HomeController&gt;()<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>不必担心 GetxView<T> 的性能，因为它仅仅是继承自 Stateless Widget ，记住，有了 getx 你完全不需要 Stateful Widget</p>
+<p>GetView是一个Stateless Widget，仅是为了方便使用controller。如果我们只有一个controller作为依赖，可以使用GetView取代StatelessWidget并且不用再写Get.find。<br>这里完全没有Get.find，但是可以直接使用controller，因为GetView里封装好了：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GetView&lt;T&gt;</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>&#123;<br>  const <span class="hljs-type">GetView</span>(&#123;<span class="hljs-type">Key</span> key&#125;) : <span class="hljs-keyword">super</span>(key: key);<br><br>  <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> tag = <span class="hljs-literal">null</span>;<br><br>  <span class="hljs-type">T</span> get controller =&gt; <span class="hljs-type">GetInstance</span>().find&lt;<span class="hljs-type">T</span>&gt;(tag: tag);<br><br>  <span class="hljs-meta">@override</span><br>  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>不在需要 StatelessWidget 和 StatefulWidget。这也是开发最常用的模式，推荐大家使用。</p>
+<p>当然，也许有时候觉得每次声明一个 Bingings 类也很麻烦，那么可以使用 BindingsBuilder ，这样就可以简单地使用一个函数来实例化任何想要注入的东西。</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs coffeescript">GetMaterialApp(<br>      ...<br>       GetPage(<br>       name: <span class="hljs-string">&#x27;/details&#x27;</span>,<br>       page: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> DetailsView(),<br>       binding: BindingsBuilder(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;<br>         Get.lazyPut&lt;DetailsController&gt;(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> DetailsController());<br>       &#125;),<br>    )<br></code></pre></td></tr></table></figure>
+
+<p>就是这么简单，Bingings 都不需要创建。两种方式都可以，大家根据自己的编码习惯选择最适合的风格。</p>
+<p>Bindings的工作原理 Bindings 会创建过渡性工厂，在点击进入另一个页面的那一刻，这些工厂就会被创建，一旦路由过渡动画发生，就会被销毁。<br>工厂占用的内存很少，它们并不持有实例，而是一个具有我们想要的那个类的 “形状”的函数。 这在内存上的成本很低，但由于这个库的目的是用最少的资源获得最大的性能，所以Get连工厂都默认删除。</p>
+<blockquote>
+<p>Bindings是我们可以在其中声明依赖项，然后将它们“绑定”到路由的类。但是，这意味着我们只能在使用GetX进行路由管理时使用它。</p>
+</blockquote>
+<h1 id="六-GetX路由管理"><a href="#六-GetX路由管理" class="headerlink" title="六.GetX路由管理"></a>六.GetX路由管理</h1><h3 id="1-简单路由"><a href="#1-简单路由" class="headerlink" title="1.简单路由"></a>1.简单路由</h3><h4 id="1-导航到新页面"><a href="#1-导航到新页面" class="headerlink" title="(1.)导航到新页面"></a>(1.)导航到新页面</h4><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs coffeescript">Get.to(<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>LoginPage());<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-进入新页面-配置路由名称-建议这种统一配置"><a href="#2-进入新页面-配置路由名称-建议这种统一配置" class="headerlink" title="(2.)进入新页面 配置路由名称 建议这种统一配置"></a>(2.)进入新页面 配置路由名称 建议这种统一配置</h4><figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">Get.toNamed(Routes.XXXX)<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="3-pop-返回、关闭snackbars-dialogs-bottomsheets"><a href="#3-pop-返回、关闭snackbars-dialogs-bottomsheets" class="headerlink" title="(3.)pop 返回、关闭snackbars, dialogs, bottomsheets"></a>(3.)pop 返回、关闭snackbars, dialogs, bottomsheets</h4><figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">Get.back()<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="4-push到下一页，但禁止从下一页返回过来"><a href="#4-push到下一页，但禁止从下一页返回过来" class="headerlink" title="(4.)push到下一页，但禁止从下一页返回过来"></a>(4.)push到下一页，但禁止从下一页返回过来</h4><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">Get</span>.<span class="hljs-keyword">off</span>(LoginPage());<br></code></pre></td></tr></table></figure>
+
+<p>可以用在启动屏、登录页中。</p>
+<h4 id="5-push到下一页，并且从栈内移除以前的所有路由"><a href="#5-push到下一页，并且从栈内移除以前的所有路由" class="headerlink" title="(5.)push到下一页，并且从栈内移除以前的所有路由"></a>(5.)push到下一页，并且从栈内移除以前的所有路由</h4><figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">Get.offAll(LoginPage())<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>可以发现，上面的push和pop方式，不需要传递context,省下了很多麻烦，这个GetX在路由管理的最大优势，这样增加了路由管理的书写范围，扩大了你代码灵活性，不用担心context在哪，而特意使用builder。</p>
+<h3 id="2-路由传值"><a href="#2-路由传值" class="headerlink" title="2.路由传值"></a>2.路由传值</h3><p>在不同页面中传递参数 get中有三种方式</p>
+<h5 id="1-argment-传递"><a href="#1-argment-传递" class="headerlink" title="(1.)argment 传递"></a>(1.)argment 传递</h5><p>argments 参数是 dynamic 类型的 ， 与Navigator中的arguments相同,但是在getx中获取却非常方便<br>传递参数:</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">// a页面 附带argements参数<br><span class="hljs-keyword">Get</span>.toNamed(&quot;/b&quot;,arguments: <span class="hljs-keyword">true</span>);  <br>// 等同于 Navigator.pushNamed(<span class="hljs-keyword">Get</span>.context, &quot;/b&quot;, arguments: <span class="hljs-keyword">true</span>);<br></code></pre></td></tr></table></figure>
+<p>获取参数:</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs haskell">//b页面  获取argments参数  (在 build 中)<br><span class="hljs-title">var</span> <span class="hljs-class"><span class="hljs-keyword">data</span> = <span class="hljs-type">Get</span>.arguments;</span><br>//等同于  var <span class="hljs-class"><span class="hljs-keyword">data</span> = <span class="hljs-type">ModalRoute</span>.of(<span class="hljs-title">context</span>).settings.arguments;</span><br></code></pre></td></tr></table></figure>
+<h5 id="2-parameters-传递"><a href="#2-parameters-传递" class="headerlink" title="(2.)parameters 传递"></a>(2.)parameters 传递</h5><p>parameters接受 Map&lt;String, String&gt;作为参数传递, 方式类似与网页传值<br>传递参数:</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs gams"><span class="hljs-comment">//a页面  </span><br>Get.toNamed(<span class="hljs-string">&quot;/b&quot;</span>, <span class="hljs-keyword">parameters</span>: &#123;<span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;张三&quot;</span>&#125;);<br><span class="hljs-comment">//或者  使用 拼接形式</span><br>Get.toNamed(<span class="hljs-string">&quot;/b?name=张三&quot;</span>);<br></code></pre></td></tr></table></figure>
+<p>获取参数:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-comment">//b页面</span><br><span class="hljs-keyword">var</span> <span class="hljs-keyword">data</span> = Get.parameters;<br><span class="hljs-keyword">data</span>[<span class="hljs-string">&#x27;name&#x27;</span>]   <br></code></pre></td></tr></table></figure>
+<h5 id="3-parameters-还有一种-传值方式传值通过-绑定路由地址"><a href="#3-parameters-还有一种-传值方式传值通过-绑定路由地址" class="headerlink" title="(3.)parameters 还有一种 传值方式传值通过 绑定路由地址"></a>(3.)parameters 还有一种 传值方式传值通过 绑定路由地址</h5><p>&#x2F;&#x2F; 修改路由表  新增 &#x2F;serach&#x2F;:id</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">GetPage</span>(<br>        <span class="hljs-attribute">name</span>: Routes.HOME,  <span class="hljs-comment">// &quot;/home&quot;</span><br>        <span class="hljs-attribute">page</span>: () =&gt; <span class="hljs-built_in">TabBarPage</span>(),<br>        <span class="hljs-attribute">children</span>: [<br>          <span class="hljs-built_in">GetPage</span>(<br>            <span class="hljs-attribute">name</span>: Routes.SEARCH,  <span class="hljs-comment">// &quot;/search&quot;</span><br>            <span class="hljs-attribute">page</span>: () =&gt; <span class="hljs-built_in">SearchPage</span>(),<br>          ),<br>          <span class="hljs-built_in">GetPage</span>(   <span class="hljs-comment">//  ********* 新增 *******  </span><br>            <span class="hljs-attribute">name</span>: Routes.SEARCH+<span class="hljs-string">&quot;/:id&quot;</span>,<br>            <span class="hljs-attribute">page</span>: () =&gt; <span class="hljs-built_in">SearchPage</span>(),<br>          ),<br>        ]<br>    ),<br></code></pre></td></tr></table></figure>
+<p>&#x2F;search&#x2F;:id 是home的子路由 那么访问 他的完整链接应该是 “&#x2F;home&#x2F;search&#x2F;:id”</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-comment">// 跳转 传递参数</span><br><span class="hljs-symbol">Get.toNamed</span>(<span class="hljs-string">&quot;/home/search/123&quot;</span>)<span class="hljs-comment">;</span><br><br><span class="hljs-comment">// 在 search 页面中接收</span><br><span class="hljs-symbol">var</span> <span class="hljs-meta">data</span> = <span class="hljs-meta">Get</span>.parameters<span class="hljs-comment">;</span><br><span class="hljs-comment">//data =  &#123;&quot;id&quot;:&quot;123&quot;&#125;</span><br></code></pre></td></tr></table></figure>
+<p>上面的方式学过前端框架的应该很熟悉</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-title">onPressed</span>: () async &#123;<br><span class="hljs-title">var</span> <span class="hljs-class"><span class="hljs-keyword">data</span> = await <span class="hljs-type">Get</span>.to(<span class="hljs-type">MinePage</span>());</span><br>// 上个页面返回后，立即拿到数据,<span class="hljs-number">456</span><br><span class="hljs-title">print</span>(<span class="hljs-class"><span class="hljs-keyword">data</span>);</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-built_in">MaterialButton</span>(<br>onPressed: () &#123;<br><span class="hljs-comment">// 返回携带参数</span><br>Get<span class="hljs-selector-class">.back</span>(result: <span class="hljs-number">456</span>);<br>&#125;,<br><span class="hljs-attribute">color</span>: Colors.blue,<br>textColor: Colors.white,<br>child: <span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;返回上个页面&quot;</span>),<br>),<br></code></pre></td></tr></table></figure>
+<h3 id="3-命名路由导航"><a href="#3-命名路由导航" class="headerlink" title="3.命名路由导航"></a>3.命名路由导航</h3><p>要使用别名路由导航，需要定义路由，在main函数内使用GetMaterialApp，并设置相关属性。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">void</span> <span class="hljs-selector-tag">main</span>() &#123;<br>  <span class="hljs-comment">// 别名路由配置</span><br>  <span class="hljs-selector-tag">runApp</span>(<br>    <span class="hljs-built_in">GetMaterialApp</span>(<br>      <span class="hljs-attribute">initialRoute</span>: <span class="hljs-string">&#x27;/&#x27;</span>,<br>      <span class="hljs-attribute">getPages</span>: [<br>        <span class="hljs-built_in">GetPage</span>(<span class="hljs-attribute">name</span>: <span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-attribute">page</span>: () =&gt; <span class="hljs-built_in">OnePage</span>()),<br>        <span class="hljs-built_in">GetPage</span>(<br>            <span class="hljs-attribute">name</span>: <span class="hljs-string">&#x27;/two&#x27;</span>, <span class="hljs-attribute">page</span>: () =&gt; <span class="hljs-built_in">TwoPage</span>(), <span class="hljs-attribute">transition</span>: Transition.zoom),<span class="hljs-comment">//添加跳转动画</span><br>      ],<br>    ),<br>  );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="GetMaterialApp下还有一个属性unknownRoute，可以设置未定义路由的导航，如错误页面。"><a href="#GetMaterialApp下还有一个属性unknownRoute，可以设置未定义路由的导航，如错误页面。" class="headerlink" title="GetMaterialApp下还有一个属性unknownRoute，可以设置未定义路由的导航，如错误页面。"></a>GetMaterialApp下还有一个属性unknownRoute，可以设置未定义路由的导航，如错误页面。</h4><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs coffeescript">unknownRoute: GetPage(name: <span class="hljs-string">&#x27;/notfound&#x27;</span>, page: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> UnknownRoutePage()),<br></code></pre></td></tr></table></figure>
+
+<h4 id="push到下一页"><a href="#push到下一页" class="headerlink" title="push到下一页"></a>push到下一页</h4><figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">Get.toNamed(<span class="hljs-string">&quot;/two&quot;</span>)<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="push下一页并移除前一个页面。"><a href="#push下一页并移除前一个页面。" class="headerlink" title="push下一页并移除前一个页面。"></a>push下一页并移除前一个页面。</h4><figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">Get.offNamed(<span class="hljs-string">&quot;/two&quot;</span>)<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="push下一页并移除所有之前的页面"><a href="#push下一页并移除所有之前的页面" class="headerlink" title="push下一页并移除所有之前的页面"></a>push下一页并移除所有之前的页面</h4><figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">Get.offAllNamed(<span class="hljs-string">&quot;/two&quot;</span>)<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="push时携带数据-主要在后面加上你要传递的数据即可"><a href="#push时携带数据-主要在后面加上你要传递的数据即可" class="headerlink" title="push时携带数据 主要在后面加上你要传递的数据即可"></a>push时携带数据 主要在后面加上你要传递的数据即可</h4><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">Get</span><span class="hljs-selector-class">.toNamed</span>(<span class="hljs-string">&quot;/two&quot;</span>, <span class="hljs-attribute">arguments</span>: <span class="hljs-string">&#x27;www.qson.tech&#x27;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>在你别名为two的页面通过Get.arguments即可获取数据。</p>
+<h3 id="4-路由中间件-路由拦截"><a href="#4-路由中间件-路由拦截" class="headerlink" title="4.路由中间件(路由拦截)"></a>4.路由中间件(路由拦截)</h3><p>在跳转前做些事情，比如判断是否登录，可以使用routingCallback来实现：</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-built_in">GetMaterialApp</span>(<br>  routingCallback: (routing) &#123;<br>    <span class="hljs-built_in">if</span>(routing.current == &#x27;/second&#x27;)&#123;<br>     <span class="hljs-comment">// 如果登录。。。</span><br>    &#125;<br>  &#125;<br>)<br></code></pre></td></tr></table></figure>
+<h1 id="七-GetX服务GetxService"><a href="#七-GetX服务GetxService" class="headerlink" title="七.GetX服务GetxService"></a>七.GetX服务GetxService</h1><h3 id="1-GetxService的作用"><a href="#1-GetxService的作用" class="headerlink" title="1. GetxService的作用"></a>1. GetxService的作用</h3><p>GetxService就像是全局状态的 “GetxController”，它共享程序的相同的生命周期（“onInit()”、“onReady()”、“onClose()”）。<br>GetxService不会从内存中删除。所以可以在程序任何地方都可以通过Get.find()获取。GetXService 类似服务,所以如果你需要在你的应用程序的生命周期内对一个类实例进行绝对的持久化。<br>比如ApiService，StorageService，CacheService，还有需要异步初始化的类，放在这里注入非常合适.<br>实际删除一个GetxService的唯一方法是使用Get.reset()，它就像”热重启 “你的应用程序。</p>
+<h3 id="2-GetxService的简单使用"><a href="#2-GetxService的简单使用" class="headerlink" title="2. GetxService的简单使用"></a>2. GetxService的简单使用</h3><p>通过GetxService获取usertoken的例子:<br>第一步：创建Service</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SpService</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">GetxService</span> </span>&#123;<br>  <span class="hljs-type">Future</span>&lt;<span class="hljs-type">String</span>&gt; getUserToken() async &#123;<br>    <span class="hljs-type">SharedPreferences</span> prefs = await <span class="hljs-type">SharedPreferences</span>.getInstance();<br>    <span class="hljs-type">String</span> token = prefs.getString(<span class="hljs-string">&quot;token&quot;</span>);<br>    print(<span class="hljs-string">&quot;token 的值为: $token&quot;</span>);<br>    <span class="hljs-keyword">return</span> token;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>第二步：初始化Service</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment"><span class="hljs-doctag">///</span> 初始化服务</span><br><span class="hljs-function">Future&lt;<span class="hljs-keyword">void</span>&gt; <span class="hljs-title">main</span>() <span class="hljs-keyword">async</span></span> &#123;<br>  <span class="hljs-keyword">await</span> initServices();<br>  runApp(MyApp());<br>&#125;<br><br><span class="hljs-function">Future&lt;<span class="hljs-keyword">void</span>&gt; <span class="hljs-title">initServices</span>() <span class="hljs-keyword">async</span></span> &#123;<br>  print(<span class="hljs-string">&quot;初始化服务&quot;</span>);<br>  <span class="hljs-keyword">await</span> Get.putAsync(() <span class="hljs-keyword">async</span> =&gt; <span class="hljs-keyword">await</span> SpService());<br>  print(<span class="hljs-string">&quot;所有服务启动&quot;</span>);<br>&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title">MyApp</span> <span class="hljs-title">extends</span> <span class="hljs-title">StatelessWidget</span> &#123;<br>  @override<br>  <span class="hljs-function">Widget <span class="hljs-title">build</span>(<span class="hljs-params">BuildContext context</span>)</span> &#123;<br>    <span class="hljs-keyword">return</span> GetMaterialApp(<br>      title: <span class="hljs-string">&quot;GetX&quot;</span>,<br>      home: GetXServiceExample(),<br>    );<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>第三步：调用Service</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GetXServiceExample</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">StatelessWidget</span> </span>&#123;<br>  <span class="hljs-meta">@override</span><br>  <span class="hljs-type">Widget</span> build(<span class="hljs-type">BuildContext</span> context) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-type">Scaffold</span>(<br>      body: <span class="hljs-type">Center</span>(<br>        child: <span class="hljs-type">ElevatedButton</span>(<br>            onPressed: () async &#123;<br>              <span class="hljs-type">String</span> userToken =<br>                  await <span class="hljs-type">Get</span>.find&lt;<span class="hljs-type">SpService</span>&gt;().getUserToken(); <span class="hljs-comment">//可以获取到全局的服务</span><br>              print(<span class="hljs-string">&quot;token:$userToken&quot;</span>);<br>            &#125;,<br>            child: <span class="hljs-type">Text</span>(<span class="hljs-string">&quot;获取token&quot;</span>)),<br>      ),<br>    );<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="八-GetX其他功能"><a href="#八-GetX其他功能" class="headerlink" title="八.GetX其他功能"></a>八.GetX其他功能</h1><p>Getx还提供了许许多多的Api供我们开发时使用.<br>其他高级API:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-comment">// 给出当前页面的args。</span><br>Get<span class="hljs-selector-class">.arguments</span><br><br><span class="hljs-comment">//给出以前的路由名称</span><br>Get<span class="hljs-selector-class">.previousRoute</span><br><br><span class="hljs-comment">// 给出要访问的原始路由，例如，rawRoute.isFirst()</span><br>Get<span class="hljs-selector-class">.rawRoute</span><br><br><span class="hljs-comment">// 允许从GetObserver访问Rounting API。</span><br>Get<span class="hljs-selector-class">.routing</span><br><br><span class="hljs-comment">// 检查 snackbar 是否打开</span><br>Get<span class="hljs-selector-class">.isSnackbarOpen</span><br><br><span class="hljs-comment">// 检查 dialog 是否打开</span><br>Get<span class="hljs-selector-class">.isDialogOpen</span><br><br><span class="hljs-comment">// 检查 bottomsheet 是否打开</span><br>Get<span class="hljs-selector-class">.isBottomSheetOpen</span><br><br><span class="hljs-comment">// 删除一个路由。</span><br>Get<span class="hljs-selector-class">.removeRoute</span>()<br><br><span class="hljs-comment">//反复返回，直到表达式返回真。</span><br>Get<span class="hljs-selector-class">.until</span>()<br><br><span class="hljs-comment">// 转到下一条路由，并删除所有之前的路由，直到表达式返回true。</span><br>Get<span class="hljs-selector-class">.offUntil</span>()<br><br><span class="hljs-comment">// 转到下一个命名的路由，并删除所有之前的路由，直到表达式返回true。</span><br>Get<span class="hljs-selector-class">.offNamedUntil</span>()<br><br><span class="hljs-comment">//检查应用程序在哪个平台上运行。</span><br>GetPlatform<span class="hljs-selector-class">.isAndroid</span><br>GetPlatform<span class="hljs-selector-class">.isIOS</span><br>GetPlatform<span class="hljs-selector-class">.isMacOS</span><br>GetPlatform<span class="hljs-selector-class">.isWindows</span><br>GetPlatform<span class="hljs-selector-class">.isLinux</span><br>GetPlatform<span class="hljs-selector-class">.isFuchsia</span><br><br><span class="hljs-comment">//检查设备类型</span><br>GetPlatform<span class="hljs-selector-class">.isMobile</span><br>GetPlatform<span class="hljs-selector-class">.isDesktop</span><br><span class="hljs-comment">//所有平台都是独立支持web的!</span><br><span class="hljs-comment">//你可以知道你是否在浏览器内运行。</span><br><span class="hljs-comment">//在Windows、iOS、OSX、Android等系统上。</span><br>GetPlatform<span class="hljs-selector-class">.isWeb</span><br><br><span class="hljs-comment">// 相当于.MediaQuery.of(context).size.height,</span><br><span class="hljs-comment">//但不可改变。</span><br>Get<span class="hljs-selector-class">.height</span><br>Get<span class="hljs-selector-class">.width</span><br><br><span class="hljs-comment">// 提供当前上下文。</span><br>Get<span class="hljs-selector-class">.context</span><br><br><span class="hljs-comment">// 在你的代码中的任何地方，在前台提供 snackbar/dialog/bottomsheet 的上下文。</span><br>Get<span class="hljs-selector-class">.contextOverlay</span><br><br><span class="hljs-comment">// 注意：以下方法是对上下文的扩展。</span><br><span class="hljs-comment">// 因为在你的UI的任何地方都可以访问上下文，你可以在UI代码的任何地方使用它。</span><br><br><span class="hljs-comment">// 如果你需要一个可改变的高度/宽度（如桌面或浏览器窗口可以缩放），你将需要使用上下文。</span><br>context<span class="hljs-selector-class">.width</span><br>context<span class="hljs-selector-class">.height</span><br><br><span class="hljs-comment">// 让您可以定义一半的页面、三分之一的页面等。</span><br><span class="hljs-comment">// 对响应式应用很有用。</span><br><span class="hljs-comment">// 参数： dividedBy (double) 可选 - 默认值：1</span><br><span class="hljs-comment">// 参数： reducedBy (double) 可选 - 默认值：0。</span><br>context<span class="hljs-selector-class">.heightTransformer</span>()<br>context<span class="hljs-selector-class">.widthTransformer</span>()<br><br><span class="hljs-comment">/// 类似于 MediaQuery.of(context).size。</span><br>context<span class="hljs-selector-class">.mediaQuerySize</span>()<br><br><span class="hljs-comment">/// 类似于 MediaQuery.of(context).padding。</span><br>context<span class="hljs-selector-class">.mediaQueryPadding</span>()<br><br><span class="hljs-comment">/// 类似于 MediaQuery.of(context).viewPadding。</span><br>context<span class="hljs-selector-class">.mediaQueryViewPadding</span>()<br><br><span class="hljs-comment">/// 类似于 MediaQuery.of(context).viewInsets。</span><br>context<span class="hljs-selector-class">.mediaQueryViewInsets</span>()<br><br><span class="hljs-comment">/// 类似于 MediaQuery.of(context).orientation;</span><br>context<span class="hljs-selector-class">.orientation</span>()<br><br><span class="hljs-comment">///检查设备是否处于横向模式</span><br>context<span class="hljs-selector-class">.isLandscape</span>()<br><br><span class="hljs-comment">///检查设备是否处于纵向模式。</span><br>context<span class="hljs-selector-class">.isPortrait</span>()<br><br><span class="hljs-comment">///类似于MediaQuery.of(context).devicePixelRatio。</span><br>context<span class="hljs-selector-class">.devicePixelRatio</span>()<br><br><span class="hljs-comment">///类似于MediaQuery.of(context).textScaleFactor。</span><br>context<span class="hljs-selector-class">.textScaleFactor</span>()<br><br><span class="hljs-comment">///查询设备最短边。</span><br>context<span class="hljs-selector-class">.mediaQueryShortestSide</span>()<br><br><span class="hljs-comment">///如果宽度大于800，则为真。</span><br>context<span class="hljs-selector-class">.showNavbar</span>()<br><br><span class="hljs-comment">///如果最短边小于600p，则为真。</span><br>context<span class="hljs-selector-class">.isPhone</span>()<br><br><span class="hljs-comment">///如果最短边大于600p，则为真。</span><br>context<span class="hljs-selector-class">.isSmallTablet</span>()<br><br><span class="hljs-comment">///如果最短边大于720p，则为真。</span><br>context<span class="hljs-selector-class">.isLargeTablet</span>()<br><br><span class="hljs-comment">///如果当前设备是平板电脑，则为真</span><br>context<span class="hljs-selector-class">.isTablet</span>()<br><br><span class="hljs-comment">///根据页面大小返回一个值&lt;T&gt;。</span><br><span class="hljs-comment">///可以给值为：</span><br><span class="hljs-comment">///watch：如果最短边小于300</span><br><span class="hljs-comment">///mobile：如果最短边小于600</span><br><span class="hljs-comment">///tablet：如果最短边（shortestSide）小于1200</span><br><span class="hljs-comment">///desktop：如果宽度大于1200</span><br>context.responsiveValue&lt;T&gt;()<br></code></pre></td></tr></table></figure>
+<h1 id="九-GetX模板代码生成"><a href="#九-GetX模板代码生成" class="headerlink" title="九.GetX模板代码生成"></a>九.GetX模板代码生成</h1><p>在开发中使用getx,有许多的模板代码例如创建controller,创建bindings,创建page.这样的代码技术含量不高,且都是一样的.如果手动编写费时费力,因此我们可以借助一些工具<br>来生成这些模板代码.</p>
+<h3 id="1-GetX-Cli工具"><a href="#1-GetX-Cli工具" class="headerlink" title="1. GetX Cli工具"></a>1. GetX Cli工具</h3><p><a target="_blank" rel="noopener" href="https://github.com/jonataslaw/get_cli">GetX Cli</a>是一个命令行脚本（command-line interface)安装好Cli可以通过命令行代码生成一些模板代码.<br>CLI有如下的功能:</p>
+<ul>
+<li>创建Getx项目</li>
+<li>项目工程化</li>
+<li>生成Model</li>
+<li>生成page</li>
+<li>生成view</li>
+<li>生成controller</li>
+<li>自定义controller模板</li>
+<li>生成翻译文件</li>
+</ul>
+<h3 id="2-开发工具插件"><a href="#2-开发工具插件" class="headerlink" title="2.开发工具插件"></a>2.开发工具插件</h3><p>可以通过AndroidStudio或者是Vscode找寻模板插件,提升开发效率。例如getx_template.</p>
+<p>相关资料:<br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6924104248275763208">Flutter GetX使用—简洁的魅力！</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6984593635681517582#heading-34">【源码篇】Flutter GetX深度剖析 | 我们终将走出自己的路（万字图文）</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6905367558008078350">Flutter状态管理终极方案GetX第一篇——路由</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6907622450151096334#heading-10">Flutter状态管理终极方案GetX第二篇——状态管理</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6910920929199521800#heading-10">GetX第三篇-依赖注入</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6913917533997891591">GetX项目级实战</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a643a1f6074e">getx的controller是怎么销毁的</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_36407748/article/details/115213064">Getx - 如何使用依赖管理和Bindings</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33950912/article/details/117793429">getx 学习 使用 记录 - 路由</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_36407748/article/details/115204260">Getx - 如何使用路由管理页面</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/iOS_And_Swift/article/details/111587941">flutter 一文带你了解GetX</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/71dd44bf61bb">Flutter GetX系列教程—国际化配置、依赖注入、Binding</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6997283367045562375#heading-0">flutter + getx 最佳实践</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/7005342494552489991">Flutter 入门与实战（七十四）：GetxController 的生命周期详解</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/7005010372637753352#heading-2">Flutter GetX系列教程—GetxController</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6978079109804982285">Flutter状态管理–GetX的简单使用</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Flutter%E5%BC%80%E5%8F%91/" class="category-chain-item">Flutter开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>使用Getx框架简化Flutter开发</div>
+      <div>http://example.com/2021/09/29/使用Getx框架简化Flutter开发/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年9月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/10/10/GitHubAction%E8%AF%A6%E8%A7%A3/" title="GitHubAction详解">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">GitHubAction详解</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/09/02/AndroidJetpack%E5%88%86%E9%A1%B5%E7%BB%84%E4%BB%B6paging3/" title="AndroidJetpack分页组件paging3">
+                        <span class="hidden-mobile">AndroidJetpack分页组件paging3</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

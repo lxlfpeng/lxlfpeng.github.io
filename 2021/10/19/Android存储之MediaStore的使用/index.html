@@ -1,0 +1,854 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Android系统内容提供者ContentProvider安卓系统会在每次开机之后扫描所有文件并分类整理存入数据库，这个数据库保存了手机上存储的所有文件的信息。该数据库文件存放在Android设备的&#x2F;data&#x2F;data&#x2F;com.android.providers.media&#x2F;databases或&#x2F;data&#x2F;data&#x2F;com.android.providers.media.module&#x2F;databa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android存储之MediaStore的使用">
+<meta property="og:url" content="http://example.com/2021/10/19/Android%E5%AD%98%E5%82%A8%E4%B9%8BMediaStore%E7%9A%84%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Android系统内容提供者ContentProvider安卓系统会在每次开机之后扫描所有文件并分类整理存入数据库，这个数据库保存了手机上存储的所有文件的信息。该数据库文件存放在Android设备的&#x2F;data&#x2F;data&#x2F;com.android.providers.media&#x2F;databases或&#x2F;data&#x2F;data&#x2F;com.android.providers.media.module&#x2F;databa">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:21:50.069Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Android存储之MediaStore的使用 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Android存储之MediaStore的使用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-10-19 00:00" pubdate>
+          2021年10月19日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          35 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Android存储之MediaStore的使用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="Android系统内容提供者ContentProvider"><a href="#Android系统内容提供者ContentProvider" class="headerlink" title="Android系统内容提供者ContentProvider"></a>Android系统内容提供者ContentProvider</h3><p>安卓系统会在每次开机之后<code>扫描所有文件并分类整理存入数据库</code>，这个数据库保存了手机上存储的所有文件的信息。该数据库文件存放在Android设备的<code>/data/data/com.android.providers.media/databases</code>或<code>/data/data/com.android.providers.media.module/databases</code>目录当中，该目录下有两个数据库文件分别是<strong>internal.db</strong>(内部存储数据库文件)和<strong>external.db</strong>(外部存储数据库文件)， 这两个数据库文件中的数据表和表结构都大体相似，区别在于internal.db是用来存放内部存储中的文件信息的，而external.db是用来存储外部存储中的文件信息的。因此可以通过访问这两个数据库获取例如媒体文件(音频、视频、图片)等的文件信息， 而不必通过遍历媒体文件的方式来获取文件信息。但是在android设备中是禁止应用程序直接对这个数据进行直接操作的，而是将这个数据库的操作通过<strong>ContentProvider(内容提供者)<strong>将数据操作提供出来， 如要要对ContentProvider中的数据进行操作，可以通过</strong>ContentResolver(数据调用者)</strong> 对象结合Uri进行调用 来实现 。 ContentResolver(数据调用者)可以实现与ContentProvider进行通信，然后再通过ContentResolver调用ContentProvider的添加(insert)、删除(delete)、查询(query)、修改(update)等操作的同名方法，从而让ContentProvider对象接收数据请求、执行请求的操作并返回结果，这是一套标准的Android内容提供者数据模型。</p>
+<h3 id="为什么要使用ContentProvider-内容提供者-来实现这一功能呢"><a href="#为什么要使用ContentProvider-内容提供者-来实现这一功能呢" class="headerlink" title="为什么要使用ContentProvider(内容提供者)来实现这一功能呢?"></a>为什么要使用ContentProvider(内容提供者)来实现这一功能呢?</h3><ol>
+<li>Android设备系统中有些数据很重要，不能让别的应用程序随便访问并操作，对于需要用到这些数据的应用程序，可以通过ContentProvider这个机制，提供安全的数据访问操作方式。</li>
+<li>ContentProvider还有一个重要的特点就是它是可以使得某些数据可以被跨进程访问，会自动处理安全性和跨进程通信。</li>
+<li>Android系统通过ContentProvider暴露自己的数据，可以使得开发者在开发时无需知道数据是如何存储的，是使用数据库还是使用文件?开发者只需要通过这一套标准及统一的接口和数据打交道。</li>
+</ol>
+<h3 id="ContentResolver如何使用"><a href="#ContentResolver如何使用" class="headerlink" title="ContentResolver如何使用?"></a>ContentResolver如何使用?</h3><p>获取ContentResolver实例:</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">val mResolver <span class="hljs-operator">=</span> context.getContentResolver()<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>ContentResolver实例获得后，就可以进行各种增删改查的方法 ，ContentResolver类也提供了与ContentProvider类相对应的四个方法可供调用：</p>
+<table>
+<thead>
+<tr>
+<th>返回值</th>
+<th>函数声明</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>final Uri</td>
+<td>insert(Uri url, ContentValues values)</td>
+<td>该方法用于往ContentProvider添加数据。</td>
+</tr>
+<tr>
+<td>final int</td>
+<td>delete(Uri url, String where, String[] selectionArgs)</td>
+<td>该方法用于从ContentProvider删除数据。</td>
+</tr>
+<tr>
+<td>final Cursor</td>
+<td>query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder)</td>
+<td>该方法用于从ContentProvider中获取数据。</td>
+</tr>
+<tr>
+<td>final int</td>
+<td>update(Uri uri, ContentValues values, String where, String[] selectionArgs)</td>
+<td>该方法用于更新ContentProvider中的数据。</td>
+</tr>
+</tbody></table>
+<p>ContentResolver是通过Uri来查询ContentProvider中提供的数据的。因此想操作ContentProvider，必须要知道内容提供者的Uri，在正确得到Uri之后，就可以通过ContentResolver对象来操作ContentProvider中的数据了。</p>
+<h3 id="什么是Uri"><a href="#什么是Uri" class="headerlink" title="什么是Uri?"></a>什么是Uri?</h3><p>上文中提到了Android提供内容的叫ContentProvider，那么在Android中怎么区分各个Provider？有的是提供联系人的，有的是提供图片的，有的是提供视频的等等。所以就需要有一个唯一的标识来标识这个Provider，Uri(通用资源标识符 Universal Resource Identifier)就是起到了这个标识的作用。每一个ContentProvider都会有一个唯一的Uri地址，通过这个Uri标识可以获取到ContentProvider和其中的数据，然后进行数据操作。<br>ContentProvider使用的Uri语法结构如下：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">content:<span class="hljs-regexp">//m</span>edia<span class="hljs-regexp">/external/im</span>ages/media<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong>content:&#x2F;&#x2F;</strong> 是通用前缀，表示该Uri用于ContentProvider定位资源。</li>
+<li><strong>authority</strong> 是授权者名称，用来确定具体由哪一个ContentProvider提供资源。因此一般authority都由类的小写全称组成，以保证唯一性。</li>
+<li><strong>data_path</strong> 是数据路径，用来确定请求的是哪个数据集。</li>
+<li><strong>id</strong> 是数据编号，用来请求单条数据。如果是多条这个字段忽略。</li>
+</ul>
+<p>对于系统已经提供了如通讯录、多媒体、短信等的URI，可以直接用ContentResolver调用这些URI，对系统数据库进行增删改查等操作，从而保证整个Android设备中数据的统一。</p>
+<h3 id="如何获取Uri"><a href="#如何获取Uri" class="headerlink" title="如何获取Uri?"></a>如何获取Uri?</h3><p>以<code>content://media/external/images/media</code>为例，其URI有三种写法：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs abnf">Uri uri1 <span class="hljs-operator">=</span> Uri.parse(<span class="hljs-string">&quot;content://media/external/images/media&quot;</span>)<span class="hljs-comment">;</span><br>Uri uri2 <span class="hljs-operator">=</span> MediaStore.Images.Media.getContentUri(<span class="hljs-string">&quot;external&quot;</span>)<span class="hljs-comment">;</span><br>Uri uri3 <span class="hljs-operator">=</span> MediaStore.Images.Media.EXTERNAL_CONTENT_URI<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>Android 提供了 MediaStore 类来对数据库的的多媒体数据进行封装。</p>
+<p>我们知道Android系统中的每一种媒体文件有两种地址描述方式:</p>
+<ul>
+<li>第一种模式，在Android中，ContentProvider是用来存储和获取公共数据的统一接口，Content Provider为每一类资源分配了URI地址比如图片的Uri地址就包括<code>MediaStore.Images.Media.INTERNAL_CONTENT_URI</code>和<code>MediaStore.Images.Media.EXTERNAL_CONTENT_URI</code>这两个地址，其值分别是<code>content://media/internal/images/media</code>和<code>content://media/external/images/media</code>，对应内部库和外部库地址。每一张图片的地址基本上是上面的基础URL地址下加上图片的内部ID。例如外部存储上的图片ID为52，其对应的Uri地址就是 content:&#x2F;&#x2F;media&#x2F;external&#x2F;images&#x2F;media&#x2F;52. 知道了这个地址，基本上就可以操作这张图片的所有信息了。同样，对于其他多媒体文件例如外部库的音频 Uri 地址为 <strong>MediaStore.Audio.Media.EXTERNAL_CONTENT_URI</strong> ，其它 Uri 地址都是类似的。</li>
+<li>另外一种描述文件地址标识就是传统的文件路径模式了。比如一张存储卡上的图片地址可能描述为：&#x2F;mnt&#x2F;sdcard&#x2F;images&#x2F;52.jpg。其实这个路径存储在文件储存库中的data字段中，有了这点关联，可以在这两种模式下进行任意切换。</li>
+</ul>
+<p>通过上文可以知道Android为多媒体提供的ContentProvider的Uri都记录在MediaStore这个类里。MediaStore获取文件信息，是通过文件的mime-type来获取的，也就说文件储存库中有mime-type这个字段。</p>
+<p><strong>MediaStore内部类</strong></p>
+<ul>
+<li>class MediaStore.Audio：所有音频内容的类。</li>
+<li>class MediaStore.Files：文件储存库中所有文件的索引，包括非媒体文件和媒体文件类。</li>
+<li>class MediaStore.Images：所有图片内容的类。</li>
+<li>interface MediaStore.MediaColumns：文件储存库中表的公共字段。</li>
+<li>class MediaStore.Video：所有视频内容的类。</li>
+</ul>
+<p><strong>MediaStore内部类对外提供的多媒体Uri常量有如下</strong></p>
+<ul>
+<li>MediaStore.Audio.Media.EXTERNAL_CONTENT_URI：存储在手机外部存储器上的音频文件Uri路径。</li>
+<li>MediaStore.Audio.Media.INTERNAL_CONTENT_URI：存储在手机内部存储器上的音频文件Uri路径。</li>
+<li>MediaStore.Images.Media.EXTERNAL_CONTENT_URI：存储在手机外部存储器上的图片文件Uri路径。</li>
+<li>MediaStore.Images.Media.INTERNAL_CONTENT_URI：存储在手机内部存储器上的图片文件Uri路径。</li>
+<li>MediaStore.Video.Media.EXTERNAL_CONTENT_URI：存储在手机外部存储器上的视频文件Uri路径。</li>
+<li>MediaStore.Video.Media.INTERNAL_CONTENT_URI：存储在手机内部存储器上的视频文件Uri路径。</li>
+</ul>
+<blockquote>
+<p>注意：MediaStore.Downloads.EXTERNAL_CONTENT_URI是Android10版本新增API，用于创建、访问非媒体文件。</p>
+</blockquote>
+<p>Android系统给我们定义好了许多的媒体文件对应的URI路径如下表:</p>
+<table>
+<thead>
+<tr>
+<th>媒体类型</th>
+<th>Uri路径</th>
+<th>MediaStore内部类常量</th>
+<th>默认存储目录</th>
+<th>允许存储目录</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Image(图片)</td>
+<td>content:&#x2F;&#x2F;media&#x2F;external&#x2F;images&#x2F;media</td>
+<td>MediaStore.Images.Media.EXTERNAL_CONTENT_URI</td>
+<td>Pictures</td>
+<td>DCIM、Pictures</td>
+</tr>
+<tr>
+<td>Audio(音频)</td>
+<td>content:&#x2F;&#x2F;media&#x2F;external&#x2F;audio&#x2F;media</td>
+<td>MediaStore.Audio.Media.EXTERNAL_CONTENT_URI</td>
+<td>Music</td>
+<td>Alarms、Music、Notifications、Podcasts、Ringtones</td>
+</tr>
+<tr>
+<td>Video(视频)</td>
+<td>content:&#x2F;&#x2F;media&#x2F;external&#x2F;video&#x2F;media</td>
+<td>MediaStore.Video.Media.EXTERNAL_CONTENT_URI</td>
+<td>Movies</td>
+<td>DCIM 、Movies</td>
+</tr>
+<tr>
+<td>Download(下载文件)</td>
+<td>content:&#x2F;&#x2F;media&#x2F;external&#x2F;downloads</td>
+<td>MediaStore.Downloads.EXTERNAL_CONTENT_URI</td>
+<td>Download</td>
+<td>Download</td>
+</tr>
+</tbody></table>
+<p>有了对应的Uri 地址，我们可以通过<strong>ContentResolver</strong>调用添加(insert)、删除(delete)、查询(query)、 修改(update)等操作了。</p>
+<h3 id="使用ContentResolver查询数据"><a href="#使用ContentResolver查询数据" class="headerlink" title="使用ContentResolver查询数据"></a>使用ContentResolver查询数据</h3><p>有了 Uri 地址，我们可以通过<strong>ContentResolver</strong>的 <em>query()</em> 方法来获取到 Cursor，从而获取到数据库资源。</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> Cursor <span class="hljs-title">query</span> <span class="hljs-params">(Uri uri, <span class="hljs-type">String</span>[] projection,<span class="hljs-type">String</span> selection,<span class="hljs-type">String</span>[] selectionArgs, <span class="hljs-type">String</span> sortOrder)</span></span><br></code></pre></td></tr></table></figure>
+<p>ContentResolver的query方法接受几个参数，参数意义如下:</p>
+<ul>
+<li>Uri：这个Uri代表要查询的内容提供者的Uri。上文说到多媒体类型的Uri一般都直接从MediaStore里取得，例如我要取所有图片的信息，就必须利用MediaStore.Images.Media.EXTERNAL_CONTENT_URI这个Uri。</li>
+<li>projection： 代表告诉Provider要返回的字段内容（列Column），用一个String数组来表示。用null表示返回Provider的所有字段内容（列Column）。</li>
+<li>selection：相当于SQL语句中的where子句，就是代表查询条件。null表示不进行添加筛选查询。</li>
+<li>selectArgs：如果selection里有？这个符号时，这里可以以实际值代替这个问号。如果Selections这个没有？的话，那么这个String数组可以为null。</li>
+<li>sortOrder：说明查询结果按什么来排序。相当于SQL语句中的Order by，升序 asc &#x2F;降序 desc，null为默认排序。</li>
+</ul>
+<p>示例:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//查找所有图片的信息</span><br><span class="hljs-type">Cursor</span> <span class="hljs-variable">cursor</span> <span class="hljs-operator">=</span> contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,<br>        <span class="hljs-literal">null</span>,<br>        <span class="hljs-literal">null</span>,<br>        <span class="hljs-literal">null</span>,<br>        <span class="hljs-literal">null</span>);<br><br><span class="hljs-comment">//查找所有图片的信息的DISPLAY_NAME字段</span><br><span class="hljs-type">Cursor</span> <span class="hljs-variable">cursor</span> <span class="hljs-operator">=</span> contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,<br>        <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>[]&#123;MediaStore.Images.Media.DISPLAY_NAME&#125;,<br>        <span class="hljs-literal">null</span>,<br>        <span class="hljs-literal">null</span>,<br>        <span class="hljs-literal">null</span>);<br><br><span class="hljs-comment">//查找图片名字叫“xx.png”的图片信息,null表示不进行筛选。</span><br><span class="hljs-type">Cursor</span> <span class="hljs-variable">cursor</span> <span class="hljs-operator">=</span> contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,<br>        <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>[]&#123;MediaStore.Images.Media.DISPLAY_NAME&#125;,<br>        <span class="hljs-comment">//第三个参数设置条件，相当于SQL语句中的where。</span><br>        <span class="hljs-comment">//null表示不进行筛选。</span><br>        MediaStore.Images.Media.DISPLAY_NAME + <span class="hljs-string">&quot;=&#x27;xx.png&#x27;&quot;</span>,<br>        <span class="hljs-literal">null</span>,<br>        <span class="hljs-literal">null</span>);<br>        <br><span class="hljs-comment">//查找图片名字叫“xx.png”的图片信息,如果在selection参数里面有？，那么你在selectionArgs写的数据就会替换掉？，</span><br> <span class="hljs-type">Cursor</span> <span class="hljs-variable">cursor</span> <span class="hljs-operator">=</span> contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,<br>        <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>[]&#123;MediaStore.Images.Media.DISPLAY_NAME&#125;,<br>        MediaStore.Images.Media.DISPLAY_NAME + <span class="hljs-string">&quot;=?&quot;</span>,<br>        <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>[]&#123;<span class="hljs-string">&quot;xx.png&quot;</span>&#125;,<br>        <span class="hljs-literal">null</span>);<br>        <br><span class="hljs-comment">//默认排序是升序。注意：desc前有空格</span><br><span class="hljs-type">Cursor</span> <span class="hljs-variable">cursor</span> <span class="hljs-operator">=</span> contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,<br>        <span class="hljs-literal">null</span>,<br>        <span class="hljs-literal">null</span>,<br>        <span class="hljs-literal">null</span>,<br>        ContactsContract.Contacts._ID + <span class="hljs-string">&quot; DESC&quot;</span>);<br></code></pre></td></tr></table></figure>
+<p>上面就是各个参数的意义，它返回的查询结果一个Cursor结果集。那么如何使用Cursor对象获取数据?<br>Cursor就是游标，把查询到的结果集封装在一个Cursor对象当中。我们知道只要是数据表都是可以通过行和列定位到具体的位置然后数据将其取出，Cursor也不例外，可以通过<code>cursor.moveToNext()</code>让行向后移动，然后根据<code>getColumnIndex(String columnName)</code>获取到列名的索引位置。有了每一行的的列名索引位置就可以就可以取出每一行中对应的数据了。当然这些数据类型也是多种多样的，Cursor也给我们提供了以下的方法去获取不同类型的值:</p>
+<ul>
+<li>以字节数组的形式返回请求列的值：byte[] getBlob(int columnIndex)</li>
+<li>以字符串形式返回请求列的值：String getString(int columnIndex)</li>
+<li>以整数形式返回请求列的值：int getInt(int columnIndex)</li>
+<li>以 long 形式返回请求列的值：long getLong(int columnIndex)</li>
+<li>以浮点数形式返回请求列的值：float getFloat(int columnIndex)</li>
+<li>以双精度形式返回请求列的值：double getDouble(int columnIndex)</li>
+<li>返回给定列值的数据类型：int getType(int columnIndex)</li>
+<li>列值是否为空：boolean isNull(int columnIndex)</li>
+<li>以短形式返回请求列的值：short getShort(int columnIndex)</li>
+</ul>
+<p>示例:使用ContentResolver通过Uri获取图片文件相关的信息集Cursor，然后通过Cursor取出图片文件相关的信息:</p>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs fsharp"><span class="hljs-comment">// 先拿到图片提供者的Uri</span><br><span class="hljs-keyword">val</span> imageUri <span class="hljs-operator">=</span> MediaStore.Images.Media.EXTERNAL_CONTENT_URI<br><span class="hljs-comment">// 需要获取图片数据表中的哪几列信息，注意这里需要和cursor取出的列名相对应否则会出现空指针</span><br><span class="hljs-keyword">val</span> projection <span class="hljs-operator">=</span> arrayOf(<br>    <span class="hljs-comment">//获取ID列的数据</span><br>    MediaStore.Images.Media._ID,<br>    <span class="hljs-comment">//获取MIME_TYPE列的值</span><br>    MediaStore.Images.Media.MIME_TYPE,<br>    <span class="hljs-comment">//获取DISPLAY_NAME列的值</span><br>    MediaStore.Images.Media.DISPLAY_NAME<br>)<br><br><span class="hljs-comment">// 查询条件：因为是查询全部图片，传null</span><br><span class="hljs-comment">//String selection = MediaStore.Images.Media.DISPLAY_NAME +&quot;= ?&quot;;</span><br><span class="hljs-comment">// 条件参数：因为是查询全部图片，传null</span><br><span class="hljs-comment">//String[] args = new String[] &#123;“xxx.png”&#125;</span><br><span class="hljs-comment">// 排序：可以添加排序</span><br><span class="hljs-comment">// val order = MediaStore.Files.FileColumns._ID + &quot;DESC&quot;</span><br><span class="hljs-comment">// 开始查询</span><br><span class="hljs-keyword">val</span> cursor <span class="hljs-operator">=</span> contentResolver.query(imageUri, projection, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>)<br><br><span class="hljs-comment">//获取我们需要的数据在数据的第几列，这里需要和projection查询的数据对应起来，因为cursor结果集只包含projection的列信息，否则会出现空指针</span><br><span class="hljs-keyword">if</span> (cursor <span class="hljs-operator">!=</span> <span class="hljs-literal">null</span>) &#123;<br>    <span class="hljs-comment">// 获取id字段是第几列</span><br>    <span class="hljs-keyword">val</span> idIndex <span class="hljs-operator">=</span> cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)<br>    <span class="hljs-keyword">val</span> mimeTypeIndex <span class="hljs-operator">=</span> cursor.getColumnIndexOrThrow(MediaStore.Images.Media.MIME_TYPE)<br>    <span class="hljs-keyword">val</span> displayNameIndex <span class="hljs-operator">=</span> cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)<br><br>    <span class="hljs-comment">//循环取出cursor每一行的数据</span><br>    <span class="hljs-keyword">while</span> (cursor.moveToNext()) &#123;<br>        <span class="hljs-comment">//根据列的坐标，取出对应行数的数据</span><br>        <span class="hljs-keyword">val</span> <span class="hljs-built_in">id</span> <span class="hljs-operator">=</span> cursor.getLong(idIndex)<br>        <span class="hljs-comment">//根据列的坐标，取出对应行数的数据</span><br>        <span class="hljs-keyword">val</span> <span class="hljs-keyword">type</span> <span class="hljs-operator">=</span> cursor.getString(mimeTypeIndex)<br>        <span class="hljs-comment">//根据列的坐标，取出对应行数的数据</span><br>        <span class="hljs-keyword">val</span> disName <span class="hljs-operator">=</span> cursor.getString(displayNameIndex)<br>        <span class="hljs-comment">//根据ID和图片提供者的Uri可以合成图片的Uri</span><br>        <span class="hljs-keyword">val</span> imageUri <span class="hljs-operator">=</span> ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, <span class="hljs-built_in">id</span>)<br>        <span class="hljs-comment">//TODO</span><br>    &#125;<br>    <span class="hljs-comment">//关闭游标</span><br>    cursor.close()<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>通过上面的例子，可以获取到手机外部存储中所有的图片文件信息的ID、MIME_TYPE、DISPLAY_NAME等信息，如果要获取到文件大小等其他的信息也是可以的，只需要在projection集合中添加对应的列名然后，在cursor中找到每一行对应的列的索引值就可以取出对应的值，这些列名可以在MediaStore.MediaColumns取公共常量字段，也可以根据文件类型的不同在MediaStore的内部类中取值:<br>图片文件比较常见的列名有:</p>
+<ul>
+<li>MediaStore.Images.Media._ID：磁盘上文件的路径</li>
+<li>MediaStore.Images.Media.DATA：磁盘上文件的路径</li>
+<li>MediaStore.Images.Media.DATE_ADDED：文件添加到media provider的时间（单位秒）</li>
+<li>MediaStore.Images.Media.DATE_MODIFIED：文件最后一次修改单元的时间</li>
+<li>MediaStore.Images.Media.DISPLAY_NAME：文件的显示名称</li>
+<li>MediaStore.Images.Media.HEIGHT：图像&#x2F;视频的高度，以像素为单位</li>
+<li>MediaStore.Images.Media.MIME_TYPE：文件的MIME类型</li>
+<li>MediaStore.Images.Media.SIZE：文件的字节大小</li>
+<li>MediaStore.Images.Media.TITLE：标题</li>
+<li>MediaStore.Images.Media.WIDTH：图像&#x2F;视频的宽度，以像素为单位。</li>
+</ul>
+<p>视频文件比较常见的列名有:</p>
+<ul>
+<li>MediaStore.Video.Media.TITLE  名称</li>
+<li>MediaStore.Video.Media.DURATION 总时长</li>
+<li>MediaStore.Video.Media.DATA 地址</li>
+<li>MediaStore.Video.Media.SIZE 大小</li>
+<li>MediaStore.Video.Media.WIDTH：视频的宽度，以像素为单位。</li>
+<li>MediaStore.Video.Media.HEIGHT：视频的高度，以像素为单位</li>
+</ul>
+<p>音频文件比较常见的列名有:</p>
+<ul>
+<li>MediaStore.Audio.Media.TITLE：歌名</li>
+<li>MediaStore.Audio.Media.ARTIST：歌手</li>
+<li>MediaStore.Audio.Media.DURATION：总时长</li>
+<li>MediaStore.Audio.Media.DATA：地址</li>
+<li>MediaStore.Audio.Media.SIZE：大小</li>
+</ul>
+<h3 id="使用ContentResolver插入数据"><a href="#使用ContentResolver插入数据" class="headerlink" title="使用ContentResolver插入数据"></a>使用ContentResolver插入数据</h3><p>如果需要插入数据只需要调用<code>contentResolver.insert(uri, contentValues)</code>;构造一个 ContentValues 对象，通过 ContentResolver.insert 插入到对应的目录中，该方法会返回一个 Uri，通过对该 Uri 进行文件流写入即可:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">saveImage</span><span class="hljs-params">(bitmap: <span class="hljs-type">Bitmap</span>)</span></span>&#123;<br>    <span class="hljs-keyword">val</span> values = ContentValues()<br>    <span class="hljs-keyword">val</span> insertUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values)<br>    insertUri?.let &#123;<br>        contentResolver.openOutputStream(it).use &#123;outputStream-&gt;<br>            bitmap.compress(Bitmap.CompressFormat.PNG,<span class="hljs-number">100</span>,outputStream)<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>ContentValues类和Bundle类很类似，都是使用HashMap的泛型形式来存储的，并且都是HashMap&lt;String, Object&gt;()。通过ContentValues可以设置列的数据，和上文中提到的一样可以在MediaStore.MediaColumns中<br>取公共常量字段也可以在MediaStore.MediaColumns取公共常量字段:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">private</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">saveImage</span><span class="hljs-params">(bitmap: <span class="hljs-type">Bitmap</span>)</span></span>&#123;<br>    <span class="hljs-keyword">val</span> values = ContentValues().apply &#123;<br>      <span class="hljs-comment">//设置文件的 MimeType</span><br>      put(MediaStore.Images.Media.MIME_TYPE,<span class="hljs-string">&quot;image/png&quot;</span>)<br>      <span class="hljs-comment">//指定保存的文件名，</span><br>      put(MediaStore.Images.Media.DISPLAY_NAME,<span class="hljs-string">&quot;<span class="hljs-subst">$&#123;System.currentTimeMillis()&#125;</span>.png&quot;</span>)<br>      <span class="hljs-comment">//指定保存的文件目录,如果不设置这个值，则会被默认保存到对应的媒体类型的文件夹下，</span><br>      <span class="hljs-keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.Q) &#123;<br>           put(MediaStore.Images.Media.RELATIVE_PATH,<span class="hljs-string">&quot;<span class="hljs-subst">$&#123;Environment.DIRECTORY_PICTURES&#125;</span>/DemoPicture&quot;</span>)<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>           put(MediaStore.MediaColumns.DATA,<span class="hljs-string">&quot;<span class="hljs-subst">$&#123;Environment.getExternalStorageDirectory().path&#125;</span><span class="hljs-subst">$&#123;File.separator&#125;</span><span class="hljs-subst">$&#123;Environment.DIRECTORY_DCIM&#125;</span><span class="hljs-subst">$&#123;File.separator&#125;</span><span class="hljs-subst">$&#123;System.currentTimeMillis()&#125;</span>.png&quot;</span>)<br>      &#125;<br>     <br>    &#125;<br>    <span class="hljs-comment">//插入文件数据库并获取到文件的Uri</span><br>    <span class="hljs-keyword">val</span> insertUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values)<br>    <br>    insertUri?.let &#123;<br>        <span class="hljs-comment">//通过outputStream将图片文件内容写入Url</span><br>        contentResolver.openOutputStream(it).use &#123;outputStream-&gt;<br>            bitmap.compress(Bitmap.CompressFormat.PNG,<span class="hljs-number">100</span>,outputStream)<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>需要注意的有点:</p>
+<ol>
+<li>是对于 Android 中的媒体类型，应该按照不同的MimeType放到对应的公共目录媒体文件夹下:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>MimeType</th>
+<th>对应文件夹</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>图片(image&#x2F;*)</td>
+<td>DCIM,Pictures</td>
+</tr>
+<tr>
+<td>音频(audio&#x2F;*)</td>
+<td>Alarms, Music, Notifications, Podcasts, Ringtones</td>
+</tr>
+<tr>
+<td>视频(video&#x2F;*)</td>
+<td>Movies</td>
+</tr>
+<tr>
+<td>文档(file&#x2F;*)</td>
+<td>Documents,Download</td>
+</tr>
+</tbody></table>
+<p>当然，这些也都可以通过 MediaStore 放到 <code>Downloads</code> 文件夹下</p>
+<ol start="2">
+<li><p>是MediaStore.Images.Media.RELATIVE_PATH这个值如果不设置，则系统会取当前的时间戳作为文件名例如，图片文件(mimeType &#x3D; image&#x2F;<em>)会被保存到Pictures(Environment#DIRECTORY_PICTURES) 中，需要注意的是，不能将文件放置到不对应的顶级文件夹下，比如将一个 mimeType 为 audio&#x2F;mpeg 放大 Pictures 这样的行为是不被允许的，也就是如果设置 MIME_TYPE &#x3D; audia&#x2F;</em> 并将 RELATIVE_PATH 设置为 Environment#DIRECTORY_PICTURES 这样是会 Throw IllegalArgumentException 的。</p>
+</li>
+<li><p>是MediaStore.Images.Media.RELATIVE_PATH是在Android10才被添加进来的因此需要做好不同版本的适配。</p>
+</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Android存储之MediaStore的使用</div>
+      <div>http://example.com/2021/10/19/Android存储之MediaStore的使用/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年10月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/11/02/Android%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%A1%86%E6%9E%B6hilt%E4%BD%BF%E7%94%A8/" title="Android依赖注入框架hilt使用">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Android依赖注入框架hilt使用</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/10/18/Android%E5%AD%98%E5%82%A8%E4%B9%8B%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8%E9%80%82%E9%85%8D/" title="Android存储之分区存储适配">
+                        <span class="hidden-mobile">Android存储之分区存储适配</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

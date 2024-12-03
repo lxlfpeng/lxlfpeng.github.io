@@ -1,0 +1,703 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.Compose页面跳转的方式1.通过Activity进行导航(不推荐)使用startActivity进行页面跳转，使用intent进行数据传递。每一个Activity承载一个Compose页面，这是Android原生自带的界面跳转方式。 2.通过if判断显示界面声明式compose ui在简单页面可以通过隐藏，显示来实现页面切换。例如: 12345678910@Composablefun Ap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jetpack-Compose之四 页面跳转(导航)">
+<meta property="og:url" content="http://example.com/2022/05/20/Jetpack-Compose%E4%B9%8B%E5%9B%9B%20%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC(%E5%AF%BC%E8%88%AA)/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.Compose页面跳转的方式1.通过Activity进行导航(不推荐)使用startActivity进行页面跳转，使用intent进行数据传递。每一个Activity承载一个Compose页面，这是Android原生自带的界面跳转方式。 2.通过if判断显示界面声明式compose ui在简单页面可以通过隐藏，显示来实现页面切换。例如: 12345678910@Composablefun Ap">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:35:54.389Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Jetpack-Compose之四 页面跳转(导航) - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Jetpack-Compose之四 页面跳转(导航)"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-05-20 00:00" pubdate>
+          2022年5月20日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Jetpack-Compose之四 页面跳转(导航)</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-Compose页面跳转的方式"><a href="#一-Compose页面跳转的方式" class="headerlink" title="一.Compose页面跳转的方式"></a>一.Compose页面跳转的方式</h1><h3 id="1-通过Activity进行导航-不推荐"><a href="#1-通过Activity进行导航-不推荐" class="headerlink" title="1.通过Activity进行导航(不推荐)"></a>1.通过Activity进行导航(不推荐)</h3><p>使用startActivity进行页面跳转，使用intent进行数据传递。每一个Activity承载一个Compose页面，这是Android原生自带的界面跳转方式。</p>
+<h3 id="2-通过if判断显示界面"><a href="#2-通过if判断显示界面" class="headerlink" title="2.通过if判断显示界面"></a>2.通过if判断显示界面</h3><p>声明式compose ui在简单页面可以通过隐藏，显示来实现页面切换。<br>例如:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">App</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">val</span> context = LocalContext.current<br>    <span class="hljs-keyword">var</span> isLogin <span class="hljs-keyword">by</span> remember &#123; mutableStateOf(checkLogin(context)) &#125;<br>    <span class="hljs-keyword">if</span> (isLogin) &#123;<br>        Home()<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        Login()<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-Navigation导航库-推荐"><a href="#3-Navigation导航库-推荐" class="headerlink" title="3.Navigation导航库(推荐)"></a>3.Navigation导航库(推荐)</h3><p>使用单Activity来承载Compose效果非常好，切换页面时可以做到基于view级别。</p>
+<h1 id="二-使用Navigation-Compose导航库"><a href="#二-使用Navigation-Compose导航库" class="headerlink" title="二.使用Navigation-Compose导航库"></a>二.使用Navigation-Compose导航库</h1><p>导航实际上就是页面跳转，因为Compose中每一个@Composable注解标注的方法就可以成为一个视图，所以导航就是用来处理这些视图之间的跳转操作。 Navigation在设计上高度抽象，只负责导航逻辑不关心页面的具体实现，无论是Activity、Fragment甚至是一个已定义View都可以基于Navigation实现导航。当然，Composable也是可以的。</p>
+<h3 id="1-添加navigation-compose依赖"><a href="#1-添加navigation-compose依赖" class="headerlink" title="1.添加navigation-compose依赖"></a>1.添加navigation-compose依赖</h3><p>如果需要使用Navigation组件，必须在应用模块的build.gradle文件中添加一下依赖：</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs clean">dependencies &#123;<br>  <span class="hljs-keyword">implementation</span> <span class="hljs-string">&quot;androidx.navigation:navigation-compose:2.4.0-beta02&quot;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-NavController导航控制"><a href="#2-NavController导航控制" class="headerlink" title="2.NavController导航控制"></a>2.NavController导航控制</h3><p>NavController 是 Navigation 组件的中心 API。此 API 是有状态的，可以跟踪组成应用屏幕的可组合项的返回堆栈以及每个屏幕的状态。在组合项中，它是通过rememberController()方法来创建的。如下：</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs isbl"><span class="hljs-variable">val</span> <span class="hljs-variable">navController</span> = <span class="hljs-function"><span class="hljs-title">rememberNavController</span>()</span><br></code></pre></td></tr></table></figure>
+<p>为了使所有的组合项都可以访问NavController，需要在组合项层次结构中的适当位置创建它(遵循状态提升的原则)。<br>NavBackStackEntry存储了导航中回退栈的信息。可以通过以下方式获取:</p>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs fsharp"><span class="hljs-keyword">val</span> backstackEntry <span class="hljs-operator">=</span> navController.currentBackStackEntryAsState()<br><span class="hljs-comment">//获取当前的路由状态</span><br><span class="hljs-keyword">val</span> route <span class="hljs-operator">=</span> backstackEntry.value<span class="hljs-operator">?.</span>destination<span class="hljs-operator">?.</span>route <br></code></pre></td></tr></table></figure>
+
+<h3 id="3-创建并关联NavHost"><a href="#3-创建并关联NavHost" class="headerlink" title="3.创建并关联NavHost"></a>3.创建并关联NavHost</h3><p>每个NavController都必须与一个NavHost可组合项相关联，NavHost 将 NavController 与导航图相关联导航图用于指定您应能够在其间进行导航的可组合项目的地。在可组合项之间进行导航期间，NavHost的内容会自动进行重组。导航图中的每个可组合项目的地都与一个路线相关联，路线用字符串进行表示,用于定义指向可组合项的路径。<br>您可以将其视为指向特定目的地的隐式深层链接。每个目的地都应该有一条唯一的路线。如果一条路线用于多个可组合项，则会导航到最后一个设定的可组合项。创建并关联NavHost需要用到rememberNavController创建的NavController和导航图的起始目的地的路线，如下：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs stylus">val navController = <span class="hljs-built_in">rememberNavController</span>()<br><span class="hljs-function"><span class="hljs-title">NavHost</span><span class="hljs-params">(navController = navController, startDestination = <span class="hljs-string">&quot;onePage&quot;</span>)</span></span> &#123;<br>  <span class="hljs-built_in">composable</span>(<span class="hljs-string">&quot;onePage&quot;</span>) &#123; <span class="hljs-built_in">OnePage</span>(<span class="hljs-comment">/*...*/</span>) &#125;<br>  <span class="hljs-built_in">composable</span>(<span class="hljs-string">&quot;twoPage&quot;</span>) &#123; <span class="hljs-built_in">TwoPage</span>(<span class="hljs-comment">/*...*/</span>) &#125;<br>  <span class="hljs-built_in">composable</span>(<span class="hljs-string">&quot;thirdPage&quot;</span>) &#123; <span class="hljs-built_in">ThirdPage</span>(<span class="hljs-comment">/*...*/</span>) &#125;<br>  <span class="hljs-comment">/*...*/</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-导航（跳转）到可组合项"><a href="#4-导航（跳转）到可组合项" class="headerlink" title="4.导航（跳转）到可组合项"></a>4.导航（跳转）到可组合项</h3><h5 id="1-简单导航"><a href="#1-简单导航" class="headerlink" title="(1.)简单导航"></a>(1.)简单导航</h5><p>如需导航到导航图中的可组合项目的地，您必须使用 navigate() 方法。navigate() 接受代表目的地路线的单个 String 参数。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">NavController<span class="hljs-selector-class">.navigate</span>(<span class="hljs-string">&quot;onePage&quot;</span>)<br></code></pre></td></tr></table></figure>
+<p>可以创建FirstPage，SecondPage，ThirdPage组合，然后给它们指定路径进行跳转:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">HelloCompose</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-comment">// 创建NavController</span><br>    <span class="hljs-keyword">val</span> navController = rememberNavController()<br>    <span class="hljs-comment">// 用NavHost将NavController和导航图相关联，startDestination指定起始的可组合项</span><br>    NavHost(navController = navController, startDestination = <span class="hljs-string">&quot;first_page&quot;</span>) &#123;<br>        <span class="hljs-comment">// 给FirstPage可组合项指定路径</span><br>        composable(<span class="hljs-string">&quot;first_page&quot;</span>) &#123; FirstPage(navController) &#125;<br>        <span class="hljs-comment">// 给SecondPage可组合项指定路径</span><br>        composable(<span class="hljs-string">&quot;second_page&quot;</span>) &#123; SecondPage(navController) &#125;<br>        <span class="hljs-comment">// 给ThirdPage可组合项指定路径</span><br>        <span class="hljs-comment">//composable(&quot;third_page&quot;) &#123; ThirdPage(navController) &#125;</span><br>    &#125;<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> *FirstPage可组合项</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">FirstPage</span><span class="hljs-params">(navController: <span class="hljs-type">NavController</span>)</span></span> &#123;<br>    Column &#123;<br>        Text(text = <span class="hljs-string">&quot;FirstPage页面&quot;</span>)<br>        Button(onClick = &#123;<br>            <span class="hljs-comment">// 导航到SecondPage可组合项</span><br>            navController.navigate(<span class="hljs-string">&quot;second_page&quot;</span>)<br>        &#125;) &#123;<br>            Text(text = <span class="hljs-string">&quot;去SecondPage&quot;</span>)<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * SecondPage可组合项</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">SecondPage</span><span class="hljs-params">(navController: <span class="hljs-type">NavController</span>)</span></span> &#123;<br>    Text(text = <span class="hljs-string">&quot;SecondPage页面&quot;</span>)<br>&#125;<br>```  <br><br>在上面的代码中，使用NavHost制作屏幕，而我们的第一个屏幕是“ first_screen”，因为我们将startDestination设置为“ first_screen”。在此，“ first_screen ”，“ second_screen ”和“ third_screen ”是每个屏幕的路线。每个目的地都应具有唯一的路线，因为借助这些路线，一个屏幕会与其他屏幕区分开。<br><br>##### (<span class="hljs-number">2.</span>)导航后清除起始页和目的页之间的页面<br>导航之前，清除指定可组合项到目的可组合项之间的可组合项:<br></code></pre></td></tr></table></figure>
+<p>NavController.navigate(“目的地路径”){ popUpTo(“返回路径”) }</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">如下例子<br></code></pre></td></tr></table></figure>
+<p>@Composable<br>fun HelloCompose() {<br>    &#x2F;&#x2F; 创建NavController<br>    val navController &#x3D; rememberNavController()<br>    &#x2F;&#x2F; 用NavHost将NavController和导航图相关联，startDestination指定起始的可组合项<br>    NavHost(navController &#x3D; navController, startDestination &#x3D; “first_page”) {<br>        &#x2F;&#x2F; 给FirstPage可组合项指定路径<br>        composable(“first_page”) { FirstPage(navController) }<br>        &#x2F;&#x2F; 给SecondPage可组合项指定路径<br>        composable(“second_page”) { SecondPage(navController) }<br>        &#x2F;&#x2F; 给ThirdPage可组合项指定路径<br>        composable(“third_page”) { ThirdPage(navController) }<br>    }<br>}</p>
+<p>&#x2F;**<br> *FirstPage<br> *&#x2F;<br>@Composable<br>fun FirstPage(navController: NavController) {<br>    Column {<br>        Text(text &#x3D; “FirstPage页面”, color &#x3D; Color.Red)<br>        Button(onClick &#x3D; {<br>            &#x2F;&#x2F; 导航到SecondPage可组合项<br>            navController.navigate(“second_page”)<br>        }) {<br>            Text(text &#x3D; “去SecondPage”)<br>        }<br>    }<br>}   </p>
+<p>&#x2F;**</p>
+<ul>
+<li>SecondPage<br> *&#x2F;<br>@Composable<br>fun SecondPage(navController: NavController) {<br> Column {<br> Text(text &#x3D; “SecondPage页面”, color &#x3D; Color.Red)<br> Button(onClick &#x3D; {<br>     &#x2F;&#x2F; 导航到ThirdPage可组合项<br>     navController.navigate(“third_page”) { popUpTo(“first_page”) }<br> }) {<br>     Text(text &#x3D; “去ThirdPage”)<br> }<br> }<br>}</li>
+</ul>
+<p>&#x2F;**<br> *ThirdPage<br> *&#x2F;<br>@Composable<br>fun ThirdPage(navController: NavHostController) {<br>    Text(text &#x3D; “ThirdPage页面”, color &#x3D; Color.Red)<br>}</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs clean">上面例子中点击FirstPage --&gt; SecondPage --&gt; ThirdPage，在ThirdPage，此时点击返回的话，会回到点击FirstPage可组合项，而不是SecondPage。<br><br>##### (<span class="hljs-number">3.</span>)清除导航后目的页之前的所有页面<br>清除导航后目的页之前的所有页面，直接加个属性``inclusive=true``就可以了。类似于Activity的``android:launchMode=<span class="hljs-string">&quot;singleTask&quot;</span>``。<br></code></pre></td></tr></table></figure>
+<p>@Composable<br>fun HelloCompose() {<br>    &#x2F;&#x2F; 创建NavController<br>    val navController &#x3D; rememberNavController()<br>    &#x2F;&#x2F; 用NavHost将NavController和导航图相关联,startDestination指定起始的可组合项<br>    NavHost(navController &#x3D; navController, startDestination &#x3D; “first_page”) {<br>        &#x2F;&#x2F; 给FirstPage可组合项指定路径<br>        composable(“first_page”) { FirstPage(navController) }<br>        &#x2F;&#x2F; 给SecondPage可组合项指定路径<br>        composable(“second_page”) { SecondPage(navController) }<br>        &#x2F;&#x2F; 给ThirdPage可组合项指定路径<br>        composable(“third_page”) { ThirdPage(navController) }<br>    }<br>}</p>
+<p>&#x2F;**<br> *FirstPage<br> *&#x2F;<br>@Composable<br>fun FirstPage(navController: NavController) {<br>    Column {<br>        Text(text &#x3D; “FirstPage页面”, color &#x3D; Color.Red)<br>        Button(onClick &#x3D; {<br>            &#x2F;&#x2F; 导航到SecondPage可组合项<br>            navController.navigate(“second_page”)<br>        }) {<br>            Text(text &#x3D; “去SecondPage”)<br>        }<br>    }<br>}</p>
+<p>&#x2F;**</p>
+<ul>
+<li>SecondPage<br> *&#x2F;<br>@Composable<br>fun SecondPage(navController: NavController) {<br> Column {<br> Text(text &#x3D; “SecondPage页面”, color &#x3D; Color.Red)<br> Button(onClick &#x3D; {<br>     &#x2F;&#x2F; 导航到ThirdPage可组合项<br>     navController.navigate(“third_page”) { popUpTo(“first_page”) }<br> }) {<br>     Text(text &#x3D; “去ThirdPage”)<br> }<br> }<br>}</li>
+</ul>
+<p>&#x2F;**<br> *ThirdPage<br> *&#x2F;<br>@Composable<br>fun ThirdPage(navController: NavHostController) {<br>    Text(text &#x3D; “ThirdPage页面”, color &#x3D; Color.Red)<br>}</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs clean">上面例子中点击FirstPage --&gt; SecondPage --&gt; ThirdPage，在ThirdPage，此时点击返回的话，会回到桌面。<br><br>##### (<span class="hljs-number">4.</span>)页面未在页面栈内才进行导航<br>如果该页面在栈顶的话，不会重新入栈，而是会复用该栈 。类似于Activity的``android:launchMode=<span class="hljs-string">&quot;singleTop&quot;</span>``。<br></code></pre></td></tr></table></figure>
+<p>navController.navigate(“search”) {<br>    launchSingleTop &#x3D; true<br>}</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br>### <span class="hljs-number">5.</span>导航传递参数<br>在页面跳转过程中需要传递参数，可以通过在路径中添加参数占位符的方式来实现。默认情况下，所有参数都会被解析成字符串，不过我们可以通过arguments参数来设置参数类型。<br>##### (<span class="hljs-number">1.</span>)传递参数<br>设置arguments参数：<br></code></pre></td></tr></table></figure>
+<p>composable(<br>    “second_page&#x2F;{person_name}”,<br>    &#x2F;&#x2F;设置参数<br>    arguments &#x3D; listOf(navArgument(“person_name”) { type &#x3D; NavType.StringType })<br>) { backStackEntry -&gt;<br>    …<br>}</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs clean">默认情况下，所有参数都会被解析为字符串。您可以使用 arguments 参数来设置 type，以指定其他类型： 设置完arguments参数之后， 在导航时，把占位符设置为具体值即可。<br><br>##### (<span class="hljs-number">2.</span>)接收参数<br>有传递就有接收，在Compose中是通过composalbe()函数的lambda中提供的NavBackStackEntry中提取NavArguments：<br></code></pre></td></tr></table></figure>
+<p>composable(<br>    “second_page&#x2F;{person_name}”,<br>    arguments &#x3D; listOf(navArgument(“person_name”) {<br>        &#x2F;&#x2F;表示传递的参数是String类型<br>        type &#x3D; NavType.StringType<br>    })<br>) { backStackEntry -&gt;<br>    &#x2F;&#x2F;backStackEntry里面封装了参数<br>    SecondPage(navController, backStackEntry)<br>}</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs"><br></code></pre></td></tr></table></figure>
+<p>@Composable<br>fun SecondPage(navController: NavController, backStackEntry: NavBackStackEntry) {<br>    val personName &#x3D; backStackEntry.arguments?.getString(“person_name”)<br>    Text(text &#x3D; “SecondPage页面$personName”, color &#x3D; Color.Red)<br>}</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br>##### (<span class="hljs-number">3.</span>)导航传递默认参数<br>可以在构建导航路由的时候使用defaultValue添加默认参数，代码如下：<br></code></pre></td></tr></table></figure>
+<p>composable(<br>    “second_page&#x2F;{person_name}”,<br>    arguments &#x3D; listOf(navArgument(“person_name”) {&#x2F;&#x2F;路由中三部分的person_name名称必须一致<br>        type &#x3D; NavType.StringType&#x2F;&#x2F;表示传递的参数是String类型<br>        defaultValue &#x3D; “默认名字”<br>    })<br>) {<br>    SecondPage(it.arguments?.getString(“goodsId”))&#x2F;&#x2F;获取名称传递给SecondPage视图<br>}</p>
+<pre><code class="hljs">
+参考资料:
+[Compose_15--导航1（页面跳转）](https://blog.csdn.net/weixin_42404361/article/details/121941709)
+[Jetpack Compose初体验--（导航、生命周期等）](https://juejin.cn/post/6983968223209193480)
+[compose导航简单使用讲解](https://juejin.cn/post/6985782640917872670)
+
+
+
+
+
+
+
+
+
+
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/JetpackCompose/" class="category-chain-item">JetpackCompose</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Jetpack-Compose之四 页面跳转(导航)</div>
+      <div>http://example.com/2022/05/20/Jetpack-Compose之四 页面跳转(导航)/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年5月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/06/09/AndroidJetpack-Compose%E4%B9%8B%E4%BA%94%E5%B8%B8%E7%94%A8%E7%BB%84%E4%BB%B6%E5%8F%8A%E4%B8%BB%E9%A2%98/" title="AndroidJetpack-Compose之五常用组件及主题">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">AndroidJetpack-Compose之五常用组件及主题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/05/12/ExoPlayer%E6%B7%BB%E5%8A%A0Ffmpeg%E6%89%A9%E5%B1%95%E5%AE%9E%E7%8E%B0%E8%BD%AF%E8%A7%A3%E5%8A%9F%E8%83%BD/" title="ExoPlayer添加Ffmpeg扩展实现软解功能">
+                        <span class="hidden-mobile">ExoPlayer添加Ffmpeg扩展实现软解功能</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

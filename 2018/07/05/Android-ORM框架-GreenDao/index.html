@@ -1,0 +1,724 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.GreenDao简介GreenDAO是一个基于sqlite的对象关系映射(ORM)的数据库框架，ORM（Object Relation Mapping对象关系映射），其表现形式就是通过GreenDao将数据库和Bean对象关联起来。使用greendao可以节省自己编写SQL语句进行CRUD的时间。GreenDao官网GitHub地址 二.项目工程引入GreenDao1.引入GreenDaoIn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android-ORM框架-GreenDao">
+<meta property="og:url" content="http://example.com/2018/07/05/Android-ORM%E6%A1%86%E6%9E%B6-GreenDao/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.GreenDao简介GreenDAO是一个基于sqlite的对象关系映射(ORM)的数据库框架，ORM（Object Relation Mapping对象关系映射），其表现形式就是通过GreenDao将数据库和Bean对象关联起来。使用greendao可以节省自己编写SQL语句进行CRUD的时间。GreenDao官网GitHub地址 二.项目工程引入GreenDao1.引入GreenDaoIn">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/31e0493a22955d3dc02b9c6ebacc9b1b.webp">
+<meta property="og:image" content="http://example.com/images/2efcace7338d84d771015bab0cd9214d.webp">
+<meta property="article:published_time" content="2018-07-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:21:06.954Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/31e0493a22955d3dc02b9c6ebacc9b1b.webp">
+  
+  
+  
+  <title>Android-ORM框架-GreenDao - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Android-ORM框架-GreenDao"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-07-05 00:00" pubdate>
+          2018年7月5日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Android-ORM框架-GreenDao</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-GreenDao简介"><a href="#一-GreenDao简介" class="headerlink" title="一.GreenDao简介"></a>一.GreenDao简介</h1><p>GreenDAO是一个基于<strong>sqlite</strong>的对象关系映射(ORM)的数据库框架，<strong>ORM（Object Relation Mapping对象关系映射）</strong>，其表现形式就是通过GreenDao将数据库和Bean对象关联起来。使用greendao可以节省自己编写SQL语句进行CRUD的时间。<br><a target="_blank" rel="noopener" href="http://greenrobot.org/greendao/">GreenDao官网</a><br><a target="_blank" rel="noopener" href="https://github.com/greenrobot/greenDAO">GitHub地址</a><br><img src="/images/31e0493a22955d3dc02b9c6ebacc9b1b.webp" srcset="/img/loading.gif" lazyload alt="greendao原理"></p>
+<h1 id="二-项目工程引入GreenDao"><a href="#二-项目工程引入GreenDao" class="headerlink" title="二.项目工程引入GreenDao"></a>二.项目工程引入GreenDao</h1><h3 id="1-引入GreenDao"><a href="#1-引入GreenDao" class="headerlink" title="1.引入GreenDao"></a>1.引入GreenDao</h3><p>In root build.gradle file</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">buildscript</span> &#123;<br>    <span class="hljs-keyword">repositories</span> &#123;<br>        google()<br>        jcenter()<br>    &#125;<br>    <span class="hljs-keyword">dependencies</span> &#123;<br>         ...<br>        <span class="hljs-keyword">classpath</span> <span class="hljs-string">&#x27;org.greenrobot:greendao-gradle-plugin:lastVersion&#x27;</span> <span class="hljs-comment">// add plugin</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>In app modules app&#x2F;build.gradle file:</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs clean">...<br>apply plugin: <span class="hljs-string">&#x27;org.greenrobot.greendao&#x27;</span> <span class="hljs-comment">// apply plugin</span><br> <br>dependencies &#123;<br>    <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;org.greenrobot:greendao:lastVersion&#x27;</span> <span class="hljs-comment">// add library</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-配置GreenDao"><a href="#2-配置GreenDao" class="headerlink" title="2.配置GreenDao"></a>2.配置GreenDao</h3><p>项目中使用kotlin时引入greendao最好配置一下targetGenDir  否则可能编译报错。</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs awk">android&#123;<br>    ...<br>&#125;<br>greendao&#123;<br>    schemaVersion <span class="hljs-number">2</span> <span class="hljs-regexp">//</span> 数据库版本号<br>  <span class="hljs-regexp">//</span>  daoPackage  <span class="hljs-string">&#x27;com.doris.sample.greendao&#x27;</span><span class="hljs-regexp">//g</span>reenDao 自动生成的代码保存的包名<br>    targetGenDir   <span class="hljs-string">&#x27;src/main/java&#x27;</span> <span class="hljs-regexp">//</span>自动生成的代码存储的路径，默认是 build<span class="hljs-regexp">/generated/</span>source/greendao.<br>   <span class="hljs-regexp">//</span> generateTests false <span class="hljs-regexp">//</span>true的时候自动生成测试单元<br>  <span class="hljs-regexp">//</span>  targetGenDirTests: 测试单元的生成目录默认是 src<span class="hljs-regexp">/androidTest/</span>java<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="三-GreenDao关键类"><a href="#三-GreenDao关键类" class="headerlink" title="三.GreenDao关键类"></a>三.GreenDao关键类</h1><p><strong>DaoMaster:</strong> 保存数据库对象（SQLiteDatabase）并管理特定模式的Dao类。它具有静态方法来创建表或将他们删除。其内部类OpenHelper和DevOpenHelper是在SQLite数据库中创建模式的SQLiteOpenHelper实现。<br>**DaoSession:**管理特定模式的所有可用Dao对象，您可以使用其中一个getter方法获取。DaoSession还为实体提供了一些通用的持久性方法，如插入，加载，更新，刷新和删除。最后，DaoSession对象也跟踪一个身份范围。<br>**XXDAO:**数据访问对象(Dao)持续存在并查询实体。对于每个实体，GreenDao生成一个Dao,它比DaoSession有更多的持久化方法。<br>**Entities(实体对象):**持久对象，通常实体是使用标准Java属性(如POJO或JavaBean)来表示数据库的对象。</p>
+<h1 id="四-GreenDao使用"><a href="#四-GreenDao使用" class="headerlink" title="四.GreenDao使用"></a>四.GreenDao使用</h1><h3 id="1-初始化GreenDao"><a href="#1-初始化GreenDao" class="headerlink" title="1.初始化GreenDao"></a>1.初始化GreenDao</h3><p>一般我们在Application里面进行初始化.</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">BaseApplication</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">SuperApplication</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">DaoMaster</span>.<span class="hljs-property">DevOpenHelper</span> mHelper;<br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">SQLiteDatabase</span> db;<br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">DaoMaster</span> mDaoMaster;<br>    <span class="hljs-keyword">public</span>  <span class="hljs-title class_">DaoSession</span> mDaoSession;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">onCreate</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-variable language_">super</span>.<span class="hljs-title function_">onCreate</span>();<br>        ...<br>      <span class="hljs-comment">// 通过 DaoMaster 的内部类 DevOpenHelper，你可以得到一个便利的 SQLiteOpenHelper 对      象。</span><br>     <span class="hljs-comment">// 可能你已经注意到了，你并不需要去编写「CREATE TABLE」这样的 SQL 语句，因为 GreenDAO 已经帮你做了。</span><br>     <span class="hljs-comment">// 注意：默认的 DaoMaster.DevOpenHelper 会在数据库升级时，删除所有的表，意味着这将导致数据的丢失。</span><br>     <span class="hljs-comment">// 所以，在正式的项目中，你还应该做一层封装，来实现数据库的安全升级。</span><br>    <span class="hljs-comment">// 此处green-db表示数据库名称 可以任意填写</span><br>       mHelper = <span class="hljs-keyword">new</span> <span class="hljs-title class_">DaoMaster</span>.<span class="hljs-title class_">DevOpenHelper</span>(<span class="hljs-variable language_">this</span>, <span class="hljs-string">&quot;green-db&quot;</span>, <span class="hljs-literal">null</span>);<br>       db = mHelper.<span class="hljs-title function_">getWritableDatabase</span>();<br>     <span class="hljs-comment">// 注意：该数据库连接属于 DaoMaster，所以多个 Session 指的是相同的数据库连接。</span><br>       mDaoMaster = <span class="hljs-keyword">new</span> <span class="hljs-title class_">DaoMaster</span>(db);<br>       mDaoSession = mDaoMaster.<span class="hljs-title function_">newSession</span>();<br>      &#125;<br>    <span class="hljs-keyword">public</span>  <span class="hljs-title class_">DaoSession</span> <span class="hljs-title function_">getDaoSession</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> mDaoSession;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title class_">SQLiteDatabase</span> <span class="hljs-title function_">getDb</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> db;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-创建实体类"><a href="#2-创建实体类" class="headerlink" title="2.创建实体类"></a>2.创建实体类</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-meta">@Entity</span>(<br>        nameInDb = <span class="hljs-string">&quot;USERS&quot;</span>,<span class="hljs-comment">// 指定该表在数据库中的名称，默认是基于实体类名</span><br>        indexes = &#123;<span class="hljs-meta">@Index</span>(value = <span class="hljs-string">&quot;text, date DESC&quot;</span>, unique = <span class="hljs-literal">true</span>)&#125;,<span class="hljs-comment">// 定义跨多个列的索引</span><br>        createInDb = <span class="hljs-literal">true</span>,<span class="hljs-comment">// 高级标志，是否创建该表。默认为true。如果有多个实体映射一个表，或者该表已在外部创建，则可置为false</span><br>        <span class="hljs-comment">//schema = &quot;bqt_schema&quot;,// 告知GreenDao当前实体属于哪个schema。属于不同模式的实体应不具有关系。</span><br>        active = <span class="hljs-literal">true</span>,<span class="hljs-comment">// 标记一个实体处于活动状态，活动实体(设置为true)有更新、删除和刷新方法。默认为false</span><br>        generateConstructors = <span class="hljs-literal">true</span>,<span class="hljs-comment">//是否生成所有属性的构造器。注意：无参构造器总是会生成。默认为true</span><br>        generateGettersSetters = <span class="hljs-literal">true</span><span class="hljs-comment">//是否应该生成属性的getter和setter。默认为true</span><br>)<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">User</span>&#123;<br>    <span class="hljs-meta">@Id</span>(autoincrement = <span class="hljs-literal">true</span>) <span class="hljs-comment">//主键自增,类型为包装类型Long,如果使用long就会报错。插入数据时第一个参数是ID，如果插入值为null，字段会自动增长。</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">Long</span> id;<br><br>    <span class="hljs-meta">@NotNull</span><span class="hljs-comment">//在保存到数据库中之前需要保证此值不为null，否则会报 IllegalArgumentException ，并直接崩溃</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">String</span> name;<br><br>    <span class="hljs-meta">@Transient</span> <span class="hljs-comment">//表明此字段不存储到数据库中，用于不需要持久化的字段，比如临时状态</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">String</span> nickName;<br><br>    <span class="hljs-meta">@Property</span>(nameInDb = <span class="hljs-string">&quot;TIME&quot;</span>) <span class="hljs-comment">//为该属性在数据库中映射的字段名设置一个非默认的名称,，默认是的使用字段名</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">Date</span> brithday;<br><br>    <span class="hljs-meta">@Convert</span>(converter = <span class="hljs-title class_">UserTypeConverter</span>.<span class="hljs-property">class</span>, columnType = <span class="hljs-title class_">String</span>.<span class="hljs-property">class</span>) <span class="hljs-comment">//类型转换类，自定义的类型在数据库中存储的类型</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">UserType</span> <span class="hljs-keyword">type</span>; <span class="hljs-comment">//在保存到数据库时会将自定义的类型 NoteType 通过 UserType TypeConverter 转换为 String 类型。反之亦然</span><br> <br>    <span class="hljs-keyword">private</span> long createTime = <span class="hljs-title class_">System</span>.<span class="hljs-title function_">currentTimeMillis</span>();<span class="hljs-comment">//设置默认值</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>greendao支持的数据类型</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">boolean</span>, <span class="hljs-keyword">Boolean</span><br><span class="hljs-keyword">int</span>, Integer<br><span class="hljs-keyword">short</span>, <span class="hljs-keyword">Short</span><br><span class="hljs-keyword">long</span>, <span class="hljs-keyword">Long</span><br><span class="hljs-keyword">float</span>, <span class="hljs-keyword">Float</span><br><span class="hljs-keyword">double</span>, <span class="hljs-keyword">Double</span><br><span class="hljs-keyword">byte</span>, <span class="hljs-keyword">Byte</span><br><span class="hljs-keyword">byte</span>[]<br>String<br>Date<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-生成类文件"><a href="#3-生成类文件" class="headerlink" title="3.生成类文件"></a>3.生成类文件</h3><p>编写好实体类并添加自己需要的注解之后，点击build –&gt; Make Project，就会自动生成相应的 setter 和 getter 方法。并且在项目的build目录下(或者自己设定的目录:src&#x2F;main&#x2F;java)下看到生成的三个类文件。DaoMaster、DaoSession、XXXDao</p>
+<h1 id="五-GreenDao增删改查"><a href="#五-GreenDao增删改查" class="headerlink" title="五.GreenDao增删改查"></a>五.GreenDao增删改查</h1><h3 id="1-插入数据"><a href="#1-插入数据" class="headerlink" title="1.插入数据"></a>1.插入数据</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//获取dao</span><br><span class="hljs-type">DaoSession</span> <span class="hljs-variable">daoSession</span> <span class="hljs-operator">=</span> ((App) getApplication()).getDaoSession();<br><span class="hljs-type">UserDao</span> <span class="hljs-variable">userDao</span> <span class="hljs-operator">=</span> daoSession.getUserDao();<br><br><span class="hljs-comment">//准备数据</span><br>User user=<span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>(<span class="hljs-literal">null</span>,<span class="hljs-string">&quot;张三&quot;</span>...)<br><br><span class="hljs-comment">//插入数据</span><br><span class="hljs-type">int</span> id=userDao.insert(user); <br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>insert 插入一条数据</p>
+</li>
+<li><p>insertInTx 批量插入数据</p>
+</li>
+<li><p>insertOrReplace 插入数据，传入的对象主键如果存在于数据库中，有则更新，否则插入</p>
+</li>
+<li><p>insertOrReplaceInTx 批量插入数据 同上</p>
+</li>
+<li><p>save 插入数据，判断对象是否有Key值，有则更新，否则插入</p>
+</li>
+</ul>
+<h3 id="2-删除数据"><a href="#2-删除数据" class="headerlink" title="2.删除数据"></a>2.删除数据</h3><figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs abnf">//获取dao<br>DaoSession daoSession <span class="hljs-operator">=</span> ((App) getApplication()).getDaoSession()<span class="hljs-comment">;</span><br>UserDao userDao <span class="hljs-operator">=</span> daoSession.getUserDao()<span class="hljs-comment">;</span><br>//删除数据<br>userDao.deleteByKey(id)<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>delete 删除单个数据</p>
+</li>
+<li><p>deleteInTx 批量删除数据</p>
+</li>
+<li><p>deleteByKey 通过主键删除数据</p>
+</li>
+<li><p>deleteByKeyInTx 通过主键批量删除数据</p>
+</li>
+<li><p>deleteAll 删除全部数据</p>
+</li>
+</ul>
+<h3 id="3-修改数据"><a href="#3-修改数据" class="headerlink" title="3.修改数据"></a>3.修改数据</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//获取dao</span><br><span class="hljs-type">DaoSession</span> <span class="hljs-variable">daoSession</span> <span class="hljs-operator">=</span> ((App) getApplication()).getDaoSession();<br><span class="hljs-type">UserDao</span> <span class="hljs-variable">userDao</span> <span class="hljs-operator">=</span> daoSession.getUserDao();<br><br><span class="hljs-comment">//准备数据</span><br>User user=<span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>(<span class="hljs-number">1</span>,<span class="hljs-string">&quot;李四&quot;</span>...)<br><br><span class="hljs-comment">//修改数据</span><br>userDao.update(user); <br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>update 单个修改数据</p>
+</li>
+<li><p>updateInTx 批量修改数据</p>
+</li>
+</ul>
+<h3 id="4-查询数据"><a href="#4-查询数据" class="headerlink" title="4.查询数据"></a>4.查询数据</h3><figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs abnf">//获取dao<br>DaoSession daoSession <span class="hljs-operator">=</span> ((App) getApplication()).getDaoSession()<span class="hljs-comment">;</span><br>UserDao userDao <span class="hljs-operator">=</span> daoSession.getUserDao()<span class="hljs-comment">;</span><br>//查询所有的数据<br>List&lt;User&gt; list<span class="hljs-operator">=</span>userDao.loadAll()<span class="hljs-comment">; </span><br><br>//按条件查询<br>User unique <span class="hljs-operator">=</span> userDao.queryBuilder().where(UserDao .Properties.Name.eq(<span class="hljs-string">&quot;张三&quot;</span>)).unique()<span class="hljs-comment">;</span><br><br></code></pre></td></tr></table></figure>
+<ol>
+<li>or(WhereCondition cond1, WhereCondition cond2, WhereCondition… condMore): 嵌套条件或者，用法同or。</li>
+<li>and(WhereCondition cond1, WhereCondition cond2, WhereCondition… condMore): 嵌套条件且，用法同and。</li>
+</ol>
+<ul>
+<li><p>load 根据主键查询</p>
+</li>
+<li><p>loadAll 查询所有数据</p>
+</li>
+<li><p>where 条件查询</p>
+</li>
+<li><p>like 模糊查询</p>
+</li>
+<li><p>list 以ArrayList返回</p>
+</li>
+<li><p>unique 返回唯一或null</p>
+</li>
+<li><p>eq 查询该字段的数据</p>
+</li>
+<li><p>notEq 查询不是该字段的数据</p>
+</li>
+</ul>
+<h3 id="5-排序、条件限制"><a href="#5-排序、条件限制" class="headerlink" title="5.排序、条件限制"></a>5.排序、条件限制</h3><ul>
+<li>order 排序，我们可以对查询的结果进行排序。orderAsc:（依据的属性名称，可以有多个属性），正序 orderDesc: 倒序</li>
+<li>limit 限制,当你根据条件查询，返回N条数据的时候，但是你只想要里面的前十个的时候.需要做分页的时候offset(start).limit(10)</li>
+</ul>
+<h3 id="6-Debug查询"><a href="#6-Debug查询" class="headerlink" title="6.Debug查询"></a>6.Debug查询</h3><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">QueryBuilder.LOG_SQL</span> = <span class="hljs-literal">true</span><span class="hljs-comment">;</span><br><span class="hljs-attr">QueryBuilder.LOG_VALUES</span> = <span class="hljs-literal">true</span><span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+<p>设置这两个属性就可以看到log</p>
+<h1 id="六-GreenDao数据库版本迁移"><a href="#六-GreenDao数据库版本迁移" class="headerlink" title="六.GreenDao数据库版本迁移"></a>六.GreenDao数据库版本迁移</h1><p>在版本迭代时，我们经常需要对数据库进行升级，而GreenDAO默认的DaoMaster.DevOpenHelper在进行数据升级时，会把旧表删除，然后创建新表，并没有迁移旧数据到新表中，从而造成数据丢失。<br>查看DaoMaster源码可知:<br><img src="/images/2efcace7338d84d771015bab0cd9214d.webp" srcset="/img/loading.gif" lazyload><br><a target="_blank" rel="noopener" href="https://github.com/yuweiguocn/GreenDaoUpgradeHelper">解决方式</a></p>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="http://greenrobot.org/greendao/">GreenDao官网</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/53083f782ea2">一篇技术好文之Android数据库 GreenDao的使用完全解析</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Android-ORM框架-GreenDao</div>
+      <div>http://example.com/2018/07/05/Android-ORM框架-GreenDao/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2018年7月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2018/07/11/Android%E5%9B%BD%E9%99%85%E5%8C%96%E5%A4%9A%E8%AF%AD%E8%A8%80/" title="Android国际化多语言">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Android国际化多语言</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2018/07/02/Android%E5%A4%9C%E9%97%B4%E6%A8%A1%E5%BC%8F(%E6%8D%A2%E8%82%A4)%E6%80%BB%E7%BB%93/" title="Android夜间模式(换肤)总结">
+                        <span class="hidden-mobile">Android夜间模式(换肤)总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

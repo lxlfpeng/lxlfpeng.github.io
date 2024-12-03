@@ -1,0 +1,786 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一. 常见的软件设计模式总体来说23种设计模式分为三大类： 创建型模式（5种）单例模式、建造者模式、工厂方法模式、抽象工厂模式、原型模式。 结构型模式（7种）适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。 行为型模式（11种）策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。 二. 单例模式1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java常见的设计模式(上)">
+<meta property="og:url" content="http://example.com/2020/02/10/Java%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F(%E4%B8%8A)/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一. 常见的软件设计模式总体来说23种设计模式分为三大类： 创建型模式（5种）单例模式、建造者模式、工厂方法模式、抽象工厂模式、原型模式。 结构型模式（7种）适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。 行为型模式（11种）策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。 二. 单例模式1">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:35:02.711Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Java常见的设计模式(上) - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java常见的设计模式(上)"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-02-10 00:00" pubdate>
+          2020年2月10日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          41 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Java常见的设计模式(上)</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-常见的软件设计模式"><a href="#一-常见的软件设计模式" class="headerlink" title="一. 常见的软件设计模式"></a>一. 常见的软件设计模式</h1><p>总体来说23种设计模式分为三大类：</p>
+<h3 id="创建型模式（5种）"><a href="#创建型模式（5种）" class="headerlink" title="创建型模式（5种）"></a>创建型模式（5种）</h3><p>单例模式、建造者模式、工厂方法模式、抽象工厂模式、原型模式。</p>
+<h3 id="结构型模式（7种）"><a href="#结构型模式（7种）" class="headerlink" title="结构型模式（7种）"></a>结构型模式（7种）</h3><p>适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。</p>
+<h3 id="行为型模式（11种）"><a href="#行为型模式（11种）" class="headerlink" title="行为型模式（11种）"></a>行为型模式（11种）</h3><p>策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。</p>
+<h1 id="二-单例模式"><a href="#二-单例模式" class="headerlink" title="二. 单例模式"></a>二. 单例模式</h1><h3 id="1-单例模式的特点"><a href="#1-单例模式的特点" class="headerlink" title="1. 单例模式的特点?"></a>1. 单例模式的特点?</h3><p>确保一个类最多只有一个实例对象，并向整个系统提供这个实例。<br><strong>优点：</strong>由于单例模式只生成了一个实例，所以能够节约系统资源，减少性能开销，提高系统效率，同时也能够严格控制客户对它的访问。<br><strong>缺点：</strong>也正是因为系统中只有一个实例，这样就导致了单例类的职责过重，违背了“单一职责原则”，同时也没有抽象类，这样扩展起来有一定的困难。</p>
+<h3 id="2-单例模式的使用场景"><a href="#2-单例模式的使用场景" class="headerlink" title="2.单例模式的使用场景"></a>2.单例模式的使用场景</h3><ul>
+<li>整个程序的运行中只允许有一个类的实例。</li>
+<li>需要频繁实例化然后销毁的对象。</li>
+<li>创建对象时耗时过多或者耗资源过多，但又经常用到的对象。</li>
+<li>方便资源相互通信的环境。</li>
+</ul>
+<h3 id="3-单例模式实现"><a href="#3-单例模式实现" class="headerlink" title="3. 单例模式实现"></a>3. 单例模式实现</h3><p>常见的单例模式实现方式有五种：<code>饿汉式、懒汉式、双重检测锁、静态内部类式和枚举单例</code>。而在这四种方式中饿汉式和懒汉式又最为常见。</p>
+<h5 id="饿汉式"><a href="#饿汉式" class="headerlink" title="饿汉式"></a>饿汉式</h5><p>线程安全，调用效率高。但是不能延时加载。<br>    <figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs smali">   <span class="hljs-keyword"> public</span> class Singleton&#123;<br>      //饿汉模式<br>      //将构造函数私有化<br>     <span class="hljs-keyword"> private</span> Singleton()&#123;&#125;<br>      //将对象实例化<br>     <span class="hljs-keyword"> private</span><span class="hljs-keyword"> static</span> Singleton<span class="hljs-built_in"> instance </span>=<span class="hljs-built_in"> new </span>Singleton();<br>      //得到实例的方法<br>     <span class="hljs-keyword"> public</span><span class="hljs-keyword"> static</span> Singleton getInstance() &#123;<br>         <span class="hljs-built_in"> return </span>instance;<br>      &#125;<br>&#125;<br></code></pre></td></tr></table></figure><br>饿汉式是在类加载的时候创建实例，所以<strong>线程是安全的</strong>。由于该模式在加载类的时候对象就已经创建了，所以加载类的速度比较慢，但是获取对象的速度比较快。<br><strong>优点：</strong>线程安全。<br><strong>缺点：</strong>如果不调用的话浪费内存。</p>
+<h5 id="懒汉式"><a href="#懒汉式" class="headerlink" title="懒汉式"></a>懒汉式</h5><pre><code class="hljs"><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Singleton</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Singleton singleton;<br>    <span class="hljs-comment">//将构造函数私有化</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Singleton</span>()</span> &#123;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Singleton <span class="hljs-title">getInstance</span>()</span> &#123;<br>        <span class="hljs-comment">//判断是否有实例化对象,没有则新建</span><br>        <span class="hljs-keyword">if</span> (singleton == <span class="hljs-literal">null</span>) &#123;<br>            singleton = <span class="hljs-keyword">new</span> Singleton();<br>        &#125;<br>        <span class="hljs-keyword">return</span> singleton;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+<p>此类的设计确保只创建一个 Singleton 对象。构造函数被声明为 private，getInstance() 方法只创建一个对象。这个实现适合于单线程程序。然而，当引入多线程时，就必须通过同步来保护 getInstance() 方法。如果不保护 getInstance() 方法，则可能返回Singleton 对象的两个不同的实例。假设两个线程并发调用 getInstance() 方法并且按以下顺序执行调用：</p>
+<ul>
+<li>线程 1 调用 getInstance() 方法并决定 instance 在 &#x2F;&#x2F;1 处为 null。 </li>
+<li>线程 1 进入 if 代码块，但在执行 &#x2F;&#x2F;2 处的代码行时被线程 2 预占。 </li>
+<li>线程 2 调用 getInstance() 方法并在 &#x2F;&#x2F;1 处决定 instance 为 null。 </li>
+<li>线程 2 进入 if 代码块并创建一个新的 Singleton 对象并在 &#x2F;&#x2F;2 处将变量 instance 分配给这个新对象。 </li>
+<li>线程 2 在 &#x2F;&#x2F;3 处返回 Singleton 对象引用。</li>
+<li>线程 2 被线程 1 预占。 </li>
+<li>线程 1 在它停止的地方启动，并执行 &#x2F;&#x2F;2 代码行，这导致创建另一个 Singleton 对象。 </li>
+<li>线程 1 在 &#x2F;&#x2F;3 处返回这个对象。<blockquote>
+<p>结果是 getInstance() 方法创建了两个 Singleton 对象，而它本该只创建一个对象。<br>如何实现线程安全的懒汉式可以使用双重检查加锁机制。<br>  <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Singleton</span>&#123;<br>    <span class="hljs-comment">//volatile防止指令重排序</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">volatile</span> Singleton instance;<br>    <span class="hljs-comment">//将构造函数私有化</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Singleton</span>()</span> &#123;&#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Singleton <span class="hljs-title">getInstance</span>()</span> &#123;<br>        <span class="hljs-keyword">if</span> (instance == <span class="hljs-literal">null</span>) &#123;<br>            synchronized (Singleton.<span class="hljs-keyword">class</span>) &#123;<br>                <span class="hljs-keyword">if</span> (instance == <span class="hljs-literal">null</span>) &#123;<br>                    instance = <span class="hljs-keyword">new</span> Singleton();<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> instance;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></p>
+</blockquote>
+</li>
+</ul>
+<h5 id="使用静态内部类实现单例模式"><a href="#使用静态内部类实现单例模式" class="headerlink" title="使用静态内部类实现单例模式"></a>使用静态内部类实现单例模式</h5><pre><code class="hljs"><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Singleton</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title">SingletonHoler</span> &#123;<br>        <span class="hljs-comment">/**</span><br><span class="hljs-comment">         * 静态初始化器，由JVM来保证线程安全</span><br><span class="hljs-comment">         */</span><br>        <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Singleton instance = <span class="hljs-keyword">new</span> Singleton();<br>    &#125;<br>    <span class="hljs-comment">//私有构造方法</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Singleton</span>()</span> &#123;<br>    &#125;<br>    <span class="hljs-comment">//获取单例对象</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Singleton <span class="hljs-title">getInstance</span>()</span> &#123;<br>        <span class="hljs-keyword">return</span> SingletonHoler.instance;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+<p>当getInstance方法第一次被调用的时候,它第一次读取SingletonHolder.instance，导致SingletonHolder类得到初始化；而这个类在装载并被初始化的时候，会初始化它的静态域，从而创建Singleton的实例，由于是静态的域，<code>因此只会在虚拟机装载类的时候初始化一次，并由虚拟机来保证它的线程安全性</code>。</p>
+<blockquote>
+<p>静态内部类方式是在需要实例化时，调用getInstance方法，才会加载SingletonHolder类，实例化Singleton由于类的静态属性只会在第一次加载类的时候初始化，所以在这里我们也保证了线程的安全性，所以通过这种静态内部类的方式解决了资源浪费和性能的问题</p>
+</blockquote>
+<h5 id="使用枚举来实现单例"><a href="#使用枚举来实现单例" class="headerlink" title="使用枚举来实现单例"></a>使用枚举来实现单例</h5><pre><code class="hljs"><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-built_in">enum</span> Singleton &#123;<br>    INSTANCE;<span class="hljs-comment">// 定义一个枚举的元素，它 就代表了Singleton的一个实例</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">init</span>()</span> &#123;<br>        System.<span class="hljs-keyword">out</span>.println(<span class="hljs-string">&quot;资源初始化。。。&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+<p>可以通过Singleton.INSTANCE来访问，虚拟机会保证一个类的<clinit>() 方法在多线程环境中被正确的加锁、同步。所以，枚举实现是在实例化时是线程安全。<br>枚举类实现单例模式是 effective java 作者极力推荐的单例实现模式，因为枚举类型是线程安全的，并且只会装载一次，设计者充分的利用了枚举的这个特性来实现单例模式，<br>枚举的写法非常简单，而且枚举类型是所用单例实现中唯一一种不会被破坏的单例实现模式。</p>
+<blockquote>
+<p>单例被破坏的方式一般有:<code>反射破坏单例，序列化破坏单例，克隆破坏单例</code></p>
+</blockquote>
+<h1 id="四-构建者模式"><a href="#四-构建者模式" class="headerlink" title="四. 构建者模式"></a>四. 构建者模式</h1><h3 id="1-构建者模式的特点"><a href="#1-构建者模式的特点" class="headerlink" title="1. 构建者模式的特点?"></a>1. 构建者模式的特点?</h3><p>构建者模式(Builder模式)指的是在创建一个复杂的对象时，将一部负责对象的构建分为许多小对象的构建，最后在整合构建的模式。将一个复杂的构建与其表示相分离，使得同样的构建过程可以创建不同的表示。</p>
+<p><strong>构建者模式的优点:</strong></p>
+<ul>
+<li>使用建造者模式可以使客户端不必知道产品内部组成的细节。</li>
+<li>具体的建造者类之间是相互独立的，这有利于系统的扩展。</li>
+<li>具体的建造者相互独立，因此可以对建造的过程逐步细化，而不会对其他模块产生任何影响。</li>
+</ul>
+<p><strong>构建者模式的缺点:</strong><br>产品必须有共同点，范围有限制，如果内部变化复杂，会有很多的建造类。</p>
+<h3 id="2-建造者模式的使用场景"><a href="#2-建造者模式的使用场景" class="headerlink" title="2. 建造者模式的使用场景"></a>2. 建造者模式的使用场景</h3><p>使用Builder模式来替代多参数构造函数是一个比较好的实践法则。<br>我们有时候会写这样的构造方法：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-built_in">Person</span>();<br><span class="hljs-built_in">Person</span>(<span class="hljs-type">String</span> name);<br><span class="hljs-built_in">Person</span>(<span class="hljs-type">String</span> name，<span class="hljs-type">int</span> age);<br><span class="hljs-built_in">Person</span>(<span class="hljs-type">String</span> name，<span class="hljs-type">int</span> age，<span class="hljs-type">double</span> height);<br><span class="hljs-built_in">Person</span>(<span class="hljs-type">String</span> name,<span class="hljs-type">int</span> age,<span class="hljs-type">double</span> height,<span class="hljs-type">double</span> weight);<br></code></pre></td></tr></table></figure>
+
+<p>在实际开发中，我们有时候需要声明所有的构造方法，这样书写很常见并且也比较有效率，但是也存在很多不足，对于代码后期维护和协同开发会是一件很痛苦的事情。<br>Builder模式就是使用一个代理完成对象的构建过程。这样的好处是易于扩展和类的使用，但同时也失去了一些效率。</p>
+<ul>
+<li>如果一个对象有非常复杂的内部结构「这些产品通常有很多属性」，那么使用建造者模式。</li>
+<li>如果想把复杂对象的创建和使用分离开来，那么使用建造者模式「使用相同的创建步骤可以创建不同的产品」。</li>
+</ul>
+<h3 id="3-建造者模式的JAVA实现"><a href="#3-建造者模式的JAVA实现" class="headerlink" title="3. 建造者模式的JAVA实现"></a>3. 建造者模式的JAVA实现</h3><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> &#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">String</span> mName;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> mAge;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">double</span> mHeight;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">double</span> mWeight;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Person</span><span class="hljs-params">(Builder builder)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.mName = builder.mName;<br>        <span class="hljs-keyword">this</span>.mAge = builder.mAge;<br>        <span class="hljs-keyword">this</span>.mHeight = builder.mHeight;<br>        <span class="hljs-keyword">this</span>.mWeight = builder.mWeight;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-type">String</span> <span class="hljs-title">getName</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> mName;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title">getAge</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> mAge;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-type">double</span> <span class="hljs-title">getHeight</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> mHeight;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-type">double</span> <span class="hljs-title">getWeight</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> mWeight;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Builder</span> &#123;<br><br>        <span class="hljs-keyword">private</span> <span class="hljs-type">String</span> mName;<br>        <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> mAge;<br>        <span class="hljs-keyword">private</span> <span class="hljs-type">double</span> mHeight;<br>        <span class="hljs-keyword">private</span> <span class="hljs-type">double</span> mWeight;<br><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> Builder <span class="hljs-title">setName</span><span class="hljs-params">(<span class="hljs-type">String</span> name)</span> </span>&#123;<br>            mName = name;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;<br>        &#125;<br><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> Builder <span class="hljs-title">setAge</span><span class="hljs-params">(<span class="hljs-type">int</span> age)</span> </span>&#123;<br>            mAge = age;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;<br>        &#125;<br><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> Builder <span class="hljs-title">setHeight</span><span class="hljs-params">(<span class="hljs-type">double</span> height)</span> </span>&#123;<br>            mHeight = height;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;<br>        &#125;<br><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> Builder <span class="hljs-title">setWeight</span><span class="hljs-params">(<span class="hljs-type">double</span> weight)</span> </span>&#123;<br>            mWeight = weight;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;<br>        &#125;<br><br>        <span class="hljs-function"><span class="hljs-keyword">public</span> Person <span class="hljs-title">build</span><span class="hljs-params">()</span> </span>&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Person</span>(<span class="hljs-keyword">this</span>);<br>        &#125;<br>        <br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>使用:</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs x86asm"><span class="hljs-meta">public</span> class <span class="hljs-keyword">Test</span> &#123;<br><br>    <span class="hljs-meta">public</span> static void main(String[] args) &#123;<br>     Person person = new Person<span class="hljs-number">.</span>Builder()<br><span class="hljs-meta">                .setName</span>(<span class="hljs-string">&quot;ZhangSan&quot;</span>)<br><span class="hljs-meta">                .setAge</span>(<span class="hljs-number">11</span>)<br><span class="hljs-meta">                .setHeight</span>(<span class="hljs-number">18.</span><span class="hljs-number">0d</span>)<br><span class="hljs-meta">                .setWeight</span>(<span class="hljs-number">20.</span><span class="hljs-number">0d</span>)<br><span class="hljs-meta">                .build</span>()<span class="hljs-comment">;</span><br><br>        Log<span class="hljs-number">.</span>i(TAG, <span class="hljs-string">&quot;name: &quot;</span>+person<span class="hljs-number">.</span>getName()+<span class="hljs-string">&quot;, age: &quot;</span>+person<span class="hljs-number">.</span>getAge()+<span class="hljs-string">&quot;, height: &quot;</span>+person<span class="hljs-number">.</span>getHeight()+<span class="hljs-string">&quot;, weight: &quot;</span>+person<span class="hljs-number">.</span>getWeight())<span class="hljs-comment">;</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<h1 id="五-工厂模式"><a href="#五-工厂模式" class="headerlink" title="五. 工厂模式"></a>五. 工厂模式</h1><h3 id="1-模式的特点"><a href="#1-模式的特点" class="headerlink" title="1. 模式的特点?"></a>1. 模式的特点?</h3><p>工厂模式提供一个创建对象实例的功能，而无须关心其具体实现。被创建实例的类型可以是接口、抽象类，也可以是具体的类。<br>工厂模式用于对象的创建，使得客户从具体的产品对象中被解耦。为了解耦合，把对象的创建者与对象的使用者分开。<br>例如:制造一个汽车，一般情况我们需要制造轮子、引擎、座位等等；可是如果有一个CarFactory的话，调取该Factory就可以直接制造。</p>
+<p><strong>模式的优点:</strong></p>
+<ul>
+<li><p>工厂模式是为了解耦：可以将对象的创建和使用分离，如果不分离，不但违反了设计模式的开闭原则，需要使用另一个子类的话，需要修改源代码，把对象的创建和使用的过程分开。就是Class A 想调用 Class B ，那么A只是调用B的方法，而至于B的实例化，就交给工厂类。</p>
+</li>
+<li><p>工厂模式可以降低代码重复。如果创建对象B的过程都很复杂，需要一定的代码量，而且很多地方都要用到，那么就会有很多的重复代码。我们可以这些创建对象B的代码放到工厂里统一管理。既减少了重复代码，也方便以后对B的创建过程的修改维护。由于创建过程都由工厂统一管理，所以发生业务逻辑变化，不需要找到所有需要创建B的地方去逐个修正，只需要在工厂里修改即可，降低维护成本。同理，想把所有调用B的地方改成B的子类B1，只需要在对应生产B的工厂中或者工厂的方法中修改其生产的对象为B1即可，而不需要找到所有的new B（）改为new B1()。</p>
+</li>
+<li><p>因为工厂管理了对象的创建逻辑，使用者并不需要知道具体的创建过程，只管使用即可，减少了使用者因为创建逻辑导致的错误。 </p>
+</li>
+<li><p>可以通过参数设置，返回不同的构造函数，不需要修改使用类的地方。如果一个类有多个构造方法（构造的重写），我们也可以将它抽出来，放到工厂中，一个构造方法对应一个工厂方法并命名一个友好的名字，这样我们就不再只是根据参数的不同来判断，而是可以根据工厂的方法名来直观判断将要创建的对象的特点。这对于使用者来说，体验比较好。</p>
+</li>
+</ul>
+<h3 id="2-模式的使用场景"><a href="#2-模式的使用场景" class="headerlink" title="2. 模式的使用场景"></a>2. 模式的使用场景</h3><ul>
+<li>消费者不关心它所要创建对象的类(产品类)的时候。</li>
+<li>消费者知道它所要创建对象的类(产品类)，但不关心如何创建的时候。</li>
+</ul>
+<p>在Java语言中，我们通常有以下几种创建对象的方式：</p>
+<ul>
+<li>使用new关键字直接创建对象；</li>
+<li>通过反射机制创建对象；</li>
+<li>通过clone()方法创建对象；</li>
+<li>通过工厂类创建对象。</li>
+</ul>
+<p>工厂设计模式分类：<code> 简单工厂模式(静态工厂模式)；工厂方法模式； 抽象工厂模式</code></p>
+<h3 id="3-简单工厂模式-静态工厂模式"><a href="#3-简单工厂模式-静态工厂模式" class="headerlink" title="3. 简单工厂模式(静态工厂模式)"></a>3. 简单工厂模式(静态工厂模式)</h3><p>就是建立一个工厂类，对实现了同一接口的一些类进行实例的创建。</p>
+<ol>
+<li>首先，创建二者的共同接口： <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * 拿铁、卡布奇诺等均为咖啡家族的一种产品</span><br><span class="hljs-comment"> * 咖啡则作为一种抽象概念</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Coffee</span> &#123;<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 获取coffee名称</span><br><span class="hljs-comment">     * @return</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> String <span class="hljs-title">getName</span>()</span>;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>其次，创建实现类： <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 卡布奇诺</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> */</span><br>public <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CappuccinoCoffee</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Coffee</span> </span>&#123;<br><br>    <span class="hljs-meta">@Override</span><br>    public <span class="hljs-type">String</span> getName() &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;卡布奇诺&quot;</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+ <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 拿铁</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> */</span><br>public <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LatteCoffee</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Coffee</span> </span>&#123;<br><br>    <span class="hljs-meta">@Override</span><br>    public <span class="hljs-type">String</span> getName() &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;拿铁&quot;</span>;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>最后，建工厂类： <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CoffeeFactory</span> &#123;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 通过类型获取Coffee实例对象</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> type 咖啡类型</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title class_">Coffee</span> <span class="hljs-title function_">create</span>(<span class="hljs-params"><span class="hljs-title class_">String</span> <span class="hljs-keyword">type</span></span>)&#123;<br>         <span class="hljs-keyword">if</span>(<span class="hljs-string">&quot;cappuccino&quot;</span>.<span class="hljs-title function_">equals</span>(<span class="hljs-keyword">type</span>))&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CappuccinoCoffee</span>();<br>        &#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(<span class="hljs-string">&quot;latte&quot;</span>.<span class="hljs-title function_">equals</span>(<span class="hljs-keyword">type</span>))&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">LatteCoffee</span>();<br>        &#125;<span class="hljs-keyword">else</span>&#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RuntimeException</span>(<span class="hljs-string">&quot;type[&quot;</span>+<span class="hljs-keyword">type</span>+<span class="hljs-string">&quot;]类型不可识别，没有匹配到可实例化的对象！&quot;</span>);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>进行测试 <figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-built_in">public</span> <span class="hljs-keyword">class</span> FactoryTest &#123;<br><br>    <span class="hljs-built_in">public</span> static <span class="hljs-type">void</span> main(String[] args) &#123;<br>        Coffee latte = CoffeeFactory.<span class="hljs-keyword">create</span>(&quot;latte&quot;);<br>        <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(&quot;创建的咖啡实例为:&quot; + latte.getName());<br>        Coffee cappuccino = CoffeeFactory.<span class="hljs-keyword">create</span>(&quot;cappuccino&quot;);<br>        <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(&quot;创建的咖啡实例为:&quot; + cappuccino.getName());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p><strong>特点：</strong></p>
+<ul>
+<li>它是一个具体的类，非接口或是抽象类。有一个重要的create()方法，利用if或者 switch创建产品并返回。</li>
+<li>create()方法通常是静态的，所以也称之为静态工厂。</li>
+</ul>
+<p><strong>优点：</strong><br>使用简单，代码少，所以使用较多。</p>
+<p><strong>缺点：</strong><br>添加新的产品需要修改工厂里面的方法，不修改代码的话是无法进行扩展的。所以违背了开闭原则（对扩展开放，对修改关闭）。</p>
+<h3 id="4-工厂方法模式"><a href="#4-工厂方法模式" class="headerlink" title="4.工厂方法模式"></a>4.工厂方法模式</h3><p>也就是定义一个抽象工厂，其定义了产品的生产接口，但不负责具体的产品，将生产任务交给不同的派生类工厂。这样不用通过指定类型来创建对象了。工厂方法是针对每一种产品提供一个工厂类。<br>通过不同的工厂实例来创建不同的产品实例。</p>
+<ol>
+<li><p>修改工厂类</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title">CoffeeFactory</span> &#123;<br>    <span class="hljs-comment">//创建不同的产品</span><br>    <span class="hljs-function">Coffee <span class="hljs-title">create</span>()</span>;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>创建生产不同产品的工厂</p>
+ <figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs haxe"><span class="hljs-keyword">public</span> <span class="hljs-title class_"><span class="hljs-keyword">class</span> <span class="hljs-title">CappuccinoFactory</span> <span class="hljs-keyword"><span class="hljs-keyword">implements</span> <span class="hljs-type">CoffeeFactory</span></span> </span>&#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Coffee create() &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span><span class="hljs-type"></span> CappuccinoCoffee();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+ <figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs haxe"><span class="hljs-keyword">public</span> <span class="hljs-title class_"><span class="hljs-keyword">class</span> <span class="hljs-title">LatteFactory</span> <span class="hljs-keyword"><span class="hljs-keyword">implements</span> <span class="hljs-type">CoffeeFactory</span></span> </span>&#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Coffee create() &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span><span class="hljs-type"></span> LatteCoffee();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+</li>
+<li><p>测试</p>
+ <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-code">        public static void main(String[] args) &#123;</span><br><span class="hljs-code">            CappuccinoFactory cappuccinoFactory = new CappuccinoFactory();</span><br><span class="hljs-code">            Coffee cappuccino = cappuccinoFactory.create();</span><br><span class="hljs-code">    </span><br><span class="hljs-code">            LatteFactory latteFactory = new LatteFactory();</span><br><span class="hljs-code">            Coffee latte = latteFactory.create();</span><br><span class="hljs-code">        &#125;</span><br><span class="hljs-code">    ```             </span><br><span class="hljs-code"></span><br>&gt;当需要增加一个产品 Mocca(摩卡咖啡) 时，只需要增加 Mocca 具体产品类和 MoccaFactory 具体工厂类即可，不需要修改原有的产品类和工厂类<br><br><span class="hljs-strong">**特点：**</span><br>符合开闭原则，工厂方法模式是简单工厂模式的延伸，它继承了简单工厂模式的优点，同时还弥补了简单工厂模式的不足。              <br><span class="hljs-strong">**优点：**</span><br><span class="hljs-bullet">-</span> 在工厂方法模式中，工厂方法用来创建客户所需要的产品，同时还向客户隐藏了哪种具体产品类将被实例化这一细节，用户只需要关心所需产品对应的工厂，无须关心创建细节，甚至无须知道具体产品类的类名。<br><span class="hljs-bullet">-</span> 基于工厂角色和产品角色的多态性设计是工厂方法模式的关键。它能够让工厂可以自主确定创建何种产品对象，而如何创建这个对象的细节则完全封装在具体工厂内部。工厂方法模式之所以又被称为多态工厂模式，就正是因为所有的具体工厂类都具有同一抽象父类。<br><span class="hljs-bullet">-</span> 使用工厂方法模式的另一个优点是在系统中加入新产品时，无须修改抽象工厂和抽象产品提供的接口，无须修改客户端，也无须修改其他的具体工厂和具体产品，而只要添加一个具体工厂和具体产品就可以了，这样，系统的可扩展性也就变得非常好，完全符合”开闭原则”。<br><br><span class="hljs-strong">**缺点：**</span>                                                                                                                                                                                                                                                       <br><span class="hljs-bullet">-</span> 在添加新产品时，需要编写新的具体产品类，而且还要提供与之对应的具体工厂类，系统中类的个数将成对增加，在一定程度上增加了系统的复杂度，有更多的类需要编译和运行，会给系统带来一些额外的开销。<br><span class="hljs-bullet">-</span> 由于考虑到系统的可扩展性，需要引入抽象层，在客户端代码中均使用抽象层进行定义，增加了系统的抽象性和理解难度，且在实现时可能需要用到DOM、反射等技术，增加了系统的实现难度。<br><br><span class="hljs-section">### 5. 抽象工厂模式  </span><br>工厂方法模式不管工厂怎么拆分抽象，都只是针对一类产品。如果要生成另一种产品，如果用上述工厂方法方式，除去对应的产品实体类还需要新增抽象工厂及具体工厂实现，随着产品的增多，会导致类爆炸。这时就需要使用到抽象工厂模式。<br>抽象工厂是应对产品族概念的。比如说，每个饮料厂可能要同时生产茶，汽水，咖啡，那么每一个工厂都要有创建茶，汽水车和咖啡的方法。<br>抽象工厂模式是工厂方法模式的升级版本。例如上面的饮料厂引入了的新的饮品种类：茶。我们可以将世界各地的饮料厂抽象为一个饮料厂接口，这个饮料厂生产两种饮料：咖啡和茶。咖啡又分为卡布奇诺和拿铁等种类，需要将咖啡进行抽象。茶分为红茶和绿茶，也需要对茶进行抽象。在中国和美国都有饮料厂，他们属于饮料厂接口的实现，拥有生产咖啡和茶的功能。至于中国和美国的饮料厂生产的咖啡是卡布奇诺还是摩卡，生产的茶是红茶还是绿茶需要自己去实现。<br><br>例如：中国的饮料厂生产拿铁咖啡和红茶。美国的饮料厂生产卡布奇诺和绿茶，代码实现为：<br><span class="hljs-bullet"> 1.</span> 添加新的产品茶，并且创建其实现类：红茶和绿茶。<br></code></pre></td></tr></table></figure>
+<p> public interface Tea {<br> &#x2F;**<br>  * 获取茶的名称<br>  * @return<br>  *&#x2F;<br> public abstract String getName();<br> }</p>
+ <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs"><br></code></pre></td></tr></table></figure>
+<p> public class RedTea implements Tea {<br> @Override<br> public String getName() {<br>     return “红茶”;<br> }<br> }</p>
+ <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs"><br></code></pre></td></tr></table></figure>
+<p> public class GreenTea implements Tea {<br> @Override<br> public String getName() {<br>     return “绿茶”;<br> }<br> }</p>
+ <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">2.</span> 定义饮料抽象工厂，及中国饮料工厂和美国饮料工厂的实现。<br></code></pre></td></tr></table></figure>
+<p> public interface DrinkFactory {</p>
+<pre><code class="hljs"> //制造咖啡
+ Coffee createCoffee();
+
+ //制造茶
+ Tea createTea();
+</code></pre>
+<p> }</p>
+ <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs"><br></code></pre></td></tr></table></figure>
+<p> public class ChinaDrinkFactory implements DrinkFactory {<br> @Override<br> public Coffee createCoffee() {<br>     return new LatteCoffee();<br> }<br><br> @Override<br> public Tea createTea() {<br>     return new RedTea();<br> }<br> }</p>
+ <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs"><br></code></pre></td></tr></table></figure>
+<p> public class AmericaDrinkFactory implements DrinkFactory{<br> @Override<br> public Coffee createCoffee() {<br>     return new CappuccinoCoffee();<br> }<br><br> @Override<br> public Tea createTea() {<br>     return new GreenTea();<br> }<br> }</p>
+ <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">3.测试类，创建中国工厂和美国工厂进行生产。<br></code></pre></td></tr></table></figure>
+<p> public class FactoryTest {<br>     public static void main(String[] args) {<br>         ChinaDrinkFactory chinaDrinkFactory &#x3D; new ChinaDrinkFactory();<br>         Coffee coffee &#x3D; chinaDrinkFactory.createCoffee();<br>         Tea tea &#x3D; chinaDrinkFactory.createTea();<br><br>         AmericaDrinkFactory americaDrinkFactory &#x3D; new AmericaDrinkFactory();<br>         Coffee coffee1 &#x3D; americaDrinkFactory.createCoffee();<br>         Tea tea1 &#x3D; americaDrinkFactory.createTea();<br>     }<br> }</p>
+<pre><code class="hljs">
+</code></pre>
+</li>
+</ol>
+<p><strong>特点：</strong><br>用来生产不同的产品族的全部产品，增加新的产品线很容易，但是无法增加新的产品。<br>抽象工厂模式与工厂方法模式最大的区别：抽象工厂中每个工厂可以创建多种类的产品；而工厂方法每个工厂只能创建一类。</p>
+<p><strong>优点：</strong></p>
+<ul>
+<li>可以在类的内部对产品族中相关联的多等级产品共同管理，而不必专门引入多个新的类来进行管理。</li>
+<li>当增加一个新的产品族时不需要修改原代码，满足开闭原则。</li>
+</ul>
+<p><strong>缺点：</strong><br>当产品族中需要增加一个新的产品时，所有的工厂类都需要进行修改。</p>
+<blockquote>
+<p>抽象工厂在使用中出现的很少,除非要建立多个产品种类的情况,一般情况用工厂方法即可解决.</p>
+</blockquote>
+<p>参考资料：<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/80127173">为什么用枚举类来实现单例模式越来越流行？</a><br><a target="_blank" rel="noopener" href="https://juejin.im/entry/6844903509729476621">Java 设计模式之抽象工厂模式</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/nugongahou110/article/details/50425823">Android设计模式之一个例子让你彻底明白工厂模式(Factory Pattern)</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="category-chain-item">设计模式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java常见的设计模式(上)</div>
+      <div>http://example.com/2020/02/10/Java常见的设计模式(上)/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2020年2月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/02/18/Dockerfile%E4%B9%8BENTRYPOINT%E5%92%8CCMD%E7%9A%84%E5%BC%82%E5%90%8C/" title="Dockerfile之ENTRYPOINT和CMD的异同">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Dockerfile之ENTRYPOINT和CMD的异同</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/01/12/%E4%B8%87%E5%AD%97%E9%95%BF%E6%96%87%E6%80%BB%E7%BB%93MySQL%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" title="万字长文总结MySQL关系型数据库">
+                        <span class="hidden-mobile">万字长文总结MySQL关系型数据库</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

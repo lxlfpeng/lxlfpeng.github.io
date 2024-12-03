@@ -9,14 +9,14 @@
   <meta charset="UTF-8">
 
   <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
   
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="John Doe">
+  <meta name="author" content="peng">
   <meta name="keywords" content="">
   
     <meta property="og:type" content="website">
@@ -24,7 +24,7 @@
 <meta property="og:url" content="http://example.com/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="peng">
 <meta name="twitter:card" content="summary_large_image">
   
   
@@ -61,7 +61,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -87,7 +87,7 @@
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>Fluid</strong>
+      <strong>鹏哥的Blog</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -189,7 +189,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="An elegant Material-Design theme for Hexo"></span>
+            <span id="subtitle" data-typed-text="学而不思则罔，思而不学则殆"></span>
           
         </div>
 
@@ -227,15 +227,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/02/Android%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D/" target="_self">
-          Android屏幕适配
+        <a href="/2023/02/19/Win10%E5%8F%8A11%E5%AE%89%E8%A3%85Wsl2/" target="_self">
+          Win10及11安装Wsl2
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/12/02/Android%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/02/19/Win10%E5%8F%8A11%E5%AE%89%E8%A3%85Wsl2/" target="_self">
         <div>
-          与屏幕实际尺寸无关，取决于 ROM 指定的像素密度与屏幕真实像素密度之间的关系。编译 ROM 时会指定像素密度的。只能指定为以下几个值：  ldpi: 120ppi （mdpi x 0.75） mdpi: 160ppi （android 基准 ppi, 1dp&#x3D;1px） tvdpi: 213.333ppi （xhdpi &#x2F; 1.5） hdpi: 240ppi （mdpi x 1
+          一.安装Wsl2环境要求必须运行 Windows 10 版本 2004 及更高版本（内部版本 19041 及更高版本）或 Windows 11。 WSL2 是 WSL 1 的升级版，带来的主要优势：  提高文件系统性能 支持完全的系统调用兼容性  WSL2 使用了 hyper-v 虚拟化技术，它就是一个你感知不到的虚拟机（VM），比以前的版本性能更高。 安装步骤1.启用虚拟机平台和 Linux 子
         </div>
       </a>
 
@@ -243,11 +243,32 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-02 17:52" pubdate>
-              2024-12-02
+            <time datetime="2023-02-19 00:00" pubdate>
+              2023-02-19
             </time>
           </div>
         
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux%E7%B3%BB%E7%BB%9F/" class="category-chain-item">Linux系统</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
         
         
       </div>
@@ -260,13 +281,283 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/02/%E4%B8%8A%E4%BC%A0Aar%E5%88%B0maven%E5%BA%93/" target="_self">
+        <a href="/2022/12/18/Win11%E6%AD%A3%E5%BC%8F%E7%89%88(21H2)%E5%AE%89%E8%A3%85Android%E5%AD%90%E7%B3%BB%E7%BB%9F/" target="_self">
+          Win11正式版(21H2)安装Android子系统
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/12/18/Win11%E6%AD%A3%E5%BC%8F%E7%89%88(21H2)%E5%AE%89%E8%A3%85Android%E5%AD%90%E7%B3%BB%E7%BB%9F/" target="_self">
+        <div>
+          本教程的背景是Win11正式版本(21H2)暂未全面推送Android子系统的情况的尝鲜教程。  一. Win11dev版本wsa在win11测试版本上面已经可以直接使用了，只设置区域为美国，设置-&gt;启动关闭windows功能-&gt;开启hyper-v和虚拟机平台，电脑重启后，去商店搜索Window Subsystem for Android即可使用。 二. Win11正式版：1. 修改
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-12-18 00:00" pubdate>
+              2022-12-18
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux%E7%B3%BB%E7%BB%9F/" class="category-chain-item">Linux系统</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/10/28/Android%E6%B2%89%E6%B5%B8%E5%BC%8F%E7%8A%B6%E6%80%81%E6%A0%8F%E5%AE%9E%E7%8E%B0%E6%80%BB%E7%BB%93/" target="_self">
+          Android沉浸式状态栏实现总结
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/10/28/Android%E6%B2%89%E6%B5%B8%E5%BC%8F%E7%8A%B6%E6%80%81%E6%A0%8F%E5%AE%9E%E7%8E%B0%E6%80%BB%E7%BB%93/" target="_self">
+        <div>
+          Android api 30+ 可用新的api实现沉浸式状态栏等方案状态栏字体颜色修改：&#x2F;&#x2F;状态栏字体改为白色 1WindowCompat.getInsetsController(window,window.decorView).isAppearanceLightStatusBars = false &#x2F;&#x2F;状态栏字体改为黑色 1WindowCompat.get
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-10-28 00:00" pubdate>
+              2022-10-28
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/10/03/Android%E9%A1%B9%E7%9B%AEGadle%E7%BB%9F%E4%B8%80%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/" target="_self">
+          Android项目Gadle统一依赖管理
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/10/03/Android%E9%A1%B9%E7%9B%AEGadle%E7%BB%9F%E4%B8%80%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/" target="_self">
+        <div>
+          一.Gradle管理依赖版本在中大型Android项目中，都会有多个Module进行协同配合。这些module中可能会依赖同一个库的不同版本，这将导致一些问题，要么是代码冲突，要么是APK包体积增大，亦或是项目构建的时间变长，拖慢开发效率。 例如:下图就是在不同的module中依赖同一个库的不同版本。要解决这个问题我们首先要了解在Android项目中目前有那些方案来引入第三方依赖:  直接编写(默
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-10-03 00:00" pubdate>
+              2022-10-03
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/09/23/Android%E5%8D%B3%E6%97%B6%E9%80%9A%E8%AE%AFIm%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93/" target="_self">
+          Android即时通讯Im开发总结
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/23/Android%E5%8D%B3%E6%97%B6%E9%80%9A%E8%AE%AFIm%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93/" target="_self">
+        <div>
+          实现即时通讯IM的方式一. 使用第三方IM服务对于短平快的公司，完全可以采用第三方SDK来实现。国内IM的第三方服务商有很多，类似云信、环信、融云、LeanCloud，当然还有其它的很多，这里就不一一举例了，感兴趣的小伙伴可以自行查阅下。第三方服务商IM底层协议基本上都是TCP。他们的IM方案很成熟，有了它们，我们甚至不需要自己去搭建IM后台，什么都不需要去考虑。如果你甚至连UI都不需要自己做，这
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-09-23 00:00" pubdate>
+              2022-09-23
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/09/18/Android%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1Services%E5%92%8CWorkManager%E6%80%BB%E7%BB%93/" target="_self">
+          Android后台任务Services和WorkManager总结
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/18/Android%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1Services%E5%92%8CWorkManager%E6%80%BB%E7%BB%93/" target="_self">
+        <div>
+          Android后台服务限制Android O对应用在后台运行时可以执行的操作施加了限制，称为后台执行限制（Background Execution Limits），这可以大大减少应用的内存使用和耗电量，提高用户体验。后台执行限制分为两个部分： 后台服务限制（Background Service Limitations）、 广播限制（BroadcastLimitations）。除了下面情况外都是后台
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-09-18 00:00" pubdate>
+              2022-09-18
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/09/10/%E4%B8%8A%E4%BC%A0Aar%E5%88%B0maven%E5%BA%93/" target="_self">
           上传Aar到maven库
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/12/02/%E4%B8%8A%E4%BC%A0Aar%E5%88%B0maven%E5%BA%93/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/10/%E4%B8%8A%E4%BC%A0Aar%E5%88%B0maven%E5%BA%93/" target="_self">
         <div>
           方式一:12345678910111213141516171819202122232425262728293031323334353637383940plugins &#123;    id &#x27;com.android.library&#x27;    id &#x27;org.jetbrains.kotlin.android&#x27;    id &#x27;maven-publish
         </div>
@@ -276,11 +567,32 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-02 17:50" pubdate>
-              2024-12-02
+            <time datetime="2022-09-10 00:00" pubdate>
+              2022-09-10
             </time>
           </div>
         
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
         
         
       </div>
@@ -293,15 +605,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/02/hello-world/" target="_self">
-          Hello World
+        <a href="/2022/09/01/%E8%87%AA%E5%AE%9A%E4%B9%89Rss%E6%BA%90%E6%AF%94%E8%BE%83/" target="_self">
+          自定义Rss源比较
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/12/02/hello-world/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/01/%E8%87%AA%E5%AE%9A%E4%B9%89Rss%E6%BA%90%E6%AF%94%E8%BE%83/" target="_self">
         <div>
-          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick
+          万物皆可RSS简书荒废有近两年，最近发现一个RSS神器，所以又有了动力写一点东西。前年关于使用RSS订阅微信公众号、知乎、社交网络等，有写几篇文章：  【干货】如何高效地订阅微信公众号 【干货】如何通过 RSS 订阅知乎 【干货】如何通过RSS订阅社交网络  其中，最最主要的方法是使用部署的Huginn去制作相应的RSS，但是，这种方法的学习成本稍高，对不懂编程语言的人不太友好；那么到底有没有更简
         </div>
       </a>
 
@@ -309,11 +621,140 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-02 17:13" pubdate>
-              2024-12-02
+            <time datetime="2022-09-01 00:00" pubdate>
+              2022-09-01
             </time>
           </div>
         
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/RSS%E8%AE%A2%E9%98%85/" class="category-chain-item">RSS订阅</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/08/28/%E4%BD%BF%E7%94%A8Huginn%E6%89%93%E9%80%A0%E8%87%AA%E5%8A%A8%E5%8C%96%E4%BF%A1%E6%81%AF%E5%A4%84%E7%90%86%E4%B8%AD%E5%BF%83/" target="_self">
+          使用Huginn打造自动化信息处理中心
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/08/28/%E4%BD%BF%E7%94%A8Huginn%E6%89%93%E9%80%A0%E8%87%AA%E5%8A%A8%E5%8C%96%E4%BF%A1%E6%81%AF%E5%A4%84%E7%90%86%E4%B8%AD%E5%BF%83/" target="_self">
+        <div>
+          一.Huginn简介在北欧神话中，奥丁的肩膀上坐着两只乌鸦，一只名叫 Huginn，一只名叫 Muninn。这两只乌鸦告诉奥丁他们的所见所闻，毫无遗漏。奥丁在黎明时派出它们，它们飞遍全世界然后在晚餐之前回来汇报，因此，奥丁能知晓很多事情。在Huginn的项目主页上，作者对它有详细的介绍。我们同样可以通过Huginn创建不同的代理，通过这些代理发送HTTP请求获得相关数据，然后将获取到的数据进行处理
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-08-28 00:00" pubdate>
+              2022-08-28
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/RSS%E8%AE%A2%E9%98%85/" class="category-chain-item">RSS订阅</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2022/08/25/%E4%BD%BF%E7%94%A8Feed43%E4%B8%BA%E7%BD%91%E9%A1%B5%E7%94%9F%E6%88%90RSS%E8%AE%A2%E9%98%85%E6%BA%90/" target="_self">
+          使用Feed43为网页生成RSS订阅源
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/08/25/%E4%BD%BF%E7%94%A8Feed43%E4%B8%BA%E7%BD%91%E9%A1%B5%E7%94%9F%E6%88%90RSS%E8%AE%A2%E9%98%85%E6%BA%90/" target="_self">
+        <div>
+          简介在我们使用Rss时候发现很多的网站并不支持Rss服务，如果自己使用Rsshub，Huginn等搭建订阅源，不单单需要懂一些编程和服务器部署的知识，还需要买服务器。如果只是轻度的使用那么完全可以试试FEED43，通过FEED43提供的免费服务可以为静态网页生成订阅源。 步骤总览 准备好需要解析的网站网址(必须是服务端渲染页面网站，也就是常说的静态网页)。 注册好Feed43的账号，并登录。 使用
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-08-25 00:00" pubdate>
+              2022-08-25
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/RSS%E8%AE%A2%E9%98%85/" class="category-chain-item">RSS订阅</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
         
         
       </div>
@@ -321,6 +762,12 @@
   </div>
 
 
+
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/#board">13</a><a class="extend next" rel="next" href="/page/2/#board"><i class="iconfont icon-arrowright"></i></a>
+    </span>
+  </nav>
 
 
 
@@ -368,7 +815,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
     </div>
   
   

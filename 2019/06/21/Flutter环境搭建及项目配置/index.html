@@ -1,0 +1,744 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一. 下载安装Flutter。1.1 下载安装包Flutter SDK 1.2 下载完成后进行解压: 1.3 配置环境变量。控制面板-&gt;系统和安全-&gt;系统-&gt;高级系统设置-&gt;环境变量-&gt;path-&gt;编辑-&gt;新建 1.4 安装flutter依赖并检查。cmd命令: 1flutter doctor  1.5 查看flutter版本。1flutter docto">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flutter环境搭建及项目配置">
+<meta property="og:url" content="http://example.com/2019/06/21/Flutter%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8A%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一. 下载安装Flutter。1.1 下载安装包Flutter SDK 1.2 下载完成后进行解压: 1.3 配置环境变量。控制面板-&gt;系统和安全-&gt;系统-&gt;高级系统设置-&gt;环境变量-&gt;path-&gt;编辑-&gt;新建 1.4 安装flutter依赖并检查。cmd命令: 1flutter doctor  1.5 查看flutter版本。1flutter docto">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/790e1a6e1da648f24f5196bf5f40a893.webp">
+<meta property="og:image" content="http://example.com/images/584c394cafe48aa90501c58928cc1cfd.webp">
+<meta property="og:image" content="http://example.com/images/6f8918090fcbff15309423e45ae357bb.webp">
+<meta property="og:image" content="http://example.com/images/3475896c37cedb706b3578e53057ee66.webp">
+<meta property="og:image" content="http://example.com/images/a06dd7c88bef5014a91d02e60205b377.webp">
+<meta property="og:image" content="http://example.com/images/51f7d25a2c5829ad444ea3111bdd2d70.webp">
+<meta property="og:image" content="http://example.com/images/4e2735083e6fe524e45a5eccc77d4335.webp">
+<meta property="og:image" content="http://example.com/images/6a97f539d0e0be528a95c9fd953624c2.webp">
+<meta property="og:image" content="http://example.com/images/042df2a9de26db86a72770aa551d733b.webp">
+<meta property="og:image" content="http://example.com/images/fbb639a186bc1752e41df3bc493e498d.webp">
+<meta property="og:image" content="http://example.com/images/0bec2b31685de17ebabf29e1818fece6.webp">
+<meta property="og:image" content="http://example.com/images/402bb23d49be831f11d22d832f48fd08.webp">
+<meta property="og:image" content="http://example.com/images/718c0c51fa870ec11a0e05955a2b018e.webp">
+<meta property="og:image" content="http://example.com/images/721fc8bf64f3643469d44895e517f551.webp">
+<meta property="article:published_time" content="2019-06-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:49:26.153Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/790e1a6e1da648f24f5196bf5f40a893.webp">
+  
+  
+  
+  <title>Flutter环境搭建及项目配置 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Flutter环境搭建及项目配置"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-06-21 00:00" pubdate>
+          2019年6月21日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Flutter环境搭建及项目配置</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-下载安装Flutter。"><a href="#一-下载安装Flutter。" class="headerlink" title="一. 下载安装Flutter。"></a>一. 下载安装Flutter。</h1><h3 id="1-1-下载安装包Flutter-SDK"><a href="#1-1-下载安装包Flutter-SDK" class="headerlink" title="1.1 下载安装包Flutter SDK"></a>1.1 下载安装包<a target="_blank" rel="noopener" href="https://flutter.cn/docs/development/tools/sdk/releases">Flutter SDK</a></h3><p><img src="/images/790e1a6e1da648f24f5196bf5f40a893.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="1-2-下载完成后进行解压"><a href="#1-2-下载完成后进行解压" class="headerlink" title="1.2 下载完成后进行解压:"></a>1.2 下载完成后进行解压:</h3><p><img src="/images/584c394cafe48aa90501c58928cc1cfd.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="1-3-配置环境变量。"><a href="#1-3-配置环境变量。" class="headerlink" title="1.3 配置环境变量。"></a>1.3 配置环境变量。</h3><p>控制面板-&gt;系统和安全-&gt;系统-&gt;高级系统设置-&gt;环境变量-&gt;path-&gt;编辑-&gt;新建<br><img src="/images/6f8918090fcbff15309423e45ae357bb.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="1-4-安装flutter依赖并检查。"><a href="#1-4-安装flutter依赖并检查。" class="headerlink" title="1.4 安装flutter依赖并检查。"></a>1.4 安装flutter依赖并检查。</h3><p>cmd命令:</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">flutter doctor</span><br></code></pre></td></tr></table></figure>
+<p><img src="/images/3475896c37cedb706b3578e53057ee66.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="1-5-查看flutter版本。"><a href="#1-5-查看flutter版本。" class="headerlink" title="1.5 查看flutter版本。"></a>1.5 查看flutter版本。</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">flutter doctor -v</span><br></code></pre></td></tr></table></figure>
+<h1 id="二-Android-Studio安装配置。"><a href="#二-Android-Studio安装配置。" class="headerlink" title="二. Android Studio安装配置。"></a>二. Android Studio安装配置。</h1><h3 id="2-1-Android-studio安装dart和flutter插件。"><a href="#2-1-Android-studio安装dart和flutter插件。" class="headerlink" title="2.1 Android studio安装dart和flutter插件。"></a>2.1 Android studio安装dart和flutter插件。</h3><p><img src="/images/a06dd7c88bef5014a91d02e60205b377.webp" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/images/51f7d25a2c5829ad444ea3111bdd2d70.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="2-2-重启Android-studio创建flutter工程。"><a href="#2-2-重启Android-studio创建flutter工程。" class="headerlink" title="2.2 重启Android studio创建flutter工程。"></a>2.2 重启Android studio创建flutter工程。</h3><p><img src="/images/4e2735083e6fe524e45a5eccc77d4335.webp" srcset="/img/loading.gif" lazyload></p>
+<h1 id="三-VsCode配置。"><a href="#三-VsCode配置。" class="headerlink" title="三. VsCode配置。"></a>三. VsCode配置。</h1><h3 id="1-vscode添加flutter支持。"><a href="#1-vscode添加flutter支持。" class="headerlink" title="1. vscode添加flutter支持。"></a>1. vscode添加flutter支持。</h3><p><img src="/images/6a97f539d0e0be528a95c9fd953624c2.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="2-创建一个flutter的项目。"><a href="#2-创建一个flutter的项目。" class="headerlink" title="2. 创建一个flutter的项目。"></a>2. 创建一个flutter的项目。</h3><p><img src="/images/042df2a9de26db86a72770aa551d733b.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="3-使用模拟器调试。"><a href="#3-使用模拟器调试。" class="headerlink" title="3.使用模拟器调试。"></a>3.使用模拟器调试。</h3><p><img src="/images/fbb639a186bc1752e41df3bc493e498d.webp" srcset="/img/loading.gif" lazyload><br><img src="/images/0bec2b31685de17ebabf29e1818fece6.webp" srcset="/img/loading.gif" lazyload></p>
+<h1 id="四-创建或者运行项目卡住问题"><a href="#四-创建或者运行项目卡住问题" class="headerlink" title="四. 创建或者运行项目卡住问题"></a>四. 创建或者运行项目卡住问题</h1><p>创建项目一直卡在Creating Flutter Project没反应。<br>运行项目一直卡在:</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gams"><span class="hljs-function"><span class="hljs-title">Running</span></span> Gradle task <span class="hljs-string">&#x27;assembleDebug&#x27;</span>...   <br></code></pre></td></tr></table></figure>
+<p>因为创建和运行flutter项目时会卡住是因为Gradle的Maven仓库在国外, 可以替换使用阿里云的镜像地址。方可解决问题。</p>
+<p>(1). 修改项目中android&#x2F;build.gradle文件</p>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs fsharp"><span class="hljs-keyword">buildscript</span> &#123;<br>     <span class="hljs-keyword">repositories</span> &#123;<br>         <span class="hljs-comment">//修改的地方</span><br>		 <span class="hljs-comment">//google()</span><br>         <span class="hljs-comment">//jcenter()</span><br>         <span class="hljs-keyword">maven</span> &#123; url <span class="hljs-symbol">&#x27;https</span><span class="hljs-operator">:</span><span class="hljs-comment">//maven.aliyun.com/repository/google&#x27; &#125;</span><br>         <span class="hljs-keyword">maven</span> &#123; url <span class="hljs-symbol">&#x27;https</span><span class="hljs-operator">:</span><span class="hljs-comment">//maven.aliyun.com/repository/jcenter&#x27; &#125;</span><br>         <span class="hljs-keyword">maven</span> &#123; url <span class="hljs-symbol">&#x27;http</span><span class="hljs-operator">:</span><span class="hljs-comment">//maven.aliyun.com/nexus/content/groups/public&#x27; &#125;</span><br>     &#125;<br>  <span class="hljs-operator">...</span><br> &#125;<br><br><span class="hljs-keyword">allprojects</span> &#123;<br>     <span class="hljs-keyword">repositories</span> &#123;<br>         <span class="hljs-comment">//修改的地方</span><br>         <span class="hljs-comment">//google()</span><br>         <span class="hljs-comment">//jcenter()</span><br>         <span class="hljs-keyword">maven</span> &#123; url <span class="hljs-symbol">&#x27;https</span><span class="hljs-operator">:</span><span class="hljs-comment">//maven.aliyun.com/repository/google&#x27; &#125;</span><br>         <span class="hljs-keyword">maven</span> &#123; url <span class="hljs-symbol">&#x27;https</span><span class="hljs-operator">:</span><span class="hljs-comment">//maven.aliyun.com/repository/jcenter&#x27; &#125;</span><br>         <span class="hljs-keyword">maven</span> &#123; url <span class="hljs-symbol">&#x27;http</span><span class="hljs-operator">:</span><span class="hljs-comment">//maven.aliyun.com/nexus/content/groups/public&#x27; &#125;</span><br>     &#125;<br> &#125;<br><br></code></pre></td></tr></table></figure>
+<p>(2). 修改Flutter的配置文件, 该文件在Flutter安装目录&#x2F;packages&#x2F;flutter_tools&#x2F;gradle&#x2F;flutter.gradle</p>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs fsharp"><span class="hljs-keyword">buildscript</span> &#123;<br>    <span class="hljs-keyword">repositories</span> &#123;<br>       <span class="hljs-comment">// google()</span><br>       <span class="hljs-comment">// jcenter()</span><br>	   <span class="hljs-keyword">maven</span> &#123; url <span class="hljs-symbol">&#x27;https</span><span class="hljs-operator">:</span><span class="hljs-comment">//maven.aliyun.com/repository/google&#x27; &#125;</span><br>       <span class="hljs-keyword">maven</span> &#123; url <span class="hljs-symbol">&#x27;https</span><span class="hljs-operator">:</span><span class="hljs-comment">//maven.aliyun.com/repository/jcenter&#x27; &#125;</span><br>       <span class="hljs-keyword">maven</span> &#123; url <span class="hljs-symbol">&#x27;http</span><span class="hljs-operator">:</span><span class="hljs-comment">//maven.aliyun.com/nexus/content/groups/public&#x27; &#125;</span><br>	&#125;<br>  <span class="hljs-operator">...</span><br>&#125;<br>  <span class="hljs-operator">...</span><br><span class="hljs-keyword">class</span> FlutterPlugin implements Plugin<span class="hljs-operator">&lt;</span>Project<span class="hljs-operator">&gt;</span> &#123;<br>   <span class="hljs-comment">// private static final String MAVEN_REPO      = &quot;https://storage.googleapis.com/download.flutter.io&quot;;</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> final String MAVEN_REPO      <span class="hljs-operator">=</span> <span class="hljs-string">&quot;http://download.flutter.io&quot;</span>;<br>    <span class="hljs-operator">...</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>(3).替换download.flutter.io。</p>
+<ul>
+<li><p>flutter&#x2F;packages&#x2F;flutter_tools&#x2F;gradle&#x2F;resolve_dependencies.gradle</p>
+</li>
+<li><p>flutter&#x2F;packages&#x2F;flutter_tools&#x2F;gradle&#x2F;aar_init_script.gradle</p>
+</li>
+<li><p>flutter&#x2F;packages&#x2F;flutter_tools&#x2F;gradle&#x2F;flutter.gradle</p>
+</li>
+</ul>
+<p>中的：<a target="_blank" rel="noopener" href="https://storage.googleapis.com/download.flutter.io">https://storage.googleapis.com/download.flutter.io</a>   替换为：<a target="_blank" rel="noopener" href="http://download.flutter.io/">http://download.flutter.io</a>   重新编译。</p>
+<h1 id="五-项目结构分析"><a href="#五-项目结构分析" class="headerlink" title="五 . 项目结构分析"></a>五 . 项目结构分析</h1><p><img src="/images/402bb23d49be831f11d22d832f48fd08.webp" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><p>.idea：IDE的生成的一些配置，不用管</p>
+</li>
+<li><p>android：创建项目生成的Android原生代码</p>
+</li>
+<li><p>build：项目编译目录</p>
+</li>
+<li><p>ios：创建项目生成的ios原生代码</p>
+</li>
+<li><p>lib：(重点)我们写的代码都在这里边，以.dart结尾。</p>
+</li>
+<li><p>test:创建项目自动生成的test文件</p>
+</li>
+</ul>
+<p>pubspec.yaml：(重点)flutter包管理，我们依赖的包都在这里管理，类似于maven、gradle;flutter依赖包中国地址：<a target="_blank" rel="noopener" href="https://pub.flutter-io.cn/">flutter-io</a>。除此之外还可以对Flutter进行设置、添加资源文件等。</p>
+<h1 id="六-Flutter添加第三方依赖"><a href="#六-Flutter添加第三方依赖" class="headerlink" title="六. Flutter添加第三方依赖"></a>六. Flutter添加第三方依赖</h1><p>在flutter中引入第三方库一共有三种方式:</p>
+<ul>
+<li>Pub方式<a target="_blank" rel="noopener" href="https://pub.dev/">pub仓库</a></li>
+<li>导入本地工程方式</li>
+<li>Git 远程仓库添加</li>
+</ul>
+<h3 id="1-Pub引入方式"><a href="#1-Pub引入方式" class="headerlink" title="1. Pub引入方式"></a>1. Pub引入方式</h3><p>Flutter 的依赖管理在 pubspec.yaml 中进行。使用pubspec.yaml 管理第三方库，例如要将包’dio’添加到应用中，请执行以下操作：</p>
+<ul>
+<li>（1.） 添加依赖，打开 <code>pubspec.yaml</code> 文件，然后在 dependencies 下添加 dio:<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">dependencies</span>:<br>  <span class="hljs-attribute">dio</span>: ^<span class="hljs-number">2</span>.<span class="hljs-number">1</span>.<span class="hljs-number">6</span><br></code></pre></td></tr></table></figure>
+格式为：<code>包名 + ^ + 版本号</code></li>
+<li>（2.） 进行安装在 terminal 中·：运行 <code>flutter packages get</code>或者在 As 中: 点击 pubspec.yaml 文件顶部的<code> Packages Get</code>。</li>
+</ul>
+<h3 id="2-导入本地工程方式"><a href="#2-导入本地工程方式" class="headerlink" title="2. 导入本地工程方式"></a>2. 导入本地工程方式</h3><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">dependencies:</span><br>    <span class="hljs-comment">// 包名</span><br><span class="hljs-symbol">    dio:</span><br>        <span class="hljs-comment">// 本地包路径</span><br><span class="hljs-symbol">        path:</span> ../..<span class="hljs-keyword">/code/</span>dio<br></code></pre></td></tr></table></figure>
+<h3 id="3-Git-远程仓库添加"><a href="#3-Git-远程仓库添加" class="headerlink" title="3. Git 远程仓库添加"></a>3. Git 远程仓库添加</h3><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">dependencies:</span><br>  <span class="hljs-comment">// 包名</span><br><span class="hljs-symbol">  dio:</span><br><span class="hljs-symbol">    git:</span><br>      <span class="hljs-comment">// 远程仓库 url</span><br><span class="hljs-symbol">      url:</span> git:<span class="hljs-comment">//github.com/flutter/packages.git</span><br>      <span class="hljs-comment">// 远程仓库中的包的相对路径</span><br><span class="hljs-symbol">      path:</span> packages/dio<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>dependencies 与dev_dependencies的区别</strong><br>dependencies 与dev_dependencies 是用户发布环境与本地环境开发，一般写在dependencies下面即可devDependencies  里面的插件只用于开发环境，不用于生产环境，而 dependencies  是需要发布到生产环境的。<br>比如我们写一个项目要依赖于XXX，没有这个包的依赖运行就会报错，这时候就把这个依赖写入dependencies ；<br>而我们使用的一些构建工具比如XXX、XXX这些只是在开发中使用的包，上线以后就和他们没关系了，所以将它写入devDependencies。</p>
+</blockquote>
+<h3 id="4-Flutter的flutter-packages-get失败"><a href="#4-Flutter的flutter-packages-get失败" class="headerlink" title="4. Flutter的flutter packages get失败"></a>4. Flutter的flutter packages get失败</h3><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">Running <span class="hljs-string">&quot;flutter pub get&quot;</span> <span class="hljs-keyword">in</span> flutter_app...                     <br>Got <span class="hljs-built_in">socket</span> error trying <span class="hljs-built_in">to</span> find package flutter_easyrefresh <span class="hljs-keyword">at</span> <span class="hljs-keyword">https</span>://pub.dartlang.org.<br></code></pre></td></tr></table></figure>
+<p>添加站点</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">1. <span class="hljs-built_in">export</span> <span class="hljs-attribute">PUB_HOSTED_URL</span>=https://pub.flutter-io.cn<br></code></pre></td></tr></table></figure>
+<p><img src="/images/718c0c51fa870ec11a0e05955a2b018e.webp" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">2. <span class="hljs-built_in">export</span> <span class="hljs-attribute">FLUTTER_STORAGE_BASE_URL</span>=https://storage.flutter-io.cn<br></code></pre></td></tr></table></figure>
+<p><img src="/images/721fc8bf64f3643469d44895e517f551.webp" srcset="/img/loading.gif" lazyload></p>
+<h1 id="七-在Flutter中添加资源文件"><a href="#七-在Flutter中添加资源文件" class="headerlink" title="七. 在Flutter中添加资源文件."></a>七. 在Flutter中添加资源文件.</h1><p>一个应用程序少不了一些静态资源，<code>例如：图片、字体、配置文件</code>等。这些静态资源会打包到程序安装包中，可以在运行时访问。</p>
+<p>Flutter 中添加静态资源需要将静态资源放置在任意目录（通常是根目录下的 <code>assets</code> 文件夹中），然后在配置文件中 <code>pubspec.yaml</code> 中配置资源的路径。每个 asset 都通过相对于 <code>pubspec.yaml</code> 文件所在位置的路径进行标识。资源才能被打包使用。</p>
+<h3 id="1-加载资源图片图片"><a href="#1-加载资源图片图片" class="headerlink" title="1.加载资源图片图片"></a>1.加载资源图片图片</h3><p>(1.) Flutter 中使用 <a target="_blank" rel="noopener" href="https://docs.flutter.io/flutter/painting/AssetImage-class.html">AssetImage</a> 组件展示图片。Flutter 会根据当前设备的分辨率加载对应的图片，我们只需要按照特定的目录结构来放置图片，例如：</p>
+<figure class="highlight gml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs gml">images<br>    ├── logo.png<br>    ├── <span class="hljs-number">2.0</span><span class="hljs-variable language_">x</span><br>        ├── logo.png<br>    ├── <span class="hljs-number">3.0</span><span class="hljs-variable language_">x</span><br>        ├── logo.png<br></code></pre></td></tr></table></figure>
+<p>(2.) 添加本地图片资源</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">flutter:</span><br><span class="hljs-symbol">    assets:</span><br>        <span class="hljs-comment">// 表示引入根目录下的 images 文件夹下的所有资源文件</span><br>        - images/<br>        <span class="hljs-comment">// 只添加 images/ 下的 logo.png</span><br>        - images/logo.png<br></code></pre></td></tr></table></figure>
+<p>(3. ) 加载本地图片资源</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">Image</span><span class="hljs-selector-class">.asset</span>(<span class="hljs-string">&quot;images/logo.png&quot;</span>)<br><span class="hljs-comment">// 或者</span><br><span class="hljs-selector-tag">Image</span>(<br>  <span class="hljs-attribute">image</span>: new <span class="hljs-built_in">AssetImage</span>(<span class="hljs-string">&quot;assets/images/logo.png&quot;</span>),<br>),<br></code></pre></td></tr></table></figure>
+<p>至此图片就会显示在屏幕上面了。</p>
+<h1 id="八-Android原生项目添加flutter模块"><a href="#八-Android原生项目添加flutter模块" class="headerlink" title="八. Android原生项目添加flutter模块"></a>八. Android原生项目添加flutter模块</h1><h3 id="1-切换到native项目的根目录。再执行下面命令来创建一个flutter模块。"><a href="#1-切换到native项目的根目录。再执行下面命令来创建一个flutter模块。" class="headerlink" title="1. 切换到native项目的根目录。再执行下面命令来创建一个flutter模块。"></a>1. 切换到native项目的根目录。再执行下面命令来创建一个flutter模块。</h3><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lua">flutter <span class="hljs-built_in">create</span> -t <span class="hljs-built_in">module</span> flutter_module<br></code></pre></td></tr></table></figure>
+<h3 id="2-在project中的settings-gradle文件中添加如下代码。"><a href="#2-在project中的settings-gradle文件中添加如下代码。" class="headerlink" title="2. 在project中的settings.gradle文件中添加如下代码。"></a>2. 在project中的settings.gradle文件中添加如下代码。</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">setBinding</span><span class="hljs-params">(new Binding([gradle: this])</span></span>)<br><span class="hljs-built_in">evaluate</span>(new <span class="hljs-built_in">File</span>(<br>        settingsDir<span class="hljs-selector-class">.parentFile</span>,<br>        <span class="hljs-string">&#x27;FlutterHybridAndroid\\flutter_module\\.android\\include_flutter.groovy&#x27;</span><br>))<br><br></code></pre></td></tr></table></figure>
+<h3 id="3-项目依赖这个flutter的module。"><a href="#3-项目依赖这个flutter的module。" class="headerlink" title="3. 项目依赖这个flutter的module。"></a>3. 项目依赖这个flutter的module。</h3><figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs isbl"><span class="hljs-variable">implementation</span> <span class="hljs-function"><span class="hljs-title">project</span>(<span class="hljs-string">&#x27;:flutter&#x27;</span>)</span><br></code></pre></td></tr></table></figure>
+<h1 id="九-flutter打android项目打包"><a href="#九-flutter打android项目打包" class="headerlink" title="九. flutter打android项目打包"></a>九. flutter打android项目打包</h1><ol>
+<li>创建打包的jks。</li>
+<li>在Flutter工程中&#x2F;android&#x2F;app&#x2F;创建key&#x2F;目录。</li>
+<li>sign.jks拖到key&#x2F;目录下。</li>
+<li>配置&#x2F;android&#x2F;app&#x2F;build.gradle文件。<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">android &#123;<br>    signingConfigs &#123;<br>        <span class="hljs-keyword">release</span> &#123;<br>            keyAlias <span class="hljs-string">&#x27;sign&#x27;</span><br>            keyPassword <span class="hljs-string">&#x27;android&#x27;</span><br>            storeFile file(<span class="hljs-string">&#x27;key/sign.jks&#x27;</span>)<br>            storePassword <span class="hljs-string">&#x27;android&#x27;</span><br>        &#125;<br>    &#125;<br><br>    buildTypes &#123;<br>        <span class="hljs-keyword">release</span> &#123;<br>            signingConfig signingConfigs.<span class="hljs-keyword">release</span><br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>打包APK。<br>在当前项目目录的终端中，或者直接在 Android Studio 的 Terinal 执行命令：<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">flutter build apk</span><br></code></pre></td></tr></table></figure>
+生成的目录：当前项目<code>\build\app\outputs\apk\release\xx.apk</code></li>
+</ol>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="https://juejin.im/post/5c206b4ff265da61327f52f4">Flutter 插件使用必知必会</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Fluter%E5%BC%80%E5%8F%91/" class="category-chain-item">Fluter开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Flutter环境搭建及项目配置</div>
+      <div>http://example.com/2019/06/21/Flutter环境搭建及项目配置/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年6月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/06/28/Dart%E8%AF%AD%E8%A8%80%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" title="Dart语言编程基础">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Dart语言编程基础</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/06/20/Kotlin%E6%80%BB%E7%BB%93%E4%B9%8B%E4%B8%80%E5%8F%98%E9%87%8F%E5%B8%B8%E9%87%8F%E5%8F%8A%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" title="Kotlin总结之一变量常量及流程控制">
+                        <span class="hidden-mobile">Kotlin总结之一变量常量及流程控制</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

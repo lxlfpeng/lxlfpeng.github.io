@@ -1,0 +1,701 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.背景在家庭局域网中，假如有若干个设备连接在同一台路由其中。路由器便和下属设备形成了一个小型局域网。 可以在局域网中我们可以通过设备的 ip 地址互相访问。 但是管理内部的局域网的机器过多，ip地址也变得越来越多，不想浪费精力在对ip的记忆上，而且使用IP远程登录非常容易搞混，为了解决这种问题， 比较简单的有两种方式。第一种方式是通过修改hosts文件，来完成域名和ip的映射，这种只能对一台机器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="局域网添加DNS服务器进行域名解析">
+<meta property="og:url" content="http://example.com/2022/05/10/%E5%B1%80%E5%9F%9F%E7%BD%91%E6%B7%BB%E5%8A%A0DNS%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9B%E8%A1%8C%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.背景在家庭局域网中，假如有若干个设备连接在同一台路由其中。路由器便和下属设备形成了一个小型局域网。 可以在局域网中我们可以通过设备的 ip 地址互相访问。 但是管理内部的局域网的机器过多，ip地址也变得越来越多，不想浪费精力在对ip的记忆上，而且使用IP远程登录非常容易搞混，为了解决这种问题， 比较简单的有两种方式。第一种方式是通过修改hosts文件，来完成域名和ip的映射，这种只能对一台机器">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/d88f7700d91b945fe8d15bc17657fbbf.webp">
+<meta property="article:published_time" content="2022-05-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:11:26.770Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/d88f7700d91b945fe8d15bc17657fbbf.webp">
+  
+  
+  
+  <title>局域网添加DNS服务器进行域名解析 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="局域网添加DNS服务器进行域名解析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-05-10 00:00" pubdate>
+          2022年5月10日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">局域网添加DNS服务器进行域名解析</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-背景"><a href="#一-背景" class="headerlink" title="一.背景"></a>一.背景</h1><p>在家庭局域网中，假如有若干个设备连接在同一台路由其中。路由器便和下属设备形成了一个小型局域网。 可以在局域网中我们可以通过设备的 ip 地址互相访问。 但是管理内部的局域网的机器过多，ip地址也变得越来越多，不想浪费精力在对ip的记忆上，而且使用IP远程登录非常容易搞混，为了解决这种问题， 比较简单的有两种方式。第一种方式是通过修改hosts文件，来完成域名和ip的映射，这种只能对一台机器生效，而且例如手机之类的不容易修改hosts的设备也比较麻烦，不过有些新的路由器或者是软路由可以在路由器层面修改hosts来达到适配所有设备的能力。另外一种解决方法是搭建一个局域网的DNS服务器，使用不同的域名指向不同的机器ip。 使用自建DNS服务器的好处远不止这一个，还有很多其他的好处。例如当IP地址发生变化时，只需要更改DNS服务器的设置即可。</p>
+<h1 id="二-DNS简介"><a href="#二-DNS简介" class="headerlink" title="二.DNS简介"></a>二.DNS简介</h1><p>要搭建DNS服务器，首先需要了解一下什么是DNS。</p>
+<h3 id="什么是-DNS？"><a href="#什么是-DNS？" class="headerlink" title="什么是 DNS？"></a>什么是 DNS？</h3><p>DNS 是将域转换为其服务器的数字 IP 地址的系统，例如将域名<code>www.web-server.com</code>转换成ip地址<code>127.0.0.1</code>。每当使用域名发出网络请求时，系统都会执行 DNS 查询以确定域名对应的服务器ip地址。</p>
+<h3 id="为什么要运行自己的-DNS服务器？"><a href="#为什么要运行自己的-DNS服务器？" class="headerlink" title="为什么要运行自己的 DNS服务器？"></a>为什么要运行自己的 DNS服务器？</h3><p>自建DNS服务器可以更好地控制网络。例如能够配置网络级域映射，<code>web-server</code>到<code>192.168.0.101</code>。将路由器配置为使用你自己搭建的 DNS服务器， 可以让任何连接到该路由器设备都能够通过<code>http://web-server</code>访问到<code>192.168.0.101</code>，自建DNS服务器可以对域名解析进行集中式的管理，而不是在每台设备上单独修改<code>/etc/hosts</code>， 自建DNS服务器将适用于你连接到网络的所有内容，包括无法通过其他方式自定义其路由堆栈的嵌入式硬件。自建 DNS 服务器还可以提高性能并提供额外的弹性层。在发生大规模 DNS 中断时可以为你与之交互的关键服务使用具有长期缓存的自定义服务器可以帮助你度过所选上游提供商的停机时间。</p>
+<h3 id="DNS-与-Dnsmasq"><a href="#DNS-与-Dnsmasq" class="headerlink" title="DNS 与 Dnsmasq"></a>DNS 与 Dnsmasq</h3><p>Dnsmasq是一个轻量级的 DNS 服务器，大多数 Linux 发行版中都可以安装它。<br>自建Dnsmasq服务器流程如下所示：</p>
+<ol>
+<li>路由器接收来自你连接的设备之一的请求。路由器将配置为使用 Dnsmasq 主机作为其 DNS 服务器。</li>
+<li>Dnsmasq 会检查它是否有定义的域名路由，例如<code>web-server</code>to <code>192.168.0.101</code>。如果请求是<code>http://web-server/example-page</code>，它将发送<code>192.168.0.101</code>回路由器。</li>
+<li>当 Dnsmasq 没有匹配的路由时，它会将 DNS 请求转发给 Google 的<code>8.8.8.8</code>，从而在公共互联网上启用解析。这确保你在使用自己的 DNS 时仍然可以访问更广泛的网络。</li>
+</ol>
+<blockquote>
+<p>你无需在客户端设备上进行任何配置更改。路由器后面的所有东西最终都会通过 Dnsmasq 进行 DNS 查询。但是，值得注意的是，所有流行的桌面和移动操作系统都支持设置 DNS 服务器，因此您可以将单个设备配置为使用 Dnsmasq，而无需在路由器级别启用它。</p>
+</blockquote>
+<h1 id="三-Dnsmasq搭建DNS服务器"><a href="#三-Dnsmasq搭建DNS服务器" class="headerlink" title="三.Dnsmasq搭建DNS服务器"></a>三.Dnsmasq搭建DNS服务器</h1><h2 id="1-Dnsmasq简介"><a href="#1-Dnsmasq简介" class="headerlink" title="1.Dnsmasq简介"></a>1.Dnsmasq简介</h2><p><a target="_blank" rel="noopener" href="https://wiki.archlinux.org/title/Dnsmasq">Dnsmasq</a> 是一个小巧且方便地用于配置DNS和DHCP的工具，适用于小型网络，它提供了DNS功能和可选择的DHCP功能。它服务那些只在本地适用的域名，这些域名是不会在全球的DNS服务器中出现的。DHCP服务和DNS服务结合，并且允许DHCP分配的地址能在DNS中正常解析，而这些DHCP分配的地址和相关命令可以配置到每台主机中，也可以配置到一台核心设备中（比如路由器），DNSmasq支持静态和动态两种DHCP配置方式。</p>
+<h2 id="2-安装Dnsmasq"><a href="#2-安装Dnsmasq" class="headerlink" title="2.安装Dnsmasq"></a>2.安装Dnsmasq</h2><h3 id="Ubuntu安装dnsmasq"><a href="#Ubuntu安装dnsmasq" class="headerlink" title="Ubuntu安装dnsmasq"></a>Ubuntu安装dnsmasq</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">apt <span class="hljs-keyword">install</span> dnsmasq -y<br></code></pre></td></tr></table></figure>
+
+<h3 id="Docker安装dnsmasq"><a href="#Docker安装dnsmasq" class="headerlink" title="Docker安装dnsmasq"></a>Docker安装dnsmasq</h3><ol>
+<li>下载镜像<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker pull jpillora/dnsmasq<br></code></pre></td></tr></table></figure></li>
+<li>运行镜像<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs livescript">docker run <span class="hljs-string">\</span><br>    --name dnsmasq <span class="hljs-string">\</span><br>    -d <span class="hljs-string">\</span><br>    -p <span class="hljs-number">53</span>:<span class="hljs-number">53</span>/udp <span class="hljs-string">\</span><br><span class="hljs-comment"># web控制端</span><br>    -p <span class="hljs-number">5380</span>:<span class="hljs-number">8080</span> <span class="hljs-string">\</span><br><span class="hljs-comment"># 账号</span><br>    -e <span class="hljs-string">&quot;HTTP_USER=foo&quot;</span> <span class="hljs-string">\</span><br><span class="hljs-comment"># 密码</span><br>    -e <span class="hljs-string">&quot;HTTP_PASS=bar&quot;</span> <span class="hljs-string">\</span><br>    --restart always <span class="hljs-string">\</span><br>    jpillora/dnsmasq<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="3-Linux53端口被systemd-resolve占用的解决方法"><a href="#3-Linux53端口被systemd-resolve占用的解决方法" class="headerlink" title="3.Linux53端口被systemd-resolve占用的解决方法"></a>3.Linux53端口被systemd-resolve占用的解决方法</h3><p>在Linux系统中有些软件（如：Dnsmasq解锁Netflix中的Dns等服务）可能要用到53的端口，但有些系统提示已使用（required port 53 already in use ）。使用<code>lsof -i:53</code>查看53端口是否是是被systemd-resolved进程所占用了。</p>
+<ol>
+<li>先停用 systemd-resolved 服务:</li>
+</ol>
+<figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nsis"><span class="hljs-params">system</span>ctl stop <span class="hljs-params">system</span>d-resolved<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>编辑 &#x2F;etc&#x2F;systemd&#x2F;resolved.conf 文件:</li>
+</ol>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">vi</span> /etc/systemd/resolved.<span class="hljs-keyword">conf</span><br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>修改配置如下:</li>
+</ol>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[Resolve]</span><br><span class="hljs-attr">DNS</span>=<span class="hljs-number">8.8</span>.<span class="hljs-number">8.8</span>  <span class="hljs-comment">#取消注释，增加dns</span><br><span class="hljs-comment">#FallbackDNS=</span><br><span class="hljs-comment">#Domains=</span><br><span class="hljs-comment">#LLMNR=no</span><br><span class="hljs-comment">#MulticastDNS=no</span><br><span class="hljs-comment">#DNSSEC=no</span><br><span class="hljs-comment">#Cache=yes</span><br><span class="hljs-attr">DNSStubListener</span>=<span class="hljs-literal">no</span>  <span class="hljs-comment">#取消注释，把yes改为no</span><br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>最后运行下面命令即可:</li>
+</ol>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">ln</span> -<span class="hljs-keyword">sf</span> /run/systemd/<span class="hljs-built_in">resolve</span>/resolv.<span class="hljs-keyword">conf</span> /etc/resolv.<span class="hljs-keyword">conf</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="4-配置Dnsmasq"><a href="#4-配置Dnsmasq" class="headerlink" title="4.配置Dnsmasq"></a>4.配置Dnsmasq</h2><p>打开&#x2F;etc&#x2F;dnsmasq.conf 配置文件，添加需要映射的域名和ip地址:</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-string">...</span><br><span class="hljs-comment">#dnsmasq config, for a complete example, see:</span><br><span class="hljs-comment">#  http://oss.segetech.com/intra/srv/dnsmasq.conf</span><br><span class="hljs-comment">#dns解析日志</span><br>log-queries<br><span class="hljs-comment">#定义主机与IP映射</span><br>address=<span class="hljs-string">/www.qinglong.com/172.17.205.28</span><br>address=<span class="hljs-string">/www.baihu.com/172.17.205.32</span><br><span class="hljs-string">...</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="5-路由器设置DNS服务器"><a href="#5-路由器设置DNS服务器" class="headerlink" title="5.路由器设置DNS服务器"></a>5.路由器设置DNS服务器</h2><p>通过上面的步骤 ，我们已经设置好一个 DNS 服务器。接下来，进入你的路由器管理界面，使用你的设置，把你路由器的 DNS 服务器指向刚才机器在局域网的静态 IP。 也可以配置你的PC电脑的 DNS 指向这个地址。 建议是，保留原始的 DNS 主机地址比如:</p>
+<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs accesslog"><span class="hljs-number">192.168.1.1</span><br><br><span class="hljs-number">192.168.31.223</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>第一个是我的原始路由器的 DNS 地址</p>
+</li>
+<li><p>第二个是我设置的地址，这样子可以作为补充。</p>
+</li>
+</ul>
+<p><img src="/images/d88f7700d91b945fe8d15bc17657fbbf.webp" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>如果你 dnsmasq 设置没有继承 路由器主机的 DNS 服务，可以设置第二个 DNS 服务器为路由器主机 ，这样可以保证原来的状态。</p>
+</blockquote>
+<h2 id="6-远程网页查看Dnsmasq信息"><a href="#6-远程网页查看Dnsmasq信息" class="headerlink" title="6.远程网页查看Dnsmasq信息"></a>6.远程网页查看Dnsmasq信息</h2><p>访问Dnsmasq安装主机的8080端口就可以进入管理界面:</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">http:</span><span class="hljs-comment">//127.0.0.1:8080/</span><br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" class="category-chain-item">网络基础</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>局域网添加DNS服务器进行域名解析</div>
+      <div>http://example.com/2022/05/10/局域网添加DNS服务器进行域名解析/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年5月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/05/11/Vue%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/" title="Vue前端开发">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Vue前端开发</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/10/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%92%8C%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E8%81%94%E7%B3%BB/" title="Web服务器和应用服务器的区别与联系">
+                        <span class="hidden-mobile">Web服务器和应用服务器的区别与联系</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

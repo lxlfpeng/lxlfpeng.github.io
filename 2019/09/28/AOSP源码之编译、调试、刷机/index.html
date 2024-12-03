@@ -1,0 +1,900 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.准备工作 系统最好是Linux或者mac OS(本文基于Ubuntu)。 Ubuntu设置永不休眠，在setting中搜索power.blank-screen选择never。 一块大一点儿的硬盘，至少得有200G剩余空间。  二.下载Aosp源码1.安装GIT首先需要安装Git，因为源码是用Git管理的。1sudo apt-get install git 接下来创建一个bin文件夹，并加入到P">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AOSP源码之编译、调试、刷机">
+<meta property="og:url" content="http://example.com/2019/09/28/AOSP%E6%BA%90%E7%A0%81%E4%B9%8B%E7%BC%96%E8%AF%91%E3%80%81%E8%B0%83%E8%AF%95%E3%80%81%E5%88%B7%E6%9C%BA/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.准备工作 系统最好是Linux或者mac OS(本文基于Ubuntu)。 Ubuntu设置永不休眠，在setting中搜索power.blank-screen选择never。 一块大一点儿的硬盘，至少得有200G剩余空间。  二.下载Aosp源码1.安装GIT首先需要安装Git，因为源码是用Git管理的。1sudo apt-get install git 接下来创建一个bin文件夹，并加入到P">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-09-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:52:48.313Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>AOSP源码之编译、调试、刷机 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="AOSP源码之编译、调试、刷机"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-09-28 00:00" pubdate>
+          2019年9月28日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          68 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">AOSP源码之编译、调试、刷机</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-准备工作"><a href="#一-准备工作" class="headerlink" title="一.准备工作"></a>一.准备工作</h1><ul>
+<li>系统最好是Linux或者mac OS(本文基于Ubuntu)。</li>
+<li>Ubuntu设置永不休眠，在setting中搜索power.blank-screen选择never。</li>
+<li>一块大一点儿的硬盘，至少得有200G剩余空间。</li>
+</ul>
+<h1 id="二-下载Aosp源码"><a href="#二-下载Aosp源码" class="headerlink" title="二.下载Aosp源码"></a>二.下载Aosp源码</h1><h3 id="1-安装GIT"><a href="#1-安装GIT" class="headerlink" title="1.安装GIT"></a>1.安装GIT</h3><h5 id="首先需要安装Git，因为源码是用Git管理的。"><a href="#首先需要安装Git，因为源码是用Git管理的。" class="headerlink" title="首先需要安装Git，因为源码是用Git管理的。"></a>首先需要安装Git，因为源码是用Git管理的。</h5><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> install git<br></code></pre></td></tr></table></figure>
+<h5 id="接下来创建一个bin文件夹，并加入到PATH中，有点像Windows的环境变量。"><a href="#接下来创建一个bin文件夹，并加入到PATH中，有点像Windows的环境变量。" class="headerlink" title="接下来创建一个bin文件夹，并加入到PATH中，有点像Windows的环境变量。"></a>接下来创建一个bin文件夹，并加入到PATH中，有点像Windows的环境变量。</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> ~/bin<br>PATH=~/bin:<span class="hljs-variable">$PATH</span><br></code></pre></td></tr></table></figure>
+<h5 id="然后初始化Git，邮箱和姓名。"><a href="#然后初始化Git，邮箱和姓名。" class="headerlink" title="然后初始化Git，邮箱和姓名。"></a>然后初始化Git，邮箱和姓名。</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus">git config <span class="hljs-attr">--global</span> user<span class="hljs-selector-class">.email</span> <span class="hljs-string">&quot;xxx@gmail.com&quot;</span><br>git config <span class="hljs-attr">--global</span> user<span class="hljs-selector-class">.name</span> <span class="hljs-string">&quot;xxx&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-安装Python环境"><a href="#2-安装Python环境" class="headerlink" title="2.安装Python环境"></a>2.安装Python环境</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> install python<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-安装repo及配置"><a href="#3-安装repo及配置" class="headerlink" title="3.安装repo及配置"></a>3.安装repo及配置</h3><p>repo 是一个python 脚本(所以我们上面要配置Python环境)，因为Android源码包含数百个git库，简化帮助管理git Android版本库的工具。</p>
+<h5 id="1-安装curl下载的库："><a href="#1-安装curl下载的库：" class="headerlink" title="(1.)安装curl下载的库："></a>(1.)安装curl下载的库：</h5><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> install curl<br></code></pre></td></tr></table></figure>
+<h5 id="2-下载repo并设置可以运行权限。"><a href="#2-下载repo并设置可以运行权限。" class="headerlink" title="(2.)下载repo并设置可以运行权限。"></a>(2.)下载repo并设置可以运行权限。</h5><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">curl https:<span class="hljs-regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="hljs-regexp">/git/gi</span>t-repo &gt; ~<span class="hljs-regexp">/bin/</span>repo<br>chmod a+x ~<span class="hljs-regexp">/bin/</span>repo<br></code></pre></td></tr></table></figure>
+<h5 id="3-添加下载源。"><a href="#3-添加下载源。" class="headerlink" title="(3.)添加下载源。"></a>(3.)添加下载源。</h5><p>google 的AOSP 的话，因为FQ和数据量太大，且需要需要翻墙影响速度，因此优先考虑国内的镜像(本文使用的是清华的源)。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">export</span> <span class="hljs-attribute">REPO_URL</span>=<span class="hljs-string">&#x27;https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-初始化及同步源码"><a href="#4-初始化及同步源码" class="headerlink" title="4.初始化及同步源码"></a>4.初始化及同步源码</h3><h5 id="1-创建文件夹"><a href="#1-创建文件夹" class="headerlink" title="(1.)创建文件夹"></a>(1.)创建文件夹</h5><p>创建一个AOSP文件夹，cdd到文件夹里面去待会儿需要把源码下载到这里:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> aosp<br><span class="hljs-built_in">cd</span> aosp<br></code></pre></td></tr></table></figure>
+<h5 id="2-初始化Aosp仓库"><a href="#2-初始化Aosp仓库" class="headerlink" title="(2.)初始化Aosp仓库"></a>(2.)初始化Aosp仓库</h5><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">repo init -u https:<span class="hljs-regexp">//</span>aosp.tuna.tsinghua.edu.cn<span class="hljs-regexp">/platform/m</span>anifest<br></code></pre></td></tr></table></figure>
+<h5 id="3-初始化并指定版本"><a href="#3-初始化并指定版本" class="headerlink" title="(3.)初始化并指定版本"></a>(3.)初始化并指定版本</h5><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">repo</span> init -u https://aosp.tuna.tsinghua.edu.cn/platform/manifest -b android-<span class="hljs-number">8</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>_r36<br></code></pre></td></tr></table></figure>
+<p>AOSP对应关系查看地址： <a target="_blank" rel="noopener" href="https://source.android.google.cn/setup/start/build-numbers#source-code-tags-and-builds">对应关系</a></p>
+<h5 id="4-开始同步源码"><a href="#4-开始同步源码" class="headerlink" title="(4.)开始同步源码"></a>(4.)开始同步源码</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">repo <span class="hljs-built_in">sync</span> -j4<br></code></pre></td></tr></table></figure>
+<p>-j表示并发数.</p>
+<p><strong>因为Android的源码越来越大，repo sync失败的概率也越来越高。所以我们可以避开使用repo sync的方式，而采用下载预下载包的方式来实现下载源码。</strong></p>
+<h3 id="5-预下载包的方式"><a href="#5-预下载包的方式" class="headerlink" title="5.预下载包的方式"></a>5.预下载包的方式</h3><h5 id="1-下载预下载包"><a href="#1-下载预下载包" class="headerlink" title="1. 下载预下载包"></a>1. 下载预下载包</h5><p>在windows或者Linux上面通过迅雷下载<code>https://mirrors.tuna.tsinghua.edu.cn/aosp-monthly/aosp-latest.tar</code>。</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">wget -c https:<span class="hljs-regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="hljs-regexp">/aosp-monthly/</span>aosp-latest.tar <span class="hljs-comment">#下载初始化包</span><br></code></pre></td></tr></table></figure>
+<h5 id="2-解压预下载包"><a href="#2-解压预下载包" class="headerlink" title="2. 解压预下载包"></a>2. 解压预下载包</h5><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">tar</span> xf aosp-latest.tar<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>cd AOSP-&gt;解压得到的 AOSP 工程目录，这时 ls 的话什么也看不到，因为只有一个隐藏的 .repo 目录</p>
+</blockquote>
+<h5 id="3-查看分支"><a href="#3-查看分支" class="headerlink" title="3. 查看分支"></a>3. 查看分支</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> .repo/manifests <br>git branch -a<br></code></pre></td></tr></table></figure>
+<h5 id="4-在aosp目录选择需要同步的版本"><a href="#4-在aosp目录选择需要同步的版本" class="headerlink" title="4. 在aosp目录选择需要同步的版本"></a>4. 在aosp目录选择需要同步的版本</h5><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">repo init -<span class="hljs-keyword">b </span><span class="hljs-keyword">android-9.0.0_r55</span><br><span class="hljs-keyword"></span>repo <span class="hljs-keyword">sync </span><span class="hljs-comment"># 正常同步一遍即可得到完整目录</span><br></code></pre></td></tr></table></figure>
+<p>或者直接在aosp目录设置好你要同步的分支:</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">repo</span> init -u https://aosp.tuna.tsinghua.edu.cn/platform/manifest -b android-<span class="hljs-number">8</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>_r36<br><span class="hljs-attribute">repo</span> sync  # 正常同步一遍即可得到完整目录<br></code></pre></td></tr></table></figure>
+<p>如果仅加载具体模块:</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">repo sync platform<span class="hljs-regexp">/prebuilts/</span>clang<span class="hljs-regexp">/host/</span>darwin-x86<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-防止下载源码执行脚本卡死"><a href="#6-防止下载源码执行脚本卡死" class="headerlink" title="6.防止下载源码执行脚本卡死"></a>6.防止下载源码执行脚本卡死</h3><p>通过自定义Shell脚本启动源码下载可以有效防止，同步源码时脚本被卡死的问题。</p>
+<h5 id="1-在AOSP文件夹中新建down-sh文件"><a href="#1-在AOSP文件夹中新建down-sh文件" class="headerlink" title="(1.)在AOSP文件夹中新建down.sh文件"></a>(1.)在AOSP文件夹中新建down.sh文件</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br><span class="hljs-built_in">echo</span> “======= start repo <span class="hljs-built_in">sync</span> =======”<br><span class="hljs-built_in">cd</span> ~/Desktop/AOSP<br>repo <span class="hljs-built_in">sync</span> -j4<br><span class="hljs-keyword">while</span> [ $? == 1 ]; <span class="hljs-keyword">do</span><br><span class="hljs-built_in">echo</span> “====== <span class="hljs-built_in">sync</span> failed! re-sync again =====”<br><span class="hljs-built_in">sleep</span> 3<br>repo <span class="hljs-built_in">sync</span> -j4<br></code></pre></td></tr></table></figure>
+<h5 id="2-执行down-sh文件"><a href="#2-执行down-sh文件" class="headerlink" title="(2.)执行down.sh文件"></a>(2.)执行down.sh文件</h5><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stata"><span class="hljs-keyword">sh</span> down.<span class="hljs-keyword">sh</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="三-AOSP源码目录结构"><a href="#三-AOSP源码目录结构" class="headerlink" title="三.AOSP源码目录结构"></a>三.AOSP源码目录结构</h1><ul>
+<li>abi Application Binary Interface 应用程序二进制接口，abi相信同学们在SO库调用上遇到过，如果不支持该平台的话就说不ABI不支持。</li>
+<li>art Android Runtime 安卓运行时。这个会提前把字节码编译成二进制机器码保存起来，执行的时候加载速度比较快。Dalvik虚拟机则是在加载以后再去编译的，所以速度上ART会比Dalvik快一点。牺牲空间来赢取时间。</li>
+<li>bionic 基础库，Android系统与Linux内核的桥梁。Bionic 音标为 bīˈänik，翻译为”仿生”。</li>
+<li>bootable 系统启动引导相关程序</li>
+<li>build 用于构建Android系统的工具，也就是用于编译Android系统的</li>
+<li>cts Compatibility Test Suite 兼容性测试</li>
+<li>dalvik dalvik虚拟机，用于解析执行dex文件的虚拟机</li>
+<li>developers 开发者目录</li>
+<li>developerment 开发目录，比如说应用，application就在里面了，apps</li>
+<li>devices 设备相关的配置信息，什么索尼、HTC、自己的产品，就可以定义在这个目录下了</li>
+<li>docs 文档</li>
+<li>external 开源模组相关文件</li>
+<li>frameworks 系统架构，Android的核心了</li>
+<li>hardware hal层代码，硬件抽象层</li>
+<li>libcore 核心库</li>
+<li>libnativehelper native帮助库，实现JNI的相关文件</li>
+<li>ndk native development kit</li>
+<li>out 输出目录，编译以后生成的目录，相关的产出就在这里了</li>
+<li>packages 应用程序包。一些系统的应用就在这里了，比如说蓝牙，Launcher，相机，拨号之类的。</li>
+<li>pdk Plug-in Development Kit (PDK) is designed to help you build your own pattern projects</li>
+<li>platform_testing 平台测试</li>
+<li>prebuilts x86&#x2F;arm架构下预编译的文件</li>
+<li>sdk software development kit</li>
+<li>system 底层系统文件</li>
+<li>toolchain 工具链</li>
+<li>tools 工具文件</li>
+<li>Makefile mk文件，用于控制编译</li>
+</ul>
+<h1 id="四-AOSP源码整编"><a href="#四-AOSP源码整编" class="headerlink" title="四.AOSP源码整编"></a>四.AOSP源码整编</h1><p>编译AOSP源码需要配置好JAVA环境.</p>
+<h3 id="1-安装Java编译环境"><a href="#1-安装Java编译环境" class="headerlink" title="1.安装Java编译环境"></a>1.安装Java编译环境</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> update<br>sudo apt-<span class="hljs-built_in">get</span> install openjdk-8-jdk<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-进入AOSP文件夹，进行编译"><a href="#2-进入AOSP文件夹，进行编译" class="headerlink" title="2.进入AOSP文件夹，进行编译"></a>2.进入AOSP文件夹，进行编译</h3><h5 id="1-初始化编译环境"><a href="#1-初始化编译环境" class="headerlink" title="(1.)初始化编译环境"></a>(1.)初始化编译环境</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> build/envsetup.sh<br></code></pre></td></tr></table></figure>
+<h5 id="2-删除上一次编译的结果，初次编译可以不需要这一步"><a href="#2-删除上一次编译的结果，初次编译可以不需要这一步" class="headerlink" title="(2.)删除上一次编译的结果，初次编译可以不需要这一步"></a>(2.)删除上一次编译的结果，初次编译可以不需要这一步</h5><p><code>make clobber</code></p>
+<h5 id="3-选择与设备对应的编译版本"><a href="#3-选择与设备对应的编译版本" class="headerlink" title="(3.)选择与设备对应的编译版本"></a>(3.)选择与设备对应的编译版本</h5><p><code>lunch XX</code></p>
+<p>选择与设备对应的编译版本.如:编译开发工程师的版本<code>lunch aosp_x86-eng</code>，可以方便debug<br><a target="_blank" rel="noopener" href="https://source.android.com/setup/build/running#selecting-device-build">编译版本选择</a></p>
+<p>如果<code>lunch</code>命令没有加对应的编译版本则会有以下信息输出：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs markdown">You&#x27;re building on Linux<br><br>Lunch menu... pick a combo:<br><span class="hljs-bullet"> 1.</span> aosp<span class="hljs-emphasis">_arm-eng</span><br><span class="hljs-emphasis"> 2. aosp_</span>arm64-eng<br><span class="hljs-bullet"> 3.</span> aosp<span class="hljs-emphasis">_mips-eng</span><br><span class="hljs-emphasis"> 4. aosp_</span>mips64-eng<br><span class="hljs-bullet"> 5.</span> aosp<span class="hljs-emphasis">_x86-eng</span><br><span class="hljs-emphasis"> 6. aosp_</span>x86<span class="hljs-emphasis">_64-eng</span><br><span class="hljs-emphasis"> 7. full_</span>fugu-userdebug<br><span class="hljs-bullet"> 8.</span> aosp<span class="hljs-emphasis">_fugu-userdebug</span><br><span class="hljs-emphasis"> 9. mini_</span>emulator<span class="hljs-emphasis">_arm64-userdebug</span><br><span class="hljs-emphasis"> 10. m_</span>e<span class="hljs-emphasis">_arm-userdebug</span><br><span class="hljs-emphasis"> 11. m_</span>e<span class="hljs-emphasis">_mips64-eng</span><br><span class="hljs-emphasis"> 12. m_</span>e<span class="hljs-emphasis">_mips-userdebug</span><br><span class="hljs-emphasis"> 13. mini_</span>emulator<span class="hljs-emphasis">_x86_</span>64-userdebug<br><span class="hljs-bullet"> 14.</span> mini<span class="hljs-emphasis">_emulator_</span>x86-userdebug<br><span class="hljs-bullet"> 15.</span> aosp<span class="hljs-emphasis">_dragon-userdebug</span><br><span class="hljs-emphasis"> 16. aosp_</span>dragon-eng<br><span class="hljs-bullet"> 17.</span> aosp<span class="hljs-emphasis">_marlin-userdebug</span><br><span class="hljs-emphasis"> 18. aosp_</span>sailfish-userdebug<br><span class="hljs-bullet"> 19.</span> aosp<span class="hljs-emphasis">_flounder-userdebug</span><br><span class="hljs-emphasis"> 20. aosp_</span>angler-userdebug<br><span class="hljs-bullet"> 21.</span> aosp<span class="hljs-emphasis">_bullhead-userdebug</span><br><span class="hljs-emphasis"> 22. hikey-userdebug</span><br><span class="hljs-emphasis"> 23. aosp_</span>shamu-userdebug<br><br>Which would you like? [aosp<span class="hljs-emphasis">_arm-eng] </span><br></code></pre></td></tr></table></figure>
+<p>这里需要选择编译目标的格式(选择前面的序号，按回车即可)，编译目标的格式组成为<code>BUILD-BUILDTYPE</code>，比如aosp_arm-eng的BUILD为aosp_arm，BUILDTYPE为eng。 其中BUILD表示编译出的镜像可以运行在什么环境，aosp代表Android开源项目，arm表示系统是运行在arm架构的处理器上。 更多参考官方文档<a target="_blank" rel="noopener" href="https://source.android.google.cn/source/running.html#selecting-device-build">文档</a>。<br>BUILDTYPE 指的是编译类型，有以下三种：</p>
+<ul>
+<li>user：用来正式发布到市场的版本，权限受限，如没有 root 权限，不能 dedug，adb默认处于停用状态。</li>
+<li>userdebug：在user版本的基础上开放了 root 权限和 debug 权限，adb默认处于启用状态。一般用于调试真机。</li>
+<li>eng：开发工程师的版本，拥有最大的权限(root等)，具有额外调试工具的开发配置。一般用于模拟器。<br>如果你没有Nexus设备，只想编译完后运行在模拟器查看，那么BUILD可以选择aosp_x86，BUILDTYPE选择eng。</li>
+</ul>
+<h5 id="4-开始编译"><a href="#4-开始编译" class="headerlink" title="(4.)开始编译"></a>(4.)开始编译</h5><figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gauss"><span class="hljs-built_in">make</span> -j8<br></code></pre></td></tr></table></figure>
+<p>j后面数字几就是多少线程，最多不超过你的cpu总线程，<br>编译成功会显示如下:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">Creating filesystem with parameters:</span><br>    <span class="hljs-attr">Size:</span> <span class="hljs-number">2147483648</span><br>    <span class="hljs-attr">Block size:</span> <span class="hljs-number">4096</span><br>    <span class="hljs-attr">Blocks per group:</span> <span class="hljs-number">32768</span><br>    <span class="hljs-attr">Inodes per group:</span> <span class="hljs-number">8192</span><br>    <span class="hljs-attr">Inode size:</span> <span class="hljs-number">256</span><br>    <span class="hljs-attr">Journal blocks:</span> <span class="hljs-number">8192</span><br>    <span class="hljs-attr">Label:</span> <span class="hljs-string">system</span><br>    <span class="hljs-attr">Blocks:</span> <span class="hljs-number">524288</span><br>    <span class="hljs-attr">Block groups:</span> <span class="hljs-number">16</span><br>    <span class="hljs-attr">Reserved block group size:</span> <span class="hljs-number">127</span><br><span class="hljs-string">Created</span> <span class="hljs-string">filesystem</span> <span class="hljs-string">with</span> <span class="hljs-number">2216</span><span class="hljs-string">/131072</span> <span class="hljs-string">inodes</span> <span class="hljs-string">and</span> <span class="hljs-number">199826</span><span class="hljs-string">/524288</span> <span class="hljs-string">blocks</span><br>[<span class="hljs-number">100</span><span class="hljs-string">%</span> <span class="hljs-number">7669</span><span class="hljs-string">/7669</span>] <span class="hljs-string">Install</span> <span class="hljs-string">system</span> <span class="hljs-string">fs</span> <span class="hljs-string">ima.../target/product/generic_x86/system.img</span><br><span class="hljs-string">out/target/product/generic_x86/system.img+</span> <span class="hljs-string">maxsize=2192446080</span> <span class="hljs-string">blocksize=2112</span> <span class="hljs-string">total=2147483648</span> <span class="hljs-string">reserve=22146432</span><br><br><span class="hljs-comment">#### make completed successfully (01:24:41 (hh:mm:ss)) ####</span><br></code></pre></td></tr></table></figure>
+<p>会在源码跟目录out&#x2F;target&#x2F;product&#x2F;angler目录下生成镜像文件：</p>
+<ul>
+<li>system.img：系统镜像</li>
+<li>ramdisk.img：根文件系统镜像</li>
+<li>userdata.img：用户数据镜像</li>
+<li>recovery.img:recovery镜像</li>
+<li>boot.img:启动镜像</li>
+<li>vendor.img:驱动镜像</li>
+</ul>
+<p>最终会在 out&#x2F;target&#x2F;product&#x2F;generic_x86&#x2F;目录生成了三个重要的镜像文件： system.img、userdata.img、ramdisk.img。大概介绍着三个镜像文件：</p>
+<ul>
+<li>system.img：系统镜像，里面包含了Android系统主要的目录和文件，通过init.c进行解析并mount挂载到&#x2F;system目录下。</li>
+<li>userdata.img：用户镜像，是Android系统中存放用户数据的，通过init.c进行解析并mount挂载到&#x2F;data目录下。</li>
+<li>ramdisk.img：根文件系统镜像，包含一些启动Android系统的重要文件，比如init.rc。</li>
+</ul>
+<h3 id="3-编译错误解决"><a href="#3-编译错误解决" class="headerlink" title="3.编译错误解决"></a>3.编译错误解决</h3><h5 id="1-缺少libncurses-so-5"><a href="#1-缺少libncurses-so-5" class="headerlink" title="(1.)缺少libncurses.so.5"></a>(1.)缺少libncurses.so.5</h5><p>报错信息:<br><code>error while loading shared libraries: libncurses.so.5: cannot open shared object file: No such file or directory</code><br>解决方式:</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">sudo apt-<span class="hljs-keyword">get</span> <span class="hljs-keyword">update</span><br></code></pre></td></tr></table></figure>
+
+<p>for 32-bit binaries : </p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> install libncurses5:i386<br></code></pre></td></tr></table></figure>
+
+<p>for 64-bit binaries : </p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> install libncurses5<br></code></pre></td></tr></table></figure>
+
+<h5 id="2-缺少M4"><a href="#2-缺少M4" class="headerlink" title="(2.)缺少M4"></a>(2.)缺少M4</h5><p>报错信息:<br><code>/bin/bash: m4: command not found</code><br>解决方式:</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span> install m4<br></code></pre></td></tr></table></figure>
+
+<h5 id="3-去除所有本地化设置"><a href="#3-去除所有本地化设置" class="headerlink" title="(3.)去除所有本地化设置"></a>(3.)去除所有本地化设置</h5><p>报错信息:<br><code>FAILED: out/host/linux-x86/obj/EXECUTABLES/checkpolicy_intermediates/policy_scan.c</code><br>解决方法:</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">export</span> <span class="hljs-attribute">LC_ALL</span>=C<br></code></pre></td></tr></table></figure>
+<p>LC_ALL&#x3D;C 是为了去除所有本地化的设置，让命令能正确执行， 但是不可以修改~&#x2F;.bashrc，会导致终端内中文显示为数字(应该是对应的编码)</p>
+<h5 id="4-jack-server的问题"><a href="#4-jack-server的问题" class="headerlink" title="(4.)jack-server的问题"></a>(4.)jack-server的问题</h5><p><strong>jack server交互命令:</strong></p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">jack-<span class="hljs-keyword">admin</span> <span class="hljs-keyword">start</span>-<span class="hljs-keyword">server</span><br>jack-<span class="hljs-keyword">admin</span> kill-<span class="hljs-keyword">server</span><br>jack-<span class="hljs-keyword">admin</span> list-<span class="hljs-keyword">server</span><br>jack-<span class="hljs-keyword">admin</span> uninstall-<span class="hljs-keyword">server</span><br>mm -j32 showcommands &amp;&gt; mm.<span class="hljs-keyword">out</span><br>jack-<span class="hljs-keyword">admin</span> install-<span class="hljs-keyword">server</span> jack-launcher.jar  jack-<span class="hljs-keyword">server</span><span class="hljs-number">-4.8</span>.ALPHA.jar<br>jack-<span class="hljs-keyword">admin</span> dump-report<br>jack-<span class="hljs-keyword">admin</span> dump-re<br>jack-<span class="hljs-keyword">admin</span> <span class="hljs-keyword">server</span>-<span class="hljs-keyword">log</span>  查找<span class="hljs-keyword">log</span>所在目录<br></code></pre></td></tr></table></figure>
+
+<p><strong>问题一：多用户同时编译时报错</strong><br>错误信息：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">FAILED: setup-jack-<span class="hljs-keyword">server</span><br>/bin/bash -c &quot;(prebuilts/sdk/tools/jack-admin install-server prebuilts/sdk/tools/jack-launcher.jar prebuilts/sdk/tools/jack-server-4.11.ALPHA.jar  2&gt;&amp;1 || (exit 0) ) &amp;&amp; (JACK_SERVER_VM_ARGUMENTS=\&quot;-Dfile.encoding=UTF<span class="hljs-number">-8</span> -XX:+TieredCompilation\&quot; prebuilts/sdk/tools/jack-admin start-server 2&gt;&amp;1 || exit 0 ) &amp;&amp; (prebuilts/sdk/tools/jack-admin update server prebuilts/sdk/tools/jack-server-4.11.ALPHA.jar 4.11.ALPHA 2&gt;&amp;1 || exit 0 ) &amp;&amp; (prebuilts/sdk/tools/jack-admin update jack prebuilts/sdk/tools/jacks/jack-4.31.CANDIDATE.jar 4.31.CANDIDATE || exit 47 )&quot;<br>Jack <span class="hljs-keyword">server</span> already installed <span class="hljs-keyword">in</span> &quot;/home/disk/lixialong/.jack-server&quot;<br>Communication error <span class="hljs-keyword">with</span> Jack <span class="hljs-keyword">server</span> (<span class="hljs-number">35</span>), try <span class="hljs-string">&#x27;jack-diagnose&#x27;</span> <span class="hljs-keyword">or</span> see Jack <span class="hljs-keyword">server</span> <span class="hljs-keyword">log</span><br>SSL error <span class="hljs-keyword">when</span> connecting <span class="hljs-keyword">to</span> the Jack <span class="hljs-keyword">server</span>. Try <span class="hljs-string">&#x27;jack-diagnose&#x27;</span><br>SSL error <span class="hljs-keyword">when</span> connecting <span class="hljs-keyword">to</span> the Jack <span class="hljs-keyword">server</span>. Try <span class="hljs-string">&#x27;jack-diagnose&#x27;</span><br></code></pre></td></tr></table></figure>
+<p>解决方案：同时修改$HOME&#x2F;.jack-settings和$HOME&#x2F;.jack-server&#x2F;config.properties中的端口号（比如都改为8386&#x2F;8387，端口号值为0~65535，1024下的值不要用），方可支持多用户同时编译。<br>查看端口是否一致：cat ~&#x2F;.jack-server&#x2F;config.properties|grep -i port &amp;&amp; cat ~&#x2F;.jack|grep -i port|grep -v LOG &amp;&amp;cat ~&#x2F;.jack-settings|grep -i port</p>
+<ol>
+<li>$HOME&#x2F;.jack-settings<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">SERVER_PORT_SERVICE</span>=<span class="hljs-number">8386</span><br><span class="hljs-attr">SERVER_PORT_ADMIN</span>=<span class="hljs-number">8387</span><br></code></pre></td></tr></table></figure></li>
+<li>$HOME&#x2F;.jack-server&#x2F;config.properties<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs elm"><span class="hljs-title">jack</span>.server.service.<span class="hljs-keyword">port</span>=8386<br><span class="hljs-title">jack</span>.server.admin.<span class="hljs-keyword">port</span>=8387<br></code></pre></td></tr></table></figure></li>
+<li>$HOME&#x2F;.jack<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">SERVER_PORT_SERVICE</span>=<span class="hljs-number">8288</span><br><span class="hljs-attr">SERVER_PORT_ADMIN</span>=<span class="hljs-number">8289</span><br></code></pre></td></tr></table></figure></li>
+</ol>
+<p><strong>问题二： No Jack server running. Try ‘jack-admin start-server’</strong><br>错误信息</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stylus">com<span class="hljs-selector-class">.android</span><span class="hljs-selector-class">.jack</span><span class="hljs-selector-class">.server</span><span class="hljs-selector-class">.api</span><span class="hljs-selector-class">.v01</span><span class="hljs-selector-class">.ServerException</span>: <span class="hljs-string">&#x27;./config.properties&#x27;</span> musthave permission rw------- but have rwx------<br>Caused by: java<span class="hljs-selector-class">.io</span><span class="hljs-selector-class">.IOException</span>: <span class="hljs-string">&#x27;./config.properties&#x27;</span> must have permissionrw------- but have rwx------<br>... <br></code></pre></td></tr></table></figure>
+<p>解决方案：通过查看文件 $HOME&#x2F;.jack-server&#x2F;logs&#x2F;jack-server-0-0.log：<br>发现是配置文件的权限不对造成的，把文件$HOME&#x2F;.jack-server&#x2F;config.properties的权限由rwx改为rw即可解决问题。<br><strong>问题三：未配置变量信息导致问题</strong><br>错误信息:</p>
+<figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs subunit"><span class="hljs-keyword">ERROR: </span>Communication error with Jack server (52) make: *** [out/target/common/obj/JAVA_LIBRARIES/libutil_intermediates/classes.jack] Error<br></code></pre></td></tr></table></figure>
+<p>这种情况多半属于jack-admin缺少变量JACK_JAR而导致的。</p>
+<p>解决方案：<br>工程根目录内执行以下三句，再进行编译。</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">export JACK_JAR=./<span class="hljs-keyword">out</span>/host/linux-x86/framework/jack.jar<br><br>./<span class="hljs-keyword">out</span>/host/linux-x86/bin/jack-<span class="hljs-keyword">admin</span> stop-<span class="hljs-keyword">server</span><br><br>./<span class="hljs-keyword">out</span>/host/linux-x86/bin/jack-<span class="hljs-keyword">admin</span> <span class="hljs-keyword">start</span>-<span class="hljs-keyword">server</span><br></code></pre></td></tr></table></figure>
+<p><strong>问题四:TLSv1， TLSv1.1 禁用</strong><br>报错信息:</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">Ensuring <span class="hljs-keyword">Jack </span>server is <span class="hljs-keyword">installed </span><span class="hljs-keyword">and </span>started<br></code></pre></td></tr></table></figure>
+<p>解决方式:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> vim /etc/java-8-openjdk/security/java.security<br></code></pre></td></tr></table></figure>
+<p>vim里面输入&#x2F;搜索jdk.tls.disabledAlgorithms&#x3D; 将TLSv1， TLSv1.1 光标选中输入x删除掉取消禁用.然后wq保存.<br>修改后:</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">jdk</span>.tls.disabledAlgorithms=SSLv3, RC4, DES, MD5withRSA, \<br>    <span class="hljs-attribute">DH</span> keySize &lt; <span class="hljs-number">1024</span>, EC keySize &lt; <span class="hljs-number">224</span>, <span class="hljs-number">3</span>DES_EDE_CBC, anon, NULL, \<br>    <span class="hljs-attribute">include</span> jdk.disabled.namedCurves<br></code></pre></td></tr></table></figure>
+<p>aosp&#x2F;prebuilts&#x2F;sdk&#x2F;tools&#x2F; 目录下执行.&#x2F;jack-admin kill-server &amp;&amp; .&#x2F;jack-admin start-server 成功。</p>
+<h5 id="4-xmllint的问题"><a href="#4-xmllint的问题" class="headerlink" title="(4.)xmllint的问题"></a>(4.)xmllint的问题</h5><p>报错信息:<br><code>/bin/bash: xmllint: command not found</code><br>解决方案:</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sudo apt-<span class="hljs-built_in">get</span>  install libxml2-utils<br></code></pre></td></tr></table></figure>
+
+<h5 id="5-编译内存不足"><a href="#5-编译内存不足" class="headerlink" title="(5.)编译内存不足"></a>(5.)编译内存不足</h5><p>报错信息</p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sqf"><span class="hljs-keyword">Try</span> increasing heap <span class="hljs-built_in">size</span> <span class="hljs-keyword">with</span> java option <span class="hljs-string">&#x27;-Xmx&lt;size&gt;&#x27;</span>错误<br></code></pre></td></tr></table></figure>
+<p>解决方案:</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">export</span> <span class="hljs-attribute">JACK_SERVER_VM_ARGUMENTS</span>=<span class="hljs-string">&quot;-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4g&quot;</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">jack-<span class="hljs-keyword">admin</span> kill-<span class="hljs-keyword">server</span><br>jack-<span class="hljs-keyword">admin</span> <span class="hljs-keyword">start</span>-<span class="hljs-keyword">server</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="五-运行模拟器"><a href="#五-运行模拟器" class="headerlink" title="五.运行模拟器"></a>五.运行模拟器</h1><h3 id="1-启动模拟器"><a href="#1-启动模拟器" class="headerlink" title="1.启动模拟器"></a>1.启动模拟器</h3><p>在编译完成之后，就可以通过以下命令运行Android虚拟机了，由于之前已经执行过source和lunch命令了，可以直接运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> build/envsetup.sh<br>lunch aosp_x86-eng<br>emulator<br></code></pre></td></tr></table></figure>
+<p>就会启动模拟器了.</p>
+<h3 id="2-启动模拟器失败"><a href="#2-启动模拟器失败" class="headerlink" title="2.启动模拟器失败"></a>2.启动模拟器失败</h3><p>尝试使用-verbose选项（即“emulator -verbose”），这将打印模拟器正在做什么&#x2F;正在探测哪些文件，并给出有关错误的更多详细信息。<br><code>emulator -use-system-libs</code><br>启动模模拟器报错:</p>
+<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs vbnet"><span class="hljs-symbol">emulator:</span> <span class="hljs-keyword">ERROR</span>: x86_64 emulation currently requires hardware acceleration!<br>Please ensure KVM <span class="hljs-built_in">is</span> properly installed <span class="hljs-built_in">and</span> usable.<br>CPU acceleration status: This user doesn<span class="hljs-comment">&#x27;t have permissions to use KVM (/dev/kvm)</span><br></code></pre></td></tr></table></figure>
+<ol>
+<li>安装 Qemu-KVM 和 cpu-checker<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">sudo apt-get <span class="hljs-keyword">install </span>qemu-kvm cpu-checker<br>sudo apt-get <span class="hljs-keyword">install </span>qemu-kvm libvirt-<span class="hljs-keyword">bin </span>ubuntu-vm-<span class="hljs-keyword">builder </span><span class="hljs-keyword">bridge-utils</span><br></code></pre></td></tr></table></figure></li>
+<li>查看系统 KVM 是否可用<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-variable">$ </span>kvm-ok<br>  <span class="hljs-variable constant_">INFO</span>: <span class="hljs-regexp">/dev/kvm</span> exists<br>  <span class="hljs-variable constant_">KVM</span> acceleration can be used<br><span class="hljs-string">``</span><span class="hljs-string">`  </span><br><span class="hljs-string">3. 创建 kvm 用户组并把当前登录用户（如 peng ）添加到 kvm 用户组</span><br></code></pre></td></tr></table></figure>
+sudo addgroup kvm<br>sudo usermod -a -G kvm peng<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-number">4</span>. 改变 <span class="hljs-regexp">/dev/</span>kvm 用户组为 kvm<br></code></pre></td></tr></table></figure>
+sudo chgrp kvm &#x2F;dev&#x2F;kvm<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">5. 创建 udev rule，并写入 <span class="hljs-attribute">KERNEL</span>==&quot;kvm&quot;, <span class="hljs-attribute">GROUP</span>=<span class="hljs-string">&quot;kvm&quot;</span>, <span class="hljs-attribute">MODE</span>=<span class="hljs-string">&quot;0660&quot;</span><br></code></pre></td></tr></table></figure>
+sudo gedit &#x2F;etc&#x2F;udev&#x2F;rules.d&#x2F;60-qemu-kvm.rules<br>KERNEL&#x3D;&#x3D;”kvm”, GROUP&#x3D;”kvm”, MODE&#x3D;”0660”<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">6.</span> 重启ubuntu系统然后运行emulator<br><br><span class="hljs-section"># 六.AOSP源码编译某个单独的模块</span><br>上面的编译我们都是对整个Android系统进行编译的.如果我们要编译系统的Settings应用模块，这就属于源码单编某一个模块.<br>在AOSP根目录执行：<br></code></pre></td></tr></table></figure>
+source build&#x2F;envsetup.sh<br>lunch aosp_x86-eng<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">进入Settings的目录：<br></code></pre></td></tr></table></figure>
+cd packages&#x2F;apps&#x2F;Settings<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">通过mm编译当前目录下的模块，不编译依赖模块。<br></code></pre></td></tr></table></figure>
+mm<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs awk">编译成功后会有提示生成文件的存放路径。除了Settings.odex文件，还会在out<span class="hljs-regexp">/target/</span>product<span class="hljs-regexp">/generic_x86/</span>system<span class="hljs-regexp">/priv-app/</span>Settings目录下生成Settings.apk。<br>此外还有以下命令可以进行单编：<br>- mmm：编译指定目录下的模块，不编译它所依赖的其它模块。<br>- mma：编译当前目录下的模块及其依赖项。<br>- mmma：编译指定路径下所有模块，并且包含依赖。<br><br>如果对系统模块的源码进行修改，查看生成的APK文件，有两种方式：<br>- 通过adb push或者adb install 来安装APK。<br>- 使用make snod命令，重新生成 system.img，运行模拟器查看。<br><br><span class="hljs-comment"># 七.导入源码到AS</span><br><span class="hljs-comment">### 1.编译idegen模块，生成IDE项目文件</span><br>在源码中，存在idegen模块，该模块专门用来为idea工具生成系统源码的project.默认情况下aosp编译并不会生成该文件。<br>在开始编译该模块之前，首先确保你已经编译过Android源码了，如果没有，先要进行AOSP编译.和编译普通的模块一样，我们用mmm命令编译idegen.<br>在开始编译之前，检查out<span class="hljs-regexp">/host/</span>linux-x86<span class="hljs-regexp">/framework/</span>目录下是否存在idegen.jar文件，存在则说明你已经编译过该模块，否者，则需要编译.执行如下命令即可:<br></code></pre></td></tr></table></figure>
+source build&#x2F;envsetup.sh 将脚本添加到系统内<br>lunch 并选择要编译的项目<br>mmm development&#x2F;tools&#x2F;idegen&#x2F;<br>sudo .&#x2F;development&#x2F;tools&#x2F;idegen&#x2F;idegen.sh<figure class="highlight profile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs profile"><br>其中mmm development/tools/idegen/执行完成后会生成idegen.jar，而sodo ./development/tools/idegen/idegen.sh则会在源码目录下生成IEDA工程配置文件:android.ipr，android.iml及android.iws.<br><br>简单的说明一下这三个文件的作用:<br><br>- android.ipr:通常是保存工程相关的设置，比如编译器配置，入口，相关的libraries等<br>- android.iml:则是主要是描述了modules，比如modules的路径，依赖关系等.<br>- android.iws:则主要是包含了一些个人工作区的设置.<br><br>&gt;<span class="hljs-string">&quot;android.iml&quot;</span>和<span class="hljs-string">&quot;android.ipr&quot;</span>一般是<span class="hljs-string">&quot;只读&quot;</span>的属性，我们这里建议大家，把这两个文件改成可读可写，否则，在更改一些项目配置的时候可能会出现无法保存的情况，执行如下两条命令即可。<br></code></pre></td></tr></table></figure>
+sudo chmod 777 android.iml<br>sudo chmod 777 android.ipr<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br>### <span class="hljs-number">2</span> 导入源码到AndroidStudio<br>##### (<span class="hljs-number">1.</span>)配置AS<br>IDE内存优化<br>因为源码数量非常多，所以导入时IDEA/AS会需要大量内存。所以我们需要编辑IDE的VM选项。配置文件为<br><br>IDEA的是IDEA_HOME/bin/idea.vmoptions<br>AS的是AS_HOME/bin/studio.vmoptions<br>注意，AS有一个<span class="hljs-number">64</span>位版本的配置文件studio64.vmoptions最好一并修改了。<br><br>找到上面的配置文件，将对应的内容修改为<br></code></pre></td></tr></table></figure>
+-Xms748m -Xmx748m<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs clean">即将VM的堆内存最小和最大都设置为<span class="hljs-number">748</span>m。官方要求至少在<span class="hljs-number">748</span>m以上，根据实际情况进行配置即可<br>##### (<span class="hljs-number">2.</span>)导入源码<br>接下来，我们导入源码:打开Android Studio，点击File-&gt;Open，选择刚才生成的android.ipr文件即可，然后就是漫长的等待，注意此时是将源码完全导入到AS中了。<br>如果AS运行比较慢我们就需要排除一些不需要导入的模块。<br><br>##### (<span class="hljs-number">3.</span>) 排除模块<br>很多情况下，我们希望不导入某些模块，那么就可以在导入前修改android.iml文件，通过添加配置的方式告诉AS不导入某些模块，比如现在我不想导入art模块，那么就在android.iml文件中添加:<br></code></pre></td></tr></table></figure>
+&lt;excludeFloder url&#x3D;”file:&#x2F;&#x2F;$MODULE_DIR$”&#x2F;abi&gt;<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs elixir">不难发现，其格式为<span class="hljs-symbol">:``&lt;excludeFloder</span> url=<span class="hljs-string">&quot;file://$MODULE_DIR$&quot;</span>/模块名&gt;``<br><br>&gt;注<span class="hljs-symbol">:</span>编译生成的android.iml文件中已经默认排除了一些模块，通过搜索excludeFolder关键字可找到.<br><br>如果比较关心framworks和packages模块，则保留framworks和packages模块，将其他模块全部排除，在android.iml中添加了以下配置<span class="hljs-symbol">:</span><br></code></pre></td></tr></table></figure>
+   <excludeFolder url="file://$MODULE_DIR$/.repo" />
+   <excludeFolder url="file://$MODULE_DIR$/abi" />
+   <excludeFolder url="file://$MODULE_DIR$/art" />
+   <excludeFolder url="file://$MODULE_DIR$/bionic" />
+   <excludeFolder url="file://$MODULE_DIR$/bootable" />
+   <excludeFolder url="file://$MODULE_DIR$/build" />
+   <excludeFolder url="file://$MODULE_DIR$/cts" />
+   <excludeFolder url="file://$MODULE_DIR$/dalvik" />
+   <excludeFolder url="file://$MODULE_DIR$/developers" />
+   <excludeFolder url="file://$MODULE_DIR$/development" />
+   <excludeFolder url="file://$MODULE_DIR$/device" />
+   <excludeFolder url="file://$MODULE_DIR$/docs" />
+   <excludeFolder url="file://$MODULE_DIR$/external" />
+   <excludeFolder url="file://$MODULE_DIR$/external/bluetooth" />
+   <excludeFolder url="file://$MODULE_DIR$/external/chromium" />
+   <excludeFolder url="file://$MODULE_DIR$/external/emma" />
+   <excludeFolder url="file://$MODULE_DIR$/external/icu4c" />
+   <excludeFolder url="file://$MODULE_DIR$/external/jdiff" />
+   <excludeFolder url="file://$MODULE_DIR$/external/webkit" />
+   <excludeFolder url="file://$MODULE_DIR$/frameworks/base/docs" />
+   <excludeFolder url="file://$MODULE_DIR$/frameworks/base/extension" />
+   <excludeFolder url="file://$MODULE_DIR$/hardware" />
+   <excludeFolder url="file://$MODULE_DIR$/kernel" />
+   <excludeFolder url="file://$MODULE_DIR$/kernel-3.18" />
+   <excludeFolder url="file://$MODULE_DIR$/libcore" />
+   <excludeFolder url="file://$MODULE_DIR$/libnativehelper" />
+   <excludeFolder url="file://$MODULE_DIR$/ndk" />
+   <excludeFolder url="file://$MODULE_DIR$/oem-release" />
+   <excludeFolder url="file://$MODULE_DIR$/out" />
+   <excludeFolder url="file://$MODULE_DIR$/out/eclipse" />
+   <excludeFolder url="file://$MODULE_DIR$/out/host" />
+   <excludeFolder url="file://$MODULE_DIR$/out/target/common/docs" />
+   <excludeFolder url="file://$MODULE_DIR$/out/target/common/obj/JAVA_LIBRARIES/android_stubs_current_intermediates" />
+   <excludeFolder url="file://$MODULE_DIR$/out/target/product" />
+   <excludeFolder url="file://$MODULE_DIR$/pdk" />
+   <excludeFolder url="file://$MODULE_DIR$/platform_testing" />
+   <excludeFolder url="file://$MODULE_DIR$/prebuilt" />
+   <excludeFolder url="file://$MODULE_DIR$/prebuilts" />
+   <excludeFolder url="file://$MODULE_DIR$/rc_projects" />
+   <excludeFolder url="file://$MODULE_DIR$/sdk" />
+   <excludeFolder url="file://$MODULE_DIR$/system" />
+   <excludeFolder url="file://$MODULE_DIR$/tools" />
+   <excludeFolder url="file://$MODULE_DIR$/trusty" />
+   <excludeFolder url="file://$MODULE_DIR$/vendor" />
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs gradle">完成之后，按照上面说的步骤，使用Android Studio选中<span class="hljs-string">&quot;android.ipr&quot;</span>打开项目即可。<br>&gt;等项目加载完成后，我们还可以通过Android Studio对<span class="hljs-keyword">Exclude</span>的Module进行调整，所以也不用害怕这里<span class="hljs-keyword">Exclude</span>掉了有用的代码，或少<span class="hljs-keyword">Exclude</span>了一部分代码，在项目加载完以后再进行调整就行了。此处和在android.iml文件中添加excludeFolder 的功能是一样的；<br><br>打开<span class="hljs-string">&quot;Project Structure&quot;</span>，中间的窗口选择<span class="hljs-string">&quot;android&quot;</span>，在弹出的窗口中左边栏中选择<span class="hljs-string">&quot;Modules&quot;</span>，而后在右边的窗口中选择<span class="hljs-string">&quot;Sources&quot;</span>。<br>在这里我们可以看到项目的所有代码目录，我们可以选中不需要的module，并点击上面的<span class="hljs-string">&quot;Excluded&quot;</span>按钮，当被选中的目录变为橙色，即表示完成<span class="hljs-keyword">Exclude</span>操作；<br>如果想要取消对某代码目录的<span class="hljs-keyword">Exclude</span>操作，选中该目录，再次点击<span class="hljs-string">&quot;Excluded&quot;</span>按钮，等待目录变为蓝色即可。 <br>![](<span class="hljs-regexp">/images/</span><span class="hljs-number">0</span>d5568dc0704484071c79ffafc9f4a59.webp)<br><br>##### (<span class="hljs-number">3</span>.) 配置源码正确跳转<br>当我们导入完源码后，就可以查看整个系统的源码，但是有个问题，打开的Java代码，查看集成关系或者调用关系的时候，还是会跳转到.<span class="hljs-keyword">class</span>文件中，而不是相应的Java类，<br>比如PhoneWindow.java继承了Window.java，但是我们跳转的时候却跳到了Window.<span class="hljs-keyword">class</span>，并没有跳转到frameworks目录下对应的源码类，而是jar包中的类。<br>我们需要让其跳转到相应的类中。我们就需要新建一个没有任何jar库的SDK给到系统源码项目的依赖， 这里的配置JDK/SDK，是用于解决在分析和调试源码的过程，能正确地跳转到目标源码，<br>而非SDK中的代码。 <br>-  新建JDK<br><span class="hljs-keyword">Project</span> Structure -&gt; SDKs， 新建 JDK， 其中JDK目录可选择跟原本JDK一致即可，任意取一个名字，这里取empty_jdk 然后删除这里取empty_jdk其<span class="hljs-keyword">classpath</span>和SourcePath的内容，确保使用Android系统源码文件<br>![](<span class="hljs-regexp">/images/</span><span class="hljs-number">741503</span>e98ebaf38731e46ca6a74996a9.webp)<br>jdk_none<br><br>-  配置SDK<br><span class="hljs-keyword">Project</span> Structure -&gt; SDKs， 选中与自己编译的AOSP对应的SDk版本(如果没有对应的就到SDKmanager里面取下载一个对应的版本) Android API <span class="hljs-number">28</span> Platform， 然后选择其Java SDK为前面新建的empty_jdk<br>![](<span class="hljs-regexp">/images/</span><span class="hljs-number">58</span>a145d0b3b2acc11ec4d057a398cd67.webp)<br>sdk_none<br><br>- 选择SDK<br><span class="hljs-keyword">Project</span> Structure -&gt; <span class="hljs-keyword">Project</span> -&gt; 选中<span class="hljs-keyword">Project</span> SDK， 选择前面的Android API <span class="hljs-number">28</span> Platform<br>![](<span class="hljs-regexp">/images/</span><span class="hljs-number">08</span>d2bfa2c04cf43a3ac7b5322ac72e13.webp)<br>project_sdk<br><br>-  建立依赖<br><span class="hljs-keyword">Project</span> Structure -&gt; Modules -&gt; android -&gt; <span class="hljs-keyword">Dependencies</span>: Module选择我们上面编辑过的SDK。然后点击下图绿色的+号来选择Jars or directories，将 aosp<span class="hljs-regexp">/frameworks 目录添加进来，再按照同样的步骤将aosp/</span>external 目录， 也可添加其他所关注的源码；<br>然后选中其他所有的依赖，点击右边的下移箭头将其他依赖移动到我们添加的目录下面。(或者将其他的所有依赖删除)<br>![](<span class="hljs-regexp">/images/</span><span class="hljs-number">06</span>c6777d56a3fe108306901c3f11ddd3.webp)<br>   <br>&gt;注意，一般我们大部分人不在ubuntu下开发app ，为了能在Windows或Mac系统下也能使用Android Studio查看源码，<br>可以按照上面的步骤，那样直接拷贝ubuntu下的android.iml和android.ipr文件到Windows或Mac系统下的android源码根目录下，<br>然后导入Adnroid Studio中，这样就可以在这两个平台上进行查看源码了。        <br><br># 八.通过AS调试源码<br>### <span class="hljs-number">1</span>. 打开模拟器<br>要调试代码，首先要打开模拟器，注意不是Android Studio自带的模拟器，而是通过编译后的代码启动的模拟器，否则可能出现代码不对应的问题。<br>直接运行emulator命令是无法启动的，执行方法如下：<br></code></pre></td></tr></table></figure>
+source build/envsteup.sh</li>
+</ol>
+<p>lunch 6 &#x2F;&#x2F;和编译时对应</p>
+<p>emulator</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs clean">接下来通过Run-&gt;Attache debugger to Android process，在弹出的Choose Process框内必须选择Show all processes，否则看不到相关的进程:然后选择system_process，就可以进行调试了。<br><br># 九.Android刷机知识<br>### <span class="hljs-number">1.</span>BootLoader<br>机器首先要启动，CPU 最先执行的一段程序就是 BootLoader，是在操作系统内核运行之前运行的一段小程序。其实Bootloader就相当于电脑的bios。 通过这段小程序，进行硬件初始化，获取内存大小信息等，调整手机到适配状态，从而将系统的软硬件环境带到一个合适状态，以便为最终调用操作系统内核准备好正确的环境。<br>。很多的手机厂商都会锁住BootLoader，这样你就只能使用官方的系统，想要第三方的ROM能够运行，或者破解官方系统这时候就需要进行bootloader解锁!这是刷机的第一步， 当然也有很多手机没有bootloader锁!我们只需要知道要想刷机就得先bootloader解锁。<br>### <span class="hljs-number">2.</span>FastBoot<br>fastboot，它是bootloader后期进入的一个特殊阶段。例如小米手机开机同时按音量下建就会进入这个模式.也是一种模式。可以通过数据线与电脑连接，然后在电脑上执行一些命令，如刷系统镜像到手机上。fastboot可以理解为实现了一个简单的通信协议，接收命令并更新镜像文件，其他什么的干不了。<br>需使用USB数据线连接电脑和手机的一种线刷刷机模式，大部分第三方的Recovery刷入，或者救砖均是在Fastboot模式下进行，所以这种方式称为线刷。 fastboot需要bootloader的支持，所以不是每家手机都会支持这种模式。Fastboot 可以说是一个通信协议，电脑可以通过这个通信协议，直接向手机系统不同分区中写入文件（.img 文件）。<br>###### fastboot(bootloader)模式怎么进入？<br>大多数安卓手机，都可以在关机状态下，然后同时按住【电源键】+【音量+】键，大约<span class="hljs-number">2</span><span class="hljs-number">-3</span>s后，就可以进入Fastboot模式。 作为开发者在开机状态下可以用下面的方式进入：<br></code></pre></td></tr></table></figure>
+<p>adb reboot bootloader</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs clean">###### fastboot命令<br>然后就可以执行下面的fastboot命令了:<br></code></pre></td></tr></table></figure>
+<p>fastboot flashing unlock    #6.0以上设备 设备必须解锁，开始刷机（这个不同的手机厂商不同）<br>fastboot erase {partition}  # 擦除分区<br>fastboot  erase  frp    # 擦除 frp 分区，frp 即 Factory Reset Protection，用于防止用户信息在手机丢失后外泄<br>fastboot  flash  boot  boot.img    # 刷入 boot 分区<br>fastboot  flash  system  system.img    # 刷入 system 分区<br>fastboot  flash  recovery  recovery.img    # 刷入 recovery 分区<br>fastboot flashall    #烧写所有分区，注意：此命令会在当前目录中查找所有img文件，将这些img文件烧写到所有对应的分区中，并重新启动手机。<br>fastboot  format  data    # 格式化 data 分区<br>fastboot  flashing lock    # 设备上锁，刷机完毕<br>fastboot  continue    # 自动重启设备<br>fastboot reboot# 重启手机<br>fastboot reboot-bootloader# 重启到bootloader 刷机用<br>fastboot devices  ## 发现手机，显示当前哪些手机通过fastboot连接了</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs clean">### <span class="hljs-number">3.</span>Recovery<br>如果没有进入fastboot，bootloader继续执行，如果又发现有特殊的按键组合，比如小米上是音量上键和开机键，则会进入recovery模式。它里面包含了一个kernel以及一个可执行程序recovery，以<br>及一些初始化文件。Recovery模式指的是一种可以对安卓机内部的数据或系统进行修改的模式，也叫工程模式，像是电脑上的小型winPE系统，winPE可以在电脑上安装操作系统，或者做些删除备份、管理的工作。<br>官方Recovery用处不大，所以通常会刷入一个第三方的Recovery ，Recovery 更类似于一个小型的管理系统。只不过功能简单，所做的管理有限。在recovery模式下，会加载了部分文件系统，所以才可以读sdcard中的update.zip进行刷机，当然，也可以清除cache和用户数据。<br>该模式可根据用户的需要进行修改，因此有官方recovery模式以及第三方recovery模式。第三方recovery模式可以识别第三方rom包，因此可以用来刷机。而官方recovery一般不能识别第三方zip文件。好用的第三方RE:TWRP 和 CWM Recovery刷机包是称为Google Update 格式。在用Recovery恢复时，刷机包通常放在SD卡里，所以这里刷机一般称为卡刷。<br>### <span class="hljs-number">4.</span>线刷和卡刷<br>- 线刷： 直接想手机硬盘写入*.img 文件，我个人觉得这种方法比较快捷，而且省事。但是必须借助电脑和数据线。<br>- 卡刷：就是利用recovery的从SD卡中更新系统的这个功能，如果你想刷第三方Rom，必须刷入个第三方recovery，只有fastboot模式才能刷recovery.img。卡刷有个限制，必须要把想要更新的ROM（Android系统）拷贝到SD卡上。如果手机已经是砖了。那只能用线刷了。<br><br># 十.手机硬件驱动知识<br>### <span class="hljs-number">1.</span> 硬件驱动的作用<br>AOSP是一个由谷歌维护的开源操作系统开发项目，既然是开源项目，也就意味着任何人都可以自由地审查和贡献代码以及修复项目仓库，而谷歌引领着大方向和大部分的开发工作。AOSP会定期为Android加入最新的安全补丁，谷歌每年也会在其I/O开发者大会上公布操作系统的新功能。除了开放贡献代码外，AOSP还可以在开源许可下自由使用和修改。<br>比如，小米，华为等厂商根据自己的目的自由调整该项目，并开发了自己的衍生产品，包括多用途的emui和miui。需要注意的是，AOSP包含了开发者构建Android所需的一切，但它并不包括成品智能手机所需的一切。<br>谷歌和AOSP无法为所有硬件配置提供内核设备驱动。所谓设备驱动，是指手机硬件所需的固件，比如处理器或摄像头。手机和SoC制造商，如高通和三星，必须将这些驱动程序纳入他们的Android构建中。<br>这也是为什么从AOSP到实际设备的系统更新需要一定时间的原因。其次AOSP也不包含谷歌的软件应用套件，如Chrome浏览器、YouTube，甚至谷歌Play商店。<br>它也不包括谷歌的一些底层技术和API，而这些技术和API可以实现移动支付、语音命令和云存储等功能，这些都是作为谷歌移动服务（GMS）单独授权的。 任何厂商想要在系统中安装GMS，都必须为自己的设备获得GMS授权和移动应用分发协议（MADA），然后通过多项兼容性测试。有Android兼容性测试套件（CTS）来验证软件和硬件以及API。<br>正因为AOSP开源的特性，许多的硬件厂商的驱动代码并不是开源的，所以AOSP会有一个硬件抽象层 (HAL)，来保证驱动程序代码不被泄露。大多数手机厂商都是从高通等芯片厂商那里获得AOSP版本，该AOSP版本为硬件量身定坐了高通驱动程序，所以刷入真机是可以正常的运行。<br><br>### <span class="hljs-number">2.</span> 如何添加硬件驱动<br>在上面步骤中我们编译好了AOSP可以直接通过模拟器运行.编译aosp时也会生成<span class="hljs-keyword">system</span>.img文件，这个文件是最终刷机用的，但是<span class="hljs-keyword">system</span>.img文件必须依赖驱动文件生成，<br>如果没有放入对应的驱动就编译，那么生成的镜像也是无法正常刷机的。通过上文我们知道aosp 仅是一套源码，真机运行需要厂商的驱动，厂商的驱动是不包含在AOSP中的，<br>第三方ROM(如CM等)的厂家驱动是自行提取的。但是google也开源了nexus和pixel对应的AOSP版本的硬件驱动代码.如果我们有nexus或者是pixel设备就可以下载相应的驱动进行编译，<br>然后将编译好的系统输入到设备中去.<br>##### (<span class="hljs-number">1.</span>)下载对应的驱动<br>需要根据你选择的[版本](https:<span class="hljs-comment">//source.android.com/source/build-numbers.html)</span><br>去[驱动页面](https:<span class="hljs-comment">//developers.google.com/android/nexus/drivers#shamulrx21o)下载合适的驱动。</span><br>##### (<span class="hljs-number">2.</span>)生成驱动<br>将驱动文件下载后，解压到AOSP根目录，得到几个.sh文件，执行后，会在AOSP下创建vendor目录，里面包含了驱动。<br>##### (<span class="hljs-number">3.</span>)编译带有驱动的AOSP<br>再次`` make -j4``，此次编译的结果就包含了驱动，编译出新的系统.<br><br># 十一.ROM编译及烧录<br>一般定制ROM其实就是对手机内存里的<span class="hljs-keyword">system</span>/app文件夹的内容进行自定义，系统所有的程序都在这个文件夹里，比如浏览器、拨号器、联系人等。自己安装的软件\data\文件夹中。<br>### <span class="hljs-number">1.</span>真机驱动下载<br>在上文中可以了解到厂商的驱动是不包含在AOSP中的.因此编译出来的AOSP系统源码要在真机上运行，还需要加上厂商驱动进行编译才能烧录到真机上使用.<br>Google提供了Nexus和Pixel这两个太子机的驱动，我们可以在驱动页面下载合适的驱动。<br>[Driver Binaries for Nexus and Pixel Devices](https:<span class="hljs-comment">//developers.google.com/android/drivers#walleye)</span><br><br>### <span class="hljs-number">2.</span>配置真机驱动到AOSP<br><span class="hljs-number">1.</span> 在上面链接里面,两个文件都进行下载，一个是google vendor，一个qcom。<br><span class="hljs-number">2.</span> 解压得到``extract-google_devices-blueline.sh``，``extract-qcom-blueline.sh``<br><span class="hljs-number">3.</span> 将这两个脚本放到aosp代码目录下，进行提取<br>   ``sh extract-google_devices-blueline.sh``<br></code></pre></td></tr></table></figure>
+<p>vendor&#x2F;<br>vendor&#x2F;google_devices&#x2F;<br>vendor&#x2F;google_devices&#x2F;marlin&#x2F;<br>vendor&#x2F;google_devices&#x2F;marlin&#x2F;device-vendor-marlin.mk<br>vendor&#x2F;google_devices&#x2F;marlin&#x2F;android-info.txt<br>vendor&#x2F;google_devices&#x2F;marlin&#x2F;BoardConfigVendor.mk<br>vendor&#x2F;google_devices&#x2F;marlin&#x2F;BoardConfigPartial.mk<br>vendor&#x2F;google_devices&#x2F;marlin&#x2F;proprietary&#x2F;<br>vendor&#x2F;google_devices&#x2F;marlin&#x2F;proprietary&#x2F;vendor.img<br>vendor&#x2F;google_devices&#x2F;marlin&#x2F;device-partial.mk</p>
+<p>Files extracted successfully.</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arcade">第<span class="hljs-number">2</span>个 高通驱动<br><span class="hljs-string">``</span>sh extract-qcom-blueline.sh<span class="hljs-string">``</span><br></code></pre></td></tr></table></figure>
+<p>vendor&#x2F;<br>vendor&#x2F;qcom&#x2F;<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;BoardConfigPartial.mk<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;lib64&#x2F;<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;lib64&#x2F;libbcc.so<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;lib64&#x2F;libLLVM_android.so<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;lib64&#x2F;libiperf.so<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;lib64&#x2F;libminui.so<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;ATT_profiles.xml<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;pktlogconf<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;VZW_profiles.xml<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;ROW_profiles.xml<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;libclcore_neon.bc<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;sanitizer-status<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;libiperf.so<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;qcrilhook.jar<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;libminui.so<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;libion.so<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;proprietary&#x2F;iperf3<br>vendor&#x2F;qcom&#x2F;marlin&#x2F;device-partial.mk<br>vendor&#x2F;google_devices&#x2F;<br>vendor&#x2F;google_devices&#x2F;marlin&#x2F;<br>vendor&#x2F;google_devices&#x2F;marlin&#x2F;device-vendor-marlin.mk<br>vendor&#x2F;google_devices&#x2F;marlin&#x2F;android-info.txt<br>vendor&#x2F;google_devices&#x2F;marlin&#x2F;BoardConfigVendor.mk</p>
+<p>Files extracted successfully.</p>
+<pre><code class="hljs">执行后，会在AOSP下创建vendor目录，里面包含了驱动。编译完成后，执行``make fastboot adb ``单独编译fastboot和adb。
+
+### 3.编译Rom
+重新对AOSP进行编译.此次编译的结果就包含了驱动，编译完成后，执行make fastboot adb 单独编译fastboot和adb。
+
+### 4. 烧录Rom到手机
+1. 手机启用开发者模式，打开 USB 调试 adb shell 能进入。
+2. 开机键 + 音量- 进入 bootloader 模式。
+3. 电脑上能识别出来手机并装上了驱动。
+4. fastboot devices 能看到设备。
+5. 再次执行./fastboot -w flashall将开始刷机，刷完会自动重启，over!
+
+参考资料:
+[Android 镜像使用帮助](https://mirrors.tuna.tsinghua.edu.cn/help/AOSP/)
+[MIUI ROM适配之旅第一天——认识Android手机](https://www.xiaomi.cn/post/10984220)
+[Android FrameWork 学习之Android 系统源码调试](https://www.cnblogs.com/liumce/p/8027559.html)
+[从CM刷机过程和原理分析Android系统结构](https://blog.csdn.net/luoshengyang/article/details/29688041)
+[Android ROM移植](https://blog.csdn.net/weixin_30924087/article/details/98030409)
+[android rom移植知识普及](https://blog.csdn.net/innost/article/details/7623951)
+[Android系统源码修改](https://blog.csdn.net/huil0925/category_6259725_2.html)
+[android系统的分区结构](https://blog.csdn.net/uglychild/article/details/79550793)
+[Android ROM的制作与烧录](https://blog.csdn.net/u010142437/article/details/72834972)
+[android系统源码中添加app源码（源码部署移植）](https://blog.csdn.net/zhonglunshun/article/details/70256727)
+
+参考资料:
+[Ubentu编译Android源码（AOSP）](https://www.cnblogs.com/caoxinyu/p/10568480.html)
+[AOSP源码下载/编译/刷机/调试](http://mouxuejie.com/blog/2019-11-17/aosp-setup/)
+[Android rom移植一](https://blog.csdn.net/zy199701/article/details/106478670/)
+[目前通用的Android拼包移植方法均是正向移植](http://blog.sina.com.cn/s/blog_b278ce3b010186bw.html)
+[Android驱动开发全过程](https://blog.csdn.net/u010783226/article/details/94406309)
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>AOSP源码之编译、调试、刷机</div>
+      <div>http://example.com/2019/09/28/AOSP源码之编译、调试、刷机/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年9月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/12/10/Android%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BC%80%E5%8F%91%E4%B9%8Bijkplayer/" title="Android音视频开发之ijkplayer">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Android音视频开发之ijkplayer</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/08/15/%E4%BD%BF%E7%94%A8Python%E5%88%B6%E4%BD%9C%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/" title="使用Python制作爬虫程序总结">
+                        <span class="hidden-mobile">使用Python制作爬虫程序总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

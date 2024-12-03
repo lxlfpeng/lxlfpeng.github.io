@@ -1,0 +1,676 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="本教程的背景是Win11正式版本(21H2)暂未全面推送Android子系统的情况的尝鲜教程。  一. Win11dev版本wsa在win11测试版本上面已经可以直接使用了，只设置区域为美国，设置-&gt;启动关闭windows功能-&gt;开启hyper-v和虚拟机平台，电脑重启后，去商店搜索Window Subsystem for Android即可使用。 二. Win11正式版：1. 修改">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Win11正式版(21H2)安装Android子系统">
+<meta property="og:url" content="http://example.com/2022/12/18/Win11%E6%AD%A3%E5%BC%8F%E7%89%88(21H2)%E5%AE%89%E8%A3%85Android%E5%AD%90%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="本教程的背景是Win11正式版本(21H2)暂未全面推送Android子系统的情况的尝鲜教程。  一. Win11dev版本wsa在win11测试版本上面已经可以直接使用了，只设置区域为美国，设置-&gt;启动关闭windows功能-&gt;开启hyper-v和虚拟机平台，电脑重启后，去商店搜索Window Subsystem for Android即可使用。 二. Win11正式版：1. 修改">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/a616a2529df9da46bb22235f1da94c66.webp">
+<meta property="og:image" content="http://example.com/images/9ca1332ca793355c9130f4ed2b6eff29.webp">
+<meta property="og:image" content="http://example.com/images/05ea6dbba2cd35cc6e9a1d2aad45ba1b.webp">
+<meta property="og:image" content="http://example.com/images/791a36cdc2dfc152b26412493b1ef794.webp">
+<meta property="og:image" content="http://example.com/images/fc4aefc0f5220a9c0d484bae1f8b4dc7.webp">
+<meta property="og:image" content="http://example.com/images/453cd338f0ab746447ef3454f6b34066.webp">
+<meta property="og:image" content="http://example.com/images/02d99697652abb4e80d8566295741c9a.webp">
+<meta property="article:published_time" content="2022-12-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:43:07.710Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/a616a2529df9da46bb22235f1da94c66.webp">
+  
+  
+  
+  <title>Win11正式版(21H2)安装Android子系统 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Win11正式版(21H2)安装Android子系统"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-12-18 00:00" pubdate>
+          2022年12月18日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          515 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          5 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Win11正式版(21H2)安装Android子系统</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>本教程的背景是Win11正式版本(21H2)暂未全面推送Android子系统的情况的尝鲜教程。</p>
+</blockquote>
+<h1 id="一-Win11dev版本"><a href="#一-Win11dev版本" class="headerlink" title="一. Win11dev版本"></a>一. Win11dev版本</h1><p>wsa在win11测试版本上面已经可以直接使用了，只设置区域为美国，设置-&gt;启动关闭windows功能-&gt;开启hyper-v和虚拟机平台，电脑重启后，去商店搜索Window Subsystem for Android即可使用。</p>
+<h1 id="二-Win11正式版："><a href="#二-Win11正式版：" class="headerlink" title="二. Win11正式版："></a>二. Win11正式版：</h1><h3 id="1-修改区域为美国"><a href="#1-修改区域为美国" class="headerlink" title="1. 修改区域为美国"></a>1. 修改区域为美国</h3><p>设置-&gt;时间和语言-&gt;语言&amp;区域-&gt;国家和地区-&gt;选择美国。<br><img src="/images/a616a2529df9da46bb22235f1da94c66.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="2-打开虚拟化技术"><a href="#2-打开虚拟化技术" class="headerlink" title="2. 打开虚拟化技术"></a>2. 打开虚拟化技术</h3><ol start="2">
+<li>菜单-&gt;启动关闭windows功能-&gt;开启hyper-v和虚拟机平台-&gt;重启电脑。<br><img src="/images/9ca1332ca793355c9130f4ed2b6eff29.webp" srcset="/img/loading.gif" lazyload><blockquote>
+<p>重启的时候检查下BIOS的虚拟化是否开启Intel为VT， AMD为SVM</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="3-下载Windows-Subsystem-for-Android"><a href="#3-下载Windows-Subsystem-for-Android" class="headerlink" title="3. 下载Windows Subsystem for Android"></a>3. 下载Windows Subsystem for Android</h3><p>在<a target="_blank" rel="noopener" href="https://store.rg-adguard.net/"></a>网站，输入<a target="_blank" rel="noopener" href="https://www.microsoft.com/store/productId/9P3395VX91NR"></a>选择slow通道，点击对勾按钮，下载文件（在网页最下方，Msixbundle格式），<br><img src="/images/05ea6dbba2cd35cc6e9a1d2aad45ba1b.webp" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>如果浏览器打不开下载地址，可用迅雷等下载工具复制其路径进行下载。</p>
+</blockquote>
+<p><strong>也可以使用已经下载好的百度云盘资源包</strong><br>链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/10DEWBH5aCvAc04aEGQDFKA">https://pan.baidu.com/s/10DEWBH5aCvAc04aEGQDFKA</a><br>提取码：372p</p>
+<h3 id="4-安装Windows-Subsystem-for-Android"><a href="#4-安装Windows-Subsystem-for-Android" class="headerlink" title="4. 安装Windows Subsystem for Android"></a>4. 安装Windows Subsystem for Android</h3><h5 id="1-管理员身份运行了Powershell"><a href="#1-管理员身份运行了Powershell" class="headerlink" title="(1.) 管理员身份运行了Powershell"></a>(1.) 管理员身份运行了Powershell</h5><p><img src="/images/791a36cdc2dfc152b26412493b1ef794.webp" srcset="/img/loading.gif" lazyload></p>
+<h5 id="2-执行Add-AppxPackage-Path-刚下载的文件-Msixbundle即可。"><a href="#2-执行Add-AppxPackage-Path-刚下载的文件-Msixbundle即可。" class="headerlink" title="(2.) 执行Add-AppxPackage -Path 刚下载的文件.Msixbundle即可。"></a>(2.) 执行Add-AppxPackage -Path 刚下载的文件.Msixbundle即可。</h5><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Add</span>-AppxPackage -Path D:\Download\android\MicrosoftCorporationII.WindowsSubsystemForAndroid_1.<span class="hljs-number">8</span>.<span class="hljs-number">32822</span>.<span class="hljs-number">0</span>_neutral___8wekyb3d8bbwe.Msixbundle<br></code></pre></td></tr></table></figure>
+<p><img src="/images/fc4aefc0f5220a9c0d484bae1f8b4dc7.webp" srcset="/img/loading.gif" lazyload></p>
+<p>如果报错可以使用我提供的资源包里面的文件进行修复:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">Add-AppxPackage Microsoft<span class="hljs-selector-class">.VCLibs</span><span class="hljs-selector-class">.x64</span>.<span class="hljs-number">14.00</span><span class="hljs-selector-class">.Desktop</span>.appx<br></code></pre></td></tr></table></figure>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Add</span>-AppxPackage Microsoft.UI.Xaml.<span class="hljs-number">2</span>.<span class="hljs-number">6</span>_2.<span class="hljs-number">62108</span>.<span class="hljs-number">18004</span>.<span class="hljs-number">0</span>_x64__8wekyb3d8bbwe.Appx<br></code></pre></td></tr></table></figure>
+<p>然后再次执行Add-AppxPackage -Path 刚下载的文件.Msixbundle即可。</p>
+<h5 id="3-如果执行成功打开菜单可以看到WSA功能"><a href="#3-如果执行成功打开菜单可以看到WSA功能" class="headerlink" title="(3.) 如果执行成功打开菜单可以看到WSA功能."></a>(3.) 如果执行成功打开菜单可以看到WSA功能.</h5><p><img src="/images/453cd338f0ab746447ef3454f6b34066.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="5-通过ADB连接Android子系统"><a href="#5-通过ADB连接Android子系统" class="headerlink" title="5. 通过ADB连接Android子系统"></a>5. 通过ADB连接Android子系统</h3><p>(1.)先下载好adb然后配置好环境变量(基础功能不懂百度下).<br>(2.)打开WSA设置中的开发人员模式设置<br><img src="/images/02d99697652abb4e80d8566295741c9a.webp" srcset="/img/loading.gif" lazyload><br>(3.)adb链接设备<br>输入”adb connect 127.0.0.1:58526”（以实际was设置中显示的为准）</p>
+<h3 id="6-通过ADB安装应用到Android子系统"><a href="#6-通过ADB安装应用到Android子系统" class="headerlink" title="6. 通过ADB安装应用到Android子系统"></a>6. 通过ADB安装应用到Android子系统</h3><ol>
+<li>下载要安装的apk。通过Adb进行安装即可<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">adb <span class="hljs-keyword">install</span> D\download\qq.apk<br></code></pre></td></tr></table></figure></li>
+<li>在开始菜单可以看到新安装的安卓应用。</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux%E7%B3%BB%E7%BB%9F/" class="category-chain-item">Linux系统</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Win11正式版(21H2)安装Android子系统</div>
+      <div>http://example.com/2022/12/18/Win11正式版(21H2)安装Android子系统/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年12月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/19/Win10%E5%8F%8A11%E5%AE%89%E8%A3%85Wsl2/" title="Win10及11安装Wsl2">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Win10及11安装Wsl2</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/10/28/Android%E6%B2%89%E6%B5%B8%E5%BC%8F%E7%8A%B6%E6%80%81%E6%A0%8F%E5%AE%9E%E7%8E%B0%E6%80%BB%E7%BB%93/" title="Android沉浸式状态栏实现总结">
+                        <span class="hidden-mobile">Android沉浸式状态栏实现总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

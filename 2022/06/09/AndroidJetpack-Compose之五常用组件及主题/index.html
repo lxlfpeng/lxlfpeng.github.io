@@ -1,0 +1,799 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="使用Material design 设计主题Theme在Android中可以对整个应用的风格(颜色,字体等等)进行管理，这种风格叫做主题。通过主题对整个应用的字体、颜色、大小、形状进行管理可以使整个应用变得容易维护，保证App视觉的一致性。Compose 的 Theme 摆脱了对 XML 的使用。Theme 一般会作为最顶层的 Composalbe 出现，所有内部 Composalbe 都会应用当">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AndroidJetpack-Compose之五常用组件及主题">
+<meta property="og:url" content="http://example.com/2022/06/09/AndroidJetpack-Compose%E4%B9%8B%E4%BA%94%E5%B8%B8%E7%94%A8%E7%BB%84%E4%BB%B6%E5%8F%8A%E4%B8%BB%E9%A2%98/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="使用Material design 设计主题Theme在Android中可以对整个应用的风格(颜色,字体等等)进行管理，这种风格叫做主题。通过主题对整个应用的字体、颜色、大小、形状进行管理可以使整个应用变得容易维护，保证App视觉的一致性。Compose 的 Theme 摆脱了对 XML 的使用。Theme 一般会作为最顶层的 Composalbe 出现，所有内部 Composalbe 都会应用当">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-06-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:27:55.488Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>AndroidJetpack-Compose之五常用组件及主题 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="AndroidJetpack-Compose之五常用组件及主题"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-06-09 00:00" pubdate>
+          2022年6月9日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          34 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">AndroidJetpack-Compose之五常用组件及主题</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="使用Material-design-设计主题Theme"><a href="#使用Material-design-设计主题Theme" class="headerlink" title="使用Material design 设计主题Theme"></a>使用Material design 设计主题Theme</h1><p>在Android中可以对整个应用的风格(颜色,字体等等)进行管理，这种风格叫做主题。通过主题对整个应用的字体、颜色、大小、形状进行管理可以使整个应用变得容易维护，保证App视觉的一致性。<br>Compose 的 Theme 摆脱了对 XML 的使用。Theme 一般会作为最顶层的 Composalbe 出现，所有内部 Composalbe 都会应用当前主题的配置。这样使得主题切换也变得非常容易。</p>
+<p>Material主题设置是一种系统化的方法，用于自定义Material Design以更好反映产品的品牌，它是由颜色、排版和形状属性组成。如果这些属性被定义，构建应用的组件就会展现出对应属性的效果。<br>在Jetpack Compose中使用MaterialTheme可组合项来实现这些概念。</p>
+<h3 id="简单使用"><a href="#简单使用" class="headerlink" title="简单使用"></a>简单使用</h3><p>例如根据系统Dark&#x2F;Light主题，设置不同颜色</p>
+<ol>
+<li>定义好深色模式和浅色模式的颜色值,定义自定义的Theme方法,根据将不同的状态传入深色还是浅色值:<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-comment">/*定义深色模式的颜色值*/</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">val</span> DarkColorPalette = darkColors(<br>    primary = Teal200,<br>    primaryVariant = Purple700,<br>    secondary = Teal200<br>)<br><span class="hljs-comment">/*定义浅色模式的颜色值*/</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">val</span> LightColorPalette = lightColors(<br>    primary = Purple200,<br>    primaryVariant = Purple700,<br>    secondary = Teal200<br>)<br><span class="hljs-comment">/*定义一个自定的主题方法调用MaterialTheme*/</span><br><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">ComposeTheme</span><span class="hljs-params">(darkTheme: <span class="hljs-type">Boolean</span> = isSystemInDarkTheme()</span></span>, content: <span class="hljs-meta">@Composable()</span> () -&gt; <span class="hljs-built_in">Unit</span>) &#123;<br>    <span class="hljs-comment">/*根据传递的参数判断配置深色还是浅色*/</span><br>    <span class="hljs-keyword">val</span> colors = <span class="hljs-keyword">if</span> (darkTheme) &#123;<br>        DarkColorPalette<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        LightColorPalette<br>    &#125;<br>    MaterialTheme(<br>        colors = colors,<br>        typography = Typography,<br>        shapes = Shapes,<br>        content = content<br>    )<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>将自定义的Theme作为最顶层的 Composalbe,这样我们就可以在在内层的组件中使用定义好的.<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ThemeActivity</span> : <span class="hljs-type">ComponentActivity</span>() &#123;<br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(savedInstanceState: <span class="hljs-type">Bundle</span>?)</span></span> &#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState)<br>        setContent &#123;<br>            ComposeTheme(darkTheme = <span class="hljs-literal">false</span>) &#123;<br>                Box(<br>                    Modifier<br>                        .size(<span class="hljs-number">200.</span>dp, <span class="hljs-number">200.</span>dp)<br>                        .background(MaterialTheme.colors.primary)<br>                ) &#123;<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+上述代码ComposeComingTheme 该组合函数在 MaterialTheme 上构建而成，MaterialTheme由colors、typography、shapes属性组成。<br>然后该组合函数默认根据系统 是否是暗黑主题 将 颜色属性 进行了不同的定义。如果是暗黑主题使用DarkColorPalette，<br>否则使用LightColorPalette。darkColors和lightColors都继承自Colors，并有相关的默认颜色值。</li>
+</ol>
+<h3 id="主题自带颜色"><a href="#主题自带颜色" class="headerlink" title="主题自带颜色"></a>主题自带颜色</h3><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">primary:</span> Color = Color(<span class="hljs-number">0xFF6200EE</span>),<br><span class="hljs-symbol">primaryVariant:</span> Color = Color(<span class="hljs-number">0xFF3700B3</span>),<br><span class="hljs-symbol">secondary:</span> Color = Color(<span class="hljs-number">0xFF03DAC6</span>),<br><span class="hljs-symbol">secondaryVariant:</span> Color = Color(<span class="hljs-number">0xFF018786</span>),<br><span class="hljs-symbol">background:</span> Color = Color.White,<br><span class="hljs-symbol">surface:</span> Color = Color.White,<br><span class="hljs-symbol">error:</span> Color = Color(<span class="hljs-number">0xFFB00020</span>),<br><span class="hljs-symbol">onPrimary:</span> Color = Color.White,<br><span class="hljs-symbol">onSecondary:</span> Color = Color.Black,<br><span class="hljs-symbol">onBackground:</span> Color = Color.Black,<br><span class="hljs-symbol">onSurface:</span> Color = Color.Black,<br><span class="hljs-symbol">onError:</span> Color = Color.White<br></code></pre></td></tr></table></figure>
+
+
+<h1 id="UI组件类型"><a href="#UI组件类型" class="headerlink" title="UI组件类型"></a>UI组件类型</h1><p>虽然Jetpack Compose 1.0 才刚面世，但实际上其UI组件库已经十分完备，几乎完全覆盖了Android现有视图系统的所有组件及能力，主要包括：</p>
+<ul>
+<li>基础UI组件，如Button、TextView等，连Card、Fab、AppBar等Material Designe的控件都会涵盖；</li>
+<li>列表类组件，如List等，采用items{…} 中创建每条项目的 Composalbe，避免了额外的Adapter适配；</li>
+<li>布局类组件，提供了多种容器类Composalbe，可以十分高效方便地对子组件进行布局；通过一系列链式调用的Modifier操作符来装饰 Composable 的外观。操作符的使用十分丰富，如size、backgrounds、padding等；</li>
+<li>动画组件，同样是采用状态（State）驱动进行动画效果的实现。</li>
+</ul>
+<h1 id="Text"><a href="#Text" class="headerlink" title="Text"></a>Text</h1><ul>
+<li>text	文字</li>
+<li>color	文字颜色</li>
+<li>fontSize	字体大小</li>
+<li>fontStyle	字体样式, 可设置为斜体Italic</li>
+<li>fontWeight	字体权重,可设置字体加粗</li>
+<li>overflow	文字溢出效果,与maxLines结合使用可实现文字溢出显示省略号效果</li>
+<li>maxLines	最大行数 ,与overflow结合使用实现文字溢出显示省略号效果</li>
+</ul>
+<h1 id="Button组件"><a href="#Button组件" class="headerlink" title="Button组件"></a>Button组件</h1><h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Composable</span><br>fun <span class="hljs-built_in">Button</span>(<br>    <span class="hljs-attribute">onClick</span>: () -&gt; Unit,<span class="hljs-comment">// 按钮的点击事件</span><br>    <span class="hljs-attribute">modifier</span>: Modifier = Modifier,<br>    <span class="hljs-attribute">enabled</span>: Boolean = true, <span class="hljs-comment">//是否启用</span><br>    <span class="hljs-attribute">interactionState</span>: InteractionState = remember &#123; <span class="hljs-built_in">InteractionState</span>() &#125;,<br>    <span class="hljs-attribute">elevation</span>: ButtonElevation? = ButtonDefaults.<span class="hljs-built_in">elevation</span>(),<span class="hljs-comment">//海拔</span><br>    <span class="hljs-attribute">shape</span>: Shape = MaterialTheme.shapes.small,<span class="hljs-comment">//形状</span><br>    <span class="hljs-attribute">border</span>: BorderStroke? = null,<span class="hljs-comment">//边框</span><br>    <span class="hljs-attribute">colors</span>: ButtonColors = ButtonDefaults.<span class="hljs-built_in">buttonColors</span>(),<span class="hljs-comment">//颜色</span><br>    <span class="hljs-attribute">contentPadding</span>: PaddingValues = ButtonDefaults.ContentPadding,<span class="hljs-comment">//内边距</span><br>    <span class="hljs-attribute">content</span>: <span class="hljs-variable">@Composable</span> RowScope.() -&gt; Unit <span class="hljs-comment">//内容组件</span><br>) &#123; ... &#125;<br></code></pre></td></tr></table></figure>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>Button 组件点击事件 onClick 和内容组件 content 是必填参数外。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">TestButton</span><span class="hljs-params">()</span></span> &#123;<br>    Button(onClick = &#123;<span class="hljs-comment">/*TODO点击事件*/</span> &#125;) &#123;<br>        Text(text = <span class="hljs-string">&quot;button&quot;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="Image组件"><a href="#Image组件" class="headerlink" title="Image组件"></a>Image组件</h1><h3 id="源码-1"><a href="#源码-1" class="headerlink" title="源码"></a>源码</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">Image</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">    bitmap: <span class="hljs-type">ImageBitmap</span>,</span></span><br><span class="hljs-params"><span class="hljs-function">    contentDescription: <span class="hljs-type">String</span>?,</span></span><br><span class="hljs-params"><span class="hljs-function">    modifier: <span class="hljs-type">Modifier</span> = Modifier,</span></span><br><span class="hljs-params"><span class="hljs-function">    alignment: <span class="hljs-type">Alignment</span> = Alignment.Center,</span></span><br><span class="hljs-params"><span class="hljs-function">    contentScale: <span class="hljs-type">ContentScale</span> = ContentScale.Fit,</span></span><br><span class="hljs-params"><span class="hljs-function">    alpha: <span class="hljs-type">Float</span> = DefaultAlpha,</span></span><br><span class="hljs-params"><span class="hljs-function">    colorFilter: <span class="hljs-type">ColorFilter</span>? = <span class="hljs-literal">null</span></span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span> &#123;<br>  ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><p>Image 对应于 Android View 的 ImageView，可以用来显示图片，它主要有以下属性：</p>
+<ul>
+<li>bitmap: ImageBitmap：可以直接传入 ImageBitmap 构建,如想显示 drawable 文件夹下的图片，可以通过 <code>var imageBitmap = ImageBitmap.imageResource(id = R.drawable.xxx)</code></li>
+<li>contentDescription: String?：accessibility services 用于辅助功能时提示给用户的描述信息</li>
+<li>modifier : Modifier：Image 的修饰符</li>
+<li>aligment : Aligment：对齐方式</li>
+<li>contentScale : ContentScale：图片的显示模式(ContentScale.Crop 居中裁剪)</li>
+<li>alpha : Float：设置透明度，默认是 1.0f</li>
+<li>colorFilter : ColorFilter：可以设置颜色滤镜</li>
+</ul>
+<h3 id="引入-coil-依赖库加载网络图片"><a href="#引入-coil-依赖库加载网络图片" class="headerlink" title="引入 coil 依赖库加载网络图片"></a>引入 coil 依赖库加载网络图片</h3><figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs clean"><span class="hljs-comment">// build.gradle</span><br><span class="hljs-keyword">implementation</span> <span class="hljs-string">&quot;io.coil-kt:coil:1.4.0&quot;</span><br><span class="hljs-keyword">implementation</span> <span class="hljs-string">&quot;io.coil-kt:coil-compose:1.4.0&quot;</span><br></code></pre></td></tr></table></figure>
+<p>coil 是 Compose 中推荐使用的图片网络加载库，底层采用 Kotlin 协程进行加载。添加了依赖之后，就可以使用 rememberImagePainter 直接将图片链接传给 data 即可。如下代码：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-built_in">Image</span>(<br>    painter = <span class="hljs-built_in">rememberImagePainter</span>(<br>        data = <span class="hljs-string">&quot;https://www.baidu.com/img/flexible/logo/pc/result.png&quot;</span><br>    ),<br>    contentDescription = <span class="hljs-string">&quot;baidu&quot;</span>,<br>    modifier = Modifier<span class="hljs-selector-class">.size</span>(<span class="hljs-number">50</span>.dp),<br>    contentScale = ContentScale<span class="hljs-selector-class">.Crop</span>  <span class="hljs-comment">// 居中裁剪</span><br>)<br></code></pre></td></tr></table></figure>
+
+<h1 id="Spacer组件"><a href="#Spacer组件" class="headerlink" title="Spacer组件"></a>Spacer组件</h1><h3 id="源码-2"><a href="#源码-2" class="headerlink" title="源码"></a>源码</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">Spacer</span><span class="hljs-params">(modifier: <span class="hljs-type">Modifier</span>)</span></span> &#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h3><p>传统布局中，可以添加Margin属性，设置间距，在Jetpack Compose 中，可以使用Spacer() 来设置垂直和水平间距</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs scss">Row &#123;<br>   <span class="hljs-built_in">Spacer</span>(Modifier.width(<span class="hljs-number">20</span>.dp))<span class="hljs-comment">//设置水平间距20dp</span><br>   <span class="hljs-built_in">Spacer</span>(Modifier.height(<span class="hljs-number">20</span>.dp)) <span class="hljs-comment">//设置垂直间距20dp</span><br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="Divider"><a href="#Divider" class="headerlink" title="Divider"></a>Divider</h1><h3 id="源码-3"><a href="#源码-3" class="headerlink" title="源码"></a>源码</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">Divider</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">    modifier: <span class="hljs-type">Modifier</span> = Modifier,</span></span><br><span class="hljs-params"><span class="hljs-function">    color: <span class="hljs-type">Color</span> = MaterialTheme.colors.onSurface.copy(alpha = DividerAlpha)</span></span>,<br>    thickness: Dp = <span class="hljs-number">1.</span>dp,<br>    startIndent: Dp = <span class="hljs-number">0.</span>dp<br>) &#123;<br>  ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="属性-1"><a href="#属性-1" class="headerlink" title="属性"></a>属性</h3><ul>
+<li>color &#x2F;&#x2F;颜色</li>
+<li>thickness &#x2F;&#x2F;线的高度</li>
+<li>startIndent &#x2F;&#x2F;距离开始的间距</li>
+</ul>
+<h1 id="Surface"><a href="#Surface" class="headerlink" title="Surface"></a>Surface</h1><h3 id="源码-4"><a href="#源码-4" class="headerlink" title="源码"></a>源码</h3><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Composable</span><br>fun <span class="hljs-built_in">Surface</span>(<br>    <span class="hljs-attribute">modifier</span>: Modifier = Modifier,<br>    <span class="hljs-attribute">shape</span>: Shape = RectangleShape,<br>    <span class="hljs-attribute">color</span>: <span class="hljs-attribute">Color</span> = MaterialTheme.colors.surface,<br>    <span class="hljs-attribute">contentColor</span>: <span class="hljs-attribute">Color</span> = <span class="hljs-built_in">contentColorFor</span>(<span class="hljs-attribute">color</span>),<br>    <span class="hljs-attribute">border</span>: BorderStroke? = null,<br>    <span class="hljs-attribute">elevation</span>: Dp = <span class="hljs-number">0</span>.dp,<br>    <span class="hljs-attribute">content</span>: <span class="hljs-variable">@Composable</span> () -&gt; Unit<br>) &#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="属性-2"><a href="#属性-2" class="headerlink" title="属性"></a>属性</h3><p>当想要为我们自定义的一个组件添加背景颜色时，我们就需要用到 Surface，它主要有以下属性：</p>
+<ul>
+<li>modifier: Modifier：可以为 Surface 设置修饰符</li>
+<li>shape: Shape：设置形状，默认是 RectangleShape</li>
+<li>color: Color：设置背景色</li>
+<li>contentColor: Color：为 Surface 中的 Text 文字设置颜色，当 Text 没有指定颜色时，就是使用该颜色</li>
+<li>border: Border?：设置外边框</li>
+<li>elevation: Dp：为 Surface 设置在 Z 轴方向上的高度</li>
+<li>content: @Composable () -&gt; Unit：为 Surface 设置内容布局，需要传入 @Compose 方法</li>
+</ul>
+<h3 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h3><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">Surface</span>(modifier = Modifier.<span class="hljs-built_in">padding</span>(<span class="hljs-number">4</span>.dp), color = Color.Gray) &#123;<br>    <span class="hljs-selector-tag">Column</span> &#123;<br>        <span class="hljs-selector-tag">Text</span>(modifier = Modifier.<span class="hljs-built_in">align</span>(Alignment.CenterHorizontally), text = <span class="hljs-string">&quot;custom&quot;</span>)<br>        <span class="hljs-selector-tag">Image</span>(<br>            modifier = Modifier.<span class="hljs-built_in">size</span>(<span class="hljs-number">150</span>.dp),<br>            painter = <span class="hljs-built_in">ColorPainter</span>(<span class="hljs-attribute">color</span> = <span class="hljs-attribute">Color</span>.Green),<br>            contentDescription = <span class="hljs-string">&quot;image color&quot;</span><br>        )<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="Canvas"><a href="#Canvas" class="headerlink" title="Canvas"></a>Canvas</h1><p>Canvas 是在屏幕上指定区域执行绘制的组件。注意在使用时需要添加修饰符来指定尺寸，可以通过 Modifier.size<br>设置固定的大小，也可以使用 Modifier.fillMaxSize，ColumnScope.weight 设置相对父组件大小。如果父组件没有设置大小，那么 Canvas<br>必须要设置固定的大小。<br>Canvas 就是类似于原来的自定义 View，但是更加的简便，通过 DrawScope 定义的绘制方法进行绘制出自己想要的效果，可以通过 drawArc ，drawCircle<br>，drawLine，drawPoints 等方法来绘制图形（详情可参考 DrawScope 下的方法）：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">Canvas<span class="hljs-params">(<span class="hljs-attr">modifier</span> = Modifier.fillMaxSize()</span>) &#123;<br>    val canvasWidth = size.width<br>    val canvasHeight = size.height<br>    <span class="hljs-string">//</span> 绘制一条从左下角到右上角的蓝色的线<br>    drawLine<span class="hljs-params">(</span><br><span class="hljs-params">        <span class="hljs-attr">start</span> = Offset(<span class="hljs-attr">x</span> = canvasWidth, <span class="hljs-attr">y</span> = 0f)</span>,<br>        end = Offset<span class="hljs-params">(<span class="hljs-attr">x</span> = 0f, <span class="hljs-attr">y</span> = canvasHeight)</span>,<br>        color = Color.Blue<br>    )<br><br>    <span class="hljs-string">//</span> 在以 200，1200 位置 120 为半径绘制一个圆<br>    drawCircle<span class="hljs-params">(<span class="hljs-attr">color</span> = Color.Green, <span class="hljs-attr">center</span> = Offset(200f, 1200f)</span>, radius = 120f)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="滚动布局"><a href="#滚动布局" class="headerlink" title="滚动布局"></a>滚动布局</h1><p>只需要用 Column 中的 Modifier.verticalScroll 属性就可以了。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">SimpleList</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-comment">//使用 rememberScrollState 保存滚动的位置信息</span><br>    <span class="hljs-keyword">val</span> scrollState = rememberScrollState()<br>    <span class="hljs-comment">//Modifier.verticalScroll 可添加竖直方向上的滚动属性,使用 Column 的 Modifier.verticalScroll 方法确实可以创建一个可滑动的List，但是这种方法在开始时就会将所有 item 全部加载，类似于 ScrollView</span><br>    Column(Modifier.verticalScroll(scrollState)) &#123;<br>        repeat(<span class="hljs-number">100</span>) &#123;<br>            Text(text = <span class="hljs-string">&quot;Item <span class="hljs-variable">$it</span>&quot;</span>)<br>            Divider(color = Color.Blue, thickness = <span class="hljs-number">1.5</span>.dp, startIndent = <span class="hljs-number">10.</span>dp)<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">BodyContent</span><span class="hljs-params">(modifier: <span class="hljs-type">Modifier</span>)</span></span> &#123;<br>    Column(modifier = modifier) &#123;<br>        Text(text = <span class="hljs-string">&quot;Hi there!&quot;</span>)<br>        Text(text = <span class="hljs-string">&quot;Thanks for watching this&quot;</span>)<br>        SimpleList()    <span class="hljs-comment">// 将 List 放在之前的布局中展示出来</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这种实现方法最简单，但是会在页面开始展示时，将列表中所有的 item 加载到内存中，虽然很多 item 都没有显示在屏幕上，这种方法当列表内容很多时，会出现内存占用大的问题。</p>
+<h1 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h1><p>可以滾動的佈局</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-comment">//我們可以使用 verticalScroll() 修飾符使 Column 可滾動</span><br>Column (<br>        modifier = Modifier<span class="hljs-selector-class">.verticalScroll</span>(<span class="hljs-built_in">rememberScrollState</span>()))&#123;<br>        messages<span class="hljs-selector-class">.forEach</span> &#123; message -&gt;<br>            <span class="hljs-built_in">MessageRow</span>(message)<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+<p>但以上佈局並無法實現重用，可能導致性能問題，下面介紹我們重點佈局，列表<code>LazyColumn/LazyRow==RecylerView/listView</code>列表佈局，解決了滾動時的性能問題，LazyColumn 和 LazyRow 之間的區別就在於它們的列表項佈局和滾動方向不同<br>內邊距:</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">LazyColumn<span class="hljs-params">(</span><br><span class="hljs-params">    <span class="hljs-attr">contentPadding</span> = PaddingValues(<span class="hljs-attr">horizontal</span> = 16.dp, <span class="hljs-attr">vertical</span> = 8.dp)</span>,<br>) &#123;<br>    <span class="hljs-string">//</span> <span class="hljs-string">...</span><br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>item間距:</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">LazyColumn<span class="hljs-params">(</span><br><span class="hljs-params">    <span class="hljs-attr">verticalArrangement</span> = Arrangement.spacedBy(4.dp)</span>,<br>) &#123;<br>    <span class="hljs-string">//</span> <span class="hljs-string">...</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>浮動列表的浮動標題，使用 LazyColumn 實現粘性標題，可以使用實驗性 stickyHeader()函數</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@OptIn</span>(<span class="hljs-attribute">ExperimentalFoundationApi</span>::class)<br><span class="hljs-variable">@Composable</span><br>fun <span class="hljs-built_in">ListWithHeader</span>(<span class="hljs-attribute">items</span>: List&lt;Item&gt;) &#123;<br>    <span class="hljs-selector-tag">LazyColumn</span> &#123;<br>        <span class="hljs-selector-tag">stickyHeader</span> &#123;<br>            <span class="hljs-selector-tag">Header</span>()<br>        &#125;<br><br>        <span class="hljs-selector-tag">items</span>(items) &#123; <span class="hljs-selector-tag">item</span> <span class="hljs-selector-tag">-</span>&gt;<br>            <span class="hljs-selector-tag">ItemRow</span>(item)<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>網格佈局LazyVerticalGrid</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@OptIn</span>(<span class="hljs-attribute">ExperimentalFoundationApi</span>::class)<br><span class="hljs-variable">@Composable</span><br>fun <span class="hljs-built_in">PhotoGrid</span>(<span class="hljs-attribute">photos</span>: List&lt;Photo&gt;) &#123;<br>    <span class="hljs-selector-tag">LazyVerticalGrid</span>(<br>        cells = GridCells.<span class="hljs-built_in">Adaptive</span>(minSize = <span class="hljs-number">128</span>.dp)<br>    ) &#123;<br>        <span class="hljs-selector-tag">items</span>(photos) &#123; <span class="hljs-selector-tag">photo</span> <span class="hljs-selector-tag">-</span>&gt;<br>            <span class="hljs-selector-tag">PhotoItem</span>(photo)<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs stylus">@Composable<br>fun <span class="hljs-built_in">CreateDrawerLayout</span>() &#123;<br>    val list = mutableListOf&lt;Student&gt;()<br>    <span class="hljs-keyword">for</span> (<span class="hljs-selector-tag">i</span> <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..<span class="hljs-number">33</span>) &#123;<br>        list<span class="hljs-selector-class">.add</span>(<span class="hljs-built_in">Student</span>(<span class="hljs-string">&quot;学生$&#123;i&#125;&quot;</span>, i))<br>    &#125;<br>    <span class="hljs-built_in">LazyColumn</span>(modifier = Modifier<span class="hljs-selector-class">.fillMaxWidth</span>()) &#123;<br>        <span class="hljs-built_in">items</span>(list.size) &#123;<br>            <span class="hljs-built_in">Text</span>(<br>                <span class="hljs-selector-tag">text</span> = <span class="hljs-string">&quot;items:姓名：$&#123;list[it].name&#125;,年龄$&#123;list[it].age&#125;岁&quot;</span>,<br>                fontSize = <span class="hljs-number">18</span><span class="hljs-selector-class">.sp</span><br>            )<br>            <span class="hljs-built_in">Spacer</span>(modifier = Modifier<span class="hljs-selector-class">.height</span>(<span class="hljs-number">10</span>.dp))<br>        &#125;<br><br>        <span class="hljs-built_in">itemsIndexed</span>(items = list) &#123; index: Int, item: Student -&gt;<br>            <span class="hljs-built_in">Text</span>(<br>                <span class="hljs-selector-tag">text</span> = <span class="hljs-string">&quot;itemsIndexed:姓名：$&#123;item.name&#125;,年龄$&#123;item.age&#125;岁&quot;</span>,<br>                fontSize = <span class="hljs-number">18</span><span class="hljs-selector-class">.sp</span>, modifier = Modifier<span class="hljs-selector-class">.clickable</span> &#123;<br><br>                &#125;)<br>            <span class="hljs-built_in">Spacer</span>(modifier = Modifier<span class="hljs-selector-class">.height</span>(<span class="hljs-number">10</span>.dp))<br>        &#125;<br><br>        list<span class="hljs-selector-class">.forEachIndexed</span> &#123; index, student -&gt;<br>            item &#123;<br>                <span class="hljs-built_in">Text</span>(<br>                    <span class="hljs-selector-tag">text</span> = <span class="hljs-string">&quot;forEachIndexed:姓名：$&#123;student.name&#125;,年龄$&#123;student.age&#125;岁&quot;</span>,<br>                    fontSize = <span class="hljs-number">18</span><span class="hljs-selector-class">.sp</span><br>                )<br>                <span class="hljs-built_in">Spacer</span>(modifier = Modifier<span class="hljs-selector-class">.height</span>(<span class="hljs-number">10</span>.dp))<br>            &#125;<br>        &#125;<br><br>    &#125;<br>&#125;<br><br>data class <span class="hljs-built_in">Student</span>(<br>    val name: String,<br>    val age: Int<br>)<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">ImageListItem</span><span class="hljs-params">(index: <span class="hljs-type">Int</span>)</span></span> &#123;    <br>    <span class="hljs-comment">//列表 item 布局</span><br>    <span class="hljs-comment">//Row 可设置竖直方向上的对齐方式</span><br>    Row(verticalAlignment = Alignment.CenterVertically) &#123;<br>        Image(<br>            painter = rememberImagePainter(<br>                <span class="hljs-keyword">data</span> = <span class="hljs-string">&quot;https://pic.ntimg.cn/20140810/3822951_180850680000_2.jpg&quot;</span><br>            ), <br>            contentDescription = <span class="hljs-string">&quot;Test Img&quot;</span>, <br>            modifier = Modifier.size(<span class="hljs-number">50.</span>dp)<br>        )<br>        Spacer(modifier = Modifier.width(<span class="hljs-number">10.</span>dp)) <span class="hljs-comment">// Spacer 也可设置边距</span><br>        Text(text = <span class="hljs-string">&quot;Item #<span class="hljs-variable">$index</span>&quot;</span>, style = MaterialTheme.typography.subtitle1)<br>    &#125;<br>&#125;<br><br><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">ScrollingList</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">val</span> listSize = <span class="hljs-number">100</span><br>    <span class="hljs-comment">// 使用 rememberLazyListState 保存滚动的位置</span><br>    <span class="hljs-keyword">val</span> scrollState = rememberLazyListState()<br><br>    LazyColumn(state = scrollState) &#123;<br>        items(listSize) &#123;<br>            ImageListItem(index = it)<br>            Divider(color = Color.Blue, thickness = <span class="hljs-number">1.5</span>.dp, startIndent = <span class="hljs-number">10.</span>dp)<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="Scaffold"><a href="#Scaffold" class="headerlink" title="Scaffold"></a>Scaffold</h1><figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs livescript">Scaffold(<br>    modifier: Modifier = Modifier,<br>    scaffoldState: ScaffoldState = rememberScaffoldState(),<br>    topBar: @Composable <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> Unit = &#123;&#125;,<br>    bottomBar: @Composable <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> Unit = &#123;&#125;,<br>    snackbarHost: @Composable <span class="hljs-function"><span class="hljs-params">(SnackbarHostState)</span> -&gt;</span> Unit = &#123; SnackbarHost(<span class="hljs-literal">it</span>) &#125;,<br>    floatingActionButton: @Composable <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> Unit = &#123;&#125;,<br>    floatingActionButtonPosition: FabPosition = FabPosition.End,<br>    isFloatingActionButtonDocked: <span class="hljs-built_in">Boolean</span> = <span class="hljs-literal">false</span>,<br>    drawerContent: @Composable <span class="hljs-function"><span class="hljs-params">(ColumnScope.() -&gt; Unit)</span>? = <span class="hljs-title">null</span>,</span><br><span class="hljs-function">    <span class="hljs-title">drawerGesturesEnabled</span>: <span class="hljs-title">Boolean</span> = <span class="hljs-title">true</span>,</span><br><span class="hljs-function">    <span class="hljs-title">drawerShape</span>: <span class="hljs-title">Shape</span> = <span class="hljs-title">MaterialTheme</span>.<span class="hljs-title">shapes</span>.<span class="hljs-title">large</span>,</span><br><span class="hljs-function">    <span class="hljs-title">drawerElevation</span>: <span class="hljs-title">Dp</span> = <span class="hljs-title">DrawerDefaults</span>.<span class="hljs-title">Elevation</span>,</span><br><span class="hljs-function">    <span class="hljs-title">drawerBackgroundColor</span>: <span class="hljs-title">Color</span> = <span class="hljs-title">MaterialTheme</span>.<span class="hljs-title">colors</span>.<span class="hljs-title">surface</span>,</span><br><span class="hljs-function">    <span class="hljs-title">drawerContentColor</span>: <span class="hljs-title">Color</span> = <span class="hljs-title">contentColorFor</span><span class="hljs-params">(drawerBackgroundColor)</span>,</span><br><span class="hljs-function">    <span class="hljs-title">drawerScrimColor</span>: <span class="hljs-title">Color</span> = <span class="hljs-title">DrawerDefaults</span>.<span class="hljs-title">scrimColor</span>,</span><br><span class="hljs-function">    <span class="hljs-title">backgroundColor</span>: <span class="hljs-title">Color</span> = <span class="hljs-title">MaterialTheme</span>.<span class="hljs-title">colors</span>.<span class="hljs-title">background</span>,</span><br><span class="hljs-function">    <span class="hljs-title">contentColor</span>: <span class="hljs-title">Color</span> = <span class="hljs-title">contentColorFor</span><span class="hljs-params">(backgroundColor)</span>,</span><br><span class="hljs-function">    <span class="hljs-title">content</span>: @<span class="hljs-title">Composable</span> <span class="hljs-params">(PaddingValues)</span> -&gt;</span> Unit<br>)<br></code></pre></td></tr></table></figure>
+
+<p>属性说明</p>
+<ul>
+<li>topBar 顶部的布局</li>
+<li>bottomBar 底部的布局</li>
+<li>floatingActionButton 悬浮按钮布局</li>
+<li>floatingActionButtonPosition 悬浮按钮位置,有FabPosition.End(默认)和FabPosition.Center可选</li>
+<li>isFloatingActionButtonDocked 与BottomAppBar配合使用,可以实现底部导航条的裁剪效果,效果可以看下图</li>
+<li>drawerGesturesEnabled 是否开启侧边抽屉手势(开启后可侧滑弹出抽屉)</li>
+<li>drawerShape 抽屉的形状</li>
+<li>drawerContent 侧边抽屉内容,是个Column布局,自己可以顺便排列</li>
+<li>drawerElevation 侧边抽屉的阴影</li>
+<li>drawerBackgroundColor 侧边抽屉的背景色</li>
+<li>drawerContentColor 侧边抽屉内容颜色(似乎是覆盖字体颜色而已)</li>
+<li>drawerScrimColor 侧边抽屉遮盖最底层的颜色</li>
+</ul>
+<p>Material 支持的最高级别的可组合项是 Scaffold。Scaffold 可让您实现具有基本 Material Design 布局结构的界面。Scaffold 可以为最常见的顶级 Material 组件（如 TopAppBar、BottomAppBar、FloatingActionButton 和 Drawer）提供插槽。通过使用 Scaffold，很容易确保这些组件得到适当放置且正确地协同工作。</p>
+<h1 id="BottomNavigation"><a href="#BottomNavigation" class="headerlink" title="BottomNavigation"></a>BottomNavigation</h1><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">Tab</span><span class="hljs-params">(viewModel: <span class="hljs-type">ViewMod</span>)</span></span>&#123;<br>    <span class="hljs-comment">// tab标题</span><br>    <span class="hljs-keyword">val</span> listItem = listOf(<span class="hljs-string">&quot;组织&quot;</span>,<span class="hljs-string">&quot;发现&quot;</span>,<span class="hljs-string">&quot;我的&quot;</span>)<br>    <span class="hljs-comment">// tab未选图标</span><br>    <span class="hljs-keyword">val</span> icons = listOf(R.drawable.home,R.drawable.find,R.drawable.profile)<br>    <span class="hljs-comment">// tab选中图标</span><br>    <span class="hljs-keyword">val</span> selectIcons = listOf(R.drawable.homeselect,R.drawable.findselect,R.drawable.profileselect)<br>    <span class="hljs-comment">// 记住选中tab位置</span><br>    <span class="hljs-keyword">val</span> selectIndex = remember &#123;<br>        mutableStateOf(<span class="hljs-number">0</span>)<br>    &#125;<br>    <span class="hljs-comment">// 脚手架</span><br>    <span class="hljs-keyword">val</span> navControllers = rememberNavController()<br>    Scaffold(<br>        modifier = Modifier.fillMaxSize(),<br>        bottomBar = &#123;<br>            <span class="hljs-comment">// BottomNavigation的显示和隐藏先借助本地数据存储，再说</span><br>            BottomNavigation(<br>                backgroundColor = Color.White,<br>                elevation = <span class="hljs-number">3.</span>dp<br>            ) &#123;<br>                <span class="hljs-keyword">val</span> navBackStackEntry <span class="hljs-keyword">by</span> navControllers.currentBackStackEntryAsState()<br>                <span class="hljs-keyword">val</span> currentRoute = navBackStackEntry?.arguments?.getString(KEY_ROUTE)<br><br>                items.forEachIndexed &#123; index, s -&gt;<br>                    BottomNavigationItem(<br>                        selected = currentRoute == s.route,<br>                        onClick = &#123;<br>                            selectIndex.value = index<br>                            navControllers.navigate(s.route) &#123;<br>                                <span class="hljs-comment">// Pop up to the start destination of the graph to</span><br>                                <span class="hljs-comment">// avoid building up a large stack of destinations</span><br>                                <span class="hljs-comment">// on the back stack as users select items</span><br>                                popUpTo = navControllers.graph.startDestination<br>                                <span class="hljs-comment">// Avoid multiple copies of the same destination when</span><br>                                <span class="hljs-comment">// reselecting the same item</span><br>                                launchSingleTop = <span class="hljs-literal">true</span><br>                            &#125;<br>                                  &#125;,<br>                        icon = &#123;<br>                            <span class="hljs-keyword">when</span>(index)&#123;<br>                                selectIndex.value -&gt; &#123;<br>                                    Image(painter = painterResource(id = selectIcons[index]), contentDescription = <span class="hljs-literal">null</span>)<br>                                &#125;<br>                                <span class="hljs-keyword">else</span> -&gt; &#123;<br>                                    Image(painter = painterResource(id = icons[index]), contentDescription = <span class="hljs-literal">null</span>)<br>                                &#125;<br>                            &#125;<br>                        &#125;,<br>                        label = &#123;<br>                           Text(<br>                               text = listItem[index],<br>                               textAlign = TextAlign.Center,<br>                               color = <span class="hljs-keyword">if</span> (index == selectIndex.value) Color(<span class="hljs-number">0xFF0077E6</span>) <span class="hljs-keyword">else</span> Color(<span class="hljs-number">0xFFD8D8D8</span>)<br>                           )<br>                        &#125;<br>                    )<br>                &#125;<br>            &#125;<br>        &#125;,<br>        content = &#123;<br>            NavHost(navControllers, startDestination = Screen.Home.route) &#123;<br>                <span class="hljs-comment">// 首页</span><br>                composable(Screen.Home.route) &#123; Home(viewModel,navControllers) &#125;<br>                <span class="hljs-comment">// 发现</span><br>                composable(Screen.Find.route) &#123; Find(navControllers) &#125;<br>                <span class="hljs-comment">// 我的</span><br>                composable(Screen.Profile.route) &#123; Profile(navControllers,viewModel) &#125;<br>            &#125;<br>        &#125;<br>    )<br>&#125;<br><br><span class="hljs-keyword">sealed</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Screen</span>(<span class="hljs-keyword">val</span> route: String, <span class="hljs-meta">@StringRes</span> <span class="hljs-keyword">val</span> resourceId: <span class="hljs-built_in">Int</span>) &#123;<br>    <span class="hljs-keyword">object</span> Home : Screen(<span class="hljs-string">&quot;home&quot;</span>, R.string.home)<br>    <span class="hljs-keyword">object</span> Find : Screen(<span class="hljs-string">&quot;find&quot;</span>, R.string.find)<br>    <span class="hljs-keyword">object</span> Profile : Screen(<span class="hljs-string">&quot;profile&quot;</span>, R.string.profile)<br><br>&#125;<br><br><span class="hljs-keyword">val</span> items = listOf(<br>    Screen.Home,<br>    Screen.Find,<br>    Screen.Profile<br>)<br></code></pre></td></tr></table></figure>
+
+<h1 id="OutlinedTextField-属性解析"><a href="#OutlinedTextField-属性解析" class="headerlink" title="OutlinedTextField 属性解析"></a>OutlinedTextField 属性解析</h1><p>在实现以上效果前，先要了解OutlinedTextField的属性，才能加以运用 ；先看一下属性列表。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Composable</span><br>fun <span class="hljs-built_in">OutlinedTextField</span>(<br>    <span class="hljs-attribute">value</span>: String,<br>    <span class="hljs-attribute">onValueChange</span>: (String) -&gt; Unit,<br>    <span class="hljs-attribute">modifier</span>: Modifier = Modifier,<br>    <span class="hljs-attribute">enabled</span>: Boolean = true,<br>    <span class="hljs-attribute">readOnly</span>: Boolean = false,<br>    <span class="hljs-attribute">textStyle</span>: TextStyle = LocalTextStyle.current,<br>    <span class="hljs-attribute">label</span>: <span class="hljs-variable">@Composable</span> (() -&gt; Unit)? = null,<br>    <span class="hljs-attribute">placeholder</span>: <span class="hljs-variable">@Composable</span> (() -&gt; Unit)? = null,<br>    <span class="hljs-attribute">leadingIcon</span>: <span class="hljs-variable">@Composable</span> (() -&gt; Unit)? = null,<br>    <span class="hljs-attribute">trailingIcon</span>: <span class="hljs-variable">@Composable</span> (() -&gt; Unit)? = null,<br>    <span class="hljs-attribute">isError</span>: Boolean = false,<br>    <span class="hljs-attribute">visualTransformation</span>: VisualTransformation = VisualTransformation.None,<br>    <span class="hljs-attribute">keyboardOptions</span>: KeyboardOptions = KeyboardOptions.Default,<br>    <span class="hljs-attribute">keyboardActions</span>: KeyboardActions = KeyboardActions.Default,<br>    <span class="hljs-attribute">singleLine</span>: Boolean = false,<br>    <span class="hljs-attribute">maxLines</span>: Int = Int.MAX_VALUE,<br>    <span class="hljs-attribute">interactionSource</span>: MutableInteractionSource = remember &#123; <span class="hljs-built_in">MutableInteractionSource</span>() &#125;,<br>    <span class="hljs-attribute">shape</span>: Shape = MaterialTheme.shapes.small,<br>    <span class="hljs-attribute">colors</span>: TextFieldColors = TextFieldDefaults.<span class="hljs-built_in">outlinedTextFieldColors</span>()<br>) <br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>value: String 输入框显示的文本</li>
+<li>onValueChange: (String) -&gt; Unit 值发生改变之后触发的回调</li>
+<li>modifier: Modifier &#x3D; Modifier 修饰</li>
+<li>enabled: Boolean &#x3D; true 可用</li>
+<li>readOnly: Boolean &#x3D; false 是否只读</li>
+<li>textStyle: TextStyle &#x3D; LocalTextStyle.current</li>
+<li>label: @Composable (() -&gt; Unit)? &#x3D; null 输入框获取焦点时左上角提示的内容</li>
+<li>placeholder: @Composable (() -&gt; Unit)? &#x3D; null 输入框提示的内容</li>
+<li>leadingIcon: @Composable (() -&gt; Unit)? &#x3D; null 输入框左侧的图标</li>
+<li>trailingIcon: @Composable (() -&gt; Unit)? &#x3D; null 输入框右侧的图标</li>
+<li>isError: Boolean &#x3D; false 是否处于错误状态</li>
+<li>visualTransformation: VisualTransformation &#x3D; VisualTransformation.None, 转换输入值的视觉表示</li>
+<li>keyboardOptions: KeyboardOptions &#x3D; KeyboardOptions.Default 输入框输入类型</li>
+<li>singleLine: Boolean &#x3D; false, 是否单行显示</li>
+<li>maxLines: Int &#x3D; Int.MAX_VALUE 最大行数</li>
+<li>colors: TextFieldColors &#x3D; TextFieldDefaults.outlinedTextFieldColors() 颜色集合，设置获取焦点，失去焦点以及光标等颜色</li>
+</ul>
+<h1 id="AlertDialog"><a href="#AlertDialog" class="headerlink" title="AlertDialog"></a>AlertDialog</h1><p>1、属性一览<br>【目前基于alpha09版本】请看该对话框支持的两个函数，首先看第一个函数，该函数会根据可用空间水平放置其按钮：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">AlertDialog</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">    onDismissRequest: () -&gt; <span class="hljs-type">Unit</span>, </span></span><br><span class="hljs-params"><span class="hljs-function">    confirmButton: () -&gt; <span class="hljs-type">Unit</span>, </span></span><br><span class="hljs-params"><span class="hljs-function">    modifier: <span class="hljs-type">Modifier</span> = Modifier, </span></span><br><span class="hljs-params"><span class="hljs-function">    dismissButton: () -&gt; <span class="hljs-type">Unit</span> = <span class="hljs-literal">null</span>, </span></span><br><span class="hljs-params"><span class="hljs-function">    title: () -&gt; <span class="hljs-type">Unit</span> = <span class="hljs-literal">null</span>, </span></span><br><span class="hljs-params"><span class="hljs-function">    text: () -&gt; <span class="hljs-type">Unit</span> = <span class="hljs-literal">null</span>, </span></span><br><span class="hljs-params"><span class="hljs-function">    shape: <span class="hljs-type">Shape</span> = MaterialTheme.shapes.medium, </span></span><br><span class="hljs-params"><span class="hljs-function">    backgroundColor: <span class="hljs-type">Color</span> = MaterialTheme.colors.surface, </span></span><br><span class="hljs-params"><span class="hljs-function">    contentColor: <span class="hljs-type">Color</span> = contentColorFor(backgroundColor)</span></span>, <br>    properties: DialogProperties? = <span class="hljs-literal">null</span><br>): <span class="hljs-built_in">Unit</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>modifier: Modifier &#x3D; Modifier	应用于布局的修饰符</li>
+<li>onDismissRequest: () -&gt; Unit	当用户点击对话框外部或者按下返回按钮的时候会执行。注意：点击对话框的关闭按钮时并不会执行</li>
+<li>confirmButton: () -&gt; Unit	一个由用户确认操作的按钮，默认没有回调，需要调用者自行设置回调事件。</li>
+<li>dismissButton: () -&gt; Unit &#x3D; null	一个用于关闭对话框的按钮，默认没有回调，需要调用者自行设置回调事件。</li>
+<li>title: () -&gt; Unit &#x3D; null	对话框的标题，默认无</li>
+<li>text: () -&gt; Unit &#x3D; null	对话框的内容，默认无</li>
+<li>shape: Shape &#x3D; MaterialTheme.shapes.medium	对话框的形状</li>
+<li>backgroundColor: Color &#x3D; MaterialTheme.colors.surface	对话框的背景色</li>
+<li>contentColor: Color &#x3D; contentColorFor(backgroundColor)	提供给其子级的首选内容颜色</li>
+<li>properties: DialogProperties? &#x3D; null	用于进一步配置特定属性的对话框</li>
+</ul>
+<h1 id="Tab及ScrollableTabRow"><a href="#Tab及ScrollableTabRow" class="headerlink" title="Tab及ScrollableTabRow"></a>Tab及ScrollableTabRow</h1><p>关于tab有两个函数，如下：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Composable</span> fun <span class="hljs-built_in">Tab</span>(<br>    <span class="hljs-attribute">selected</span>: Boolean, <br>    <span class="hljs-attribute">onClick</span>: () -&gt; Unit, <br>    <span class="hljs-attribute">modifier</span>: Modifier = Modifier, <br>    <span class="hljs-attribute">text</span>: () -&gt; Unit = <span class="hljs-built_in">emptyContent</span>(), <br>    <span class="hljs-attribute">icon</span>: () -&gt; Unit = <span class="hljs-built_in">emptyContent</span>(), <br>    <span class="hljs-attribute">interactionState</span>: InteractionState = remember &#123; <span class="hljs-built_in">InteractionState</span>() &#125;, <br>    <span class="hljs-attribute">selectedContentColor</span>: <span class="hljs-attribute">Color</span> = AmbientContentColor.current, <br>    <span class="hljs-attribute">unselectedContentColor</span>: <span class="hljs-attribute">Color</span> = selectedContentColor.<span class="hljs-built_in">copy</span>(alpha = ContentAlpha.medium)<br>): Unit<br></code></pre></td></tr></table></figure>
+<ul>
+<li>selected: Boolean	该Tab是否被选中</li>
+<li>onClick: () -&gt; Unit	点击该Tab时候的回调事件</li>
+<li>modifier: Modifier &#x3D; Modifier	应用于该Tab的修饰符</li>
+<li>text: () -&gt; Unit &#x3D; emptyContent()	显示在该Tab中的文本</li>
+<li>icon: () -&gt; Unit &#x3D; emptyContent()	显示在该Tab中的图标</li>
+<li>interactionState: InteractionState &#x3D; remember { InteractionState() }	该Tab的交互状态</li>
+<li>selectedContentColor: Color &#x3D; AmbientContentColor.current	选中该Tab时内容的颜色，以及水波纹的颜色</li>
+<li>unselectedContentColor: Color &#x3D; selectedContentColor.copy(alpha &#x3D; ContentAlpha.medium)	未选中该Tab时内容的颜色</li>
+</ul>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/mingyunxiaohai/article/details/116271290">Jetpack Compose初体验</a><br><a target="_blank" rel="noopener" href="https://docs.compose.net.cn/">compose资料</a><br><a target="_blank" rel="noopener" href="https://developer.android.com/jetpack/compose/documentation?hl=zh-cn">Compose UI官方文档</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/user/4125023359205742/posts">Android全新UI编程 - Jetpack Compose 超详细教程</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/93d8a384a8a0">JetPack Compose 之 state</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/lbs458499563">Jetpack-Compose 学习笔记</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_37667770/article/details/114542808">Jetpack-Compose</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/Mr_Tony/article/details/118858756">Compose的State(九)</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/ljjliujunjie123/article/details/120935611">Compose系列 三 状态管理</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903999347359751">原创|Android Jetpack Compose 最全上手指南</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6877056735018745863">Android Jetpack Compose 超快速上手指南</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/baiyuas/p/14988887.html">compose text组件</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6956487779807133727">Jetpack Compose初体验–（布局、动画等）</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6983968223209193480">Jetpack Compose初体验–（导航、生命周期等）</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/baiyuas/p/14988887.html">compose text组件</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6956487779807133727">Jetpack Compose初体验–(布局、动画等)</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6983968223209193480">Jetpack Compose初体验–(导航、生命周期等)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/vitaviva/article/details/114764215">告别XML，使用Compose Theme为你的app轻松换皮</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>AndroidJetpack-Compose之五常用组件及主题</div>
+      <div>http://example.com/2022/06/09/AndroidJetpack-Compose之五常用组件及主题/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年6月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/06/11/AndroidJetpack-Compose%E4%B9%8B%E5%85%AD%E5%AE%9E%E6%88%98%E6%80%BB%E7%BB%93/" title="AndroidJetpack-Compose之六实战总结">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">AndroidJetpack-Compose之六实战总结</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/05/20/Jetpack-Compose%E4%B9%8B%E5%9B%9B%20%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC(%E5%AF%BC%E8%88%AA)/" title="Jetpack-Compose之四 页面跳转(导航)">
+                        <span class="hidden-mobile">Jetpack-Compose之四 页面跳转(导航)</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

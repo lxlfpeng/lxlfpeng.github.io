@@ -1,0 +1,701 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.Java平台的虚拟机Jvm1.Jvm的作用Java语言的一个非常重要的特点就是与平台的无关性(跨平台性)，经常会听到一句关于java特性的话：”一次编译到处执行”。由于机器只能识别机器码，所以需要通过Java 编译器将 .java 文件转换成 .class文件，也就是字节码文件，最后将字节码提供给 JVM，由 JVM 将它转换成机器码。 2.Jvm分析Jvm相关知识体系过于庞大，有兴趣可以看本">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android虚拟机之Dalvik和ART">
+<meta property="og:url" content="http://example.com/2016/06/09/Android%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B9%8BDalvik%E5%92%8CART/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.Java平台的虚拟机Jvm1.Jvm的作用Java语言的一个非常重要的特点就是与平台的无关性(跨平台性)，经常会听到一句关于java特性的话：”一次编译到处执行”。由于机器只能识别机器码，所以需要通过Java 编译器将 .java 文件转换成 .class文件，也就是字节码文件，最后将字节码提供给 JVM，由 JVM 将它转换成机器码。 2.Jvm分析Jvm相关知识体系过于庞大，有兴趣可以看本">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/95b5b390a324f6b1cc698a59bbd568e3.webp">
+<meta property="og:image" content="http://example.com/images/f472313757d2dc5006a051d4cd8c4805.webp">
+<meta property="og:image" content="http://example.com/images/9e12d4bcccd4ec7b0c6faef4ad261d7c.webp">
+<meta property="og:image" content="http://example.com/images/04c8bad6263b5a0bf567fce4e2b70a91.webp">
+<meta property="article:published_time" content="2016-06-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:25:42.564Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/95b5b390a324f6b1cc698a59bbd568e3.webp">
+  
+  
+  
+  <title>Android虚拟机之Dalvik和ART - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Android虚拟机之Dalvik和ART"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2016-06-09 00:00" pubdate>
+          2016年6月9日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Android虚拟机之Dalvik和ART</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-Java平台的虚拟机Jvm"><a href="#一-Java平台的虚拟机Jvm" class="headerlink" title="一.Java平台的虚拟机Jvm"></a>一.Java平台的虚拟机Jvm</h1><h3 id="1-Jvm的作用"><a href="#1-Jvm的作用" class="headerlink" title="1.Jvm的作用"></a>1.Jvm的作用</h3><p>Java语言的一个非常重要的特点就是<code>与平台的无关性(跨平台性)</code>，经常会听到一句关于java特性的话：”一次编译到处执行”。由于机器只能识别机器码，所以需要通过Java 编译器将 .java 文件转换成 .class文件，也就是字节码文件，最后将字节码提供给 JVM，由 JVM 将它转换成机器码。<br><img src="/images/95b5b390a324f6b1cc698a59bbd568e3.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="2-Jvm分析"><a href="#2-Jvm分析" class="headerlink" title="2.Jvm分析"></a>2.Jvm分析</h3><p>Jvm相关知识体系过于庞大，有兴趣可以看本人之前的文章:<a target="_blank" rel="noopener" href="https://blog.csdn.net/unreliable_narrator/article/details/97135880">JAVA JVM详解</a></p>
+<h1 id="二-Dalvik虚拟机"><a href="#二-Dalvik虚拟机" class="headerlink" title="二.Dalvik虚拟机"></a>二.Dalvik虚拟机</h1><h3 id="1-为什么Android平台不使用标准的Jvm虚拟机"><a href="#1-为什么Android平台不使用标准的Jvm虚拟机" class="headerlink" title="1.为什么Android平台不使用标准的Jvm虚拟机?"></a>1.为什么Android平台不使用标准的Jvm虚拟机?</h3><p>由于 Androd 运行在移动设备上，内存以及电量等诸多方面跟一般的 PC 设备都有本质的区别 ，一般的 JVM 没法满足移动设备的要求，所以Android 团队一开始就打造了一个符合移动设备的可以执行 Java 代码的虚拟机，这就是说的 Dalvik 虚拟机 。</p>
+<h3 id="2-Android平台Dalvik虚拟机的特点"><a href="#2-Android平台Dalvik虚拟机的特点" class="headerlink" title="2. Android平台Dalvik虚拟机的特点"></a>2. Android平台Dalvik虚拟机的特点</h3><ul>
+<li>体积小，占用内存空间小。</li>
+<li>专有的DEX可执行文件格式，体积更小，执行速度更快。</li>
+<li>基于寄存器架构，并拥有一套完整的指令系统。</li>
+</ul>
+<blockquote>
+<p>android为每个应用程序提供一个Dalvik虚拟机，可以使每个app都运行在独立的虚拟机运行环境，使稳定性提高。使得应用代码和核心的操作系统分开。即使任意一个程序中包含恶意的代码也不会直接影响系统文件。这使得 Android 操作系统更稳定可靠。</p>
+</blockquote>
+<h3 id="3-Jvm和Dalvik比较"><a href="#3-Jvm和Dalvik比较" class="headerlink" title="3.Jvm和Dalvik比较"></a>3.Jvm和Dalvik比较</h3><h5 id="1-Jvm和Dalvik的相同点"><a href="#1-Jvm和Dalvik的相同点" class="headerlink" title="(1.)Jvm和Dalvik的相同点"></a>(1.)Jvm和Dalvik的相同点</h5><ul>
+<li>都是解释执行。</li>
+<li>都是每个 OS 进程运行一个 VM，并运行一个单独的程序。</li>
+<li>（Android Froyo &#x2F; Sun JDK 1.5）都实现了相当程度的 JIT compiler（即时编译） 用于提速。JIT（Just In Time，即时编译技术）对于热代码（使用频率高的字节码）直接转换成汇编代码；</li>
+</ul>
+<h5 id="2-Jvm和Dalvik的不同点"><a href="#2-Jvm和Dalvik的不同点" class="headerlink" title="(2.)Jvm和Dalvik的不同点"></a>(2.)Jvm和Dalvik的不同点</h5><ul>
+<li><p>Dalvik执行的是.dex格式文件，Jvm执行的是.class文件。多个class文件转变成一个dex文件会引发一些问题，具体如下：</p>
+<ol>
+<li>方法数受限：多个class文件变成一个dex文件所带来的问题就是方法数超过65535时报错，由此引出MultiDex技术。</li>
+<li>class文件去冗余：class文件存在很多的冗余信息，dex工具会去除冗余信息(多个class中的字符串常量合并为一个，比如对于Ljava&#x2F;lang&#x2F;Oject字符常量，每个class文件基本都有该字符常量，存在很大的冗余)，并把所有的.class文件整合到.dex文件中。减少了I&#x2F;O操作，提高了类的查找速度。</li>
+</ol>
+</li>
+<li><p>JVM是基于栈，Dalvik指令集是基于寄存器的架构。具体如下：</p>
+<ol>
+<li>Dalvik速度快！寄存器存取速度比栈快的多，Dalvik可以根据硬件实现最大的优化，比较适合移动设备。JAVA虚拟机基于栈结构，程序在运行时虚拟机需要频繁的从栈上读取写入数据，这个过程需要更多的指令分派与内存访问次数，会耗费很多CPU时间。</li>
+<li>指令数小！Dalvik基于寄存器，所以它的指令是二地址和三地址混合，指令中指明了操作数的地址；Jvm基于栈，它的指令是零地址，指令的操作数对象默认是操作数栈中的几个位置。这样带来的结果就是Dalvik的指令数相对于Jvm的指令数会小很多，Jvm需要多条指令而Dalvik可能只需要一条指令。</li>
+<li>Jvm基于栈带来的好处是可以做的足够简单，真正的跨平台，保证在低硬件条件下能够正常运行。而dvm操作平台一般指明是ARM系统，所以采取的策略有所不同。需要注意的是Dalvik基于寄存器，但是这也是个映射关系，如果硬件没有足够的寄存器，Dalvik将多出来的寄存器映射到内存中。</li>
+</ol>
+</li>
+</ul>
+<p><img src="/images/f472313757d2dc5006a051d4cd8c4805.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="4-JIT编译"><a href="#4-JIT编译" class="headerlink" title="4.JIT编译"></a>4.JIT编译</h3><p>Dalvik虚拟机可以看做是一个Java VM(虚拟机)， Android系统初期，每次运行程序的时候，Dalvik负责将dex翻译为机器码交由系统调用。这样有一个缺陷：每次执行代码，都需要Dalvik将dex代码翻译为微处理器指令，然后交给系统处理，这样效率不高。为了解决上述问题，Google在Android2.2版本添加了JIT编译器。</p>
+<p>JIT编译器的作用是：当App运行时，每当遇到一个新类，JIT编译器就会对这个类进行编译，经过编译后的代码，会被优化成相当精简的原生型指令码（即native code），这样在下次执行到相同逻辑的时候，速度就会更快。<br><img src="/images/9e12d4bcccd4ec7b0c6faef4ad261d7c.webp" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>当然使用JIT也不一定加快执行速度，如果大部分代码的执行次数很少，那么编译花费的时间不一定少于执行dex的时间。Google当然也知道这一点，所以JIT不对所有dex代码进行编译，而是只编译执行次数较多的dex为本地机器码。有一点需要注意，那就是dex字节码翻译成本地机器码是发生在应用程序的运行过程中的，并且应用程序每一次重新运行的时候，都要做重做这个翻译工作，所以这个工作并不是一劳永逸，每次重新打开App，都需要JIT编译。JIT 编译器可以对执行次数频繁的 dex&#x2F;odex 代码进行编译与优化，将 dex&#x2F;odex 中的 Dalvik Code（Smali 指令集）翻译成相当精简的 Native Code 去执行。</p>
+</blockquote>
+<h3 id="5-JIT编译的缺点"><a href="#5-JIT编译的缺点" class="headerlink" title="5.JIT编译的缺点"></a>5.JIT编译的缺点</h3><ul>
+<li>每次启动应用都需要重新编译（没有缓存）。</li>
+<li>运行时比较耗电，耗电量大。</li>
+</ul>
+<h1 id="三-ART虚拟机"><a href="#三-ART虚拟机" class="headerlink" title="三.ART虚拟机"></a>三.ART虚拟机</h1><h3 id="1-ART虚拟机和AOT编译"><a href="#1-ART虚拟机和AOT编译" class="headerlink" title="1.ART虚拟机和AOT编译"></a>1.ART虚拟机和AOT编译</h3><p>JIT是运行时编译，是动态编译，可以对执行次数频繁的dex代码进行编译和优化，减少以后使用时的翻译时间，虽然可以加快Dalvik运行速度，但是有一个很大的问题：将dex翻译为本地机器码也要占用时间，这会拖慢应用的运行效率。 所以Google在4.4推出了全新的虚拟机运行环境ART（Android RunTime），用来替换Dalvik（4.4上ART和Dalvik共存，用户可以手动选择，5.0 后Dalvik被替换）。在ART 环境中，应用在第一次安装的时候，字节码就会预先编译成机器码，使其成为真正的本地应用。这个过程叫做预编译AOT（Ahead-Of-Time）。这样，应用的启动(首次)和执行都会变得更加快速。</p>
+<p><code>ART虚拟机直接执行本地机器码；而Dalvik虚拟机运行的是DEX字节码需要通过解释器执行。</code>安卓运行时从Dalvik虚拟机替换成ART虚拟机，并不要求开发者重新将自己的应用直接编译成目标机器码，应用程序仍然是一个包含dex字节码的apk文件，这主要得益于AOT技术，AOT（Ahead Of Time）是相对JIT（Just In Time）而言的；也就是在APK运行之前，就对其包含的Dex字节码进行翻译，得到对应的本地机器指令，于是就可以在运行时直接执行了。ART应用安装的时候把dex中的字节码将被编译成本地机器码，之后每次打开应用，执行的都是本地机器码。去除了运行时的解释执行，效率更高，启动更快。</p>
+<h3 id="2-ART缺点"><a href="#2-ART缺点" class="headerlink" title="2.ART缺点"></a>2.ART缺点</h3><ul>
+<li>应用安装需要更长的时间，因为 DEX 字节码需要在安装时就翻译成机器码。</li>
+<li>由于在安装时时生成的 native 机器码是存储在内部存储器上，所以需要更多的内部存储空间。</li>
+</ul>
+<h3 id="3-JIT和AOT共存"><a href="#3-JIT和AOT共存" class="headerlink" title="3. JIT和AOT共存"></a>3. JIT和AOT共存</h3><p>由于Art虚拟机有上述的缺点，所以在Android 7.0&#x2F;7.1的ART引入了全新的Hybrid模式(JIT + AOT)</p>
+<ul>
+<li>app在安装的时候dex不会再被编译，所以安装速度快。</li>
+<li>应用在运行时 dex 文件先通过解析器（Interpreter）后会被直接执行（这一步骤跟 Android 2.2 - Android 4.4之前的行为一致），与此同时，热点函数（Hot Code）会被识别并被 JIT 编译后存储在 jit code cache 中并生成 profile 文件以记录热点函数的信息。</li>
+<li>手机进入 IDLE（空闲） 或者 Charging（充电） 状态的时候，系统会每隔一段时间扫描App目录下profile文件，并执行AOT编译(Google官方称之为profile-guided compilation)。</li>
+</ul>
+<h5 id="1-JIT-AOT优点"><a href="#1-JIT-AOT优点" class="headerlink" title="(1.) JIT+AOT优点"></a>(1.) JIT+AOT优点</h5><p>App安装速度快，占用存储少(只编译热点函数)。</p>
+<h5 id="2-JIT-AOT缺点"><a href="#2-JIT-AOT缺点" class="headerlink" title="(2.) JIT+AOT缺点"></a>(2.) JIT+AOT缺点</h5><p>前几次运行会较慢， 只有用户操作得次数越多，jit 和AOT编译后， 性能才会跟上来。</p>
+<h1 id="四-Android虚拟机总结"><a href="#四-Android虚拟机总结" class="headerlink" title="四.Android虚拟机总结"></a>四.Android虚拟机总结</h1><p><img src="/images/04c8bad6263b5a0bf567fce4e2b70a91.webp" srcset="/img/loading.gif" lazyload></p>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="http://mouxuejie.com/blog/2018-05-12/learning-notes-vm/">Android学习笔记——虚拟机</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/csdnliuxin123524/article/details/81303711">JVM原理最全、清晰、通俗讲解</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Android虚拟机之Dalvik和ART</div>
+      <div>http://example.com/2016/06/09/Android虚拟机之Dalvik和ART/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2016年6月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2016/07/18/Retrofit%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%8F%8A%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6/" title="Retrofit上传文件及下载文件">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Retrofit上传文件及下载文件</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2015/10/31/Git%E5%91%BD%E4%BB%A4%E5%8F%8AGIt%20Flow%E5%B7%A5%E4%BD%9C%E6%B5%81/" title="Git命令及GIt Flow工作流">
+                        <span class="hidden-mobile">Git命令及GIt Flow工作流</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

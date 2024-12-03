@@ -1,0 +1,792 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.开发前准备1.注册账号如果还没有微信公众平台的账号，先进入微信公众平台首页，点击 “立即注册” 按钮进行注册。注册的账号类型选择 “小程序” 即可。接着填写账号信息，需要注意的是，填写的邮箱必须是未被微信公众平台注册、未被个人微信号绑定的邮箱，而且每个邮箱仅能申请一个小程序。激活邮箱之后，选择主体类型为 “个人类型”，并按要求登记主体信息。主体信息提交后不可修改，该主体将成为你使用微信公众平台">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信小程序开发总结">
+<meta property="og:url" content="http://example.com/2019/08/12/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.开发前准备1.注册账号如果还没有微信公众平台的账号，先进入微信公众平台首页，点击 “立即注册” 按钮进行注册。注册的账号类型选择 “小程序” 即可。接着填写账号信息，需要注意的是，填写的邮箱必须是未被微信公众平台注册、未被个人微信号绑定的邮箱，而且每个邮箱仅能申请一个小程序。激活邮箱之后，选择主体类型为 “个人类型”，并按要求登记主体信息。主体信息提交后不可修改，该主体将成为你使用微信公众平台">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/8a5bec1dbbe43c06f229c9a48e63016f.webp">
+<meta property="og:image" content="http://example.com/images/453894a595332df2b8c7630c685c6f9c.webp">
+<meta property="og:image" content="http://example.com/images/dfc011d4f8a296a6d3e047d0c252f088.webp">
+<meta property="og:image" content="http://example.com/images/151a5f4988ec1df29c263e3fad7af841.webp">
+<meta property="og:image" content="http://example.com/images/6c437ad65238b42889edcc1eca892363.webp">
+<meta property="og:image" content="http://example.com/images/977810c12155661967992036a34635ec.webp">
+<meta property="og:image" content="http://example.com/images/3b154ec2235208257fc2bf5c479e971d.webp">
+<meta property="og:image" content="http://example.com/images/4163e68c75d195f0bb88f61e531507ed.webp">
+<meta property="og:image" content="http://example.com/images/eac7a5dc87009f3d39e5792c64c212a6.webp">
+<meta property="og:image" content="http://example.com/images/067f86776fd222ade397075fcde3ab36.webp">
+<meta property="og:image" content="http://example.com/images/890413209c3615265bd5b7636e5a8777.webp">
+<meta property="og:image" content="http://example.com/images/1cd05875d8d3b9bbbb1458047fd11785.webp">
+<meta property="article:published_time" content="2019-08-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:52:15.506Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/8a5bec1dbbe43c06f229c9a48e63016f.webp">
+  
+  
+  
+  <title>微信小程序开发总结 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="微信小程序开发总结"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-08-12 00:00" pubdate>
+          2019年8月12日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">微信小程序开发总结</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-开发前准备"><a href="#一-开发前准备" class="headerlink" title="一.开发前准备"></a>一.开发前准备</h1><h3 id="1-注册账号"><a href="#1-注册账号" class="headerlink" title="1.注册账号"></a>1.注册账号</h3><p>如果还没有<a href="mp.weixin.qq.com/">微信公众平台</a>的账号，先进入<a href="mp.weixin.qq.com/">微信公众平台</a>首页，点击 “立即注册” 按钮进行注册。注册的账号类型选择 “小程序” 即可。接着填写账号信息，需要注意的是，<br>填写的邮箱必须是未被微信公众平台注册、未被个人微信号绑定的邮箱，而且每个邮箱仅能申请一个小程序。激活邮箱之后，选择主体类型为 “个人类型”，并按要求登记主体信息。<br>主体信息提交后不可修改，该主体将成为你使用微信公众平台各项服务和功能的唯一法律主体与缔约主体，在后续开通其他业务功能时不得变更或修改。</p>
+<h3 id="2-获取id"><a href="#2-获取id" class="headerlink" title="2.获取id"></a>2.获取id</h3><p>登录微信公众平台 —&gt; 开发 —&gt; 开发设置<br><img src="/images/8a5bec1dbbe43c06f229c9a48e63016f.webp" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h3 id="3-下载安装开发工具"><a href="#3-下载安装开发工具" class="headerlink" title="3.下载安装开发工具"></a>3.下载安装开发工具</h3><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html">微信小程序开发工具下载地址</a><br><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/devtools/devtools.html">官方开发文档</a></p>
+<h1 id="二-开发工具使用"><a href="#二-开发工具使用" class="headerlink" title="二.开发工具使用"></a>二.开发工具使用</h1><h3 id="1-创建新的项目"><a href="#1-创建新的项目" class="headerlink" title="1.创建新的项目"></a>1.创建新的项目</h3><p><img src="/images/453894a595332df2b8c7630c685c6f9c.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="2-微信小程序开发工具功能菜单"><a href="#2-微信小程序开发工具功能菜单" class="headerlink" title="2.微信小程序开发工具功能菜单"></a>2.微信小程序开发工具功能菜单</h3><p><img src="/images/dfc011d4f8a296a6d3e047d0c252f088.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="3-微信小程序调试期支持http"><a href="#3-微信小程序调试期支持http" class="headerlink" title="3.微信小程序调试期支持http"></a>3.微信小程序调试期支持http</h3><p>微信小程序需要https请求，(没有https证书的可以再调试时设置支持http)<br><img src="/images/151a5f4988ec1df29c263e3fad7af841.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="4-微信小程序添加编译模式"><a href="#4-微信小程序添加编译模式" class="headerlink" title="4.微信小程序添加编译模式"></a>4.微信小程序添加编译模式</h3><p>微信小程序开发工具通过添加编译模式可以针对于某一个特定的页面进行编译。<br><img src="/images/6c437ad65238b42889edcc1eca892363.webp" srcset="/img/loading.gif" lazyload><br><img src="/images/977810c12155661967992036a34635ec.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="5-微信小程序内测人员添加"><a href="#5-微信小程序内测人员添加" class="headerlink" title="5.微信小程序内测人员添加"></a>5.微信小程序内测人员添加</h3><p><img src="/images/3b154ec2235208257fc2bf5c479e971d.webp" srcset="/img/loading.gif" lazyload></p>
+<h1 id="三-小程序的目录结构"><a href="#三-小程序的目录结构" class="headerlink" title="三.小程序的目录结构"></a>三.小程序的目录结构</h1><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs arduino">├── <span class="hljs-built_in">components</span> (公共组件目录)<br>│   ├── @<span class="hljs-built_in">anima</span> (动画组件)<br>│   └── ...<br>├── images（公共图片）<br>│   └── icon<br>│      ├── icon@download.png<br>│      └── icon@cancel.png<br>├── pages（主包目录）<br>│   └── <span class="hljs-built_in">home</span> (app.json 设置的入口页)<br>│       ├── home.wxml<br>│       ├── home.js<br>│       ├── home.json<br>│       └── home.wxss<br>├── style（公用样式目录）<br>├── subpackages（分包目录）<br>│   │── news<br>|   └── store<br>├── utils（公共模块，工具类）<br>│   ├── config.js（项目配置）<br>│   └── local.config.<span class="hljs-built_in">js</span> (本地配置，git忽略)<br>├── .editorconfig<br>├── .gitignore<br>├── app.js<br>├── app.json<br>├── app.wxss<br>├── project.config.json<br></code></pre></td></tr></table></figure>
+<h3 id="1-pages目录结构"><a href="#1-pages目录结构" class="headerlink" title="1.pages目录结构"></a>1.pages目录结构</h3><p>pages: 页面文件.包含一个页面所需的所有文件</p>
+<ol>
+<li>js文件为逻辑控制层。</li>
+<li>wxml文件为页面展示层(类似于xml)。</li>
+<li>wxss文件为样式层(类似于css)。</li>
+</ol>
+<h5 id="1-page-js"><a href="#1-page-js" class="headerlink" title="(1.)page.js"></a>(1.)page.js</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-title class_">Page</span>(&#123;<br>  <span class="hljs-attr">data</span>: &#123;<span class="hljs-attr">text</span>: <span class="hljs-string">&quot;This is page data.&quot;</span>&#125;,                           <span class="hljs-comment">//页面的初始数据</span><br>  <span class="hljs-attr">onLoad</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">options</span>) &#123;  &#125;,                               <span class="hljs-comment">//生命周期回调—监听页面加载</span><br>  <span class="hljs-attr">onReady</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;  &#125;,                                     <span class="hljs-comment">//生命周期回调—监听页面初次渲染完成</span><br>  <span class="hljs-attr">onShow</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;  &#125;,                                      <span class="hljs-comment">//生命周期回调—监听页面显示</span><br>  <span class="hljs-attr">onHide</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;  &#125;,                                      <span class="hljs-comment">//生命周期回调—监听页面隐藏</span><br>  <span class="hljs-attr">onUnload</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;  &#125;,                                    <span class="hljs-comment">//生命周期回调—监听页面卸载</span><br>  <span class="hljs-attr">onPullDownRefresh</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;  &#125;,                           <span class="hljs-comment">//监听用户下拉动作</span><br>  <span class="hljs-attr">onReachBottom</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;  &#125;,                               <span class="hljs-comment">//页面上拉触底事件的处理函数</span><br>  <span class="hljs-attr">onShareAppMessage</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;  &#125;,                          <span class="hljs-comment">//监用户点击右上角转发</span><br>  <span class="hljs-attr">viewTap</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;                                         <span class="hljs-comment">//如下为自定义的事件处理函数（视图中绑定的）</span><br>    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">setData</span>(&#123;<span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Set some data for updating view.&#x27;</span>&#125;)    <span class="hljs-comment">//setData设置数据绑定data值，同时将更新视图</span><br>  &#125;<br>&#125;)<br></code></pre></td></tr></table></figure>
+<p><code>data</code> 是页面第一次渲染使用的<strong>初始数据</strong>。</p>
+<p>页面加载时，<code>data</code> 将会以<code>JSON</code>字符串的形式由逻辑层传至渲染层，因此<code>data</code>中的数据必须是可以转成<code>JSON</code>的类型：字符串，数字，布尔值，对象，数组。渲染层可以通过 [WXML]对数据进行绑定。<br>示例代码：</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">view</span>&gt;</span></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">text</span>&#125;&#125;</span><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">view</span>&gt;</span></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">array</span>[0].msg&#125;&#125;</span><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs css">Page(&#123;<br>  data: &#123;<br>    <span class="hljs-selector-tag">text</span>: <span class="hljs-string">&#x27;init data&#x27;</span>,<br>    array: [&#123;msg: <span class="hljs-string">&#x27;1&#x27;</span>&#125;, &#123;msg: <span class="hljs-string">&#x27;2&#x27;</span>&#125;]<br>  &#125;<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<h5 id="2-微信小程序界面WXML"><a href="#2-微信小程序界面WXML" class="headerlink" title="(2.)微信小程序界面WXML"></a>(2.)微信小程序界面WXML</h5><p>对于微信小程序而言，视图层就是所有<code>.wxml</code>文件与<code>.wxss文件</code>的集合。微信小程序在逻辑层将数据进行处理后发送给视图层展现出来，同时接受视图层的事件反馈。WXML是框架设计的一套类似HTML的标签语言，结合基础组件、事件系统，可以构建出页面的结构，即.wxml文件。</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">view</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;container&quot;</span>&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;<span class="hljs-name">view</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;userinfo&quot;</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">wx:if</span>=<span class="hljs-string">&quot;</span></span></span><span class="hljs-comment">&#123;&#123;!hasUserInfo &amp;&amp; canIUse&#125;&#125;</span><span class="language-xml"><span class="hljs-tag"><span class="hljs-string">&quot;</span> <span class="hljs-attr">open-type</span>=<span class="hljs-string">&quot;getUserInfo&quot;</span> <span class="hljs-attr">bindgetuserinfo</span>=<span class="hljs-string">&quot;getUserInfo&quot;</span>&gt;</span> 获取头像昵称 <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">block</span> <span class="hljs-attr">wx:else</span>&gt;</span></span><br><span class="language-xml">      <span class="hljs-tag">&lt;<span class="hljs-name">image</span> <span class="hljs-attr">bindtap</span>=<span class="hljs-string">&quot;bindViewTap&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;userinfo-avatar&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;</span></span></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">userInfo.avatarUrl</span>&#125;&#125;</span><span class="language-xml"><span class="hljs-tag"><span class="hljs-string">&quot;</span> <span class="hljs-attr">mode</span>=<span class="hljs-string">&quot;cover&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">image</span>&gt;</span></span><br><span class="language-xml">      <span class="hljs-tag">&lt;<span class="hljs-name">text</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;userinfo-nickname&quot;</span>&gt;</span></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">userInfo.nickName</span>&#125;&#125;</span><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">text</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;/<span class="hljs-name">block</span>&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;<span class="hljs-name">view</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;usermotto&quot;</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">text</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;user-motto&quot;</span>&gt;</span></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">motto</span>&#125;&#125;</span><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">text</span>&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+
+<h5 id="3-微信小程序界面wxss样式"><a href="#3-微信小程序界面wxss样式" class="headerlink" title="(3.)微信小程序界面wxss样式"></a>(3.)微信小程序界面wxss样式</h5><p>wxss( WeiXin Style Sheets ) 是一套样式语言，用来决定 WXML 的组件应该怎么显示，wxss 具有 css 大部分特性，wxss 对 css 进行了扩充以及修改，以适应微信小程序的开发<br>wxss 与 css 相比，wxss扩展的特性有：</p>
+<ul>
+<li>尺寸单位</li>
+<li>样式导入<br>样式的三种写法:<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="language-xml">页面样式的三种写法：（1）行内样式、（2）页面样式 page.wxss、（3）全局样式 app.wxss。都可以作用于页面的组件</span><br><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-comment">&lt;!--1.行内（内联）样式--&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">view</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&#x27;color:red; font-size:32px&#x27;</span>&gt;</span>测试<span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span>    <span class="hljs-comment">&lt;!--样式：键值对的形式--&gt;</span></span><br><span class="language-xml"> </span><br><span class="language-xml"><span class="hljs-comment">&lt;!--2.页内样式--&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">view</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&#x27;box&#x27;</span>&gt;</span>测试<span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span>    <span class="hljs-comment">&lt;!--通过类选择器.box</span></span><span class="hljs-template-variable">&#123;&#125;</span><span class="language-xml"><span class="hljs-comment">，到page.wxss中写样式--&gt;</span></span><br><span class="language-xml"> </span><br><span class="language-xml"><span class="hljs-comment">&lt;!--3.全局样式--&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">view</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&#x27;container&#x27;</span>&gt;</span>测试<span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span>    <span class="hljs-comment">&lt;!--通过类选择器.container，到app.wxss中写样式--&gt;</span></span><br></code></pre></td></tr></table></figure>
+如果有相同的样式，优先级依次是：行内样式 &gt; 页面样式 &gt; 全局样式。</li>
+</ul>
+<p>常用css选择器:</p>
+<table>
+<thead>
+<tr>
+<th>选择器</th>
+<th>样例</th>
+<th>样例描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>.class</td>
+<td>.intro</td>
+<td>选择所有拥有 class&#x3D;”intro” 的组件</td>
+</tr>
+<tr>
+<td>#id</td>
+<td>#firstname</td>
+<td>选择拥有 id&#x3D;”firstname” 的组件</td>
+</tr>
+<tr>
+<td>element</td>
+<td>view</td>
+<td>选择所有 view 组件</td>
+</tr>
+<tr>
+<td>例如:</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>.wxml</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">&lt;<span class="hljs-type">text</span>&gt;hello&lt;/<span class="hljs-type">text</span>&gt;<br>&lt;<span class="hljs-keyword">view</span> id=&quot;idStyle&quot;&gt;&lt;/<span class="hljs-keyword">view</span>&gt;<br>&lt;<span class="hljs-keyword">view</span> <span class="hljs-keyword">class</span>=&quot;classStyle&quot;&gt;&lt;/<span class="hljs-keyword">view</span>&gt;<br></code></pre></td></tr></table></figure>
+<p>.wxss</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-comment">/* 类选择器 */</span><br><span class="hljs-selector-class">.classStyle</span>&#123;<br>  <br>    <span class="hljs-attribute">padding</span>: <span class="hljs-number">20px</span>;<br>	<span class="hljs-attribute">background-color</span>: <span class="hljs-number">#2980B9</span>;<span class="hljs-comment">/*深蓝色*/</span><br>&#125;<br><span class="hljs-comment">/* id选择器 */</span><br><span class="hljs-selector-id">#idStyle</span>&#123;<br>    <span class="hljs-attribute">margin-top</span>: <span class="hljs-number">50px</span>;<br>    <span class="hljs-attribute">width</span>: <span class="hljs-number">50px</span>;<br>    <span class="hljs-attribute">margin</span>: <span class="hljs-number">50px</span>;<br>    <span class="hljs-attribute">height</span>: <span class="hljs-number">50px</span>;<br>    <span class="hljs-attribute">background-color</span>: blueviolet<br>&#125;<br><span class="hljs-comment">/* 元素选择器 */</span><br><span class="hljs-selector-tag">text</span>&#123;<br>    <span class="hljs-attribute">color</span>:red;<br>    <span class="hljs-attribute">background-color</span>:blue<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="2-app-js文件"><a href="#2-app-js文件" class="headerlink" title="2.app.js文件"></a>2.app.js文件</h3><p>app.js文件为程序初始化话文件(相当于Android中的application)。</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs actionscript">App(&#123;                                   <span class="hljs-comment">//如下为小程序的生命周期</span><br>  onLaunch: <span class="hljs-keyword">function</span><span class="hljs-params">()</span> &#123; &#125;,             <span class="hljs-comment">//生命周期回调——监听小程序初始化。</span><br>  onShow: <span class="hljs-keyword">function</span><span class="hljs-params">()</span> &#123;  &#125;,              <span class="hljs-comment">//生命周期回调——监听小程序启动或切前台。</span><br>  onHide: <span class="hljs-keyword">function</span><span class="hljs-params">()</span> &#123;  &#125;,              <span class="hljs-comment">//生命周期回调——监听小程序切后台。</span><br>  onError: <span class="hljs-keyword">function</span><span class="hljs-params">(msg)</span> &#123;  &#125;,          <span class="hljs-comment">//错误监听函数。</span><br>  onPageNotFound:<span class="hljs-keyword">function</span><span class="hljs-params">()</span> &#123;  &#125;        <span class="hljs-comment">//页面不存在监听函数。</span><br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-app-json-文件"><a href="#3-app-json-文件" class="headerlink" title="3.app.json 文件"></a>3.app.json 文件</h3><p>app.json可以对小程序全局配置<br><img src="/images/4163e68c75d195f0bb88f61e531507ed.webp" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h1 id="四-小程序组件"><a href="#四-小程序组件" class="headerlink" title="四.小程序组件"></a>四.小程序组件</h1><p>微信小程序提供了许多的视图，如view，button，input等(详见微信小程序开发者文档)，由这些组件堆砌成视图页面。</p>
+<h3 id="1-view标签-类似-div"><a href="#1-view标签-类似-div" class="headerlink" title="1.view标签(类似 div)"></a>1.view标签(类似 div)</h3><p>小程序提供了常用的标签组件用于构建页面:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">view</span> <span class="hljs-attr">hover-class</span>=<span class="hljs-string">&quot;h-class&quot;</span>&gt;</span><br>  点击我试试<br>  <span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span><br>  <span class="hljs-comment">&lt;!-- wxss --&gt;</span><br>  .h-class&#123;<br>    background-color: yellow;<br>  &#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-text标签"><a href="#2-text标签" class="headerlink" title="2.text标签"></a>2.text标签</h3><p>显示普通的文本 text只能嵌套text:</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">text</span> <span class="hljs-attr">selectable</span>=<span class="hljs-string">&quot;</span></span></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">false</span>&#125;&#125;</span><span class="language-xml"><span class="hljs-tag"><span class="hljs-string">&quot;</span> <span class="hljs-attr">decode</span>=<span class="hljs-string">&quot;</span></span></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">false</span>&#125;&#125;</span><span class="language-xml"><span class="hljs-tag"><span class="hljs-string">&quot;</span>&gt;</span></span><br><span class="language-xml">   测试</span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">text</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-image标签"><a href="#3-image标签" class="headerlink" title="3.image标签"></a>3.image标签</h3><p>图片标签:</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs abnf">&lt;image class<span class="hljs-operator">=</span><span class="hljs-string">&quot;widget__arrow&quot;</span> src<span class="hljs-operator">=</span><span class="hljs-string">&quot;/image/xxx.png&quot;</span> mode<span class="hljs-operator">=</span><span class="hljs-string">&quot;aspectFill&quot;</span>&gt;<br>&lt;/image&gt;<br></code></pre></td></tr></table></figure>
+<p>mode 有 13 种模式，其中 4 种是缩放模式，9 种是裁剪模式。</p>
+<h3 id="4-video标签"><a href="#4-video标签" class="headerlink" title="4.video标签"></a>4.video标签</h3><p>视频标签。该组件是原生组件，使用时请注意相关限制:</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">video</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;</span></span></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">src</span>&#125;&#125;</span><span class="language-xml"><span class="hljs-tag"><span class="hljs-string">&quot;</span> <span class="hljs-attr">controls</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">video</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+
+<h3 id="5-微信小程序模板组件"><a href="#5-微信小程序模板组件" class="headerlink" title="5.微信小程序模板组件"></a>5.微信小程序模板组件</h3><h5 id="1-创建一个文件夹专门用于存放template文件"><a href="#1-创建一个文件夹专门用于存放template文件" class="headerlink" title="(1.)创建一个文件夹专门用于存放template文件"></a>(1.)创建一个文件夹专门用于存放template文件</h5><p><img src="/images/eac7a5dc87009f3d39e5792c64c212a6.webp" srcset="/img/loading.gif" lazyload></p>
+<h5 id="2-新建-wxml文件和-wcss文件"><a href="#2-新建-wxml文件和-wcss文件" class="headerlink" title="(2.)新建.wxml文件和.wcss文件"></a>(2.)新建.wxml文件和.wcss文件</h5><p>template.wxml:</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="language-xml"><span class="hljs-comment">&lt;!-- 模板文件的命名要注意 --&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;demo&quot;</span>&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;<span class="hljs-name">view</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&#x27;tempDemo&#x27;</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-comment">&lt;!-- 传递过来的数据名字要和传递的地方一致 --&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">text</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;name&quot;</span>&gt;</span>name:</span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">item.name</span>&#125;&#125;</span><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">text</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">text</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;click&quot;</span> <span class="hljs-attr">bindtap</span>=<span class="hljs-string">&quot;clickMe&quot;</span> <span class="hljs-attr">data-name</span>=<span class="hljs-string">&quot;</span></span></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">item.name</span>&#125;&#125;</span><span class="language-xml"><span class="hljs-tag"><span class="hljs-string">&quot;</span>&gt;</span>点击<span class="hljs-tag">&lt;/<span class="hljs-name">text</span>&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+<p>template.wcss:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.tempDemo</span> &#123;<br>  <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;<br>&#125;<br><br><span class="hljs-selector-class">.name</span> &#123;<br>  <span class="hljs-attribute">color</span>: darkorange;<br>&#125;<br><br><span class="hljs-selector-class">.click</span> &#123;<br>  <span class="hljs-attribute">color</span>: red;<br>  <span class="hljs-attribute">position</span>: absolute;<br>  <span class="hljs-attribute">right</span>: <span class="hljs-number">10</span>rpx;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="3-在页面的-wxml文件和-wxss文件中引用模板文件page-js文件监听事件"><a href="#3-在页面的-wxml文件和-wxss文件中引用模板文件page-js文件监听事件" class="headerlink" title="(3.)在页面的.wxml文件和.wxss文件中引用模板文件page.js文件监听事件"></a>(3.)在页面的.wxml文件和.wxss文件中引用模板文件page.js文件监听事件</h5><p>page.wxml:</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="language-xml"><span class="hljs-comment">&lt;!-- 导入模板 --&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">import</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;../../template/template.wxml&quot;</span> /&gt;</span></span><br><span class="language-xml"><span class="hljs-comment">&lt;!-- 嵌入模板 --&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">view</span>&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;<span class="hljs-name">text</span>&gt;</span>嵌入模板<span class="hljs-tag">&lt;/<span class="hljs-name">text</span>&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;<span class="hljs-name">view</span> <span class="hljs-attr">wx:for</span>=<span class="hljs-string">&quot;</span></span></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">data</span>&#125;&#125;</span><span class="language-xml"><span class="hljs-tag"><span class="hljs-string">&quot;</span> <span class="hljs-attr">wx:key</span>=<span class="hljs-string">&quot;</span></span></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">item</span>&#125;&#125;</span><span class="language-xml"><span class="hljs-tag"><span class="hljs-string">&quot;</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-comment">&lt;!-- 传入参数，必须是对象 --&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;demo&quot;</span> <span class="hljs-attr">data</span>=<span class="hljs-string">&#x27;</span></span></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">item</span>&#125;&#125;</span><span class="language-xml"><span class="hljs-tag"><span class="hljs-string">&#x27;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+<p>page.wxss:</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">@<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;../../template/template.wxss&quot;</span><br></code></pre></td></tr></table></figure>
+<p>page.js:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-title class_">Page</span>(&#123;<br>  <span class="hljs-attr">data</span>: &#123;<br>  &#125;,<br>  <span class="hljs-attr">onLoad</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">let</span> names = [&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;马云&#x27;</span> &#125;,<br>    &#123; <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;马化腾&#x27;</span> &#125;,<br>    &#123; <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;李彦宏&#x27;</span> &#125;]<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">setData</span>(&#123;<br>      <span class="hljs-attr">data</span>: names,<br>    &#125;)<br>  &#125;,<br>  <span class="hljs-attr">clickMe</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(event.<span class="hljs-property">currentTarget</span>.<span class="hljs-property">dataset</span>.<span class="hljs-property">name</span>)<br>  &#125;<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<h5 id="4-属性可以使用-Mustache-语法，来动态决定具体需要渲染哪个模板："><a href="#4-属性可以使用-Mustache-语法，来动态决定具体需要渲染哪个模板：" class="headerlink" title="(4.)属性可以使用 Mustache 语法，来动态决定具体需要渲染哪个模板："></a>(4.)属性可以使用 Mustache 语法，来动态决定具体需要渲染哪个模板：</h5><figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;odd&quot;</span>&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;<span class="hljs-name">view</span>&gt;</span>odd<span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;even&quot;</span>&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;<span class="hljs-name">view</span>&gt;</span>even<span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></span><br><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">block</span> <span class="hljs-attr">wx:for</span>=<span class="hljs-string">&quot;</span></span></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">[1, 2, 3, 4, 5]</span>&#125;&#125;</span><span class="language-xml"><span class="hljs-tag"><span class="hljs-string">&quot;</span>&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;</span></span></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">item</span> % <span class="hljs-number">2</span> == <span class="hljs-number">0</span> ? <span class="hljs-string">&#x27;even&#x27;</span> : <span class="hljs-string">&#x27;odd&#x27;</span>&#125;&#125;</span><span class="language-xml"><span class="hljs-tag"><span class="hljs-string">&quot;</span> /&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">block</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+
+<h3 id="6-微信小程序自定义组件"><a href="#6-微信小程序自定义组件" class="headerlink" title="6.微信小程序自定义组件"></a>6.微信小程序自定义组件</h3><ol>
+<li>新建组建。<br><img src="/images/067f86776fd222ade397075fcde3ab36.webp" srcset="/img/loading.gif" lazyload></li>
+<li>引入组件。<br><img src="/images/890413209c3615265bd5b7636e5a8777.webp" srcset="/img/loading.gif" lazyload></li>
+<li>引用组件。<br><img src="/images/1cd05875d8d3b9bbbb1458047fd11785.webp" srcset="/img/loading.gif" lazyload></li>
+</ol>
+<h1 id="五-小程序页面数据绑定和事件绑定"><a href="#五-小程序页面数据绑定和事件绑定" class="headerlink" title="五.小程序页面数据绑定和事件绑定"></a>五.小程序页面数据绑定和事件绑定</h1><h3 id="1-数据绑定"><a href="#1-数据绑定" class="headerlink" title="1.数据绑定"></a>1.数据绑定</h3><p><code>注意:</code>单次设置的数据不能超过1024kB，请尽量避免一次设置过多的数据。<br>示例代码：<br>.wxml:</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="language-xml"><span class="hljs-comment">&lt;!-- </span></span><span class="hljs-template-variable">&#123;&#123;&#125;&#125;</span><span class="language-xml"><span class="hljs-comment">里面的数据则是绑定的数据 --&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">view</span>&gt;</span></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">text</span>&#125;&#125;</span><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+<p>.js:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs css">Page(&#123;<br>  data: &#123;<br>    <span class="hljs-selector-tag">text</span>: <span class="hljs-string">&#x27;hello&#x27;</span>,<br>  &#125;,<br>  onLoad: <span class="hljs-built_in">function</span>() &#123;<br>   //设置数据<br>    this<span class="hljs-selector-class">.setData</span>(&#123;<br>      <span class="hljs-selector-tag">text</span>:<span class="hljs-string">&#x27;hello wechat&#x27;</span><br>    &#125;)<br>  &#125;,<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-事件绑定"><a href="#2-事件绑定" class="headerlink" title="2.事件绑定"></a>2.事件绑定</h3><p>框架的核心是一个响应的数据绑定系统，可以让数据与视图非常简单地保持同步。当做数据修改的时候，只需要在逻辑层修改数据，视图层就会做相应的更新。<br>.wxml:</p>
+<figure class="highlight handlebars"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs handlebars"><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">view</span>&gt;</span></span><span class="hljs-template-variable">&#123;&#123;<span class="hljs-name">name</span>&#125;&#125;</span><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">view</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-comment">&lt;!-- 绑定点击的方法名 --&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">bindtap</span>=<span class="hljs-string">&quot;changeNameClick&quot;</span>&gt;</span>点击我<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><br></code></pre></td></tr></table></figure>
+<p>.js:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-title class_">Page</span>(&#123;<br>  <span class="hljs-attr">data</span>: &#123;<br>    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;wechat&#x27;</span>,<br>  &#125;,<br>  <span class="hljs-attr">onLoad</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;&#125;,<br>  <span class="hljs-comment">//wxml里面绑定的事件</span><br>  <span class="hljs-title function_">changeNameClick</span>(<span class="hljs-params">e</span>) &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">setData</span>(&#123;<br>      <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;hello-wechat&#x27;</span><br>    &#125;)<br>  &#125;<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<h1 id="六-小程序页面尺寸单位"><a href="#六-小程序页面尺寸单位" class="headerlink" title="六.小程序页面尺寸单位"></a>六.小程序页面尺寸单位</h1><p>尺寸单位：rpx（responsive pixel）：可以根据屏幕宽度进行自适应，以达到不同机型适配的效果，规定屏幕宽为 750rpx。如在 iPhone6 上，屏幕宽度为375px，共有 750个 物理像素，<br>则 750rpx &#x3D; 375px &#x3D; 750 物理像素，1rpx &#x3D; 0.5px &#x3D; 1 物理像素。</p>
+<table>
+<thead>
+<tr>
+<th>设备</th>
+<th>rpx换算px（屏幕&#x2F;750）</th>
+<th>px换算rpx（750&#x2F;屏幕宽度）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iPhone5</td>
+<td>1rpx&#x3D;0.42px</td>
+<td>1px&#x3D;2.34rpx</td>
+</tr>
+<tr>
+<td>iPhone6</td>
+<td>1rpx&#x3D;0.5px</td>
+<td>1px&#x3D;2rpx</td>
+</tr>
+<tr>
+<td>iphone5 Plus</td>
+<td>1rpx&#x3D;0.552px</td>
+<td>1px&#x3D;1.81rpx</td>
+</tr>
+</tbody></table>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" class="category-chain-item">微信小程序</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>微信小程序开发总结</div>
+      <div>http://example.com/2019/08/12/微信小程序开发总结/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年8月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/08/15/%E4%BD%BF%E7%94%A8Python%E5%88%B6%E4%BD%9C%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/" title="使用Python制作爬虫程序总结">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">使用Python制作爬虫程序总结</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/08/12/%E7%BD%91%E7%BB%9C%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86%E5%8F%8AFiddler%E7%9A%84%E4%BD%BF%E7%94%A8/" title="网络抓包原理及Fiddler的使用">
+                        <span class="hidden-mobile">网络抓包原理及Fiddler的使用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

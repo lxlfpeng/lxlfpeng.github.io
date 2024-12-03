@@ -1,0 +1,823 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.Redis简介Redis简介Redis 全称 Remote Dictionary Server（即远程字典服务），它是一个基于内存实现的键值型非关系（NoSQL）数据库， 使用 ANSI C 语言编写、遵守 BSD 协议、支持网络、可基于内存、分布式、可选持久性的键值对(Key-Value)存储数据库。 Redis的特点 Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="非关系型数据库Redis简介">
+<meta property="og:url" content="http://example.com/2021/06/10/%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93Redis%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.Redis简介Redis简介Redis 全称 Remote Dictionary Server（即远程字典服务），它是一个基于内存实现的键值型非关系（NoSQL）数据库， 使用 ANSI C 语言编写、遵守 BSD 协议、支持网络、可基于内存、分布式、可选持久性的键值对(Key-Value)存储数据库。 Redis的特点 Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-06-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:10:46.065Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>非关系型数据库Redis简介 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="非关系型数据库Redis简介"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-06-10 00:00" pubdate>
+          2021年6月10日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          33 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">非关系型数据库Redis简介</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-Redis简介"><a href="#一-Redis简介" class="headerlink" title="一.Redis简介"></a>一.Redis简介</h1><h3 id="Redis简介"><a href="#Redis简介" class="headerlink" title="Redis简介"></a>Redis简介</h3><p>Redis 全称 Remote Dictionary Server（即远程字典服务），它是一个基于内存实现的键值型非关系（NoSQL）数据库， 使用 ANSI C 语言编写、遵守 BSD 协议、支持网络、可基于内存、分布式、可选持久性的键值对(Key-Value)存储数据库。</p>
+<h3 id="Redis的特点"><a href="#Redis的特点" class="headerlink" title="Redis的特点"></a>Redis的特点</h3><ul>
+<li>Redis支持数据的持久化，可以将内存中的数据保存在<strong>磁盘</strong>中，重启的时候可以再次加载进行使用。</li>
+<li>Redis不仅仅支持简单的key-value类型的数据，同时还提供list，set，zset，hash等数据结构的存储。</li>
+<li>Redis支持数据的备份，即master-slave模式的数据备份。</li>
+</ul>
+<h3 id="Redis应用场景"><a href="#Redis应用场景" class="headerlink" title="Redis应用场景"></a>Redis应用场景</h3><p>数据库的存储方式大体可分为两大类，基于磁盘存储和基于内存存储。磁盘存储的数据库，因为磁头机械运动以及系统调用等因素导致读写效率较低。Redis 基于内存来实现数据存取，相对于磁盘来说，其读写速度要高出好几个数量级。因此Redis一般用来缓存一些经常被访问的热点数据、或者需要耗费大量资源的内容，通过把这些内容放到 Redis 中，可以让应用程序快速地读取它们。例如，网站的首页需要经常被访问，并且在创建首页的过程中会消耗的较多的资源，此时就可以使用 Redis 将整个首页缓存起来，从而降低网站的压力，减少页面访问的延迟时间。又比如再商城类的业务中，秒杀类的场景大家都是比较熟悉的，往往电商官方推出一款产品，然后在某一个特定的时间点向广大的消费者开发订购功能，那么在那个特定的时间点，可能系统平台一下子就达到10W+的QPS访问量，10w+的QPS，如果直接指向数据库，数据库很容易崩溃，导致整个系统崩溃。对于以上的业务场景，Redis就派上大用场了，一个很简单的思路，我们可以将商品的相关的信息初始化到redis中，当用户访问的时候，可以直接从Redis中获取数据返回给用户，这样的话，mysql的访问量就一下子降低了很多，同时用户的访问速度也会得到很大的提升。当然，Redis的实际应用场景是很多的，但是总的来说大部分的应用场景的眼里都是将数据保存在redis中，然后利用Redis的高性能来实现业务场景的高可用、高并发等业务问题。由此可见，将复杂的高并发和高可用业务模型简单化，Redis堪称一代神器了。</p>
+<blockquote>
+<p>注意:Redis 基于内存来实现数据的存储，因此其速度非常快。但是我们知道，计算机的内存是非常珍贵的资源，所以 Redis 不适合存储较大的文件或者二进制数据，否则会出现错误，Redis 适合存储较小的文本信息。理论上 Redis 的每个 key、value 的大小不超过 512 MB。</p>
+</blockquote>
+<h3 id="Redis的优势"><a href="#Redis的优势" class="headerlink" title="Redis的优势"></a>Redis的优势</h3><ul>
+<li>性能极高：Redis 基于内存实现数据存储，它的读取速度是 110000次&#x2F;s，写速度是 81000次&#x2F;s；</li>
+<li>多用途工具： Redis 有很多的用途，比如可以用作缓存、消息队列、搭建 Redis 集群等；</li>
+<li>命令提示功能：Redis 客户端拥有强大的命令提示功能，使用起来非常的方便，降低了学习门槛；</li>
+<li>可移植性：Redis 使用用标准 C语言编写的，能够在大多数操作系统上运行，比如 Linux，Mac，Solaris 等；</li>
+</ul>
+<h1 id="二-Docker安装Redis教程"><a href="#二-Docker安装Redis教程" class="headerlink" title="二.Docker安装Redis教程"></a>二.Docker安装Redis教程</h1><h3 id="1-搜索镜像"><a href="#1-搜索镜像" class="headerlink" title="1.搜索镜像"></a>1.搜索镜像</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">docker search redis</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-拉取镜像"><a href="#2-拉取镜像" class="headerlink" title="2.拉取镜像"></a>2.拉取镜像</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">docker pull redis</span><br></code></pre></td></tr></table></figure>
+
+<p>在不指定版本的情况下，默认是拉取最新版本。</p>
+<h3 id="3-准备容器数据目录"><a href="#3-准备容器数据目录" class="headerlink" title="3.准备容器数据目录"></a>3.准备容器数据目录</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p /usr/redis/conf<br><span class="hljs-built_in">mkdir</span> -p /usr/share/redis<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-编辑Redis的配置文件"><a href="#4-编辑Redis的配置文件" class="headerlink" title="4.编辑Redis的配置文件"></a>4.编辑Redis的配置文件</h3><p>启动前需要先创建Redis外部挂载的配置文件 （ &#x2F;home&#x2F;redis&#x2F;conf&#x2F;redis.conf ）之所以要先创建 ， 是因为Redis本身容器只存在 &#x2F;etc&#x2F;redis 目录 ， 本身就不创建 redis.conf 文件当服务器和容器都不存在 redis.conf 文件时， 执行启动命令的时候 docker 会将 redis.conf 作为目录创建 ， 这并不是我们想要的结果 。因为 redis 默认配置你会发现只能够本地连接，不能进行远程访问，使用 Redis Desktop Manager连接都会报错，因此需要手动挂载 redis 配置文件。</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">cd <span class="hljs-regexp">/usr/</span>redis/conf<br>wget http:<span class="hljs-regexp">//</span>download.redis.io<span class="hljs-regexp">/redis-stable/</span>redis.conf<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>配置文件内容特别说明</p>
+</blockquote>
+<ul>
+<li>bind 127.0.0.1 #注释掉这部分，这是限制redis只能本地访问；</li>
+<li>protected-mode no #默认yes，开启保护模式，限制为本地访问；</li>
+<li>daemonize no #默认no，改为yes意为以守护进程方式启动，可后台运行，除非kill进程（可选），改为yes会使配置文件方式启动redis失败；</li>
+<li>dir .&#x2F; #输入本地redis数据库存放文件夹（可选）；</li>
+<li>appendonly yes #redis持久化（可选）；</li>
+</ul>
+<h3 id="5-安装运行redis"><a href="#5-安装运行redis" class="headerlink" title="5.安装运行redis"></a>5.安装运行redis</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">docker run -p <span class="hljs-number">6379</span>:<span class="hljs-number">6379</span> --name redis -v <span class="hljs-regexp">/usr/</span>redis<span class="hljs-regexp">/conf/</span>redis.conf:<span class="hljs-regexp">/etc/</span>redis<span class="hljs-regexp">/redis.conf  -v /u</span>sr<span class="hljs-regexp">/share/</span>redis:<span class="hljs-regexp">/data -d redis redis-server /</span>etc<span class="hljs-regexp">/redis/</span>redis.conf --appendonly yes<br></code></pre></td></tr></table></figure>
+
+<p>参数说明</p>
+<ul>
+<li>–appendonly yes 开启持久化；</li>
+<li>redis-server &#x2F;etc&#x2F;redis&#x2F;redis.conf 以redis.conf作为配置文件启动；</li>
+<li>-v 配置数据卷；</li>
+<li>–name redis: 容器别名；</li>
+<li>-d ：后台启动；</li>
+<li>-p 6379:6379：映射容器服务的 6379 端口到宿主机的 6379 端口。外部可以直接通过宿主机ip:6379 访问到 Redis 的服务。（前者为宿主机端口，后者为容器端口）；</li>
+<li>redis：为镜像名称；</li>
+</ul>
+<h3 id="6-进入容器"><a href="#6-进入容器" class="headerlink" title="6.进入容器"></a>6.进入容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker <span class="hljs-built_in">exec</span> -it redis /bin/bash<br></code></pre></td></tr></table></figure>
+
+<p>这里可以通过容器别名或者容器ID都是可以进入的。</p>
+<h1 id="三-Redis支持的数据类型"><a href="#三-Redis支持的数据类型" class="headerlink" title="三.Redis支持的数据类型"></a>三.Redis支持的数据类型</h1><ul>
+<li>String: 字符串</li>
+<li>Hash: 散列</li>
+<li>List: 列表</li>
+<li>Set: 集合</li>
+<li>Sorted Set: 有序集合</li>
+</ul>
+<h2 id="1-String（字符串）"><a href="#1-String（字符串）" class="headerlink" title="1.String（字符串）"></a>1.String（字符串）</h2><p>string是redis最基本的类型，一个key对应一个value，string类型是二进制安全的。意思是redis的string可以包含任何数据。比如jpg图片或者序列化的对象 。string一个键最大能存储512MB。</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">&gt; <span class="hljs-keyword">SET</span> <span class="hljs-type">name</span> &quot;zhangsan&quot;<br>OK<br>&gt; <span class="hljs-keyword">GET</span> <span class="hljs-type">name</span><br>&quot;zhangsan&quot;<br></code></pre></td></tr></table></figure>
+<p>在以上实例中我们使用了 Redis 的 SET 和 GET 命令。键为 name，对应的值为 <code>zhangsan</code>。</p>
+<h2 id="2-Hash（哈希）"><a href="#2-Hash（哈希）" class="headerlink" title="2.Hash（哈希）"></a>2.Hash（哈希）</h2><p>Redis hash 是一个 string 类型的 field 和 value 的映射表，hash 特别适合用于存储对象。</p>
+<figure class="highlight node-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs node-repl"><span class="hljs-meta prompt_">&gt;</span> <span class="language-javascript"><span class="hljs-variable constant_">HMSET</span> student name <span class="hljs-string">&quot;zhangsan&quot;</span> age <span class="hljs-string">&quot;35&quot;</span></span><br>&quot;OK&quot;<br><span class="hljs-meta prompt_">&gt;</span> <span class="language-javascript"><span class="hljs-variable constant_">HGET</span> student name</span><br>&quot;zhangsan&quot;<br><span class="hljs-meta prompt_">&gt;</span> <span class="language-javascript"><span class="hljs-variable constant_">HGET</span> student age</span><br>&quot;35&quot;<br></code></pre></td></tr></table></figure>
+
+<p>实例中我们使用了 Redis HMSET， HGET 命令，HMSET 设置了两个 field&#x3D;&gt;value 对， HGET 获取对应 field 对应的 value。</p>
+<h2 id="3-List（列表）"><a href="#3-List（列表）" class="headerlink" title="3.List（列表）"></a>3.List（列表）</h2><p>Redis 列表是简单的字符串列表，按照插入顺序排序。你可以添加一个元素到列表的头部（左边）或者尾部（右边）。</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs tcl">&gt; lpush students zhangsan<br>(integer) <span class="hljs-number">1</span><br>&gt; lpush students lisi<br>(integer) <span class="hljs-number">2</span><br>&gt; lpush students wangwu<br>(integer) <span class="hljs-number">3</span><br>&gt; <span class="hljs-keyword">lrange</span> students <span class="hljs-number">0</span> <span class="hljs-number">10</span><br><span class="hljs-number">1</span>) <span class="hljs-string">&quot;zhangsan&quot;</span><br><span class="hljs-number">2</span>) <span class="hljs-string">&quot;lisi&quot;</span><br><span class="hljs-number">3</span>) <span class="hljs-string">&quot;wangwu&quot;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>列表最多可存储 232 - 1 元素 (4294967295， 每个列表可存储40多亿)。</p>
+</blockquote>
+<h2 id="4-Set（集合）"><a href="#4-Set（集合）" class="headerlink" title="4.Set（集合）"></a>4.Set（集合）</h2><p>Redis的Set是string类型的无序集合。 集合是通过哈希表实现的，所以添加，删除，查找的复杂度都是O(1)。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash">&gt; sadd <span class="hljs-built_in">users</span> zhangsan<br>(<span class="hljs-built_in">integer</span>) 1<br>&gt; sadd <span class="hljs-built_in">users</span> lisi<br>(<span class="hljs-built_in">integer</span>) 1<br>&gt; sadd <span class="hljs-built_in">users</span> wangwu<br>(<span class="hljs-built_in">integer</span>) 1<br>&gt; sadd <span class="hljs-built_in">users</span> wangwu<br>(<span class="hljs-built_in">integer</span>) 0<br>&gt; smembers <span class="hljs-built_in">users</span><br>1) <span class="hljs-string">&quot;lisi&quot;</span><br>2) <span class="hljs-string">&quot;wangwu&quot;</span><br>3) <span class="hljs-string">&quot;zhangsan&quot;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：以上实例中 wangwu 添加了两次，但根据集合内元素的唯一性，第二次插入的元素将被忽略。 集合中最大的成员数为 232 - 1(4294967295， 每个集合可存储40多亿个成员)。</p>
+</blockquote>
+<h2 id="5-zset-sorted-set：有序集合"><a href="#5-zset-sorted-set：有序集合" class="headerlink" title="5.zset(sorted set：有序集合)"></a>5.zset(sorted set：有序集合)</h2><p>Redis zset 和 set 一样也是string类型元素的集合，且不允许重复的成员。 不同的是每个元素都会关联一个double类型的分数。redis正是通过分数来为集合中的成员进行从小到大的排序。 zset的成员是唯一的，但分数(score)却可以重复。</p>
+<figure class="highlight node-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs node-repl"><span class="hljs-meta prompt_">&gt;</span> <span class="language-javascript">zadd staffs <span class="hljs-number">0</span> zhangsan</span><br>(integer) 1<br><span class="hljs-meta prompt_">&gt;</span> <span class="language-javascript">zadd staffs <span class="hljs-number">0</span> lisi</span><br>(integer) 1<br><span class="hljs-meta prompt_">&gt;</span> <span class="language-javascript">zadd staffs <span class="hljs-number">0</span> wangwu</span><br>(integer) 1<br><span class="hljs-meta prompt_">&gt;</span> <span class="language-javascript">zadd staffs <span class="hljs-number">0</span> wangwu</span><br>(integer) 0<br><span class="hljs-meta prompt_">&gt;</span> <span class="language-javascript"><span class="hljs-variable constant_">ZRANGEBYSCORE</span> staffs <span class="hljs-number">0</span> <span class="hljs-number">10</span></span><br>1) &quot;lisi&quot;<br>2) &quot;wangwu&quot;<br>3) &quot;zhangsan&quot;<br></code></pre></td></tr></table></figure>
+
+<h1 id="四-Redis基础命令操作"><a href="#四-Redis基础命令操作" class="headerlink" title="四.Redis基础命令操作"></a>四.Redis基础命令操作</h1><p>Redis客户端的基本语法如下：</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gams"><span class="hljs-meta"><span class="hljs-keyword">$redis</span>-cli</span><br></code></pre></td></tr></table></figure>
+<p>要启动redis客户端，打开终端，输入命令Redis命令行：<code>redis-cli</code>。这将连接到本地服务器，现在就可以运行各种命令了。</p>
+<h3 id="1-连接操作相关的命令"><a href="#1-连接操作相关的命令" class="headerlink" title="1.连接操作相关的命令"></a>1.连接操作相关的命令</h3><ul>
+<li>quit：关闭连接（connection）</li>
+<li>auth：简单密码认证</li>
+</ul>
+<h3 id="2-对value操作的命令"><a href="#2-对value操作的命令" class="headerlink" title="2.对value操作的命令"></a>2.对value操作的命令</h3><ul>
+<li>exists(key)：确认一个key是否存在</li>
+<li>del(key)：删除一个key</li>
+<li>type(key)：返回值的类型</li>
+<li>keys(pattern)：返回满足给定pattern的所有key</li>
+<li>randomkey：随机返回key空间的一个key</li>
+<li>rename(oldname, newname)：将key由oldname重命名为newname，若newname存在则删除newname表示的key</li>
+<li>dbsize：返回当前数据库中key的数目</li>
+<li>expire：设定一个key的活动时间（s）</li>
+<li>ttl：获得一个key的活动时间</li>
+<li>select(index)：按索引查询</li>
+<li>move(key, dbindex)：将当前数据库中的key转移到有dbindex索引的数据库</li>
+<li>flushdb：删除当前选择数据库中的所有key</li>
+<li>flushall：删除所有数据库中的所有key</li>
+</ul>
+<h3 id="3-对String操作的命令"><a href="#3-对String操作的命令" class="headerlink" title="3.对String操作的命令"></a>3.对String操作的命令</h3><ul>
+<li>set(key, value)：给数据库中名称为key的string赋予值value</li>
+<li>get(key)：返回数据库中名称为key的string的value</li>
+<li>getset(key， value)：给名称为key的string赋予上一次的value</li>
+<li>mget(key1, key2,…, key N)：返回库中多个string（它们的名称为key1，key2…）的value</li>
+<li>setnx(key, value)：如果不存在名称为key的string，则向库中添加string，名称为key，值为value</li>
+<li>setex(key, time, value)：向库中添加string（名称为key，值为value）同时，设定过期时间time</li>
+<li>mset(key1, value1, key2, value2,…key N, value N)：同时给多个string赋值，名称为key i的string赋值value i</li>
+<li>msetnx(key1, value1, key2, value2,…key N, value N)：如果所有名称为key i的string都不存在，则向库中添加string，名称key i赋值为value i</li>
+<li>incr(key)：名称为key的string增1操作</li>
+<li>incrby(key, integer)：名称为key的string增加integer</li>
+<li>decr(key)：名称为key的string减1操作</li>
+<li>decrby(key, integer)：名称为key的string减少integer</li>
+<li>append(key, value)：名称为key的string的值附加value</li>
+<li>substr(key, start, end)：返回名称为key的string的value的子串</li>
+</ul>
+<h3 id="4-对List操作的命令"><a href="#4-对List操作的命令" class="headerlink" title="4.对List操作的命令"></a>4.对List操作的命令</h3><ul>
+<li>rpush(key, value)：在名称为key的list尾添加一个值为value的元素</li>
+<li>lpush(key, value)：在名称为key的list头添加一个值为value的 元素</li>
+<li>llen(key)：返回名称为key的list的长度</li>
+<li>lrange(key, start, end)：返回名称为key的list中start至end之间的元素（下标从0开始，下同）</li>
+<li>ltrim(key, start, end)：截取名称为key的list，保留start至end之间的元素</li>
+<li>lindex(key, index)：返回名称为key的list中index位置的元素</li>
+<li>lset(key, index, value)：给名称为key的list中index位置的元素赋值为value</li>
+<li>lrem(key, count, value)：删除count个名称为key的list中值为value的元素。count为0，删除所有值为value的元素，count&gt;0从头至尾删除count个值为value的元素，count&lt;0从尾到头删除|count|个值为value的元素。 lpop(key)：返回并删除名称为key的list中的首元素 rpop(key)：返回并删除名称为key的list中的尾元素 blpop(key1, key2,… key N, timeout)：lpop命令的block版本。即当timeout为0时，若遇到名称为key i的list不存在或该list为空，则命令结束。如果timeout&gt;0，则遇到上述情况时，等待timeout秒，如果问题没有解决，则对keyi+1开始的list执行pop操作。</li>
+<li>brpop(key1, key2,… key N, timeout)：rpop的block版本。参考上一命令。</li>
+<li>rpoplpush(srckey, dstkey)：返回并删除名称为srckey的list的尾元素，并将该元素添加到名称为dstkey的list的头部</li>
+</ul>
+<h3 id="5-对Set操作的命令"><a href="#5-对Set操作的命令" class="headerlink" title="5.对Set操作的命令"></a>5.对Set操作的命令</h3><ul>
+<li>sadd(key, member)：向名称为key的set中添加元素member</li>
+<li>srem(key, member) ：删除名称为key的set中的元素member</li>
+<li>spop(key) ：随机返回并删除名称为key的set中一个元素</li>
+<li>smove(srckey, dstkey, member) ：将member元素从名称为srckey的集合移到名称为dstkey的集合</li>
+<li>scard(key) ：返回名称为key的set的基数</li>
+<li>sismember(key, member) ：测试member是否是名称为key的set的元素</li>
+<li>sinter(key1, key2,…key N) ：求交集</li>
+<li>sinterstore(dstkey, key1, key2,…key N) ：求交集并将交集保存到dstkey的集合</li>
+<li>sunion(key1, key2,…key N) ：求并集</li>
+<li>sunionstore(dstkey, key1, key2,…key N) ：求并集并将并集保存到dstkey的集合</li>
+<li>sdiff(key1, key2,…key N) ：求差集</li>
+<li>sdiffstore(dstkey, key1, key2,…key N) ：求差集并将差集保存到dstkey的集合</li>
+<li>smembers(key) ：返回名称为key的set的所有元素</li>
+<li>srandmember(key) ：随机返回名称为key的set的一个元素</li>
+</ul>
+<h3 id="6-对zset（sorted-set）操作的命令"><a href="#6-对zset（sorted-set）操作的命令" class="headerlink" title="6.对zset（sorted set）操作的命令"></a>6.对zset（sorted set）操作的命令</h3><ul>
+<li>zadd(key, score, member)：向名称为key的zset中添加元素member，score用于排序。如果该元素已经存在，则根据score更新该元素的顺序。</li>
+<li>zrem(key, member) ：删除名称为key的zset中的元素member</li>
+<li>zincrby(key, increment, member) ：如果在名称为key的zset中已经存在元素member，则该元素的score增加increment；否则向集合中添加该元素，其score的值为increment</li>
+<li>zrank(key, member) ：返回名称为key的zset（元素已按score从小到大排序）中member元素的rank（即index，从0开始），若没有member元素，返回“nil”</li>
+<li>zrevrank(key, member) ：返回名称为key的zset（元素已按score从大到小排序）中member元素的rank（即index，从0开始），若没有member元素，返回“nil”</li>
+<li>zrange(key, start, end)：返回名称为key的zset（元素已按score从小到大排序）中的index从start到end的所有元素</li>
+<li>zrevrange(key, start, end)：返回名称为key的zset（元素已按score从大到小排序）中的index从start到end的所有元素</li>
+<li>zrangebyscore(key, min, max)：返回名称为key的zset中score &gt;&#x3D; min且score &lt;&#x3D; max的所有元素 zcard(key)：返回名称为key的zset的基数 zscore(key, element)：返回名称为key的zset中元素element的score zremrangebyrank(key, min, max)：删除名称为key的zset中rank &gt;&#x3D; min且rank &lt;&#x3D; max的所有元素 zremrangebyscore(key, min, max) ：删除名称为key的zset中score &gt;&#x3D; min且score &lt;&#x3D; max的所有元素</li>
+<li>zunionstore &#x2F; zinterstore(dstkeyN, key1,…,keyN, WEIGHTS w1,…wN, AGGREGATE SUM|MIN|MAX)：对N个zset求并集和交集，并将最后的集合保存在dstkeyN中。对于集合中每一个元素的score，在进行AGGREGATE运算前，都要乘以对于的WEIGHT参数。如果没有提供WEIGHT，默认为1。默认的AGGREGATE是SUM，即结果集合中元素的score是所有集合对应元素进行SUM运算的值，而MIN和MAX是指，结果集合中元素的score是所有集合对应元素中最小值和最大值。</li>
+</ul>
+<h3 id="7-对Hash操作的命令"><a href="#7-对Hash操作的命令" class="headerlink" title="7.对Hash操作的命令"></a>7.对Hash操作的命令</h3><ul>
+<li>hset(key, field, value)：向名称为key的hash中添加元素field&lt;—&gt;value</li>
+<li>hget(key, field)：返回名称为key的hash中field对应的value</li>
+<li>hmget(key, field1, …,field N)：返回名称为key的hash中field i对应的value</li>
+<li>hmset(key, field1, value1,…,field N, value N)：向名称为key的hash中添加元素field i&lt;—&gt;value i</li>
+<li>hincrby(key, field, integer)：将名称为key的hash中field的value增加integer</li>
+<li>hexists(key, field)：名称为key的hash中是否存在键为field的域</li>
+<li>hdel(key, field)：删除名称为key的hash中键为field的域</li>
+<li>hlen(key)：返回名称为key的hash中元素个数</li>
+<li>hkeys(key)：返回名称为key的hash中所有键</li>
+<li>hvals(key)：返回名称为key的hash中所有键对应的value</li>
+<li>hgetall(key)：返回名称为key的hash中所有的键（field）及其对应的value</li>
+</ul>
+<h3 id="8-持久化"><a href="#8-持久化" class="headerlink" title="8.持久化"></a>8.持久化</h3><ul>
+<li>save：将数据同步保存到磁盘</li>
+<li>bgsave：将数据异步保存到磁盘</li>
+<li>lastsave：返回上次成功将数据保存到磁盘的Unix时戳</li>
+<li>shundown：将数据同步保存到磁盘，然后关闭服务</li>
+</ul>
+<h3 id="9-远程服务控制"><a href="#9-远程服务控制" class="headerlink" title="9.远程服务控制"></a>9.远程服务控制</h3><ul>
+<li>info：提供服务器的信息和统计</li>
+<li>monitor：实时转储收到的请求</li>
+<li>slaveof：改变复制策略设置</li>
+<li>config：在运行时配置Redis服务器</li>
+</ul>
+<h1 id="五-Redis可视化工具"><a href="#五-Redis可视化工具" class="headerlink" title="五.Redis可视化工具"></a>五.Redis可视化工具</h1><h3 id="RedisDesktopManager-收费"><a href="#RedisDesktopManager-收费" class="headerlink" title="RedisDesktopManager(收费)"></a>RedisDesktopManager(收费)</h3><p><a target="_blank" rel="noopener" href="https://github.com/uglide/RedisDesktopManager">RedisDesktopManager</a> 实用比较广泛的可视化工具，旧版免费使用，最新版需要收费。一般开发上十万级别数据就会卡顿延迟。界面比较简洁，功能很全。</p>
+<h3 id="AnotherRedisDesktopManager-免费"><a href="#AnotherRedisDesktopManager-免费" class="headerlink" title="AnotherRedisDesktopManager(免费)"></a>AnotherRedisDesktopManager(免费)</h3><p><a target="_blank" rel="noopener" href="https://github.com/qishibo/AnotherRedisDesktopManager">AnotherRedisDesktopManager</a> 一款比较稳定简洁的redis UI工具， <strong>百万级数据加载不卡顿，无延迟。</strong> </p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">数据库</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>非关系型数据库Redis简介</div>
+      <div>http://example.com/2021/06/10/非关系型数据库Redis简介/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年6月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/07/05/Flutter%E4%B9%8B%E4%B8%BB%E9%A2%98%E5%92%8C%E5%A4%9A%E8%AF%AD%E8%A8%80/" title="Flutter之主题和多语言">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Flutter之主题和多语言</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/06/09/%E5%A6%82%E4%BD%95%E5%81%9A%E5%A5%BDCodeReview%E4%BB%A3%E7%A0%81%E5%AE%A1%E6%9F%A5/" title="如何做好CodeReview代码审查">
+                        <span class="hidden-mobile">如何做好CodeReview代码审查</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

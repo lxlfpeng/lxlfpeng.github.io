@@ -1,0 +1,866 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.AOP概念AOP 和 OOP的区别:面向对象的特点是继承、多态和封装。为了符合单一职责的原则，OOP将功能分散到不同的对象中去。让不同的类设计不同的方法，这样代码就分散到一个个的类中。可以降低代码的复杂程度，提高类的复用性。但是OOP在分散代码的同时，也增加了代码的重复性。例如，我们在两个类中，可能都需要在每个方法中做日志。按照OOP的设计方法，我们就必须在两个类的方法中都加入记录日志的内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Aop技术提升Android开发效率">
+<meta property="og:url" content="http://example.com/2017/01/25/%E4%BD%BF%E7%94%A8Aop%E6%8A%80%E6%9C%AF%E6%8F%90%E5%8D%87Android%E5%BC%80%E5%8F%91%E6%95%88%E7%8E%87/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.AOP概念AOP 和 OOP的区别:面向对象的特点是继承、多态和封装。为了符合单一职责的原则，OOP将功能分散到不同的对象中去。让不同的类设计不同的方法，这样代码就分散到一个个的类中。可以降低代码的复杂程度，提高类的复用性。但是OOP在分散代码的同时，也增加了代码的重复性。例如，我们在两个类中，可能都需要在每个方法中做日志。按照OOP的设计方法，我们就必须在两个类的方法中都加入记录日志的内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/93cc8d85afdde4cf18bce704e340fcb6.webp">
+<meta property="article:published_time" content="2017-01-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:13:35.509Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/93cc8d85afdde4cf18bce704e340fcb6.webp">
+  
+  
+  
+  <title>使用Aop技术提升Android开发效率 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="使用Aop技术提升Android开发效率"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2017-01-25 00:00" pubdate>
+          2017年1月25日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          32 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">使用Aop技术提升Android开发效率</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-AOP概念"><a href="#一-AOP概念" class="headerlink" title="一.AOP概念"></a>一.AOP概念</h1><p><strong>AOP</strong> 和 <strong>OOP</strong>的区别:<br>面向对象的特点是<code>继承</code>、<code>多态</code>和<code>封装</code>。为了符合单一职责的原则，OOP将功能分散到不同的<code>对象</code>中去。让不同的类设计不同的方法，这样代码就分散到一个个的类中。可以降低代码的复杂程度，提高类的复用性。<br>但是OOP在分散代码的同时，也增加了代码的<code>重复性</code>。例如，我们在两个类中，可能都需要在每个方法中做日志。按照OOP的设计方法，我们就必须在两个类的方法中都加入记录日志的内容。也许他们是完全相同的，但是因为OOP的设计让类与类之间无法联系，而不能将这些重复的代码统一起来。然而AOP就是为了解决这类问题而产生的，它是在运行时动态地将代码切入到类的指定方法、指定位置上的编程思想。<br>AOP只是一种<code>思想</code>的统称，实现这种思想的方法有挺多。AOP通过<code>预编译方式</code>和<code>运行期动态代理</code>来实现程序功能的统一维护的一种技术。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，提高开发效率。<br><strong>总结</strong>性的来说:AOP是一种：可以在不改变原来代码的基础上，通过“动态注入”代码，来改变原来执行结果的技术。</p>
+<h1 id="二-AOP主要使用场景"><a href="#二-AOP主要使用场景" class="headerlink" title="二.AOP主要使用场景"></a>二.AOP主要使用场景</h1><p>有这样一段代码:</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doSomeWork</span>()</span> &#123;<br>       <span class="hljs-built_in">long</span> startTime = System.currentTimeMillis();<br>       <span class="hljs-comment">//执行要做的事</span><br>       <span class="hljs-built_in">long</span> endTime = System.currentTimeMillis();<br>       <span class="hljs-comment">//记录该方法运行的时间</span><br>       <span class="hljs-built_in">long</span> duration = endTime - startTime;<br>   &#125;<br>   <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doSomeWorkTwo</span>()</span> &#123;<br>       <span class="hljs-built_in">long</span> startTime = System.currentTimeMillis();<br>       <span class="hljs-comment">//执行要做的事</span><br>       <span class="hljs-built_in">long</span> endTime = System.currentTimeMillis();<br>       <span class="hljs-comment">//记录该方法运行的时间</span><br>       <span class="hljs-built_in">long</span> duration = endTime - startTime;<br>   &#125;<br></code></pre></td></tr></table></figure>
+<p>doSomeWork()和doSomeWorkTwo()里面都要记录方法执行时间的代码，如果在两个方法中都写上记录时长的代码，不仅违背了单一职责的规则，而且使得代码非常的冗余。所以我们就可以使用AOP在这两个方法中动态的加入时间统计的代码。<br>AOP主要使用场景包括:</p>
+<ul>
+<li>数据统计</li>
+<li>日志记录</li>
+<li>用户行为统计</li>
+<li>应用性能统计</li>
+<li>数据校验</li>
+<li>行为拦截</li>
+<li>无侵入的在宿主中插入一些代码，</li>
+<li>做日志埋点</li>
+<li>性能监控</li>
+<li>动态权限控制</li>
+<li>代码调试<blockquote>
+<p>AOP是一种编程范式，与语言无关，是一种程序设计思想。</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="三-Java中实现AOP的方法"><a href="#三-Java中实现AOP的方法" class="headerlink" title="三.Java中实现AOP的方法"></a>三.Java中实现AOP的方法</h1><p>AOP仅仅只是个概念，就像是oop一样，是一种编程的思想。在Java中实现Aop主要有如下几种方式。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用时机</th>
+<th>操作对象</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>APT</td>
+<td>编译期：还未编译为 class 时</td>
+<td>.java 文件</td>
+<td>1. 可以织入所有类；2. 编译期代理，减少运行时消耗</td>
+<td>1. 需要使用 apt 编译器编译；2. 需要手动拼接代理的代码（可以使用 Javapoet 弥补）；3. 生成大量代理类</td>
+</tr>
+<tr>
+<td>Javassist</td>
+<td>编译期：class 还未编译为 dex 时或运行时</td>
+<td>class 字节码</td>
+<td>1. 减少了生成子类的开销；2. 直接操作修改编译后的字节码，直接绕过了java编译器，所以可以做很多突破限制的事情，例如，跨 dex 引用，解决热修复中 CLASS_ISPREVERIFIED 问题。</td>
+<td>运行时加入切面逻辑，产生性能开销。</td>
+</tr>
+<tr>
+<td>AspectJ</td>
+<td>编译期、加载时</td>
+<td>.java 文件</td>
+<td>1.功能强大，除了 hook 之外，还可以为目标类添加变量，接口。也有抽象，继承等各种更高级的玩法。2.和Java语言无缝衔接的面向切面的编程的扩展工具（可用于Android）。</td>
+<td>1. 不够轻量级；2. 定义的切点依赖编程语言，无法兼容Lambda语法；3. 无法织入第三方库；4. 会有一些兼容性问题，如：D8、Gradle 4.x等</td>
+</tr>
+<tr>
+<td>动态代理</td>
+<td>运行时</td>
+<td>-</td>
+<td>在运行期，目标类加载后，为接口动态生成代理类，将切面织入到代理类中</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<p><strong>Java代码注入主要利用了Java的反射和注解机制，根据注解时机的不同，主要分为 编译时织入、 加载时织入、运行时织入。</strong></p>
+<h3 id="1-编译时织入。"><a href="#1-编译时织入。" class="headerlink" title="1. 编译时织入。"></a>1. 编译时织入。</h3><p>编译时织入是指在java编译期，采用特殊的编译器，将切面织入到java类当中去。</p>
+<h3 id="2-类加载时织入-也属于编译时织入的一种-。"><a href="#2-类加载时织入-也属于编译时织入的一种-。" class="headerlink" title="2. 类加载时织入(也属于编译时织入的一种)。"></a>2. 类加载时织入(也属于编译时织入的一种)。</h3><p>类加载时织入指的是通过特殊的类加载器，在字节码加载到JVM时，织入切面。</p>
+<h3 id="3-运行时织入。"><a href="#3-运行时织入。" class="headerlink" title="3. 运行时织入。"></a>3. 运行时织入。</h3><p>运行时织入指的是使用动态代理等方式在运行的时候进行织入（这可以说并不是真正的代码注入）。</p>
+<h1 id="四-APT-annotation-processing-tool-技术"><a href="#四-APT-annotation-processing-tool-技术" class="headerlink" title="四.APT(annotation processing tool)技术"></a>四.APT(annotation processing tool)技术</h1><p>APT是一种处理编译器注解的工具，确切的说它是javac的一个工具，APT在代码编译期解析注解，并且生成新的 Java 文件，减少手动的代码输入。<br>原理：利用apt，可以找到源代中的注解，并根据注解做相应的处理，生成额外的class文件或其他文件。使用APT不会影响性能，只是影响项目构建的速度<br>这里我们说一下Android中使用apt的步骤，Android中开发自定义的apt学会两个库及一个类基本就足够了。</p>
+<ul>
+<li><a href="https://link.juejin.im/?target=https://github.com/square/javapoet">JavaPoet API</a> 这个库的主要作用就是帮助我们通过类调用的形式来生成代码，简单理解就是利用这个库可以生成额外的Java代码。具体的API可以去github上看下。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/google/auto">AutoService</a> 这个库是Google开发的，主要的作用是注解 processor 类，并对其生成 META-INF 的配置信息。可以理解使用这个库之后编译的时候IDE会编译我们的Annotation处理器，只需要在自定义的Processor类上添加注释 <code>@AutoService(Processor.class)</code>。</li>
+</ul>
+<p>Processor类，我们自定义的Annotation处理器都需要实现该接口，Java为我们提供了一个抽象类实现了该接口的部分功能，我们自定义Annotation处理器的时候大部分只需要继承AbstractProcessor这个抽象类就行了。</p>
+<h3 id="1-JavaPoet技术实现AOP"><a href="#1-JavaPoet技术实现AOP" class="headerlink" title="1.JavaPoet技术实现AOP"></a>1.JavaPoet技术实现AOP</h3><p><code>作用:</code>JavaPoet项目可以动态的生成Java文件，使用注解的时候假如需要生成新的Java文件就可以通过这个开源项目实现。<br><a target="_blank" rel="noopener" href="https://github.com/square/javapoet">JavaPoet</a></p>
+<ol>
+<li>导入依赖:<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">implementation</span> &#x27;com.squareup:javapoet:<span class="hljs-number">1</span>.<span class="hljs-number">8</span>.<span class="hljs-number">0</span>&#x27;<br></code></pre></td></tr></table></figure>
+也可以在开源项目处找到jar文件，下载下来，引入到项目中。<br><code>JavaPoet常用的类:</code></li>
+</ol>
+<ul>
+<li>MethodSpec 代表一个构造函数或方法声明。</li>
+<li>TypeSpec 代表一个类、借口或者枚举声明。</li>
+<li>FieldSpec 代表一个成员变量，一个字段声明。</li>
+<li>JavaFile 包含一个顶级类的Java文件。</li>
+</ul>
+<ol start="2">
+<li>生成一个简单的类:<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-type">ClassName</span> <span class="hljs-variable">activity</span> <span class="hljs-operator">=</span> ClassName.get(<span class="hljs-string">&quot;android.app&quot;</span>, <span class="hljs-string">&quot;Activity&quot;</span>);<br><br>        TypeSpec.<span class="hljs-type">Builder</span> <span class="hljs-variable">mainActivityBuilder</span> <span class="hljs-operator">=</span> TypeSpec.classBuilder(<span class="hljs-string">&quot;SecondActivity&quot;</span>)<br>                .addModifiers(Modifier.PUBLIC)<br>                .superclass(activity);<br><br>        <span class="hljs-type">ClassName</span> <span class="hljs-variable">override</span> <span class="hljs-operator">=</span> ClassName.get(<span class="hljs-string">&quot;java.lang&quot;</span>, <span class="hljs-string">&quot;Override&quot;</span>);<br><br>        <span class="hljs-type">ClassName</span> <span class="hljs-variable">bundle</span> <span class="hljs-operator">=</span> ClassName.get(<span class="hljs-string">&quot;android.os&quot;</span>, <span class="hljs-string">&quot;Bundle&quot;</span>);<br><br>        <span class="hljs-type">ClassName</span> <span class="hljs-variable">nullable</span> <span class="hljs-operator">=</span> ClassName.get(<span class="hljs-string">&quot;android.support.annotation&quot;</span>, <span class="hljs-string">&quot;Nullable&quot;</span>);<br><br>        <span class="hljs-type">ParameterSpec</span> <span class="hljs-variable">savedInstanceState</span> <span class="hljs-operator">=</span> ParameterSpec.builder(bundle, <span class="hljs-string">&quot;savedInstanceState&quot;</span>)<br>                .addAnnotation(nullable)<br>                .build();<br><br>        <span class="hljs-type">MethodSpec</span> <span class="hljs-variable">onCreate</span> <span class="hljs-operator">=</span> MethodSpec.methodBuilder(<span class="hljs-string">&quot;onCreate&quot;</span>)<br>                .addAnnotation(override)<br>                .addModifiers(Modifier.PROTECTED)<br>                .addParameter(savedInstanceState)<br>                .addStatement(<span class="hljs-string">&quot;super.onCreate(savedInstanceState)&quot;</span>)<br>                .addStatement(<span class="hljs-string">&quot;setContentView(R.layout.activity_main)&quot;</span>)<br>                .build();<br><br>        <span class="hljs-type">TypeSpec</span> <span class="hljs-variable">mainActivity</span> <span class="hljs-operator">=</span> mainActivityBuilder.addMethod(onCreate)<br>                .build();<br><br>        <span class="hljs-type">JavaFile</span> <span class="hljs-variable">javaFile</span> <span class="hljs-operator">=</span> JavaFile.builder(<span class="hljs-string">&quot;com.test&quot;</span>, mainActivity).build();<br>        <span class="hljs-type">File</span> <span class="hljs-variable">outputFile</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>(<span class="hljs-string">&quot;src/&quot;</span>); <span class="hljs-comment">//输出文件</span><br><br>        <span class="hljs-keyword">try</span> &#123;<br>            javaFile.writeTo(outputFile);<br>            javaFile.writeTo(System.out);<br>        &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="五-Javassit技术"><a href="#五-Javassit技术" class="headerlink" title="五.Javassit技术"></a>五.Javassit技术</h1><p><a target="_blank" rel="noopener" href="https://github.com/jboss-javassist/javassist">Javassit</a><br>Java 字节码以二进制的形式存储在 .class 文件中，每一个 .class 文件包含一个 Java 类或接口。Javaassist 就是一个用来 处理 Java 字节码的类库。它可以在一个已经编译好的类中添加新的方法，或者是修改已有的方法，并且不需要对字节码方面有深入的了解。<br>Javassist 可以绕过编译，直接操作字节码，从而实现代码注入。所以使用 Javassist 的时机就是在构建工具 Gradle 将源 文件编译成 .class 文件之后，在将 .class 打包成 .dex 文件之前。</p>
+<h1 id="六-AspectJ技术"><a href="#六-AspectJ技术" class="headerlink" title="六.AspectJ技术"></a>六.AspectJ技术</h1><p><code>AspectJ</code>实际上是对AOP编程思想的一个实践，AOP虽然是一种思想，但就好像OOP中的Java一样，一些先行者也开发了一套语言来支持AOP。目前用得比较火的就是AspectJ了，它是一种几乎和Java完全一样的语言，而且完全兼容Java。当然，除了使用AspectJ特殊的语言外，AspectJ还支持原生的Java，只要加上对应的AspectJ注解就好。所以，使用AspectJ有两种方法： </p>
+<ul>
+<li>完全使用AspectJ的语言。这语言一点也不难，和Java几乎一样，也能在AspectJ中调用Java的任何类库。AspectJ只是多了一些关键词罢了。 </li>
+<li>或者使用纯Java语言开发，然后使用AspectJ注解，简称@AspectJ。</li>
+</ul>
+<h3 id="1-Android项目引入AspectJ"><a href="#1-Android项目引入AspectJ" class="headerlink" title="1.Android项目引入AspectJ"></a>1.Android项目引入AspectJ</h3><p>如果要在Android Studio中使用AspectJ，需要在项目的build里面进行一大堆配置，为了方便快捷，推荐使用沪江的<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=https://github.com/HujiangTechnology/gradle_plugin_android_aspectjx">gradle_plugin_android_aspectjx</a>。</p>
+<h5 id="1-步骤一"><a href="#1-步骤一" class="headerlink" title="(1.)步骤一:"></a>(1.)步骤一:</h5><p>在project级别的build.gradle中添加:</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">buildscript</span> &#123;<br>  ...<br>    <span class="hljs-keyword">dependencies</span> &#123;<br>     ...<br>        <span class="hljs-keyword">classpath</span> <span class="hljs-string">&#x27;com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.4&#x27;</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="2-步骤二"><a href="#2-步骤二" class="headerlink" title="(2.)步骤二:"></a>(2.)步骤二:</h5><p>在module级别的build.gradle中添加:</p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sqf"><span class="hljs-built_in">apply</span> plugin: <span class="hljs-string">&#x27;android-aspectjx&#x27;</span><br><span class="hljs-comment">//或者这样也可以</span><br><span class="hljs-built_in">apply</span> plugin: <span class="hljs-string">&#x27;com.hujiang.android-aspectjx&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-AspectJ代码编写"><a href="#2-AspectJ代码编写" class="headerlink" title="2.AspectJ代码编写"></a>2.AspectJ代码编写</h3><h5 id="1-步骤一-1"><a href="#1-步骤一-1" class="headerlink" title="(1.)步骤一:"></a>(1.)步骤一:</h5><p>创建一个FirstActivity ，只有基本的生命周期方法。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs scala">public <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FirstActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AppCompatActivity</span> </span>&#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> void onCreate(<span class="hljs-type">Bundle</span> savedInstanceState) &#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState);<br>        setContentView(<span class="hljs-type">R</span>.layout.activity_first);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> void onStart() &#123;<br>        <span class="hljs-keyword">super</span>.onStart();<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> void onResume() &#123;<br>        <span class="hljs-keyword">super</span>.onResume();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="2-步骤二-1"><a href="#2-步骤二-1" class="headerlink" title="(2.)步骤二:"></a>(2.)步骤二:</h5><p>编写一个AspectJ类。这个类要做的事情是告诉ACJ编译器，要在MainActivity中的每个方法前面打印一行log，输出当前执行的是哪个方法，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Aspect</span><span class="hljs-comment">// 告诉ACJ编译器这是个AspectJ类</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TraceAspect</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">TAG</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;TraceAspect&quot;</span>;<br><br>    <span class="hljs-meta">@Pointcut(&quot;execution(* com.yousheng.aspectjdemo.FirstActivity.**(..))&quot;)</span><span class="hljs-comment">// 注意*号后面必须有空格</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">executeAspectJ</span><span class="hljs-params">()</span> &#123;<br><br>    &#125;<br><br>    <span class="hljs-meta">@Before(&quot;executeAspectJ()&quot;)</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">beforeAspectJ</span><span class="hljs-params">(JoinPoint joinPoint)</span> <span class="hljs-keyword">throws</span> Throwable &#123;<br>        Log.d(TAG, <span class="hljs-string">&quot;injected -&gt; &quot;</span> + joinPoint.toShortString());<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<h5 id="3-步骤三"><a href="#3-步骤三" class="headerlink" title="(3.)步骤三:"></a>(3.)步骤三:</h5><p>查看这段代码执行的结果</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs isbl"><span class="hljs-variable">injected</span> -&gt; <span class="hljs-function"><span class="hljs-title">execution</span>(<span class="hljs-variable">FirstActivity.onCreate</span>(..))</span><br><span class="hljs-variable">injected</span> -&gt; <span class="hljs-function"><span class="hljs-title">execution</span>(<span class="hljs-variable">FirstActivity.onStart</span>())</span><br><span class="hljs-variable">injected</span> -&gt; <span class="hljs-function"><span class="hljs-title">execution</span>(<span class="hljs-variable">FirstActivity.onResume</span>())</span><br></code></pre></td></tr></table></figure>
+<p><strong>分析:</strong> 通过上面例子我们可以看到，我们在FirstActivity 的onCreate()，onStart()，onResume()中并未写任何代码，但是在执行这些方法的时候却输出了Log信息。这说明我们的切面成功的进行了切入。<br>而且在上面引出了<code>@Aspect</code>，<code>Join Points</code>，<code>@Pointcut</code>， <code>@Around</code>这样的概念， 下面我们分别对这些进行解释。</p>
+<ol>
+<li><p><strong>@Aspect</strong> 修饰一个类，作用是把当前类标识为一个切面供容器读取，切面是切入点和通知的集合。</p>
+</li>
+<li><p><strong>Join Points</strong> 程序运行执行点，比如上面的execution就是其中的一种类型，还有Call类型等 ，Join Points可以看做是程序运行时的一个<code>执行点</code>，比如：一个函数的调用可以看做是个Join Points，相当于代码切入点。但在AspectJ中，只有下面几种执行点是认为是Join Points</p>
+<table>
+<thead>
+<tr>
+<th>Join Points</th>
+<th>说明</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>method call</td>
+<td>函数调用</td>
+<td>比如调用Log.e()，这是一个个Join Point</td>
+</tr>
+<tr>
+<td>method execution</td>
+<td>函数执行</td>
+<td>比如Log.e()的执行内部，是一处Join Points。注意这里是函数内部</td>
+</tr>
+<tr>
+<td>constructor call</td>
+<td>构造函数调用</td>
+<td>和method call 类似</td>
+</tr>
+<tr>
+<td>constructor execution</td>
+<td>构造函数执行</td>
+<td>和method execution 类似</td>
+</tr>
+<tr>
+<td>field get</td>
+<td>获取某个变量</td>
+<td>比如读取DemoActivity.debug成员</td>
+</tr>
+<tr>
+<td>field set</td>
+<td>设置某个变量</td>
+<td>比如设置DemoActivity.debug成员</td>
+</tr>
+<tr>
+<td>pre-initialization</td>
+<td>Object在构造函数中做的一些工作。</td>
+<td>-</td>
+</tr>
+<tr>
+<td>initialization</td>
+<td>Object在构造函数中做的工作。</td>
+<td>-</td>
+</tr>
+<tr>
+<td>static initialization</td>
+<td>类初始化</td>
+<td>比如类的static{}</td>
+</tr>
+<tr>
+<td>handler</td>
+<td>异常处理</td>
+<td>比如try catch 中，对应catch内的执行</td>
+</tr>
+<tr>
+<td>advice execution</td>
+<td>这个是AspectJ 的内容</td>
+<td>-</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>Pointcut</strong> 选出我们需要的Join Points，是指那些通过使用一些特定的表达式过滤出来的想要切入Advice的连接点。如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Pointcut(&quot;execution(@com.yousheng.aspectjdemo.SingleClick * *(..))&quot;)</span><span class="hljs-comment">// 切点表达式</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">dataAccessOperation</span><span class="hljs-params">()</span> &#123;&#125; <span class="hljs-comment">// 切点前面的这个方法必须无返回值.</span><br></code></pre></td></tr></table></figure>
+<p><code>execution</code>指的是类型，也就是以方法执行时为切点，触发Aspect类。而execution里面的字符串是触发条件，也是具体的切点。<code>com.yousheng.aspectjdemo.annotation.SingleClick</code> 指的是包名+对应的类名，第一个* 指的是返回值为任意类型，第二个*指的是方法名为任意类型或者是构造器的话使用new代替，(..)指的是任意类型的参数，参数用的是正则匹配语法。</p>
+</li>
+</ol>
+<p><strong>Join Points和Pointcut的区别</strong><br>Join point就是菜单上的选项，Pointcut就是你选的菜。Join point 你只是你切面中可以切的那些方法，一旦你选择了要切哪些方法，那就是Pointcut。<br>也就是说，所有在你程序中可以被调用的方法都是Join point. 使用Pointcut 表达式，那些匹配的方法，才叫Pointcut。所以你根本不用关心Join point。比如你有10个方法，你只想切2个方法，那么那10个方法就是Join point， 2个方法就是Pointcut。<br>所有的方法都可以认为是 joinpoint， 但是我们并不希望在所有的方法上都添加 Advice， 而 pointcut 的作用就是提供一组规则(使用 AspectJ pointcut expression language 来描述) 来匹配joinpoint， 给满足规则的 joinpoint 添加 Advice.</p>
+<ul>
+<li><strong>Advice</strong> 就是我们插入的代码可以以何种方式插入，常见的有Before 还有 After、Around。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Before</td>
+<td>在方法执行之前执行要插入的代码</td>
+</tr>
+<tr>
+<td>After</td>
+<td>在方法执行之后执行要插入的代码</td>
+</tr>
+<tr>
+<td>Around</td>
+<td>在方法前后各插入代码，他包含了 Before和 After 的全部功能</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Weaving</strong> 编织：主要是在编译期使用AJC将切面的代码注入到目标中， 并生成出代码混合过的.class的过程.</li>
+</ul>
+<p>execution()是最常用的切点函数，其语法如下所示:<br>例如下面这段语法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Around(“execution(* *..MainActivity+.on*(..))&quot;)</span><br></code></pre></td></tr></table></figure>
+<p>整个表达式可以分为五个部分：</p>
+<ul>
+<li>execution()是表达式主体</li>
+<li>第一个<em>号代表返回类型，</em>号代表所有的类型。</li>
+<li>包名 表示需要拦截的包名，这里使用*.代表匹配所有的包名。</li>
+<li>第二个*号表示类名，后面跟.MainActivity是指具体的类名叫MainActivity。</li>
+<li><em>(..) 最后这个星号表示方法名，+.代表具体的函数名，</em>号通配符，包括括弧号里面表示方法的参数，两个dot代表任意参数。</li>
+</ul>
+<p>结合注解的例子:<br><strong>第一步:</strong></p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Retention</span>(RetentionPolicy.CLASS)<br><span class="hljs-variable">@Target</span>(ElementType.METHOD)<br>public <span class="hljs-variable">@interface</span> Transaction &#123;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>第二步:</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Aspect</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TransactionAspect</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">TAG</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;TransactionAspect&quot;</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">TRANSACTION_METHOD</span> <span class="hljs-operator">=</span><br>            <span class="hljs-string">&quot;execution(@com.goach.myaspectj.annotation.Transaction * *(..))&quot;</span>;<br>    <span class="hljs-meta">@Pointcut(TRANSACTION_METHOD)</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">transactionMethod</span><span class="hljs-params">()</span>&#123;&#125;<br><br>    <span class="hljs-meta">@Around(&quot;transactionMethod()&quot;)</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addTransaction</span><span class="hljs-params">(ProceedingJoinPoint joinPoint)</span>&#123;<br>        Log.d(TAG,<span class="hljs-string">&quot;开始事务....&quot;</span>);<br>        <span class="hljs-keyword">try</span> &#123;<br>            joinPoint.proceed();<span class="hljs-comment">//执行原方法</span><br>        &#125; <span class="hljs-keyword">catch</span> (Throwable throwable) &#123;<br>            throwable.printStackTrace();<br>        &#125;<br>        Log.d(TAG,<span class="hljs-string">&quot;结束事务....&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>第三步:</strong></p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">@<span class="hljs-keyword">Transaction</span>//加上注解<br><span class="hljs-built_in">public</span> <span class="hljs-type">void</span> hello(<span class="hljs-keyword">View</span> <span class="hljs-keyword">view</span>)&#123;<br>        <span class="hljs-keyword">Log</span>.d(TAG,&quot;hello aspectJ&quot;);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>执行结果 :</strong><br><img src="/images/93cc8d85afdde4cf18bce704e340fcb6.webp" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java">   <span class="hljs-meta">@Around(&quot;transactionMethod()&quot;)</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addTransaction</span><span class="hljs-params">(ProceedingJoinPoint joinPoint)</span>&#123;<br>         <span class="hljs-type">MethodSignature</span> <span class="hljs-variable">methodSignature</span> <span class="hljs-operator">=</span> (MethodSignature) point.getSignature();<br><span class="hljs-comment">// 拿到注解        </span><br><span class="hljs-type">BehaviorTrace</span> <span class="hljs-variable">behaviorTrace</span> <span class="hljs-operator">=</span> methodSignature.getMethod().getAnnotation(BehaviorTrace.class); <br><span class="hljs-comment">// 类名</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">className</span> <span class="hljs-operator">=</span> methodSignature.getDeclaringType().getSimpleName();<br>        <span class="hljs-comment">// 方法名</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">methodName</span> <span class="hljs-operator">=</span> methodSignature.getName();<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p>参考资料:<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/xinzhou201/article/details/81566653">AOP之AspectJ在Android中的应用</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qby_nianjun/article/details/79182346">AndroidStudio 配置 AspectJ 环境实现AOP</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/zhengchao1991/article/details/53391244">Spring 之AOP AspectJ切入点语法详解（最全面、最详细。）</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/baiqiantao/p/373ed2c28b94e268b82a0c18516f9348.html">AOP AspectJ 字节码 示例 Hugo MD</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/woshimalingyi/article/details/73252013">AOP之@AspectJ技术原理详解</a><br><a target="_blank" rel="noopener" href="http://linbinghe.com/2017/65db25bc.html">关于AspectJ，你需要知道的一切</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/gonjan-blog/p/6685611.html">java动态代理实现与原理详细分析</a><br><a target="_blank" rel="noopener" href="http://android9527.com/2018/10/20/2018-10-20-AOP%E6%8A%80%E6%9C%AF%E7%9A%84%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">AOP技术的几种实现方式</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/0799aa19ada1">一文读懂 AOP</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/tangZH/p/12343786.html">android的APT技术</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/7af58e8e3e18">Android APT快速教程</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903696900292621#heading-14">【Android】APT</a><br><a target="_blank" rel="noopener" href="https://www.bbsmax.com/A/A7zgNxWod4/">ARouter原理剖析及手动实现</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/857aea5b54a8">ARouter原理剖析及手动实现</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/89ac9a2513c4">Android APT工作原理（annotationProcessor）</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>使用Aop技术提升Android开发效率</div>
+      <div>http://example.com/2017/01/25/使用Aop技术提升Android开发效率/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2017年1月25日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2017/02/13/%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E5%BF%85%E7%9F%A5%E7%9A%84%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/" title="开发人员必知的网络基础知识总结">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">开发人员必知的网络基础知识总结</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2017/01/18/Android%E9%A2%9C%E8%89%B2%E9%80%8F%E6%98%8E%E5%BA%A6/" title="Android颜色透明度">
+                        <span class="hidden-mobile">Android颜色透明度</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

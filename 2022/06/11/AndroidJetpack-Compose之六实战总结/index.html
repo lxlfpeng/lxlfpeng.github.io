@@ -1,0 +1,711 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="官方推荐将 Composable 函数写在顶级函数，方便以后复用。 Compose配合ViewModel使用概述Compose中ViewModel的使用和Jetpack一致，通常我们构建页面的时候，如果一条数据多个布局都需要使用到的话我们只能在方法的形参中层层传递。但是这样明显是不合理的，会降低代码的可读性。使用ViewModel可以完美的解决这个问题，Compose中使用ViewModel的话需">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AndroidJetpack-Compose之六实战总结">
+<meta property="og:url" content="http://example.com/2022/06/11/AndroidJetpack-Compose%E4%B9%8B%E5%85%AD%E5%AE%9E%E6%88%98%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="官方推荐将 Composable 函数写在顶级函数，方便以后复用。 Compose配合ViewModel使用概述Compose中ViewModel的使用和Jetpack一致，通常我们构建页面的时候，如果一条数据多个布局都需要使用到的话我们只能在方法的形参中层层传递。但是这样明显是不合理的，会降低代码的可读性。使用ViewModel可以完美的解决这个问题，Compose中使用ViewModel的话需">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-06-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:27:46.303Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>AndroidJetpack-Compose之六实战总结 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="AndroidJetpack-Compose之六实战总结"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-06-11 00:00" pubdate>
+          2022年6月11日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          18 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">AndroidJetpack-Compose之六实战总结</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>官方推荐将 Composable 函数写在顶级函数，方便以后复用。</p>
+<h1 id="Compose配合ViewModel使用"><a href="#Compose配合ViewModel使用" class="headerlink" title="Compose配合ViewModel使用"></a>Compose配合ViewModel使用</h1><p>概述<br>Compose中ViewModel的使用和Jetpack一致，通常我们构建页面的时候，如果一条数据多个布局都需要使用到的话我们只能在方法的形参中层层传递。但是这样明显是不合理的，会降低代码的可读性。<br>使用ViewModel可以完美的解决这个问题，Compose中使用ViewModel的话需要引入lifecycle-viewmodel-compose库，获取ViewModel的方式需要用到扩展函数：viewModel()<br>多个@Composable修饰的函数里面使用viewModel()获取ViewModel可以获取到同一个ViewModel对象，这就是我们能解决问题的根本原因</p>
+<blockquote>
+<p>以上所说仅限于同一个导航页中。如果是在不同的导航页中，那么获取到的ViewModel是不同的对象，这一点跟我们不同Activity中获取不同ViewModel是一样的</p>
+</blockquote>
+<h1 id="数据流Flow"><a href="#数据流Flow" class="headerlink" title="数据流Flow"></a>数据流Flow</h1><p>概述<br>Compose可以在不导入依赖的情况下使用Flow，用法基本与相同。不过Compose中使用StateFlow不需要我们在协程中开启collect收集数据流，使用的时候直接使用Flow.collectAsState即可获取到StateFlow中的值进行展示。</p>
+<p>下面代码使用了MutableStateFlow实现了数据监听，当更新MutableStateFlow值的时候函数会被刷新，然后使用collectAsState即可获取到最新值进行展示。</p>
+<p>点击下面的按钮改变值，上面的按钮内容被改变展示效果</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">useStateFlow</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">var</span> repository = remember &#123;     Repository()    &#125;<br>    Column &#123;<br>        listItem(<br>            itemData = ItemData(<br>                title = <span class="hljs-string">&quot;点击更改StateFlow的值&quot;</span>,<br>                content = repository.stateFlow.collectAsState().value<span class="hljs-comment">//获取StateFlow中的值展示</span><br>            ), onClick = &#123;<br>            &#125;)<br>        changeUiWithState(repository)<br>    &#125;<br><br>&#125;<br><br><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">changeUiWithState</span><span class="hljs-params">(repository: <span class="hljs-type">Repository</span>)</span></span> &#123;<br>    listItem(itemData = ItemData(title = <span class="hljs-string">&quot;点击改变数据&quot;</span>), onClick = &#123;<br>        repository.increase()<span class="hljs-comment">//点击数值自增1</span><br>    &#125;)<br>&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Repository</span> &#123;<br>    <span class="hljs-keyword">val</span> stateFlow = MutableStateFlow(<span class="hljs-string">&quot;初始值0&quot;</span>)<br>    <span class="hljs-keyword">var</span> count = <span class="hljs-number">0</span><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">increase</span><span class="hljs-params">()</span></span>: <span class="hljs-built_in">Int</span> &#123;<br>        stateFlow.value = count.toString()<span class="hljs-comment">//更改StateFlow中的值</span><br>        <span class="hljs-keyword">return</span> count++<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="Hilt"><a href="#Hilt" class="headerlink" title="Hilt"></a>Hilt</h1><p>初学者可以将Hilt的学习延后，Hilt不是学习Compose的充要条件</p>
+<p>hilt的使用和传统开发基本一致，可以查看我的另一篇文章：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6967148539277213733">https://juejin.cn/post/6967148539277213733</a></p>
+<h1 id="Coil"><a href="#Coil" class="headerlink" title="Coil"></a>Coil</h1><p><a target="_blank" rel="noopener" href="https://coil-kt.github.io/coil/README-zh/">coil</a>是一个图片库，可以用来加载Compose中的远程图片</p>
+<h3 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h3><figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs clean"><span class="hljs-keyword">implementation</span> <span class="hljs-string">&quot;io.coil-kt:coil:1.4.0&quot;</span><br><span class="hljs-keyword">implementation</span> <span class="hljs-string">&quot;io.coil-kt:coil-compose:1.4.0&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="基础使用"><a href="#基础使用" class="headerlink" title="基础使用"></a>基础使用</h3><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">@Composable<br>fun useCoil<span class="hljs-params">()</span> &#123;<br>    val painter =<br>        rememberImagePainter<span class="hljs-params">(<span class="hljs-attr">data</span> = &quot;https://gimg2.baidu.com/image_search/<span class="hljs-attr">src</span>=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201501%2F27%2F20150127103509_KvXhU.jpeg&amp;<span class="hljs-attr">refer</span>=http%3A%2F%2Fb-ssl.duitang.com&amp;<span class="hljs-attr">app</span>=2002&amp;<span class="hljs-attr">size</span>=f9999,10000&amp;<span class="hljs-attr">q</span>=a80&amp;<span class="hljs-attr">n</span>=0&amp;<span class="hljs-attr">g</span>=0n&amp;<span class="hljs-attr">fmt</span>=jpeg?<span class="hljs-attr">sec</span>=1631501719&amp;<span class="hljs-attr">t</span>=9653a6a5bb4e29505b9b582c770b42ef&quot;,</span><br><span class="hljs-params">            <span class="hljs-attr">builder</span> = &#123;</span><br><span class="hljs-params">                crossfade(true)</span><br>            &#125;)<br>    Image<span class="hljs-params">(</span><br><span class="hljs-params">        <span class="hljs-attr">modifier</span> = Modifier</span><br><span class="hljs-params">            .size(300.dp)</span><br>            <span class="hljs-string">.clip</span><span class="hljs-params">(<span class="hljs-attr">shape</span> = RoundedCornerShape(20.dp)</span>),<br>        painter = painter,<br>        contentDescription = <span class="hljs-string">&quot;&quot;</span><br>    )<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="占位图"><a href="#占位图" class="headerlink" title="占位图"></a>占位图</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-built_in">Image</span>(painter = <span class="hljs-built_in">rememberImagePainter</span>(<br>        data = <span class="hljs-string">&quot;http://pic-bucket.ws.126.net/photo/0003/2021-11-16/GOTKEOOU00AJ0003NOS.jpg&quot;</span>,<br>        builder = &#123;<br>            <span class="hljs-comment">//占位图</span><br>            <span class="hljs-built_in">placeholder</span>(R<span class="hljs-selector-class">.mipmap</span>.ic_launcher)<br>        &#125;), contentDescription = null)<br></code></pre></td></tr></table></figure>
+
+<h3 id="transformations"><a href="#transformations" class="headerlink" title="transformations"></a>transformations</h3><h5 id="圆形图片"><a href="#圆形图片" class="headerlink" title="圆形图片"></a>圆形图片</h5><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">Image</span>(painter = <span class="hljs-built_in">rememberImagePainter</span>(<br>              data = <span class="hljs-string">&quot;http://pic-bucket.ws.126.net/photo/0003/2021-11-16/GOTKEOOU00AJ0003NOS.jpg&quot;</span>,<br>              builder = &#123;<br>              	  <span class="hljs-comment">//圆形图片</span><br>                  <span class="hljs-built_in">transformations</span>(<span class="hljs-built_in">CircleCropTransformation</span>())<br>              &#125;,<br>         ),<br>          contentDescription = null)<br></code></pre></td></tr></table></figure>
+
+<h5 id="圆角"><a href="#圆角" class="headerlink" title="圆角"></a>圆角</h5><p>圆角效果当然也可以使用Modifier.clip()来实现</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">Image</span>(painter = <span class="hljs-built_in">rememberImagePainter</span>(<br>              data = <span class="hljs-string">&quot;http://pic-bucket.ws.126.net/photo/0003/2021-11-16/GOTKEOOU00AJ0003NOS.jpg&quot;</span>,<br>              builder = &#123;<br>                  <span class="hljs-comment">//可以单独设置4个角的圆角度</span><br>                  <span class="hljs-built_in">transformations</span>(<span class="hljs-built_in">RoundedCornersTransformation</span>(<span class="hljs-number">50</span>f,<span class="hljs-number">50</span>f,<span class="hljs-number">30</span>f,<span class="hljs-number">30</span>f))<br>              &#125;,<br>         ), contentDescription = null)<br></code></pre></td></tr></table></figure>
+
+<h5 id="高斯模糊"><a href="#高斯模糊" class="headerlink" title="高斯模糊"></a>高斯模糊</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs stylus">val context = LocalContext<span class="hljs-selector-class">.current</span><br>    <span class="hljs-built_in">Image</span>(painter = <span class="hljs-built_in">rememberImagePainter</span>(<br>              data = <span class="hljs-string">&quot;http://pic-bucket.ws.126.net/photo/0003/2021-11-16/GOTKEOOU00AJ0003NOS.jpg&quot;</span>,<br>              builder = &#123;<br>              	  <span class="hljs-comment">//设置高斯模糊</span><br>              	  <span class="hljs-comment">//context 上下文对象</span><br>              	  <span class="hljs-comment">//10f 模糊的半径，越大越模糊 ，默认10f</span><br>              	  <span class="hljs-comment">//1f 图片缩放，默认1f</span><br>                  <span class="hljs-built_in">transformations</span>(<span class="hljs-built_in">BlurTransformation</span>(context,<span class="hljs-number">10</span>f,<span class="hljs-number">1</span>f))<br>              &#125;,<br>         ), contentDescription = null)<br></code></pre></td></tr></table></figure>
+
+<h3 id="Transitions"><a href="#Transitions" class="headerlink" title="Transitions"></a>Transitions</h3><h5 id="淡入淡出"><a href="#淡入淡出" class="headerlink" title="淡入淡出"></a>淡入淡出</h5><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">Image</span>(painter = <span class="hljs-built_in">rememberImagePainter</span>(<br>        data = <span class="hljs-string">&quot;http://pic-bucket.ws.126.net/photo/0003/2021-11-16/GOTKEOOU00AJ0003NOS.jpg&quot;</span>,<br>        builder = &#123;<br>           <span class="hljs-comment">//淡入淡出效果，可以传入true,默认动画持续时间是100毫秒</span><br>           <span class="hljs-comment">//crossfade(true)</span><br>           <span class="hljs-comment">//也可以直接传入动画时间</span><br>           <span class="hljs-built_in">crossfade</span>(<span class="hljs-number">1000</span>)<br>        &#125;,<br>    ), contentDescription = null)<br></code></pre></td></tr></table></figure>
+
+<h3 id="加载状态监听"><a href="#加载状态监听" class="headerlink" title="加载状态监听"></a>加载状态监听</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs stylus">val painter = <span class="hljs-built_in">rememberImagePainter</span>(data = <span class="hljs-string">&quot;http://pic-bucket.ws.126.net/photo/0003/2021-11-16/GOTKEOOU00AJ0003NOS.jpg&quot;</span>)<br>    <span class="hljs-comment">//图片加载状态</span><br>    <span class="hljs-built_in">when</span>(painter.state)&#123;<br>        is ImagePainter<span class="hljs-selector-class">.State</span><span class="hljs-selector-class">.Success</span> -&gt;&#123;<br>            Log<span class="hljs-selector-class">.i</span>(<span class="hljs-string">&quot;Coil&quot;</span>,<span class="hljs-string">&quot;图片加载完成&quot;</span>)<br>        &#125;<br>        is ImagePainter<span class="hljs-selector-class">.State</span><span class="hljs-selector-class">.Loading</span> -&gt;&#123;<br>            Log<span class="hljs-selector-class">.i</span>(<span class="hljs-string">&quot;Coil&quot;</span>,<span class="hljs-string">&quot;图片加载中....&quot;</span>)<br>        &#125;<br>        is ImagePainter<span class="hljs-selector-class">.State</span><span class="hljs-selector-class">.Error</span> -&gt;&#123;<br>            Log<span class="hljs-selector-class">.i</span>(<span class="hljs-string">&quot;Coil&quot;</span>,<span class="hljs-string">&quot;图片加载错误&quot;</span>)<br>        &#125;<br>    &#125;<br>    <span class="hljs-built_in">Image</span>(painter = painter, contentDescription = null)<br></code></pre></td></tr></table></figure>
+
+<h1 id="Compose动态内容"><a href="#Compose动态内容" class="headerlink" title="Compose动态内容"></a>Compose动态内容</h1><p>在可组合函数中可以使用 if 语句来确定是否要显示特定的界面元素,也可以可以使用循环创建界面元素。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">ListItem</span><span class="hljs-params">(items: <span class="hljs-type">List</span>&lt;<span class="hljs-type">Int</span>&gt;)</span></span> &#123;<br>    Column &#123;<br>        <span class="hljs-keyword">for</span> (item <span class="hljs-keyword">in</span> items) &#123;<br>            <span class="hljs-keyword">if</span>(item%<span class="hljs-number">2</span>==<span class="hljs-number">0</span>)&#123;<br>                Text(<span class="hljs-string">&quot;标题&quot;</span>)<br>            &#125;<span class="hljs-keyword">else</span>&#123;<br>                Text(<span class="hljs-string">&quot;内容&quot;</span>)<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="Compose-中使用livedata-、viewmodel、协程、获取context"><a href="#Compose-中使用livedata-、viewmodel、协程、获取context" class="headerlink" title="Compose 中使用livedata 、viewmodel、协程、获取context"></a>Compose 中使用livedata 、viewmodel、协程、获取context</h1><p>livedata转换成compose 的state，使用需要添加compose livedata的依赖</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">StatisticsPage</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">val</span> dataList <span class="hljs-keyword">by</span> viewModel.dataList.observeAsState(listOf())<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">//compose livedata相关<br>implementation <span class="hljs-string">&quot;androidx.compose.runtime:runtime:<span class="hljs-variable">$compose_version</span>&quot;</span><br>implementation <span class="hljs-string">&quot;androidx.compose.runtime:runtime-livedata:<span class="hljs-variable">$compose_version</span>&quot;</span><br></code></pre></td></tr></table></figure>
+<p>compose组件中获取context</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">StatisticsPage</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">val</span> context = LocalContext.current<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>compose组件中获取viewmodel</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">StatisticsPage</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">val</span> viewModel: StatisticsViewModel = viewModel()<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>compose 中使用协程</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">StatisticsPage</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">val</span> scope = rememberCoroutineScope()<br>    observeAsState函数是LiveData的扩展函数，将LiveData对象转化成State对象。<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="Compose重组最小范围"><a href="#Compose重组最小范围" class="headerlink" title="Compose重组最小范围"></a>Compose重组最小范围</h1><p>如下：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">ParentComponent</span><span class="hljs-params">(list: <span class="hljs-type">List</span>&lt;<span class="hljs-type">Data</span>&gt;)</span></span> &#123;<br>	Log.d(<span class="hljs-string">&quot;compose&quot;</span>, <span class="hljs-string">&quot;render parent&quot;</span>)<br>	ChildComponent(list) <br>&#125;<br><br><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">ChildComponent</span><span class="hljs-params">(list :<span class="hljs-type">List</span>&lt;<span class="hljs-type">Data</span>&gt;)</span></span> &#123;<br>	Box&#123;<br>		Log.d(<span class="hljs-string">&quot;compose&quot;</span>, <span class="hljs-string">&quot;render child&quot;</span>)<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>由于ChildComponent签名中依赖了list，当list变化引起重绘时的日志如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">D/compose: render parent<br>D/compose: render child<br></code></pre></td></tr></table></figure>
+<p>如果ChildComponent改为无参函数：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">ParentComponent</span><span class="hljs-params">(list: <span class="hljs-type">List</span>&lt;<span class="hljs-type">Data</span>&gt;)</span></span> &#123;<br>	Log.d(<span class="hljs-string">&quot;compose&quot;</span>, <span class="hljs-string">&quot;render parent&quot;</span>)<br>	ChildComponent() <br>&#125;<br><br><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">ChildComponent</span><span class="hljs-params">()</span></span> &#123;<br>	Box&#123;<br>		Log.d(<span class="hljs-string">&quot;compose&quot;</span>, <span class="hljs-string">&quot;render child&quot;</span>)<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">D/compose: render parent<br></code></pre></td></tr></table></figure>
+<p>由于对list不再依赖，当list变化引起重绘时child不再重绘</p>
+<p>内联组件的重绘<br>当我们把child直接内联到parent中时：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">ParentComponent</span><span class="hljs-params">(list: <span class="hljs-type">List</span>&lt;<span class="hljs-type">Data</span>&gt;)</span></span> &#123;<br>	Log.d(<span class="hljs-string">&quot;compose&quot;</span>, <span class="hljs-string">&quot;render parent&quot;</span>)<br>	Box&#123;<br>		Log.d(<span class="hljs-string">&quot;compose&quot;</span>, <span class="hljs-string">&quot;render child&quot;</span>)<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">D/compose: render parent<br>D/compose: render child<br></code></pre></td></tr></table></figure>
+<p>虽然Box{ … }内部没有对list的依赖，但是仍然参与了重绘。</p>
+<p>Column、Row、Box甚至是Layout 这类容器类Composable都是inline函数，因此它们只能共享调用方的Scope。</p>
+<p>如果你希望缩小重绘范围，提高性能怎么办？如上，自定义非inline函数，使之满足Compose重绘范围最小化条件。</p>
+<h1 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h1><p>应用的状态（State）是指可以随时间变化的任何值，其定义十分宽泛，从函数的入参参数到应用的背景色都包括在内</p>
+<p>对于 Android 传统的 View 视图结构来说，控件会直接持有着 State。例如，EditText 的内部就包含一个 CharSequence 类型的全局变量 mText，用于存储 EditText 当前显示的文本。当想要改变文本内容时，就需要通过手动调用 EditText.setText 方法来改变 mText，EditText 也随之刷新，mText 即 EditText 持有的 State</p>
+<p>而 Compose 通过组合多个可组合函数来描述整个屏幕状态并以此来绘制屏幕，更新视图的唯一途径就是生成新的入参参数并再次调用可组合函数，新的入参参数就代表想要的屏幕状态，每当 State 更新时就会触发可组合函数进行重组，从而实现 UI 刷新。在这整个过程中，可组合函数并不直接持有 State，而是通过读取 State 来确定自身应该如何显示</p>
+<p>副作用与 Lifecycle<br>我们也可以不借助 ViewModel 直接在 Composalbe 中操作数据。 但是数据操作涉及 IO，不应该跟随重组反复进行，应该被当做副作用（SideEffect） 处理。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">ConversationScreen</span><span class="hljs-params">()</span></span> &#123;<br>    <br>    <span class="hljs-keyword">var</span> message = remember &#123; mutableStateOf(emptyList()) &#125; <br>    <span class="hljs-keyword">val</span> scope = rememberCoroutineScope()<br>    <br>    SideEffect &#123;<br>        scope.launch &#123;<br>            message = apiService.getMessage()<br>        &#125;<br>    &#125;<br>    <br>    MessageLit(messages)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>SideEffect {…} 处理副作用，只在 Composable 首次上树显示时执行一次，不会随重组反复执行；<br>rememberCoroutineScope() 可以获取与当前 Composalbe 关联的 CoroutieScope，当 Composable 从树上移除时，其中的协程会随之取消。<br>当副作用用到协程时，也可以直接使用LaunchedEffect，更加方便：</p>
+<figure class="highlight gml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs gml"><span class="hljs-comment">//LaunchedEffect中提供了CoroutineScope，可以直接启动协程</span><br>LaunchedEffect &#123;<br>    <span class="hljs-variable language_">message</span> = apiService.getMessage()<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="Compose-如何集成到现有项目"><a href="#Compose-如何集成到现有项目" class="headerlink" title="Compose 如何集成到现有项目"></a>Compose 如何集成到现有项目</h1><p>对于很多现有的项目，从头开始使用Compose是不现实的，我肯可以根据上面提到的手动修改gradle的方式，使项目支持Compose。</p>
+<h3 id="在XML中使用"><a href="#在XML中使用" class="headerlink" title="在XML中使用"></a>在XML中使用</h3><p>我们可以直接把Compopse作为一个普通View使用</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;androidx.compose.ui.platform.ComposeView<br>        android:<span class="hljs-attribute">id</span>=<span class="hljs-string">&quot;@+id/compose_view&quot;</span><br>        android:<span class="hljs-attribute">layout_width</span>=<span class="hljs-string">&quot;match_parent&quot;</span><br>        android:<span class="hljs-attribute">layout_height</span>=<span class="hljs-string">&quot;match_parent&quot;</span>/&gt;<br></code></pre></td></tr></table></figure>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs scss">findViewById&lt;ComposeView&gt;(R.id.compose_view)<span class="hljs-selector-class">.setContent</span> &#123;<br>          ComposeTheme &#123;<br>              <span class="hljs-built_in">Surface</span>(color = MaterialTheme.colors.background) &#123;<br>                  <span class="hljs-built_in">Greeting</span>(&quot;Android&quot;)<br>              &#125;<br>          &#125;<br>      &#125;<br></code></pre></td></tr></table></figure>
+<h3 id="Activity、Fragment"><a href="#Activity、Fragment" class="headerlink" title="Activity、Fragment"></a>Activity、Fragment</h3><p>作为独立的界面使用Compopse直接使用setContent方法即可。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u013710752/article/details/121499769">Jetpack Compose Image加载网络图片</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/vitaviva/article/details/113806838">关于Jetpack Compose重绘（Recomposition）的一个坑</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/vitaviva/article/details/115605867">Jetpack Compose：理解composable的重组范围（Recomposition Scope）</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>AndroidJetpack-Compose之六实战总结</div>
+      <div>http://example.com/2022/06/11/AndroidJetpack-Compose之六实战总结/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年6月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/06/29/Node.js%E6%95%99%E7%A8%8B/" title="Node.js教程">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Node.js教程</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/06/09/AndroidJetpack-Compose%E4%B9%8B%E4%BA%94%E5%B8%B8%E7%94%A8%E7%BB%84%E4%BB%B6%E5%8F%8A%E4%B8%BB%E9%A2%98/" title="AndroidJetpack-Compose之五常用组件及主题">
+                        <span class="hidden-mobile">AndroidJetpack-Compose之五常用组件及主题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

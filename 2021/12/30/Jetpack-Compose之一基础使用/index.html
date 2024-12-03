@@ -1,0 +1,786 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.命令式UI和申明式UI如果之前有了解或者使用果Flutter，应该会对命令式UI这种架构不陌生。目前申明式UI确实是很火包含Flutter，SwiftUI，JetpackCompose都使用了该种方式。2021年7月底，Google 正式发布了 Jetpack Compose 的 1.0 稳定版本，这说明Google认为Compose已经可以用于生产环境了。 1.命令式UI回想再传统的Andr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jetpack-Compose之一基础使用">
+<meta property="og:url" content="http://example.com/2021/12/30/Jetpack-Compose%E4%B9%8B%E4%B8%80%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.命令式UI和申明式UI如果之前有了解或者使用果Flutter，应该会对命令式UI这种架构不陌生。目前申明式UI确实是很火包含Flutter，SwiftUI，JetpackCompose都使用了该种方式。2021年7月底，Google 正式发布了 Jetpack Compose 的 1.0 稳定版本，这说明Google认为Compose已经可以用于生产环境了。 1.命令式UI回想再传统的Andr">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/323fd01e2bb576e0107dcd5500528ba1.webp">
+<meta property="og:image" content="http://example.com/images/04ced3ba4f953ca6479ca00cc9d8bdbc.webp">
+<meta property="og:image" content="http://example.com/images/4630f49fb655715de2f261376e3a5e13.webp">
+<meta property="og:image" content="http://example.com/images/2f085ddc58630bc5d04571b41ab43f9e.webp">
+<meta property="og:image" content="http://example.com/images/873648909ebe094acfdcfb0d3ae2eb72.webp">
+<meta property="og:image" content="http://example.com/images/6e3098755ae69a2e760a46dbe597459a.webp">
+<meta property="og:image" content="http://example.com/images/c8f0a310d71decb25e3cad61bf4e479a.webp">
+<meta property="og:image" content="http://example.com/images/a36bb8e9c72f0bd21307994cf10b7e86.webp">
+<meta property="og:image" content="http://example.com/images/1d1b0435f24527ed910586f7e39ffab9.webp">
+<meta property="og:image" content="http://example.com/images/99a790c77e95c512869b85384351291b.webp">
+<meta property="og:image" content="http://example.com/images/566d4dd0c67d3b824291d73ac65e02df.webp">
+<meta property="og:image" content="http://example.com/images/7db2713bac45867055af6a99a3d99cf4.webp">
+<meta property="og:image" content="http://example.com/images/ac9ebcea28e9fcab889ce5f455bec7cb.webp">
+<meta property="og:image" content="http://example.com/images/f18f5a0c69e5708884a1037b164fafee.webp">
+<meta property="article:published_time" content="2021-12-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:56:48.315Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/323fd01e2bb576e0107dcd5500528ba1.webp">
+  
+  
+  
+  <title>Jetpack-Compose之一基础使用 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Jetpack-Compose之一基础使用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-12-30 00:00" pubdate>
+          2021年12月30日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Jetpack-Compose之一基础使用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-命令式UI和申明式UI"><a href="#一-命令式UI和申明式UI" class="headerlink" title="一.命令式UI和申明式UI"></a>一.命令式UI和申明式UI</h1><p>如果之前有了解或者使用果Flutter，应该会对命令式UI这种架构不陌生。目前申明式UI确实是很火包含Flutter，SwiftUI，JetpackCompose都使用了该种方式。2021年7月底，Google 正式发布了 Jetpack Compose 的 1.0 稳定版本，这说明Google认为Compose已经可以用于生产环境了。</p>
+<h3 id="1-命令式UI"><a href="#1-命令式UI" class="headerlink" title="1.命令式UI"></a>1.命令式UI</h3><p>回想再传统的Android开发中，首先会在xml布局文件中写好控件，然后在Activity中通过findViewbyid找到该控件，然后通过命令给他设置各种属性，例如设置背景颜色，设置内边距，控件会根据我们所设置的属性 做UI的变化，至始至终我们都是通过改变同一个控件的属性，来获得不同的显示效果.这就是命令式UI.</p>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cos"><span class="hljs-keyword">View</span> <span class="hljs-keyword">view</span>=findViewById(<span class="hljs-keyword">R</span>.id.<span class="hljs-keyword">view</span>)<br><span class="hljs-keyword">view</span>.setBackgroundColor(Color.Blue)<br><span class="hljs-keyword">view</span>.setTop(xxx)<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-申明式UI"><a href="#2-申明式UI" class="headerlink" title="2.申明式UI"></a>2.申明式UI</h3><p>在申明式UI中视图配置是不可变的，意思就是说需要先描述UI界面的样子，状态变化时，界面按照新的描述的重新“渲染”即可得到正确的界面，每次重新渲染就是在控件自身上触发重建， 不会修改旧的实例控件，而是构造不同的新的实例控件进行展示。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">ViewB</span>(<br>  <span class="hljs-attr">backgroundColor</span>: Color.Blue,<br>  <span class="hljs-attr">top</span>: xxx,<br>)<br></code></pre></td></tr></table></figure>
+
+<h1 id="二-项目引入Compose"><a href="#二-项目引入Compose" class="headerlink" title="二.项目引入Compose"></a>二.项目引入Compose</h1><p>有两种方式，一种是手动引入，另外一种是通过AndroidStudio创建:</p>
+<h3 id="1-手动引入Compose依赖"><a href="#1-手动引入Compose依赖" class="headerlink" title="1.手动引入Compose依赖"></a>1.手动引入Compose依赖</h3><h5 id="1-项目根gradle中添加"><a href="#1-项目根gradle中添加" class="headerlink" title="(1.)项目根gradle中添加"></a>(1.)项目根gradle中添加</h5><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">buildscript</span> &#123;<br>    ext &#123;<br>        compose_version = <span class="hljs-string">&#x27;1.0.0&#x27;</span> <span class="hljs-comment">// compose版本</span><br>    &#125;<br>    ext.kotlin_version = <span class="hljs-string">&quot;1.4.30&quot;</span><br>    <span class="hljs-keyword">repositories</span> &#123;<br>        google()<br>        mavenCentral()<br>    &#125;<br>    <span class="hljs-keyword">dependencies</span> &#123;<br>        <span class="hljs-keyword">classpath</span> <span class="hljs-string">&quot;com.android.tools.build:gradle:7.0.0&quot;</span><br>        <span class="hljs-keyword">classpath</span> <span class="hljs-string">&quot;org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version&quot;</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="2-app目录下的build-gradle设置"><a href="#2-app目录下的build-gradle设置" class="headerlink" title="(2.)app目录下的build.gradle设置"></a>(2.)app目录下的build.gradle设置</h5><p>将app支持的最低API 版本设置为21或更高，同时开启Jetpack Compose enable开关</p>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs fsharp"><span class="hljs-keyword">android</span> &#123;<br>    <span class="hljs-keyword">defaultConfig</span> &#123;<br>        <span class="hljs-operator">...</span><br>        minSdkVersion <span class="hljs-number">21</span><br>    &#125;<br><br>    <span class="hljs-keyword">buildFeatures</span> &#123;<br>        <span class="hljs-comment">// Enables Jetpack Compose for this module</span><br>        compose <span class="hljs-literal">true</span><br>    &#125;<br>    <span class="hljs-operator">...</span><br><br>    <span class="hljs-comment">// Set both the Java and Kotlin compilers to target Java 8.</span><br><br>    <span class="hljs-keyword">compileOptions</span> &#123;<br>        sourceCompatibility JavaVersion.VERSION_1_8<br>        targetCompatibility JavaVersion.VERSION_1_8<br>    &#125;<br><br>    <span class="hljs-keyword">kotlinOptions</span> &#123;<br>        jvmTarget <span class="hljs-operator">=</span> <span class="hljs-string">&quot;1.8&quot;</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="3-添加Jetpack-Compose工具包依赖项"><a href="#3-添加Jetpack-Compose工具包依赖项" class="headerlink" title="(3.)添加Jetpack Compose工具包依赖项"></a>(3.)添加Jetpack Compose工具包依赖项</h5><p>在app目录下的build.gradle添加Jetpack Compose 工具包依赖项，代码如下：</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs clean">dependencies &#123;<br>    <span class="hljs-comment">// You also need to include the following Compose toolkit dependencies.</span><br>     <span class="hljs-comment">//compose依赖</span><br>       <span class="hljs-keyword">implementation</span> <span class="hljs-string">&quot;androidx.compose.ui:ui:$compose_version&quot;</span><br>       <span class="hljs-keyword">implementation</span> <span class="hljs-string">&quot;androidx.compose.foundation:foundation:$compose_version&quot;</span><br>       <span class="hljs-keyword">implementation</span> <span class="hljs-string">&quot;androidx.compose.material:material:$compose_version&quot;</span><br>       <span class="hljs-keyword">implementation</span> <span class="hljs-string">&quot;androidx.compose.runtime:runtime-livedata:$compose_version&quot;</span><br>       <span class="hljs-keyword">implementation</span> <span class="hljs-string">&quot;androidx.compose.runtime:runtime-rxjava2:$compose_version&quot;</span><br>       <span class="hljs-keyword">implementation</span> <span class="hljs-string">&#x27;androidx.activity:activity-compose:1.3.0-alpha03&#x27;</span><br>       <span class="hljs-keyword">implementation</span> <span class="hljs-string">&quot;androidx.compose.ui:ui-tooling:$compose_version&quot;</span><br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-AndroidStudio创建Compose工程"><a href="#2-AndroidStudio创建Compose工程" class="headerlink" title="2.AndroidStudio创建Compose工程"></a>2.AndroidStudio创建Compose工程</h3><p><img src="/images/323fd01e2bb576e0107dcd5500528ba1.webp" srcset="/img/loading.gif" lazyload></p>
+<h1 id="三-Compose示例分析"><a href="#三-Compose示例分析" class="headerlink" title="三.Compose示例分析"></a>三.Compose示例分析</h1><h3 id="1-Compose简单使用"><a href="#1-Compose简单使用" class="headerlink" title="1.Compose简单使用"></a>1.Compose简单使用</h3><p>在MainActivity.kt中添加如下代码：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MainActivity</span> : <span class="hljs-type">AppCompatActivity</span>() &#123;<br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(savedInstanceState: <span class="hljs-type">Bundle</span>?)</span></span> &#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState)<br>        setContent &#123;<br>            Text(<span class="hljs-string">&quot;Hello,Compose!&quot;</span>)<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>运行就可以看到效果了:<br><img src="/images/04ced3ba4f953ca6479ca00cc9d8bdbc.webp" srcset="/img/loading.gif" lazyload><br>这种写法与使用 XML 布局的方式差别很大，setContent 块定义了 Activity 的布局。不需要使用 XML 文件来定义布局内容，而是调用一个 Compose 函数，比如上面的 Text 函数， 然后 Jetpack Compose 使用自定义 Kotlin 编译器插件将这些 Compose 函数转换为应用的界面元素。</p>
+<h3 id="2-Composable注解"><a href="#2-Composable注解" class="headerlink" title="2.Composable注解"></a>2.Composable注解</h3><p>点开Text函数，可以发现它是kotlin的一个<code>顶层函数</code>，并且被@Composable注解修饰:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">Text</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">    ...</span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span> &#123;<br>    Text(<br>      ...<br>    )<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Jetpack Compose的界面是围绕composable函数来构建的。这些composable函数可以通过描述应用程序的形状和数据依赖，以编程方式定义应用程序的UI，而不是着眼于UI的构建过程。因此要创建composable函数，只需要在函数名前面加上一个@composable注解即可。<br>例如可以通过Composable注解一个方法对Text进行封装:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MainActivity</span> : <span class="hljs-type">ComponentActivity</span>() &#123;<br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(savedInstanceState: <span class="hljs-type">Bundle</span>?)</span></span> &#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState)<br>        setContent &#123;<br>            helloText(<span class="hljs-string">&quot;Hello,Compose!&quot;</span>)<br>        &#125;<br>    &#125;<br>    <span class="hljs-meta">@Composable</span><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">helloText</span><span class="hljs-params">(text:<span class="hljs-type">String</span>)</span></span>&#123;<br>        Text(text);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>需要注意，Composable注解的函数只能在其他Composable注解的函数内调用。</p>
+</blockquote>
+<h1 id="四-Compose界面预览"><a href="#四-Compose界面预览" class="headerlink" title="四.Compose界面预览"></a>四.Compose界面预览</h1><h3 id="1-Preview注解"><a href="#1-Preview注解" class="headerlink" title="1.@Preview注解"></a>1.@Preview注解</h3><p>在 Compose 框架中通过给 Composable 函数添加 @Preview 注解就可以在不运行App的情况下确认布局的情况:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MainActivity</span> : <span class="hljs-type">ComponentActivity</span>() &#123;<br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(savedInstanceState: <span class="hljs-type">Bundle</span>?)</span></span> &#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState)<br>        setContent &#123;<br>            helloText()<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-meta">@Preview()</span><br>    <span class="hljs-meta">@Composable</span><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">helloText</span><span class="hljs-params">()</span></span>&#123;<br>        Text(<span class="hljs-string">&quot;Hello,Compose!&quot;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="/images/4630f49fb655715de2f261376e3a5e13.webp" srcset="/img/loading.gif" lazyload></p>
+<p><strong>在IDE的右上角有Code，Split，Design三个选项。分别是只显示代码，同时显示代码和布局和只显示布局。</strong></p>
+<h3 id="2-Preview注解常用参数"><a href="#2-Preview注解常用参数" class="headerlink" title="2.@Preview注解常用参数"></a>2.@Preview注解常用参数</h3><p>打开@Preview注解可以看到可以接收如下参数:</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Repeatable</span><br>annotation class <span class="hljs-built_in">Preview</span>(<br>    val <span class="hljs-attribute">name</span>: String = <span class="hljs-string">&quot;&quot;</span>,<br>    val <span class="hljs-attribute">group</span>: String = <span class="hljs-string">&quot;&quot;</span>,<br>    <span class="hljs-variable">@IntRange</span>(from = <span class="hljs-number">1</span>) val <span class="hljs-attribute">apiLevel</span>: Int = -<span class="hljs-number">1</span>,<br>    <span class="hljs-comment">// TODO(mount): Make this Dp when they are inline classes</span><br>    val <span class="hljs-attribute">widthDp</span>: Int = -<span class="hljs-number">1</span>,<br>    <span class="hljs-comment">// TODO(mount): Make this Dp when they are inline classes</span><br>    val <span class="hljs-attribute">heightDp</span>: Int = -<span class="hljs-number">1</span>,<br>    val <span class="hljs-attribute">locale</span>: String = <span class="hljs-string">&quot;&quot;</span>,<br>    <span class="hljs-variable">@FloatRange</span>(from = <span class="hljs-number">0.01</span>) val <span class="hljs-attribute">fontScale</span>: Float = <span class="hljs-number">1</span>f,<br>    val <span class="hljs-attribute">showSystemUi</span>: Boolean = false,<br>    val <span class="hljs-attribute">showBackground</span>: Boolean = false,<br>    val <span class="hljs-attribute">backgroundColor</span>: Long = <span class="hljs-number">0</span>,<br>    <span class="hljs-variable">@UiMode</span> val <span class="hljs-attribute">uiMode</span>: Int = <span class="hljs-number">0</span>,<br>    <span class="hljs-variable">@Device</span> val <span class="hljs-attribute">device</span>: String = Devices.DEFAULT<br>)<br><br></code></pre></td></tr></table></figure>
+<h5 id="1-给Preview命名"><a href="#1-给Preview命名" class="headerlink" title="(1.)给Preview命名"></a>(1.)给Preview命名</h5><ul>
+<li>name: String: 为该Preview命名，该名字会在布局预览中显示。</li>
+<li>group: String: 为该Preview设置group名字，可以在UI中以group为单位显示。<br><img src="/images/2f085ddc58630bc5d04571b41ab43f9e.webp" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<h5 id="2-给Preview设置背景颜色"><a href="#2-给Preview设置背景颜色" class="headerlink" title="(2.)给Preview设置背景颜色"></a>(2.)给Preview设置背景颜色</h5><ul>
+<li>showBackground: Boolean: 是否显示背景，true为显示。</li>
+<li>backgroundColor: Long: 设置背景的颜色(backgroundColor 是 ARGB Long，而不是 Color 值)。<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Preview</span>(showBackground = true, backgroundColor = <span class="hljs-number">0</span>xFF00FF00)<br><span class="hljs-variable">@Composable</span><br>fun <span class="hljs-built_in">WithGreenBackground</span>() &#123;<br>    <span class="hljs-selector-tag">Text</span>(<span class="hljs-string">&quot;Hello World&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+<img src="/images/873648909ebe094acfdcfb0d3ae2eb72.webp" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<blockquote>
+<p>默认情况下，您的可组合项将以透明背景显示。</p>
+</blockquote>
+<h5 id="3-给Preview设置显示宽高"><a href="#3-给Preview设置显示宽高" class="headerlink" title="(3.)给Preview设置显示宽高"></a>(3.)给Preview设置显示宽高</h5><ul>
+<li>widthDp: Int: 在Compose中渲染的最大宽度，单位为dp。</li>
+<li>heightDp: Int: 在Compose中渲染的最大高度，单位为dp。<br>默认情况下，系统会自动选择 @Preview 尺寸来封装其内容。如需手动设置尺寸，可以添加 heightDp 和 widthDp 参数。<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Preview</span>(widthDp = <span class="hljs-number">50</span>, heightDp = <span class="hljs-number">50</span>)<br><span class="hljs-variable">@Composable</span><br>fun <span class="hljs-built_in">SquareComposablePreview</span>() &#123;<br>    <span class="hljs-selector-tag">Box</span>(Modifier.<span class="hljs-built_in">background</span>(<span class="hljs-attribute">Color</span>.Yellow)) &#123;<br>        <span class="hljs-selector-tag">Text</span>(<span class="hljs-string">&quot;Hello World&quot;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<img src="/images/6e3098755ae69a2e760a46dbe597459a.webp" srcset="/img/loading.gif" lazyload><blockquote>
+<p>请注意，这些值已解释为 Dp，您无需在值末尾添加 .dp</p>
+</blockquote>
+</li>
+</ul>
+<h5 id="4-给Preview设置显示系统界面"><a href="#4-给Preview设置显示系统界面" class="headerlink" title="(4.)给Preview设置显示系统界面"></a>(4.)给Preview设置显示系统界面</h5><p>如需在预览对象中显示状态栏和操作栏，请添加 showSystemUi 参数：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Preview</span>(showSystemUi = true)<br><span class="hljs-variable">@Composable</span><br>fun <span class="hljs-built_in">DecoratedComposablePreview</span>() &#123;<br>    <span class="hljs-selector-tag">Text</span>(<span class="hljs-string">&quot;Hello World&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="/images/c8f0a310d71decb25e3cad61bf4e479a.webp" srcset="/img/loading.gif" lazyload></p>
+<h5 id="5-给Preview设置显示语言区域"><a href="#5-给Preview设置显示语言区域" class="headerlink" title="(5.)给Preview设置显示语言区域"></a>(5.)给Preview设置显示语言区域</h5><p>如需测试不同的用户语言区域，您需要添加 locale 参数：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Preview</span>(locale = <span class="hljs-string">&quot;fr-rFR&quot;</span>)<br><span class="hljs-variable">@Composable</span><br>fun <span class="hljs-built_in">DifferentLocaleComposablePreview</span>() &#123;<br>    <span class="hljs-selector-tag">Text</span>(text = <span class="hljs-built_in">stringResource</span>(R.string.greetings))<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="6-通过-PreviewParameter给Preview添加传递参数预览"><a href="#6-通过-PreviewParameter给Preview添加传递参数预览" class="headerlink" title="(6.)通过@PreviewParameter给Preview添加传递参数预览"></a>(6.)通过@PreviewParameter给Preview添加传递参数预览</h5><p>如果被 @Composable修饰的组件函数是一个有参数的函数，要对其进行预览，可以使用 @PreviewParameter 注解添加参数，以将数据传递给某个可组合项预览函数。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MainActivity</span> : <span class="hljs-type">ComponentActivity</span>() &#123;<br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(savedInstanceState: <span class="hljs-type">Bundle</span>?)</span></span> &#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState)<br>        setContent &#123;<br>            showUser(User(<span class="hljs-string">&quot;罗贯中&quot;</span>))<br>        &#125;<br>    &#125;<br>    <span class="hljs-meta">@Composable</span><br>    <span class="hljs-meta">@Preview(<span class="hljs-string">&quot;name&quot;</span>,showBackground = true, backgroundColor = 0xFF00FF00)</span><br>    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">showUser</span><span class="hljs-params">(<span class="hljs-meta">@PreviewParameter(UserPreviewParameterProvider::class)</span> user: <span class="hljs-type">User</span>)</span></span> &#123;<br>        Text(user.name)<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>如需提供示例数据，请创建一个可实现 PreviewParameterProvider 并以序列形式返回示例数据的类。</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs perl"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserPreviewParameterProvider</span><span class="hljs-attr"> : PreviewParameterProvider</span>&lt;<span class="hljs-title">User</span>&gt; </span>&#123;<br>    override val <span class="hljs-keyword">values</span> = sequenceOf(User(<span class="hljs-string">&quot;刘备&quot;</span>), User(<span class="hljs-string">&quot;曹操&quot;</span>), User(<span class="hljs-string">&quot;孙权&quot;</span>))<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>序列中的每个数据元素都会呈现一个预览：<br><img src="/images/a36bb8e9c72f0bd21307994cf10b7e86.webp" srcset="/img/loading.gif" lazyload><br>如果不想每一个数据对应的预览都展示，可通过设置 limit 参数来限制呈现的预览数量:</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Composable</span><br><span class="hljs-variable">@Preview</span>(<span class="hljs-string">&quot;name&quot;</span>,showBackground = true, backgroundColor = <span class="hljs-number">0</span>xFF00FF00)<br>fun <span class="hljs-built_in">showUser</span>(<span class="hljs-variable">@PreviewParameter</span>(<span class="hljs-attribute">UserPreviewParameterProvider</span>::class, limit = <span class="hljs-number">2</span>) <span class="hljs-attribute">user</span>: User) &#123;<br>    <span class="hljs-selector-tag">Text</span>(user.name)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="/images/1d1b0435f24527ed910586f7e39ffab9.webp" srcset="/img/loading.gif" lazyload></p>
+<p>特别需要注意的有两点:<br><strong>上面的参数都是可选参数，还有像背景设置等的参数并不是对实际的App进行设置，只是对Preview中的背景进行设置，为了更容易看清布局。</strong><br><strong>在实际的开发中，预览函数不要发布到线上，所以最佳做法是单独创建不会被应用调用的预览函数用于查看实际效果，专门的预览函数可以提高性能，并且有利于以后更轻松地设置多个预览。</strong></p>
+<h1 id="五-Compose组件配置属性"><a href="#五-Compose组件配置属性" class="headerlink" title="五.Compose组件配置属性"></a>五.Compose组件配置属性</h1><p>上文中我们用到了Compose提供的Text组件，既然是文本组件肯定存在文本属性配置， 我们知道在Jetpack Compose 所有的组件都是 可以组合函数，所以Text 也不例外，源码如下:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">Text</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">    text: <span class="hljs-type">String</span>,<span class="hljs-comment">//文字内容</span></span></span><br><span class="hljs-params"><span class="hljs-function">    modifier: <span class="hljs-type">Modifier</span> = Modifier, <span class="hljs-comment">// 布局的设置</span></span></span><br><span class="hljs-params"><span class="hljs-function">    color: <span class="hljs-type">Color</span> = Color.Unspecified,<span class="hljs-comment">// 文字颜色</span></span></span><br><span class="hljs-params"><span class="hljs-function">    fontSize: <span class="hljs-type">TextUnit</span> = TextUnit.Unspecified,<span class="hljs-comment">//文字大小</span></span></span><br><span class="hljs-params"><span class="hljs-function">    fontStyle: <span class="hljs-type">FontStyle</span>? = <span class="hljs-literal">null</span>, <span class="hljs-comment">//文字风格</span></span></span><br><span class="hljs-params"><span class="hljs-function">    fontWeight: <span class="hljs-type">FontWeight</span>? = <span class="hljs-literal">null</span>,<span class="hljs-comment">//文字比重</span></span></span><br><span class="hljs-params"><span class="hljs-function">    fontFamily: <span class="hljs-type">FontFamily</span>? = <span class="hljs-literal">null</span>, <span class="hljs-comment">//字体风格</span></span></span><br><span class="hljs-params"><span class="hljs-function">    letterSpacing: <span class="hljs-type">TextUnit</span> = TextUnit.Unspecified,<span class="hljs-comment">//字间距</span></span></span><br><span class="hljs-params"><span class="hljs-function">    textDecoration: <span class="hljs-type">TextDecoration</span>? = <span class="hljs-literal">null</span>,<span class="hljs-comment">//文字装饰器</span></span></span><br><span class="hljs-params"><span class="hljs-function">    textAlign: <span class="hljs-type">TextAlign</span>? = <span class="hljs-literal">null</span>,<span class="hljs-comment">//文字对齐方式</span></span></span><br><span class="hljs-params"><span class="hljs-function">    lineHeight: <span class="hljs-type">TextUnit</span> = TextUnit.Unspecified,<span class="hljs-comment">//文字行高</span></span></span><br><span class="hljs-params"><span class="hljs-function">    overflow: <span class="hljs-type">TextOverflow</span> = TextOverflow.Clip,<span class="hljs-comment">// 文字显示不完的处理方式</span></span></span><br><span class="hljs-params"><span class="hljs-function">    softWrap: <span class="hljs-type">Boolean</span> = <span class="hljs-literal">true</span>,<span class="hljs-comment">// 文本是否应在换行符处中断</span></span></span><br><span class="hljs-params"><span class="hljs-function">    maxLines: <span class="hljs-type">Int</span> = <span class="hljs-built_in">Int</span>.MAX_VALUE,<span class="hljs-comment">//最大行数</span></span></span><br><span class="hljs-params"><span class="hljs-function">    onTextLayout: (<span class="hljs-type">TextLayoutResult</span>) -&gt; <span class="hljs-type">Unit</span> = &#123;&#125;,</span></span><br><span class="hljs-params"><span class="hljs-function">    style: <span class="hljs-type">TextStyle</span> = AmbientTextStyle.current</span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span> &#123;<br>    ……<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>因此我们在使用Text组件时可以对其属性进行配置。<br>例如配置文字颜色:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">Text</span><span class="hljs-params">(<span class="hljs-string">&quot;Hello Compose&quot;</span>, color = Color.Blue)</span></span><br></code></pre></td></tr></table></figure>
+<p>例如配置文字字号:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">Text</span><span class="hljs-params">(<span class="hljs-string">&quot;Hello Compose&quot;</span>, fontSize=<span class="hljs-number">20</span>.sp)</span></span><br></code></pre></td></tr></table></figure>
+<p>通过这些属性我们就可以配置出各式各样不同的文本显示效果。</p>
+<h1 id="六-Compose组件中的Modifier"><a href="#六-Compose组件中的Modifier" class="headerlink" title="六.Compose组件中的Modifier"></a>六.Compose组件中的Modifier</h1><p>在上文中我们可以看到Text组件接收一个Modifier的参数， Modifier， 顾名思义就是一个修饰器，用于装饰Compose UI元素或向其添加行为。<code>每个 Compose 组件都会提供一个Modifier 参数用于修改样式</code>。</p>
+<h3 id="1-经常用到的Modifier属性"><a href="#1-经常用到的Modifier属性" class="headerlink" title="1.经常用到的Modifier属性"></a>1.经常用到的Modifier属性</h3><p>借助Modifier 参数可以控制 组件的行为和外观 如大小，背景等，还可以添加一些交互，如点击、滑动等。关于Modifier相关的设置实在是太多，在这里只介绍会经常用到的，更多<a target="_blank" rel="noopener" href="https://developer.android.com/jetpack/compose/modifiers-list">Modifier学习</a></p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">Text</span>(<br>    <span class="hljs-string">&quot;Android&quot;</span>,<br>    modifier = Modifier<br>        .<span class="hljs-built_in">padding</span>(<span class="hljs-number">10</span>.dp)<span class="hljs-comment">//设置padding</span><br>        .<span class="hljs-built_in">size</span>(<span class="hljs-number">100</span>.dp)<span class="hljs-comment">//设置大小</span><br>        .<span class="hljs-built_in">background</span>(<span class="hljs-attribute">Color</span>.Gray)<span class="hljs-comment">//设置背景</span><br>        .<span class="hljs-built_in">clickable</span>(onClick = &#123;&#125;)<span class="hljs-comment">//添加点击事件</span><br>)<br></code></pre></td></tr></table></figure>
+<h5 id="1-配置尺寸"><a href="#1-配置尺寸" class="headerlink" title="1.配置尺寸"></a>1.配置尺寸</h5><ul>
+<li>Modifier.fillMaxHeight()    &#x2F;&#x2F; 填充整个父组件的高度。</li>
+<li>Modifier.fillMaxWidth()     &#x2F;&#x2F; 填充整个父组件的宽度。</li>
+<li>Modifier.fillMaxSize()      &#x2F;&#x2F; 填充整个父组件的宽和高 类似于mach_parent</li>
+<li>Modifier.width(2.dp)        &#x2F;&#x2F; 设置宽度</li>
+<li>Modifier.height(3.dp)       &#x2F;&#x2F; 设置高度</li>
+<li>Modifier.size(4.dp, 5.dp)   &#x2F;&#x2F; 设置高度和宽度</li>
+</ul>
+<h5 id="2-配置重力"><a href="#2-配置重力" class="headerlink" title="2.配置重力"></a>2.配置重力</h5><ul>
+<li>Modifier.gravity(Alignment.CenterHorizontally)  &#x2F;&#x2F; 横向居中</li>
+<li>Modifier.gravity(Alignment.Start)               &#x2F;&#x2F; 横向居左</li>
+<li>Modifier.gravity(Alignment.End)                 &#x2F;&#x2F; 横向居右</li>
+</ul>
+<h5 id="3-配置边距Padding"><a href="#3-配置边距Padding" class="headerlink" title="3.配置边距Padding"></a>3.配置边距Padding</h5><ul>
+<li>Modifier.padding(10.dp)                       &#x2F;&#x2F;设置上下左右边距为同一值</li>
+<li>Modifier.padding(10.dp, 11.dp, 12.dp, 13.dp)  &#x2F;&#x2F;分别为上下左右边距值</li>
+<li>Modifier.padding(10.dp, 11.dp)                &#x2F;&#x2F;分别为上下和左右边距值</li>
+</ul>
+<h5 id="4-配置偏移量"><a href="#4-配置偏移量" class="headerlink" title="4.配置偏移量"></a>4.配置偏移量</h5><ul>
+<li>Modifier.offset(x&#x3D;10.dp,y&#x3D;10.dp)   &#x2F;&#x2F;要相对于原始位置放置布局，请添加 offset 修饰符，并在 x 轴和 y 轴中设置偏移量。偏移量可以是正数，也可以是非正数。</li>
+</ul>
+<blockquote>
+<p>这里设置的值必须为<code>Dp</code>，<code>Compose</code>为我们在Int中扩展了一个方法<code>dp</code>，帮我们转换成<code>Dp</code>。</p>
+</blockquote>
+<h3 id="2-Modifier属性调用顺序"><a href="#2-Modifier属性调用顺序" class="headerlink" title="2.Modifier属性调用顺序"></a>2.Modifier属性调用顺序</h3><p>Modifier是利用 kotlin 扩展函数实现的，每个方法的返回值都是Modifier 因此可以实现链式调用。由于每个函数都会对上一个函数返回的 Modifier 进行更改，因此先后顺序会影响最终结果。<br>例如:</p>
+<figure class="highlight roboconf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs roboconf">class MainActivity : ComponentActivity() &#123;<br>    <span class="hljs-attribute">override fun onCreate(savedInstanceState</span>: Bundle?) &#123;<br>        super<span class="hljs-variable">.onCreate</span>(savedInstanceState)<br>        setContent &#123;<br>            Column &#123;<br>                Text(<br>                    &quot;Hello Compose One&quot;,<br>                    fontSize = 20<span class="hljs-variable">.sp</span>,<br>                    modifier = Modifier<br>                        <span class="hljs-variable">.padding</span>(10<span class="hljs-variable">.dp</span>)<br>                        <span class="hljs-variable">.clickable</span>(onClick = &#123;&#125;)<br>                        <span class="hljs-variable">.widthIn</span>(100<span class="hljs-variable">.dp</span>, 200<span class="hljs-variable">.dp</span>)<br><br>                )<br>                Text(<br>                    &quot;Hello Compose Two&quot;,<br>                    fontSize = 20<span class="hljs-variable">.sp</span>,<br>                    modifier = Modifier<br>                        <span class="hljs-variable">.clickable</span>(onClick = &#123;&#125;)<br>                        <span class="hljs-variable">.padding</span>(10<span class="hljs-variable">.dp</span>)<br>                        <span class="hljs-variable">.widthIn</span>(100<span class="hljs-variable">.dp</span>, 200<span class="hljs-variable">.dp</span>)<br>                )<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>我们给Modifier设置的padding边距和clickable点击事件的先后顺序不同,会导致组件的可点击区域也会不一样:<br><img src="/images/99a790c77e95c512869b85384351291b.webp" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>modifier 只能设置 padding，没有 margin 属性。先设置了size尺寸再设置padding就是设置控件的内边距，先设置padding再设置size尺寸就是设置组件的外边距。所以，在 Modifier 中设置 padding 的次序很重要。</p>
+</blockquote>
+<h1 id="七-Compose常用的布局容器"><a href="#七-Compose常用的布局容器" class="headerlink" title="七.Compose常用的布局容器"></a>七.Compose常用的布局容器</h1><p><img src="/images/566d4dd0c67d3b824291d73ac65e02df.webp" srcset="/img/loading.gif" lazyload></p>
+<h3 id="1-Column垂直布局容器"><a href="#1-Column垂直布局容器" class="headerlink" title="1.Column垂直布局容器"></a>1.Column垂直布局容器</h3><p>添加Column，使布局垂直排列</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs isbl"><span class="hljs-variable">Column</span> &#123;<br>  <span class="hljs-function"><span class="hljs-title">Text</span>(<span class="hljs-string">&quot;张飞&quot;</span>)</span><br>  <span class="hljs-function"><span class="hljs-title">Text</span>(<span class="hljs-string">&quot;关羽&quot;</span>)</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="/images/7db2713bac45867055af6a99a3d99cf4.webp" srcset="/img/loading.gif" lazyload></p>
+<p>Column源码:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-keyword">inline</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">Column</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">    modifier: <span class="hljs-type">Modifier</span> = Modifier,</span></span><br><span class="hljs-params"><span class="hljs-function">    verticalArrangement: <span class="hljs-type">Arrangement</span>.<span class="hljs-type">Vertical</span> = Arrangement.Top,</span></span><br><span class="hljs-params"><span class="hljs-function">    horizontalAlignment: <span class="hljs-type">Alignment</span>.<span class="hljs-type">Horizontal</span> = Alignment.Start,</span></span><br><span class="hljs-params"><span class="hljs-function">    content: @<span class="hljs-type">Composable</span> <span class="hljs-type">ColumnScope</span>.() -&gt; <span class="hljs-type">Unit</span></span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span> &#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>Column 有两个属性 verticalArrangement 和 horizontalAlignment 来控制 child 的对齐摆放方式。</p>
+</blockquote>
+<h3 id="2-Row横向布局容器"><a href="#2-Row横向布局容器" class="headerlink" title="2.Row横向布局容器"></a>2.Row横向布局容器</h3><figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs isbl"><span class="hljs-variable">Row</span> &#123;<br>    <span class="hljs-function"><span class="hljs-title">Text</span>(<span class="hljs-string">&quot;张飞&quot;</span>)</span><br>    <span class="hljs-function"><span class="hljs-title">Text</span>(<span class="hljs-string">&quot;关羽&quot;</span>)</span><br>    &#125;<br></code></pre></td></tr></table></figure>
+<p><img src="/images/ac9ebcea28e9fcab889ce5f455bec7cb.webp" srcset="/img/loading.gif" lazyload><br>Row源码:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs kotlin"><span class="hljs-meta">@Composable</span><br><span class="hljs-keyword">inline</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">Row</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">    modifier: <span class="hljs-type">Modifier</span> = Modifier,</span></span><br><span class="hljs-params"><span class="hljs-function">    horizontalArrangement: <span class="hljs-type">Arrangement</span>.<span class="hljs-type">Horizontal</span> = Arrangement.Start,</span></span><br><span class="hljs-params"><span class="hljs-function">    verticalAlignment: <span class="hljs-type">Alignment</span>.<span class="hljs-type">Vertical</span> = Alignment.Top,</span></span><br><span class="hljs-params"><span class="hljs-function">    content: @<span class="hljs-type">Composable</span> <span class="hljs-type">RowScope</span>.() -&gt; <span class="hljs-type">Unit</span></span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span> &#123;<br>  ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>Row 有两个属性 horizontalArrangement 和 verticalAlignment 来控制 child 的对齐摆放方式。</p>
+</blockquote>
+<h3 id="2-Box堆叠布局容器"><a href="#2-Box堆叠布局容器" class="headerlink" title="2.Box堆叠布局容器"></a>2.Box堆叠布局容器</h3><p>类似于Android View 体系中的 FrameLayout</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-type">MainActivity</span> : <span class="hljs-type">ComponentActivity</span>() &#123;</span><br><span class="hljs-class">    override fun onCreate(<span class="hljs-title">savedInstanceState</span>: <span class="hljs-type">Bundle</span>?) &#123;</span><br><span class="hljs-class">        super.onCreate(<span class="hljs-title">savedInstanceState</span>)</span><br><span class="hljs-class">        setContent &#123;</span><br><span class="hljs-class">            <span class="hljs-type">Box</span> &#123;</span><br><span class="hljs-class">                <span class="hljs-type">Box</span>(</span><br><span class="hljs-class">                    <span class="hljs-type">Modifier</span></span><br><span class="hljs-class">                        .<span class="hljs-title">size</span>(200.<span class="hljs-title">dp</span>, 200.<span class="hljs-title">dp</span>)</span><br><span class="hljs-class">                        .background(<span class="hljs-type">Color</span>.<span class="hljs-type">Blue</span>))</span><br><span class="hljs-class">                <span class="hljs-type">Box</span>(</span><br><span class="hljs-class">                    <span class="hljs-type">Modifier</span></span><br><span class="hljs-class">                        .<span class="hljs-title">size</span>(100.<span class="hljs-title">dp</span>, 100.<span class="hljs-title">dp</span>)</span><br><span class="hljs-class">                        .background(<span class="hljs-type">Color</span>.<span class="hljs-type">Red</span>))</span><br><span class="hljs-class">            &#125;</span><br><span class="hljs-class">        &#125;</span><br><span class="hljs-class">    &#125;</span><br><span class="hljs-class">&#125;</span><br></code></pre></td></tr></table></figure>
+<p><img src="/images/f18f5a0c69e5708884a1037b164fafee.webp" srcset="/img/loading.gif" lazyload><br>Box源码:</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-variable">@Composable</span><br>inline fun <span class="hljs-built_in">Box</span>(<br>    <span class="hljs-attribute">modifier</span>: Modifier = Modifier,<span class="hljs-comment">//修饰符</span><br>    <span class="hljs-attribute">contentAlignment</span>: Alignment = Alignment.TopStart,<span class="hljs-comment">//对齐方法</span><br>    <span class="hljs-attribute">propagateMinConstraints</span>: Boolean = false,<br>    <span class="hljs-attribute">content</span>: <span class="hljs-variable">@Composable</span> BoxScope.() -&gt; Unit<br>) &#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>Box 有个属性contentAlignment 来控制 child 的对齐摆放方式。</p>
+</blockquote>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="https://developer.android.com/jetpack/compose/documentation?hl=zh-cn">Compose UI官方文档</a><br><a target="_blank" rel="noopener" href="https://docs.compose.net.cn/">compose资料</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903999347359751">原创|Android Jetpack Compose 最全上手指南</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_37667770/article/details/114542808">Jetpack-Compose</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6877056735018745863">Android Jetpack Compose 超快速上手指南</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/baiyuas/p/14988887.html">compose text组件</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/JetpackCompose/" class="category-chain-item">JetpackCompose</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Jetpack-Compose之一基础使用</div>
+      <div>http://example.com/2021/12/30/Jetpack-Compose之一基础使用/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年12月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/01/07/Jetpack-Compose%E4%B9%8B%E4%BA%8C%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/" title="Jetpack-Compose之二状态管理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Jetpack-Compose之二状态管理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/11/02/Android%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%A1%86%E6%9E%B6hilt%E4%BD%BF%E7%94%A8/" title="Android依赖注入框架hilt使用">
+                        <span class="hidden-mobile">Android依赖注入框架hilt使用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

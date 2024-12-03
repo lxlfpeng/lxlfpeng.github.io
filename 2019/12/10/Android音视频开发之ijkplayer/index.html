@@ -1,0 +1,673 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.Ijkplayerijk的导入方式有两种，第一种是使用gradle导入ijkplayer发布到jcenter，已经打包好的依赖包，第二种是去github中下载ijkplayer源码，自己进行编译。 1.gradle方式导入：123456789101112# required, enough for most devices.   implementation &#x27;tv.danmaku.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android音视频开发之ijkplayer">
+<meta property="og:url" content="http://example.com/2019/12/10/Android%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BC%80%E5%8F%91%E4%B9%8Bijkplayer/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.Ijkplayerijk的导入方式有两种，第一种是使用gradle导入ijkplayer发布到jcenter，已经打包好的依赖包，第二种是去github中下载ijkplayer源码，自己进行编译。 1.gradle方式导入：123456789101112# required, enough for most devices.   implementation &#x27;tv.danmaku.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/da16c24d80d3da779f1a4cc01820bbf1.webp">
+<meta property="article:published_time" content="2019-12-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:26:29.585Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/images/da16c24d80d3da779f1a4cc01820bbf1.webp">
+  
+  
+  
+  <title>Android音视频开发之ijkplayer - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Android音视频开发之ijkplayer"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-12-10 00:00" pubdate>
+          2019年12月10日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          866 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          8 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Android音视频开发之ijkplayer</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-Ijkplayer"><a href="#一-Ijkplayer" class="headerlink" title="一.Ijkplayer"></a>一.Ijkplayer</h1><p>ijk的导入方式有两种，第一种是使用gradle导入ijkplayer发布到jcenter，已经打包好的依赖包，第二种是去<a target="_blank" rel="noopener" href="https://links.jianshu.com/go?to=https://github.com">github</a>中下载<a target="_blank" rel="noopener" href="https://links.jianshu.com/go?to=https://github.com/Bilibili/ijkplayer">ijkplayer</a>源码，自己进行编译。</p>
+<h3 id="1-gradle方式导入："><a href="#1-gradle方式导入：" class="headerlink" title="1.gradle方式导入："></a>1.gradle方式导入：</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># required, enough for most devices.</span><br>   <span class="hljs-attribute">implementation</span> &#x27;tv.danmaku.ijk.media:ijkplayer-java:<span class="hljs-number">0</span>.<span class="hljs-number">8</span>.<span class="hljs-number">8</span>&#x27; <br>   <span class="hljs-attribute">implementation</span> &#x27;tv.danmaku.ijk.media:ijkplayer-armv7a:<span class="hljs-number">0</span>.<span class="hljs-number">8</span>.<span class="hljs-number">8</span>&#x27;<br><br>   <span class="hljs-comment"># Other ABIs: optional</span><br>   <span class="hljs-attribute">implementation</span> &#x27;tv.danmaku.ijk.media:ijkplayer-armv5:<span class="hljs-number">0</span>.<span class="hljs-number">8</span>.<span class="hljs-number">8</span>&#x27;<br>   <span class="hljs-attribute">implementation</span> &#x27;tv.danmaku.ijk.media:ijkplayer-arm64:<span class="hljs-number">0</span>.<span class="hljs-number">8</span>.<span class="hljs-number">8</span>&#x27;<br>   <span class="hljs-attribute">implementation</span> &#x27;tv.danmaku.ijk.media:ijkplayer-x86:<span class="hljs-number">0</span>.<span class="hljs-number">8</span>.<span class="hljs-number">8</span>&#x27;<br>   <span class="hljs-attribute">implementation</span> &#x27;tv.danmaku.ijk.media:ijkplayer-x86_64:<span class="hljs-number">0</span>.<span class="hljs-number">8</span>.<span class="hljs-number">8</span>&#x27;<br><br>   <span class="hljs-comment"># ExoPlayer as IMediaPlayer: optional, experimental</span><br>   <span class="hljs-attribute">implementation</span> &#x27;tv.danmaku.ijk.media:ijkplayer-exo:<span class="hljs-number">0</span>.<span class="hljs-number">8</span>.<span class="hljs-number">8</span>&#x27; <br></code></pre></td></tr></table></figure>
+<h3 id="2-自行编译"><a href="#2-自行编译" class="headerlink" title="2.自行编译:"></a>2.自行编译:</h3><p>如果我们需要获取更多的视频格式支持（比如mkv，rmvb等）,或是要支持https都需要自行进行编译。一般在Linux os或是Mac Os上进行编译，Windows上面编译的话坑比较多，不建议。</p>
+<ul>
+<li>准备linux系统 ubuntu14.04</li>
+<li>安装 git</li>
+<li>安装 vim(vimcdoc-1.5.0.tar.gz)</li>
+<li>安装 jdk(jdk-8u151-linux-x64.tar.gz)</li>
+<li>安装 ndk(android-ndk-r10e-linux-x86_64.bin)</li>
+<li>配置jdk、sdk和ndk环境</li>
+<li>ijkplayer 编译</li>
+<li>将已编译源码导入 android studio<br><img src="/images/da16c24d80d3da779f1a4cc01820bbf1.webp" srcset="/img/loading.gif" lazyload alt="编译完成以后的目录结构"><br>其中</li>
+<li>ijkplayer-java是核心代码必须添加，IjkMediaPlayer就在这里面。</li>
+<li>ijkplayer-armv7a是armeabi-v7a下的so库，</li>
+<li>ijkplayer-armv5是armeabi下的so库，</li>
+<li>ijkplayer-arm64是arm64-v8a下的so库，</li>
+<li>ijkplayer-x86是x86下的so库，</li>
+<li>ijkplayer-x86_64是x86_64下的so库</li>
+<li>ijkplayer-exo是谷歌下的IjkExoMediaPlayer<br>根据项目选择添加即可，一般so只需要一套<code>armeabi-v7a</code>就可以了。</li>
+</ul>
+<h1 id="二-使用"><a href="#二-使用" class="headerlink" title="二.使用"></a>二.使用</h1><p>Android系统播放器的使用是<code>MediaPlayer + Surface</code>，Surface可以通过<code>SurfaceView</code>或<code>TextureView</code>获取。<br>ijkplayer-example中封装了一个类<code>IjkVideoView,IjkVideoView</code>中演示了三种播放器实现的调用</p>
+<p><code>IjkExoMediaPlayer</code>在Ijkplayer-exo中对google exoplayer的调用封装<br><code>AndroidMediaPlayer</code>对android系统播放器MediaPlayer的调用封装<br><code>IjkMediaPlayer</code>在Ijkplayer-java中对ffmpeg的调用封装</p>
+<h3 id="1-入门使用"><a href="#1-入门使用" class="headerlink" title="1.入门使用"></a>1.入门使用</h3><h5 id="1-在布局中添加播放控件。"><a href="#1-在布局中添加播放控件。" class="headerlink" title="(1.)在布局中添加播放控件。"></a>(1.)在布局中添加播放控件。</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs stylus">&lt;com<span class="hljs-selector-class">.wshunli</span><span class="hljs-selector-class">.ijkplayer</span><span class="hljs-selector-class">.demo</span><span class="hljs-selector-class">.widget</span><span class="hljs-selector-class">.IjkVideoView</span><br>    android:id=<span class="hljs-string">&quot;@+id/ijkvideoview&quot;</span><br>    android:layout_width=<span class="hljs-string">&quot;match_parent&quot;</span><br>    android:layout_height=<span class="hljs-string">&quot;match_parent&quot;</span>&gt;<br>&lt;/com<span class="hljs-selector-class">.wshunli</span><span class="hljs-selector-class">.ijkplayer</span><span class="hljs-selector-class">.demo</span><span class="hljs-selector-class">.widget</span>.IjkVideoView&gt;<br></code></pre></td></tr></table></figure>
+<h5 id="2-然后在-Activity-中使用就可以了"><a href="#2-然后在-Activity-中使用就可以了" class="headerlink" title="(2.)然后在 Activity 中使用就可以了"></a>(2.)然后在 Activity 中使用就可以了</h5><figure class="highlight roboconf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs roboconf">IjkVideoView ijkVideoView;<br>@Override<br>protected void onCreate(Bundle savedInstanceState) &#123;<br>    <span class="hljs-attribute">super.onCreate(savedInstanceState);</span><br><span class="hljs-attribute">    setContentView(R.layout.activity_main);</span><br><span class="hljs-attribute"></span><br><span class="hljs-attribute">    ijkVideoView = findViewById(R.id.ijkvideoview);</span><br><span class="hljs-attribute">    ijkVideoView.setVideoURI(Uri.parse(&quot;http</span>://demo-videos<span class="hljs-variable">.qnsdk</span><span class="hljs-variable">.com</span>/movies/qiniu<span class="hljs-variable">.mp</span>4&quot;));<br>    //<span class="hljs-attribute">ijkVideoView.setVideoURI(Uri.parse(&quot;http</span>://qthttp<span class="hljs-variable">.apple</span><span class="hljs-variable">.com</span><span class="hljs-variable">.edgesuite</span><span class="hljs-variable">.net</span>/1010qwoeiuryfg/sl<span class="hljs-variable">.m</span>3u8&quot;));<br>    <span class="hljs-attribute">ijkVideoView.start();</span><br><span class="hljs-attribute">&#125;</span><br></code></pre></td></tr></table></figure>
+<h1 id="二-自定义播放器"><a href="#二-自定义播放器" class="headerlink" title="二.自定义播放器"></a>二.自定义播放器</h1><p>官方提供的Demo只是演示视频播放的基本操作，对于视频播放的控制(MediaController)、全屏等操作，还要自己动手做。</p>
+<h1 id="三-ijkplayer播放视频Http和Https切换以后播放报错，无法播放"><a href="#三-ijkplayer播放视频Http和Https切换以后播放报错，无法播放" class="headerlink" title="三.ijkplayer播放视频Http和Https切换以后播放报错，无法播放"></a>三.ijkplayer播放视频Http和Https切换以后播放报错，无法播放</h1><h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>在使用ijkplayer开发视频播放器时，视频是连续播放的（也就是上一段播放完成直接播放下一段视频）一直都是没有问题的。今天偶然间发现有的时候部分视频无法正常播放。查看日志信息，报错信息为：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus">E/tv<span class="hljs-selector-class">.danmaku</span><span class="hljs-selector-class">.ijk</span><span class="hljs-selector-class">.media</span><span class="hljs-selector-class">.player</span><span class="hljs-selector-class">.IjkMediaPlayer</span>: Error (-<span class="hljs-number">10000</span>,<span class="hljs-number">0</span>)<br>E/IJKMEDIA: Option ijkiomanager not found.<br></code></pre></td></tr></table></figure>
+<p>经过排查分析发现了规律：当首次播放的视频地址是http开头的，等该视频播放以后，切换到https开头的视频是无法播放的，反之亦如此。</p>
+<h3 id="2-猜测"><a href="#2-猜测" class="headerlink" title="2.猜测"></a>2.猜测</h3><p>可能是dns_cache_clear这个设置非首次播放时被还原,所以导致这样的问题产生。</p>
+<h3 id="3-解决方案"><a href="#3-解决方案" class="headerlink" title="3.解决方案"></a>3.解决方案</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">ijkPlayer</span>.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, <span class="hljs-string">&quot;dns_cache_clear&quot;</span>, <span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure>
+
+<h1 id="开源音视频播放器UI方案"><a href="#开源音视频播放器UI方案" class="headerlink" title="开源音视频播放器UI方案"></a>开源音视频播放器UI方案</h1><p><a target="_blank" rel="noopener" href="https://github.com/CarGuo/GSYVideoPlayer">GSYVideoPlayer</a><br><a target="_blank" rel="noopener" href="https://github.com/Doikki/DKVideoPlayer">DKVideoPlayer</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/5dd4db66ae69">Android视频直播、点播播放器哪家强？</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/junhuahouse/article/details/79194069">ijkplayer 详尽编译过程</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/coder_pig/article/details/79134625">ijkplayer编译so库真没那么难</a><br><a target="_blank" rel="noopener" href="https://jessiekate.gitee.io/2019/02/16/IjkplayerSo/">ijkplayer编译so文件支持更多格式</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/843c86a9e9ad">IjkPlayer播放器秒开优化以及常用Option设置</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a11c724c5b2b">ijkPlayer主流程分析</a><br><a target="_blank" rel="noopener" href="https://kevinwu.cn/p/bdcf2466/#%E5%9C%A8Android%E7%B3%BB%E7%BB%9F%E4%B8%AD%E6%92%AD%E6%94%BE%E5%A3%B0%E9%9F%B3">音乐播放器实践：MediaPlayer和IjkPlayer方案对比使用</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%BC%80%E5%8F%91/" class="category-chain-item">Android开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Android音视频开发之ijkplayer</div>
+      <div>http://example.com/2019/12/10/Android音视频开发之ijkplayer/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年12月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/01/07/Android%E4%BD%BF%E7%94%A8RecyclerView%E5%AE%9E%E7%8E%B0%E5%A0%86%E5%8F%A0%E5%A4%B4%E5%83%8F%E6%95%88%E6%9E%9C/" title="Android使用RecyclerView实现堆叠头像效果">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Android使用RecyclerView实现堆叠头像效果</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/09/28/AOSP%E6%BA%90%E7%A0%81%E4%B9%8B%E7%BC%96%E8%AF%91%E3%80%81%E8%B0%83%E8%AF%95%E3%80%81%E5%88%B7%E6%9C%BA/" title="AOSP源码之编译、调试、刷机">
+                        <span class="hidden-mobile">AOSP源码之编译、调试、刷机</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

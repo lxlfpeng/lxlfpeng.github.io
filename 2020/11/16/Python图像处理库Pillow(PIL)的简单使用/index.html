@@ -1,0 +1,707 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/images/favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="peng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一.PIL和Pillow图像处理库图像库PIL(Python Image Library)是Python的第三方图像处理库，但是由于其强大的功能与众多的使用人数，几乎已经被认为是python官方图像处理库了。PIL原来是只支持python2的版本，后来出现了移植到python3的库pillow，pillow其功能和PIL差不多。 PIL 软件包提供了基本的图像处理功能，如：改变图像大小，旋转图像，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python图像处理库Pillow(PIL)的简单使用">
+<meta property="og:url" content="http://example.com/2020/11/16/Python%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%BA%93Pillow(PIL)%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一.PIL和Pillow图像处理库图像库PIL(Python Image Library)是Python的第三方图像处理库，但是由于其强大的功能与众多的使用人数，几乎已经被认为是python官方图像处理库了。PIL原来是只支持python2的版本，后来出现了移植到python3的库pillow，pillow其功能和PIL差不多。 PIL 软件包提供了基本的图像处理功能，如：改变图像大小，旋转图像，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-11-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-03T06:39:25.060Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Python图像处理库Pillow(PIL)的简单使用 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>鹏哥的Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Python图像处理库Pillow(PIL)的简单使用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-11-16 00:00" pubdate>
+          2020年11月16日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          12 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Python图像处理库Pillow(PIL)的简单使用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一-PIL和Pillow图像处理库"><a href="#一-PIL和Pillow图像处理库" class="headerlink" title="一.PIL和Pillow图像处理库"></a>一.PIL和Pillow图像处理库</h1><p>图像库PIL(Python Image Library)是Python的第三方图像处理库，但是由于其强大的功能与众多的使用人数，几乎已经被认为是python官方图像处理库了。PIL原来是只支持python2的版本，后来出现了移植到python3的库pillow，pillow其功能和PIL差不多。 PIL 软件包提供了基本的图像处理功能，如：改变图像大小，旋转图像，图像格式转换，色场空间转换，图像增强，直方图处理，插值和滤波等等。</p>
+<h1 id="二-安装Pillow"><a href="#二-安装Pillow" class="headerlink" title="二.安装Pillow"></a>二.安装Pillow</h1><p>Pillow 的安装非常简单，不过需要注意 Pillow 和 PIL 不能共存在相同的环境中，因此在安装 Pillow 之前，先要卸载 PIL。命令行下通过 pip 安装：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> pillow<br></code></pre></td></tr></table></figure>
+
+<p>安装完成之后，可以在 Python 的开发环境输入以下代码，测试 Pillow 是否安装成功，以及查看相应的版本号。</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs coffeescript"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br><br><span class="hljs-built_in">print</span>(Image.VERSION)<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>注意，虽然使用的是 Pillow，但是导入的包依然是 PIL。</p>
+</blockquote>
+<h1 id="三-Image类使用"><a href="#三-Image类使用" class="headerlink" title="三.Image类使用"></a>三.Image类使用</h1><p>Image是PIL中最重要的模块之一，任何一张图片都可以使用Image对象来表示。 可以通过多种方式来创建 Image 类的实例，比如：从文件中加载图像、处理其它图像或从头开始创建图像。</p>
+<h3 id="1-使用Image类打开本地图片"><a href="#1-使用Image类打开本地图片" class="headerlink" title="1.使用Image类打开本地图片"></a>1.使用Image类打开本地图片</h3><p>要从文件中加载图像创建 Image 类的实例，可以使用 Image 模块的 <code>open()</code> 方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br><br>img = Image.<span class="hljs-built_in">open</span>(<span class="hljs-string">r&quot;./test.jpg&quot;</span>)<br><br></code></pre></td></tr></table></figure>
+<p>执行成功，<code>Image.open()</code> 函数会返回一个 Image 对象。如果图像文件打开错误，则会抛出 OSError 错误。</p>
+<blockquote>
+<p>注意在使用交互式处理图片文件时，应该使用文件的全路径，如果运行py文件，还是建议采用相对路径。</p>
+</blockquote>
+<h3 id="2-使用Image类从URL读取图像"><a href="#2-使用Image类从URL读取图像" class="headerlink" title="2.使用Image类从URL读取图像"></a>2.使用Image类从URL读取图像</h3><p>读取网络图形需要配合网络请求工具，通过网络请求工具将图片变成流然后通过Image类进行打开。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-keyword">from</span> PIL importImage<br>import requests<br><br>url =<span class="hljs-string">&#x27;https://xxxxxx.jpg&#x27;</span><br>resp = requests.<span class="hljs-built_in">get</span>(url, <span class="hljs-attribute">stream</span>=<span class="hljs-literal">True</span>).raw<br>img =Image.open(resp)<br>img.save(<span class="hljs-string">&#x27;xxxx.jpg&#x27;</span>,<span class="hljs-string">&#x27;jpeg&#x27;</span>)<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>该示例从 URL 读取图像并将其保存在磁盘上。</p>
+</blockquote>
+<h3 id="3-使用Image类查看图片信息"><a href="#3-使用Image类查看图片信息" class="headerlink" title="3.使用Image类查看图片信息"></a>3.使用Image类查看图片信息</h3><p>通过Image 类的实例可以使用实例的属性来检查文件内容。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br>img = Image.<span class="hljs-built_in">open</span>(<span class="hljs-string">r&quot;./test.jpg&quot;</span>)<br><br><span class="hljs-built_in">print</span>(img.<span class="hljs-built_in">format</span>)<br><span class="hljs-comment"># JPEG</span><br><span class="hljs-built_in">print</span>(img.size)<br><span class="hljs-comment"># (1080, 1920)</span><br><span class="hljs-built_in">print</span>(img.mode)<br><span class="hljs-comment"># RGB</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>format: 返回图像文件的格式（JPG, PNG, BMP, None, etc.）。用来标识图片的格式或来源，如果图片并不是通过读取文件得到的，那么值就是None。</li>
+<li>size: 返回图像的尺寸。以二元组的形式返回图像的宽度和高度（以像素为单位）；</li>
+<li>mode: 返回图像的色彩模式（L, RGB, CMYK, etc.）。L 为灰度图像，RGB 为真彩色图像，CMYK 为印刷图像；</li>
+</ul>
+<h3 id="4-使用Image类显示图片"><a href="#4-使用Image类显示图片" class="headerlink" title="4.使用Image类显示图片"></a>4.使用Image类显示图片</h3><p>Image 类实例有很多方法，如果想要查看图像，可以使用 <code>show()</code> 方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br>img = Image.<span class="hljs-built_in">open</span>(<span class="hljs-string">r&quot;./test.jpg&quot;</span>)<br>img.show()<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>show() 方法效率不高，因为它会将图像保存到临时文件中，并且调用你电脑中的图像程序来显示图像。如果你的电脑中没有安装显示图像的应用程序，show() 方法甚至不能工作。</p>
+</blockquote>
+<h3 id="5-使用Image类保存图片"><a href="#5-使用Image类保存图片" class="headerlink" title="5.使用Image类保存图片"></a>5.使用Image类保存图片</h3><p>Pillow 保存一个图像 语法为:</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs fortran">Image.<span class="hljs-keyword">save</span>(fp, <span class="hljs-keyword">format</span>=<span class="hljs-keyword">None</span>, **params)<br></code></pre></td></tr></table></figure>
+<ul>
+<li>fp - 文件名（字符串）、pathlib.Path对象或文件对象。</li>
+<li>format - 可选的格式重写。如果省略，使用的格式是由文件名扩展名决定的。如果使用文件对象而不是文件名，应该总是使用这个参数。</li>
+<li>options - 图像写入器的额外参数。</li>
+<li>返回值 - 无</li>
+<li>KeyError - 如果不能从文件名确定输出格式，使用格式选项来解决这个问题。</li>
+<li>IOError - 如果文件不能被写入，文件可能已经被创建，可能包含部分数据。</li>
+</ul>
+<blockquote>
+<p>注意:保存的时候，如果没有指定图片格式的话，那么Pollow会根据输入的后缀名决定图片的格式。</p>
+</blockquote>
+<h3 id="6-Image类常用图片转换功能"><a href="#6-Image类常用图片转换功能" class="headerlink" title="6.Image类常用图片转换功能"></a>6.Image类常用图片转换功能</h3><h5 id="获取图片信息"><a href="#获取图片信息" class="headerlink" title="获取图片信息"></a>获取图片信息</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br>im = Image.<span class="hljs-built_in">open</span>(<span class="hljs-string">r&quot;./test.jpg&quot;</span>)<br><span class="hljs-built_in">print</span>(im.<span class="hljs-built_in">format</span>)  <span class="hljs-comment"># JPEG</span><br></code></pre></td></tr></table></figure>
+<h5 id="获取大小"><a href="#获取大小" class="headerlink" title="获取大小"></a>获取大小</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br>im = Image.<span class="hljs-built_in">open</span>(<span class="hljs-string">r&quot;./test.jpg&quot;</span>)<br><span class="hljs-built_in">print</span>(im.size)  <span class="hljs-comment"># (960, 626)</span><br></code></pre></td></tr></table></figure>
+<h5 id="图像缩放"><a href="#图像缩放" class="headerlink" title="图像缩放"></a>图像缩放</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br>im = Image.<span class="hljs-built_in">open</span>(<span class="hljs-string">r&quot;./test.jpg&quot;</span>)<br><span class="hljs-comment"># 缩放为原来的1/2</span><br>im = im.resize((im.size[<span class="hljs-number">0</span>] // <span class="hljs-number">2</span>, im.size[<span class="hljs-number">1</span>] // <span class="hljs-number">2</span>))<br></code></pre></td></tr></table></figure>
+<h5 id="图像翻转"><a href="#图像翻转" class="headerlink" title="图像翻转"></a>图像翻转</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br>im = Image.<span class="hljs-built_in">open</span>(<span class="hljs-string">r&quot;./test.jpg&quot;</span>)<br><span class="hljs-comment"># 填入角度，按照逆时针进行翻转</span><br>im = im.rotate(<span class="hljs-number">90</span>)<br></code></pre></td></tr></table></figure>
+
+<h5 id="图像模糊"><a href="#图像模糊" class="headerlink" title="图像模糊"></a>图像模糊</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br>im = Image.<span class="hljs-built_in">open</span>(<span class="hljs-string">r&quot;./test.jpg&quot;</span>)<br><span class="hljs-comment"># 图像模糊</span><br>im = im.<span class="hljs-built_in">filter</span>(ImageFilter.BLUR)<br></code></pre></td></tr></table></figure>
+
+<h5 id="图像增强（细节突出）"><a href="#图像增强（细节突出）" class="headerlink" title="图像增强（细节突出）"></a>图像增强（细节突出）</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br>im = Image.<span class="hljs-built_in">open</span>(<span class="hljs-string">r&quot;./test.jpg&quot;</span>)<br>im = im.<span class="hljs-built_in">filter</span>(ImageFilter.DETAIL)<br></code></pre></td></tr></table></figure>
+
+<h5 id="图像边缘提取"><a href="#图像边缘提取" class="headerlink" title="图像边缘提取"></a>图像边缘提取</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br>im = Image.<span class="hljs-built_in">open</span>(<span class="hljs-string">r&quot;./test.jpg&quot;</span>)<br>im = im.<span class="hljs-built_in">filter</span>(ImageFilter.FIND_EDGES)<br></code></pre></td></tr></table></figure>
+
+<h5 id="浮雕效果"><a href="#浮雕效果" class="headerlink" title="浮雕效果"></a>浮雕效果</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br>im = Image.<span class="hljs-built_in">open</span>(<span class="hljs-string">r&quot;./test.jpg&quot;</span>)<br>im = im.<span class="hljs-built_in">filter</span>(ImageFilter.EMBOSS)<br></code></pre></td></tr></table></figure>
+<h5 id="锐化效果"><a href="#锐化效果" class="headerlink" title="锐化效果"></a>锐化效果</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br>im = Image.<span class="hljs-built_in">open</span>(<span class="hljs-string">r&quot;./test.jpg&quot;</span>)<br>im = im.<span class="hljs-built_in">filter</span>(ImageFilter.SHARPEN)<br></code></pre></td></tr></table></figure>
+
+<h1 id="四-Pillow压缩图片大小"><a href="#四-Pillow压缩图片大小" class="headerlink" title="四.Pillow压缩图片大小"></a>四.Pillow压缩图片大小</h1><h3 id="1-quality-方式"><a href="#1-quality-方式" class="headerlink" title="1.quality 方式"></a>1.quality 方式</h3><p>使用PIL模块的 quality方法来进行压缩</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image<br> <br><span class="hljs-comment">#读取img文件</span><br>img_file = <span class="hljs-string">&#x27;./test.jpg&#x27;</span><br>im = Image.<span class="hljs-built_in">open</span>(img_file)<br> <br><span class="hljs-comment">#quality 是设置压缩比</span><br>im.save(<span class="hljs-string">&#x27;pico-ouo.jpg&#x27;</span>,quality = <span class="hljs-number">20</span>)<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-thumbnail方式"><a href="#2-thumbnail方式" class="headerlink" title="2.thumbnail方式"></a>2.thumbnail方式</h3><p>用PIL的 thumbnail方式进行图片压缩</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image,ImageFile<br> <br><span class="hljs-comment">#防止图片超过178956970 pixels 而报错</span><br>ImageFile.LOAD_TRUNCATED_IMAGES = <span class="hljs-literal">True</span><br>Image.MAX_IMAGE_PIXELS = <span class="hljs-literal">None</span><br> <br><span class="hljs-comment">#读取img文件</span><br>img_file = <span class="hljs-string">&#x27;./test.jpg&#x27;</span><br>im = Image.<span class="hljs-built_in">open</span>(img_file)<br> <br><span class="hljs-comment">#获取原尺寸图片大小</span><br>w,h = im.size<br><span class="hljs-comment">#图片进行50%的压缩</span><br>im.thumbnail  = ((w // <span class="hljs-number">2</span>, h // <span class="hljs-number">2</span>))<br><span class="hljs-comment">#保存</span><br>im.save(<span class="hljs-string">&#x27;test.jpg&#x27;</span>)<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="五-Pillow的绘图功能"><a href="#五-Pillow的绘图功能" class="headerlink" title="五.Pillow的绘图功能"></a>五.Pillow的绘图功能</h1><p>PIL的ImageDraw提供了一系列绘图方法，让我们可以直接绘图。篇幅有限，本文暂时先不做探讨。</p>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/traditional/p/11111770.html">PIL：图像处理模块，功能强大、简单易用</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Python/" class="category-chain-item">Python</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Python图像处理库Pillow(PIL)的简单使用</div>
+      <div>http://example.com/2020/11/16/Python图像处理库Pillow(PIL)的简单使用/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>peng</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2020年11月16日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/01/05/SpringBoot%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E4%B9%8B%E4%B8%80%E9%A1%B9%E7%9B%AE%E5%9F%BA%E7%A1%80/" title="SpringBoot学习总结之一项目基础">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SpringBoot学习总结之一项目基础</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/13/Flutter%E4%B8%8EAndroid%E6%B7%B7%E7%BC%96/" title="Flutter与Android混编">
+                        <span class="hidden-mobile">Flutter与Android混编</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
