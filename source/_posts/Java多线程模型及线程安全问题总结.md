@@ -81,7 +81,7 @@ public class Main {
 谈到线程池就会想到池化技术，其中最核心的思想就是把宝贵的资源放到一个池子中；每次使用都从里面获取，用完之后又放回池子供其他人使用。ThreadPoolExecutor可以减少销毁和创建的次数，每个工作线程可以重复利用，可执行多个任务。
 
 ### 2.Java四种线程池的使用
-![](https://upload-images.jianshu.io/upload_images/3067896-a98e011c492b9cb2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/cbd7858d0a4059d9b7167b3197ea45e1.webp)
 JDK为我们封装了一套操作多线程的框架Executors，帮助我们可以更好的控制线程池，Executors下提供了一些线程池的工厂方法：Java通过Executors提供四种线程池，分别为：
 ##### (1.)newFixedThreadPool
 创建固定长度的线程池，线程池中的线程数量是固定的。超出的线程会在队列中等待。每次提交一个任务就创建一个线程，直到线程达到线程池的最大大小，线程池的大小一旦达到最大值就会保持不变。如果某个线程因为执行异常而结束，线程池会补充一个新的线程。
@@ -238,7 +238,7 @@ public ThreadPoolExecutor(int corePoolSize,//线程核心线程数。线程池�
 >注意：当线程死亡以后，不能再次调用start()方法来启动该线程，调用会返回IllegalThreadStateException异常。程序只能对处于新建状态的线程调用start()方法，而对处于新建状态的线程两次调用start()方法也是错误的，这都会引发IllegalThreadStateException异常。
 
 ### 6.总结
-![](https://upload-images.jianshu.io/upload_images/3067896-b94777c8d3b90753.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/8476c394d3106734382da07e8c70d09c.webp)
 线程从阻塞状态只能进入就绪状态，而不能直接进入运行状态。而就绪状态到运行状态之间的转换通常不受程序控制，而由系统线程调度所决定，当处于就绪状态的线程获得处理器资源时，该线程进入运行状态；当处于运行状态的线程失去处理器器资源时，该线程进入就绪状态。但有一个方法可以控制线程从运行状态转为就绪状态，那就是yiled()方法。
 
 # 五.Java线程调度方法
@@ -283,10 +283,10 @@ Object类中的notify()方法，唤醒在此对象监视器上等待的单个线
 ### 2.内存模型
 ##### (1.)现代计算机内存模型
 计算机在执行程序时，每条指令都是在CPU中执行的，而执行指令过程中，势必涉及到数据的读取和写入。由于程序运行过程中的临时数据是存放在主存(物理内存)当中的，这时就存在一个问题，由于CPU执行速度很快，而从内存读取数据和向内存写入数据的过程跟CPU执行指令的速度比起来要慢的多，因此如果任何时候对数据的操作都要通过和内存的交互来进行，会大大降低指令执行的速度。因此在CPU里面就有了高速缓存。也就是当程序在运行过程中，会将运算需要的数据从主存复制一份到CPU的高速缓存当中，那么CPU进行计算时就可以直接从它的高速缓存读取数据和向其中写入数据，当运算结束之后，再将高速缓存中的数据刷新到主存当中。这是计算机硬件对于主存数据的访问方式。
-![](https://upload-images.jianshu.io/upload_images/3067896-665e9c2de6a39f0f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/e268df6352f7cc265bdd4ed9d3793a5e.webp)
 ##### (2.)Java内存模型(JMM)
 前面介绍过了计算机内存模型，这是解决多线程场景下并发问题的一个重要规范。那么具体的实现是如何的呢，不同的编程语言，在实现上可能有所不同。众所周知，Java程序是需要运行在Java虚拟机上面的，Java内存模型即Java Memory Model，简称JMM。Java内存模型(JMM)定义了Java虚拟机(JVM)在计算机内存(RAM)中的工作规范。在硬件内存模型中，各种CPU架构的实现是不尽相同的，Java作为跨平台的语言，JMM用来屏蔽掉各种硬件和操作系统的内存访问差异，以实现让Java程序在各平台下都能够达到一致的内存访问效果。JMM是一个抽象的概念，并不是物理上的内存划分。
-![Java内存模型(JMM)](https://upload-images.jianshu.io/upload_images/3067896-aa15ce1c74f97309.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![Java内存模型(JMM)](/images/422e7d2844f1e241a2c42d211cb13ba6.webp)
 - 所有的变量都存储在主内存中。
 - 每个线程都有自己独立的工作内存，里面保存该线程使用到的变量的副本(主内存中该变量的一份拷贝)。
 - 线程对共享变量的所有操作都必须在自己的工作内存中进行，不能直接从主内存中读写。

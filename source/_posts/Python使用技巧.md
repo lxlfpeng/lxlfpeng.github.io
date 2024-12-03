@@ -942,7 +942,7 @@ python -m pyftpdlib -w -d ~/Desktop -u admin -P 123456
 
 ### 3、实例如下：
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0); "复制代码")
+[![复制代码](/images/48304ba5e6f9fe08f3fa1abda7d326ab.webp)](javascript:void(0); "复制代码")
 
 ```
 #!/usr/bin/env python3

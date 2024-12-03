@@ -7,7 +7,7 @@ title: UEFI与BIOS-有什么区别
 ### 🐒BIOS是什么
 
 BIOS（Basic Input Output System）译为基本输入输出系统。它是一组固化到计算机内主板上一个ROM芯片上的程序 ，保存着计算机最重要的基本输入输出的程序、开机后自检程序和系统自启动程序，为计算机提供最低级的、最直接的硬件控制。和其它程序不同的是，BIOS是储存在BIOS芯片中的，而不是储存在磁盘中，因此它属于主板的一部分。大家有时就称呼它一个既不同于软件也不同于硬件的名字“Firmware”（固件）。一般而言，BIOS ROM芯片是主板上唯一贴有标签的芯片，上面印有“BIOS”字样， 虽然有些主板上的BIOS 芯片没有明确印出“BIOS”，但凭借外贴的标签也能很容易地将它认出，BIOS ROM芯片在主板上很引人注目（如下图）。
-![image.png](https://img-blog.csdnimg.cn/img_convert/2a735a90438553b8dc14f06c3879a627.png)
+![image.png](/images/c676a41fc17680ada3172bea69621ca2.webp)
 BIOS是一种程序，其内容是软件，由生产厂商在出厂时用烧录的形式集成在主板上的一块ROM芯片中，因此它的表现形式为硬件。通常所说的BIOS芯片实际上指的是存储BIOS的ROM芯片，ROM只是BIOS的载体。 为了在关机后使 BIOS 不会丢失，早期的 BIOS 存储在ROM中，不能进行写入操作，并且其大小不会超过 64KB；从奔腾时代开始，目前的 BIOS 大多有 1MB 到 2MB，使用 闪存（Flash ROM）来作为BIOS的存储芯片，支持写操作，这也为刷写BIOS提供了方便。
 
 ### 🐕BIOS如何运行
@@ -61,11 +61,11 @@ UEFI，全称Unified Extensible Firmware Interface，即“统一的可扩展固
 # 三磁盘分区表
 
 在安装win7/win8/win10系统时，有的时候会出现提示磁盘具有MBR分区表，EFI无法正常安装Windows系统之类的情况，如下图:
-![](https://img-blog.csdnimg.cn/img_convert/921dcdf9e3d91947d32c46d47532458b.png)
+![](/images/166d2d4fcb764fa79c490ff646fb111b.webp)
 那么，磁盘MBR分区表和GPT分区表两者之间有什么区别?
 我们都知道，如果电脑中安装了一块新的硬盘。这块物理硬盘是无法被直接使用的，而是需要在硬盘上划分出分区，在划分好的分区上创建FAT或NTFS等文件系统，这块硬盘才能够被正常使用。当然，这块物理硬盘可以划分成多个分区，这取决于使用者的需求而定，有些人喜欢分三个区，有些人喜欢分两个区。那，怎么把硬盘分成多个区?这就要使用到分区表了，分区表定义与保存了硬盘的分区信息，
 分区表位于硬盘开头的一段特定的物理空间内，操作系统等软件通过读取分区表内的信息，就能够获得该硬盘的分区信息。
-![image.png](https://img-blog.csdnimg.cn/img_convert/fd15672bf4c06f5f08870c29d05d78b5.png)
+![image.png](/images/3e7a214fed6ba37adf1e776c7a89ffb0.webp)
 如上图所见，硬盘的空间会划分为C、D、E等3个分区，而这3个分区内的信息将在硬盘最开头的分区表中保存着。分区表在Windows系统中则有2种类型的分区方案： MBR与GPT之分。
 
 **硬盘必须要分区之后才能使用的原因有如下两点:**
@@ -76,15 +76,15 @@ UEFI，全称Unified Extensible Firmware Interface，即“统一的可扩展固
 ### 🦆MBR分区表
 
 MBR的意思是“主引导记录”，是IBM公司早年间提出的。它是存在于磁盘驱动器开始部分的一个特殊的启动扇区。这个扇区包含了已安装的操作系统系统信息，并用一小段代码来启动系统。如果MBR的信息损坏或误删就不能正常启动系统，这时候你就需要找一个引导修复软件工具来修复它就可以了。Linux系统中MBR通常会是GRUB加载器。当一台电脑启动时，它会先启动主板自带的BIOS系统，BIOS加载MBR，MBR再启动Windows，这就是mbr的启动过程。
-![image.png](https://img-blog.csdnimg.cn/img_convert/e37722829bd3ac6961b63cb35394b285.png)
+![image.png](/images/435a9d339f4451bae3a3e66acf03676b.webp)
 在MBR磁盘的第一扇区还会保存着电脑系统的启动代码以及硬盘分区表，而在MBR中，分区表的大小是固定不变的，一共可容纳4个主分区信息。MBR分区表中支持的硬盘最大分区容量仅为2TB，对2TB以上容量的物理硬盘，不适合使用MBR分区方案。
 
 ### 🦔GPT分区表
 
 GPT是GUID磁碟分割表的缩写，主要的意思是全局唯一标识磁盘分区表，这是实体硬盘的分区表的结构布局的标准。
-![image.png](https://img-blog.csdnimg.cn/img_convert/2093c737817e68669305dcba2ac2e6ba.png)
+![image.png](/images/ba4ca0d66b8a332830053669f4d0e1bd.webp)
 在GTP磁盘的第一个数据块中同样有一个与MBR(主引导记录)类似的标记，叫做PMBR。PMBR的作用是，当使用不支持GPT的分区工具时，整个硬盘将显示为一个受保护的分区，以防止分区表及硬盘数据遭到破坏。GPT的分区方案相对MBR来说更为先进，这是有原因的，主要是GPT分区表头中可自定义分区数量的最大值，也就是说GPT分区表的大小不是固定的。在Windows中，微软设定GPT磁盘最大分区数量为128个。另外，GPT分区表则能够识别2TB以上的硬盘空间。除此之外，GPT分区方案在硬盘的末端还有一个备份分区表，保证了分区信息不容易丢失。目前新出的电脑配置的硬盘基本上都使用了GPT分区方案。任何一块GPT磁盘上都有一个MSR分区，大小随硬盘总容量而定，一般不超过128MB。这个分区不能被用户直接使用，它的用途是防止将一块GPT磁盘接到老系统（如XP）中，被当作未格式化的空硬盘而继续操作（例如重新格式化），导致数据丢失。GPT磁盘上有了这个分区，当把它接入XP等老系统中，会提示无法识别的磁盘，也无法进一步操作。MBR分区表最多只能支持4个主分区或三个主分区+1个扩展分区(逻辑分区不限制)，GPT分区表在Windows系统下可以支持128个主分区。
-![image.png](https://img-blog.csdnimg.cn/img_convert/5c40479e1f663cce4393d3ff4fe622b6.png)
+![image.png](/images/72a5698bcf741d1731911d4590714701.webp)
 
 ### 🦀BIOS + MBR
 
@@ -97,7 +97,7 @@ BIOS→MBR→“活动的主分区”→\bootmgr→\Boot\BCD→\Windows\system32
 
 当引导程序运行后，操作系统内核就被加载运行，完成从`BIOS`程序中接手的引导流程，整体流程如下图：
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/2f0695aa615640c8ab9bb2b2d0051d96.png)
+![在这里插入图片描述](/images/be8ce6a3c6b964788350031fab4f423a.webp)
 
 ### 🐙UEFI + GPT
 
@@ -112,7 +112,7 @@ UEFIBIOS→EFI系统分区（FAT格式的分区）→\efi\Microsoft\boot\bootmgf
 * 开机后，固化在`ROM`里的`UEFI BIOS`就会被加载到内存运行。
 * `UEFI BIOS`将引导`EFI`系统进行运行。
 * 在`EFI`系统启动后，`GUID`分区表就会被识别，之后`EFI`系统就会通过`.efi`文件启动`Boot Loader`程序加载操作系统内核。 整体流程如下图：
-  ![在这里插入图片描述](https://img-blog.csdnimg.cn/b3878e1d5efb4314976d8b2212d181f4.png)
+  ![在这里插入图片描述](/images/93cc0567f68360fc8793e27a099e5f56.webp)
 
 使用UEFI启动的系统，必须要有一个ESP（FAT32格式）分区供UEFI使用，这是因为，不管是使用grub（或者其他比如微软windows的引导器）来引导操作系统还是UEFI直接引导linux内核镜像，
 都需要有ESP分区用于存放引导文件（BIOS里面的UEFI只认这个分区，如果走UEFI引导，也必须从这个分区加载引导文件），UEFI标准定义了默认的引导文件如下

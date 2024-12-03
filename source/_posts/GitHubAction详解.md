@@ -246,7 +246,7 @@ actions/setup-node@master  # 指向一个分支
 
 ## 😎GitHubAction执行结果
 对于GitHubAction的执行流程我们可以通过repo 上依次点击Actions就可以看到Action的状态和执行结果等信息:
-![image.png](https://img-blog.csdnimg.cn/img_convert/06c40b483828c41c6a0576b80ad460b8.png)
+![image.png](/images/dbbd32eb93239b1fe5e7a0843074a56b.webp)
 
 # 三.示例
 使用GitHubAction实现Push代码发送邮件通知功能。 主要通过 GitHub Action 监听代码 push 事件，并发送邮件（前提是邮箱需要开通 SMTP 服务）。

@@ -29,7 +29,7 @@ ijk的导入方式有两种，第一种是使用gradle导入ijkplayer发布到jc
 - 配置jdk、sdk和ndk环境
 - ijkplayer 编译
 - 将已编译源码导入 android studio
-![编译完成以后的目录结构](https://upload-images.jianshu.io/upload_images/3067896-37b6aaaea11e5ea6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![编译完成以后的目录结构](/images/da16c24d80d3da779f1a4cc01820bbf1.webp)
 其中
 - ijkplayer-java是核心代码必须添加，IjkMediaPlayer就在这里面。
 - ijkplayer-armv7a是armeabi-v7a下的so库，

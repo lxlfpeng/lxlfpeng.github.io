@@ -70,7 +70,7 @@ for (index in intArr.indices){
 # 二.集合
 ### 1.只读集合和可变集合
 Kotlin将集合分为``只读集合``和``可变集合``。
-![](https://upload-images.jianshu.io/upload_images/3067896-1187025e6660f341.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/2ab9b95b7bfb5df651b3ead4a7785dec.webp)
 -  **只读集合:**源自最基础的集合接口：kotlin.collections.Collection。该接口可以对集合进行一些基本操作，但无任何添加和移除元素的方法。
 -  **可变集合:**实现 kotlin.collections.MutableCollection 接口才可以修改集合的数据。MutableCollection 接口继承自 Collection，并提供添加、移除和清空集合元素的方法。
 >可变集合一般都带有 “Mutable” 前缀修饰，意味着能对集合中的元素进行修改。

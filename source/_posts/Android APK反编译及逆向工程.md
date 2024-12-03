@@ -4,7 +4,7 @@ title: Android APK反编译及逆向工程
 
 # 一. 分析已经打好的apk.
 首先来简单的说明下Apk文件本质上其实是一个zip包。我们直接进行解压就能看到其中的目录。
-![目录](https://img-blog.csdnimg.cn/img_convert/3b8c0aba76295903f2f76b1ee32cbf2a.png)
+![目录](/images/91cbf5f8d83bfb7ef4641b57775dfd34.webp)
 #### 1. 目录说明
 *   AndroidManifest.xml：应用的全局配置文件
 *   classes.dex：源代码编译成class后，转成jar，再压缩成dex文件，dex是可以直接在Android虚拟机上运行的文件。
@@ -33,9 +33,9 @@ xml文件都不能直接被识别了这是因为:xml文件都被aapt编译成二
 -   尝试apktool通过命令提示符运行。
 ##### (2.) 使用ApkTool
 完成安装的步骤以后，上述说到如果你把文件移动到其他的位置，就需要配置环境变量。首先进入到你想要 反编译的apk 目录下，这里就放置到一起了。
-![](https://img-blog.csdnimg.cn/img_convert/b7ba33265e1ce2938402d86d4881ce68.png)
+![](/images/d70ebb6a90dad8e1a058c1559bb32e8e.webp)
 通过``java -jar apktool.jar d xx.apk``命令执行jar程序，可以从下图看到反编译出来的具体内容：
-![](https://img-blog.csdnimg.cn/img_convert/81b280dbf8f39083867c3bb7e425bac3.png)
+![](/images/6dcaacbc12335b34ed5219557600d610.webp)
 已经得到一个可以用文本编辑器打开的阅读的AndroidManifest.xml文件、assets文件夹、res文件夹、smali文件夹等等。这样，我们就可以查看到这个Apk文件的package包名、Activity组件、程序所需要的权限、xml布局、图标等等信息。smali文件夹是反编译出来的代码，需要进行相应的学习才能看懂。
 
 ```
@@ -57,14 +57,14 @@ dex2jar的作用就是将dex格式的文件，转换成jar文件。dex文件是A
 ##### (2. )dex2jar的安装
 打开下载的文件进行解压后进入/dex2jar目录下，里面有脚本，进入终端后，输入命令就可以使用。
 利用终端进入到你的dex2jar目录下，输入命令进行获取
-![](https://img-blog.csdnimg.cn/img_convert/3ff9266c6d0dc7403ff3b7d96fe77769.png)
+![](/images/4bb8534afe1a73b07866991f0ef05024.webp)
 把apk解压下来就能获得classes.dex文件，之后赋值到dex2jar目录下 ，执行命令。
 
 这个时候又有人问我了（怎么这么多人问我），我怎么看生成的这个jar包呀。这个时候就需要 jd-gui了
 
 ### 3. 使用jd-gui查看jar里面的java源代码
 [jd-gui](https://github.com/java-decompiler/jd-gui)用法： 下载完成后直接打开，把生成的classes-dex2jar.jar 文件直接拖到里面就可以查看了
-![](https://img-blog.csdnimg.cn/img_convert/92799e9e6a5b200fb6928b2851ec8e6e.png)
+![](/images/bd10e1068adb7395c19c540512bdd0fd.webp)
 
 ### 4.使用jadx反编译Apk，得到可以阅读的.java源代码
 ##### (1.)jadx介绍
@@ -78,7 +78,7 @@ jadx可以直接对Apk进行反编译直接生成.java文件，相当于是apkto
 ##### (2.)jadx安装使用
 下载完成后进行解压，进入bin目录下执行jadx-gui.bat，jadx也有GUI，进入后选中然将要反编译的apk即可，运行效果如下：
 
-![](https://img-blog.csdnimg.cn/img_convert/66d4caf830dd70b89adf0b0a538df94f.png)
+![](/images/eda469651332ab1af4612de13d9e70e6.webp)
 
 如果要保存源码，选择File->Save ALL即可保存文件，然后就可以导入Android Studio等IDE中。我们也可以直接使用命令行反编译apk文件：
 - jadx -d out classes.dex #直接输出.java文件到out目录
@@ -93,7 +93,7 @@ jadx可以直接对Apk进行反编译直接生成.java文件，相当于是apkto
 ```
 
 # 三. Android 逆向工程.
-![总览](https://img-blog.csdnimg.cn/img_convert/7c59ded81576810595676b6c86c3c960.png)
+![总览](/images/045dbc43eb855db9d2fe4210a4dd964f.webp)
 
 ### 1. 新建一个app在MainActivity中输出一个toast,然后打包出来用于反编译,。
 ```
@@ -114,38 +114,38 @@ public class MainActivity extends AppCompatActivity {
 ```
 java -jar apktool.jar d test.apk
 ```
-![image.png](https://img-blog.csdnimg.cn/img_convert/1cc87f1b04e7eb85fe40900df6d88c34.png)
+![image.png](/images/b3795a54bb877ce9c89ecf06374909bf.webp)
 `d`参数表示decode
 在这个命令后面还可以添加像`-o -s`之类的参数，例如// java -jar apktool.jar d yourApkFile.apk -o
 - -o 指定反编译的目标文件夹的名称（默认会将文件输出到以Apk文件名命名的文件夹中）
 - -s 保留classes.dex文件（默认会将dex文件解码成smali文件）
 - -r 保留resources.arsc文件（默认会将resources.arsc解码成具体的资源文件）  
-  ![image.png](https://img-blog.csdnimg.cn/img_convert/2fce66aa016220ad3f399ac193831245.png)
+  ![image.png](/images/44bbec2e5e12134b6dfa3efcdbf8692e.webp)
 ##### (3. )我们可以从下图看到反编译出来的具体内容:
-![Android反编译工具总结](https://img-blog.csdnimg.cn/img_convert/36e3e757268455e37be0bd4f17c50fba.png)
+![Android反编译工具总结](/images/637fd7a0ca6c03c3f3e3253a204df524.webp)
 我们已经得到一个可以用文本编辑器打开的阅读的AndroidManifest.xml文件、assets文件夹、res文件夹、smali文件夹等等。original文件夹是原始的AndroidManifest.xml文件，res文件夹是反编译出来的所有资源，smali文件夹是反编译出来的代码。
 这时，我们已经可以文本编辑器打开AndroidManifest.xml文件和res下面的layout文件了。这样，我们就可以查看到这个Apk文件的package包名、Activity组件、程序所需要的权限、xml布局、图标等等信息。
 
 ##### (4. )修改smail文件.找到MainActivity.smail文件里吐司输出的内容,进行替换
-![image.png](https://img-blog.csdnimg.cn/img_convert/b11443c79ce48885684361e5831a80ad.png)
-![image.png](https://img-blog.csdnimg.cn/img_convert/774429a5f494f50b38e62348a7deb957.png)
+![image.png](/images/fabef00d952aebc4f6b2dd5e7e92fdc4.webp)
+![image.png](/images/8965743abe6ab0866c421e25380a86e4.webp)
 
 ##### (5. )使用打包命令对源码进行打包.**
 ```
 apktool b app -o other.apk（app 指需要打包的文件夹，-o other.apk 表示生产新文件）
 ```
 ##### (6. )对apk进行签名.然后安装。**
-![image.png](https://img-blog.csdnimg.cn/img_convert/51890b8693fb412d99d6331f160985d5.png)
-![image.png](https://img-blog.csdnimg.cn/img_convert/8fb9cd6e09fcc1ca0a3c0521f46d845f.png)
+![image.png](/images/308ebabafbb083398be7888ab2f43a91.webp)
+![image.png](/images/7b9cbb90cc07c3ca4ae0b8f0e16ba0e2.webp)
 
 # 四. APK加固脱壳.
 众所周知，Android应用开发完成后，除了使用Google官方的混淆外，还需要使用一些第三方的安全软件的加壳处理，比较出名的有腾讯乐固、360加固和爱加密等。加固工具的出现，让反编译的难度更大。但是有了加固技术，就会有反加固技术。
 经过加固后的apk，通过dex2jar反编译：
 腾讯乐固：
-![](https://img-blog.csdnimg.cn/img_convert/5233567c03a0f83cb974c325e7976869.png)
+![](/images/854eebe31f9c20fca32322b1ce92f336.webp)
 
 360加固：
-![](https://img-blog.csdnimg.cn/img_convert/3ff3f14877253501dfc080e953353c0f.png)
+![](/images/e740ebbfc2e599982c168f7879e1a6c9.webp)
 从上面可以看出，经过加固后的apk，通过常规方法反编译无法获取到源码。
 
 所谓Apk加固，就是给目标Apk加一层保护程序，把重要数据信息隐藏起来。加壳程序可以有效 阻止对程序的反编译和逆向分析。Apk加固本质的功能就是实现类加载器。系统先执行加固壳代码，然后将加了密的dex进行解密操作，再加载到系统内存中运行。

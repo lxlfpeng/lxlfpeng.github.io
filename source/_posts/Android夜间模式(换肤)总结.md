@@ -47,9 +47,9 @@ implementation 'androidx.appcompat:appcompat:1.0.2'
 原有的color.xml文件内的颜色系统默认作为白天模式下的颜色取值。对于夜间模式，我们需要新增values-night文件夹，里面包含一个新建的color文件
 **图片资源文件**
 如果适配图片的话，就创建对应的 drawable-night-xxhdpi目录，mipmap-night-xxhdpi目录然后将图片资源放到对应的目录里面。
-![](https://upload-images.jianshu.io/upload_images/3067896-60e69b80c76e0043.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/450ce04107bb1869c0c9c2055539dfff.webp)
 
-![](https://upload-images.jianshu.io/upload_images/3067896-ff07cba6e58c21b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/2a99115f8a700c536898d79d0b3fd5f6.webp)
 
 在这个文件中的颜色名需与默认的color文件内颜色名一一对应
 ```

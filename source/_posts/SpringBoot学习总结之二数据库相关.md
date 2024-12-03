@@ -287,7 +287,7 @@ public class User {
 ### 5.MyBatis的全注解的方式
 全注解的方式，这种方式和后面提到的 xml 的方式的区别仅仅在于 一个将 sql 语句写在 java 代码中，一个写在 xml 配置文件中。全注方式解转换成 xml 方式仅需做一点点改变即可。
 **项目结构**
-![](https://upload-images.jianshu.io/upload_images/3067896-8b10da365b3c79a8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/a4c2b53b4ed6251c91b7fbc04f332bca.webp)
 ##### (1.)Dao层
 MyBatisUserDao.java
 ```
@@ -391,7 +391,7 @@ public class MyBatisUserController {
 ```
 
 ### 6.MyBatis的xml的方式
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-61076887b5a7eab3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/3406ae8943bcf37605bf99d492997b1f.webp)
 ##### (1.)UserMapper文件
 只演示一个根据姓名找人的方法，为了让UserMapper能够让别的类进行引用，可以在UserMapper类上添加@Mapper注解：
 ```

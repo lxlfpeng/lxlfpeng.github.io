@@ -56,7 +56,7 @@ Child View将伴随着滚动事件而滚出或滚进屏幕。``如果使用了�
 ```
 
 对应效果图：
-![](https://upload-images.jianshu.io/upload_images/3067896-4e37bdb933cec7f0.gif?imageMogr2/auto-orient/strip)
+![](/images/3bcd518b787de2e37a0a922b92634c7e.webp)
 
 ### 2.scroll|enterAlways
 快速返回模式。其实就是向下滚动时Scrolling View和Child View之间的滚动优先级问题。对比`scroll`和`scroll | enterAlways`设置，发生向下滚动事件时，前者优先滚动Scrolling View，后者优先滚动Child View，当优先滚动的一方已经全部滚进屏幕之后，另一方才开始滚动。
@@ -69,7 +69,7 @@ app:layout_scrollFlags="scroll|enterAlways"
 
 ```
 对应效果图：
-![动画1.gif](https://upload-images.jianshu.io/upload_images/3067896-0f2d3189498eff57.gif?imageMogr2/auto-orient/strip)
+![动画1.gif](/images/4ee46aeadf06c58eb1f5f3b57a13e9ab.webp)
 
 ### 3.scroll|enterAlways|enterAlwaysCollapsed
 enterAlways的附加值。这里涉及到Child View的高度和最小高度，向下滚动时，Child View先向下滚动最小高度值，然后Scrolling View开始滚动，到达边界时，Child View再向下滚动，直至显示完全。
@@ -85,7 +85,7 @@ app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
 
 ```
 对应效果图：
-![动画2.gif](https://upload-images.jianshu.io/upload_images/3067896-02f43f1febbf97bf.gif?imageMogr2/auto-orient/strip)
+![动画2.gif](/images/e69d01b9b1f9fa7f9b10c96e3dfde179.webp)
 
 ### 4.exitUntilCollapsed
 这里也涉及到最小高度。发生向上滚动事件时，Child View向上滚动退出直至最小高度，然后Scrolling View开始滚动。也就是，Child View不会完全退出屏幕。
@@ -103,7 +103,7 @@ app:layout_scrollFlags="scroll|exitUntilCollapsed"
 
 对应效果图：
 
-![image](https://upload-images.jianshu.io/upload_images/1094967-6f683857f6d567ca.gif?imageMogr2/auto-orient/strip|imageView2/2/w/338/format/webp)
+![image](/images/cb9b25bf55de7e90137e73f8f6b719f5.webp)
 
 ### 5.scroll|snap
 简单理解，就是Child View滚动比例的一个吸附效果。也就是说，Child View不会存在局部显示的情况，滚动Child View的部分高度，当我们松开手指时，Child View要么向上全部滚出屏幕，要么向下全部滚进屏幕， 有点类似ViewPager的左右滑动。
@@ -120,7 +120,7 @@ app:layout_scrollFlags="scroll|snap"
 ```
 
 对应效果图：
-![动画3.gif](https://upload-images.jianshu.io/upload_images/3067896-09843347fd437dbf.gif?imageMogr2/auto-orient/strip)
+![动画3.gif](/images/2e1d439f4e6bc327331453ce1d5bc7f9.webp)
 
 # 三.CollapsingToolbarLayout
 CollapsingToolbarLayout继承自FrameLayout，作用是包装Toolbar实现折叠标题栏，给它设置layout_scrollFlags， 它可以控制包含在CollapsingToolbarLayout中的控件(如：ImageView、Toolbar)在响应layout_behavior事件时作出相应的scrollFlags滚动事件(移除屏幕或固定在屏幕顶端)， 因此如要实现折叠等效果则``必须作为AppBarLayout 的子类``，才能发挥出效果。CollapsingToolbarLayout有两种状态分别是 展开(Expanded) 和 折叠(Collapsed)。它内部可以有多个子元素，通常在子布局中放一个Toolbar，而不同子元素也会有不同的表现。这些子元素可以添加layout_collapseMode标志位进而产生不同的行为（折叠模式）。
@@ -130,11 +130,11 @@ CollapsingToolbarLayout的子布局有3种折叠模式
 - COLLAPSE_MODE_OFF (none) ：这个是默认属性，布局将正常显示，没有折叠的行为。
 
 - COLLAPSE_MODE_PIN (pin) ：view固定在适当位置，直到达到CollapsingToolbarLayout底部。就相当于View被整个推上去或者拉下来的效果。（会随着滚动固定在顶部）
-![动画4.gif](https://upload-images.jianshu.io/upload_images/3067896-03b48f8f455e7da7.gif?imageMogr2/auto-orient/strip)
+![动画4.gif](/images/f62136beff65de632119b9ec7cd1aebc.webp)
 可以看到，整个图片就像是更随下面的RecycleView一样，直到到了折叠态，才分开。
 
 - COLLAPSE_MODE_PARALLAX (parallax) ：view将以视差方式滚动，可以结合另外一个属性layout_collapseParallaxMultiplier(设置视差因子，值为0~1)搭配使用。
-![动画5.gif](https://upload-images.jianshu.io/upload_images/3067896-fe923bf7dd7d476e.gif?imageMogr2/auto-orient/strip)
+![动画5.gif](/images/f9a53ae953bf43c5d29ad9bc28bd2f29.webp)
 上面大图部分的父VIew是CollapsingToolbarLayout，对ImageView设置了parallax，效果就是上下各一半的减少，最后显示的位置是图片的正中央。
 
 ### 2.视差因子(layout_collapseParallaxMultiplier)
@@ -400,7 +400,7 @@ public class FollowBehavior extends CoordinatorLayout.Behavior<View> {
     }
 ```
 ##### (4.)效果
-![动画6.gif](https://upload-images.jianshu.io/upload_images/3067896-fe5ad9eac9f047ef.gif?imageMogr2/auto-orient/strip)
+![动画6.gif](/images/c869ca1be12cc83a32c7e0814f58036b.webp)
 
 ### 2.改变自己的状态
 第二种就是重写onStartNestedScroll、onNestedPreScroll、onNestedScroll等一系列方法。view需要根据监听CoordinatorLayout中的子view的滚动行为来改变自己的状态。
@@ -491,4 +491,4 @@ public class ScrollBehavior extends CoordinatorLayout.Behavior<View> {
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 ```
 ##### (3.)效果：
-![](https://upload-images.jianshu.io/upload_images/3067896-e526710a7517f617.gif?imageMogr2/auto-orient/strip)
+![](/images/8b3da2d96ad3ea8aef01a6bfdc6c5909.webp)

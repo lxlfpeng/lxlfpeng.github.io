@@ -5,7 +5,7 @@ title: Android虚拟机之Dalvik和ART
 # 一.Java平台的虚拟机Jvm
 ### 1.Jvm的作用
 Java语言的一个非常重要的特点就是``与平台的无关性(跨平台性)``，经常会听到一句关于java特性的话："一次编译到处执行"。由于机器只能识别机器码，所以需要通过Java 编译器将 .java 文件转换成 .class文件，也就是字节码文件，最后将字节码提供给 JVM，由 JVM 将它转换成机器码。
-![](https://upload-images.jianshu.io/upload_images/3067896-eaee09f21a9c3fc3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/95b5b390a324f6b1cc698a59bbd568e3.webp)
 
 ### 2.Jvm分析
 Jvm相关知识体系过于庞大，有兴趣可以看本人之前的文章:[JAVA JVM详解](https://blog.csdn.net/unreliable_narrator/article/details/97135880)
@@ -37,13 +37,13 @@ Jvm相关知识体系过于庞大，有兴趣可以看本人之前的文章:[JAV
   2. 指令数小！Dalvik基于寄存器，所以它的指令是二地址和三地址混合，指令中指明了操作数的地址；Jvm基于栈，它的指令是零地址，指令的操作数对象默认是操作数栈中的几个位置。这样带来的结果就是Dalvik的指令数相对于Jvm的指令数会小很多，Jvm需要多条指令而Dalvik可能只需要一条指令。
   3. Jvm基于栈带来的好处是可以做的足够简单，真正的跨平台，保证在低硬件条件下能够正常运行。而dvm操作平台一般指明是ARM系统，所以采取的策略有所不同。需要注意的是Dalvik基于寄存器，但是这也是个映射关系，如果硬件没有足够的寄存器，Dalvik将多出来的寄存器映射到内存中。
 
-![](https://upload-images.jianshu.io/upload_images/3067896-421f10fd05b70b6f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/f472313757d2dc5006a051d4cd8c4805.webp)
 
 ### 4.JIT编译
 Dalvik虚拟机可以看做是一个Java VM(虚拟机)， Android系统初期，每次运行程序的时候，Dalvik负责将dex翻译为机器码交由系统调用。这样有一个缺陷：每次执行代码，都需要Dalvik将dex代码翻译为微处理器指令，然后交给系统处理，这样效率不高。为了解决上述问题，Google在Android2.2版本添加了JIT编译器。
 
 JIT编译器的作用是：当App运行时，每当遇到一个新类，JIT编译器就会对这个类进行编译，经过编译后的代码，会被优化成相当精简的原生型指令码（即native code），这样在下次执行到相同逻辑的时候，速度就会更快。
-![](https://upload-images.jianshu.io/upload_images/3067896-4abb497d80e7faa6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/9e12d4bcccd4ec7b0c6faef4ad261d7c.webp)
 
 >当然使用JIT也不一定加快执行速度，如果大部分代码的执行次数很少，那么编译花费的时间不一定少于执行dex的时间。Google当然也知道这一点，所以JIT不对所有dex代码进行编译，而是只编译执行次数较多的dex为本地机器码。有一点需要注意，那就是dex字节码翻译成本地机器码是发生在应用程序的运行过程中的，并且应用程序每一次重新运行的时候，都要做重做这个翻译工作，所以这个工作并不是一劳永逸，每次重新打开App，都需要JIT编译。JIT 编译器可以对执行次数频繁的 dex/odex 代码进行编译与优化，将 dex/odex 中的 Dalvik Code（Smali 指令集）翻译成相当精简的 Native Code 去执行。
 
@@ -74,7 +74,7 @@ App安装速度快，占用存储少(只编译热点函数)。
 前几次运行会较慢， 只有用户操作得次数越多，jit 和AOT编译后， 性能才会跟上来。
 
 # 四.Android虚拟机总结
-![](https://upload-images.jianshu.io/upload_images/3067896-567f658452e54ede.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/04c8bad6263b5a0bf567fce4e2b70a91.webp)
 
 参考资料:
 [Android学习笔记——虚拟机](http://mouxuejie.com/blog/2018-05-12/learning-notes-vm/)

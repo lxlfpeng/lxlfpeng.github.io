@@ -408,7 +408,7 @@ data的对象可以用对象式写法和函数式写法:
 # 五.Vue组件化开发
 ### 1.Vue组件化概念
 组件(Component)是可复用的 Vue 实例， 把一些公共的模块抽取出来，将其抽出为一个组件进行复用(用来实现局部(特定)功能效果的代码集合(html/css/js/image…..)) 然后写成单独的的工具组件或者页面，在需要的页面中就直接引入即可。
-![](https://img-blog.csdnimg.cn/8a2e6bdc9a6e418a95b528c9c7da33d3.png)
+![](/images/17995dd41a5f2b5466b9bb2ae0053941.webp)
 例如 页面头部、侧边、内容区，尾部，上传图片，等多个页面要用到一样的就可以做成组件，提高了代码的复用率。如果要使用组件那么有三大步骤:定义组件（创建组件）=>注册组件=>使用组件（写组件标签）
 ```
 <!DOCTYPE html>
@@ -1021,7 +1021,7 @@ const http = axios.create({
 
 # 八.Vue生命周期
 常用的生命周期方法
-![](https://img-blog.csdnimg.cn/4b1b4705845b4cb698f3be893def8c93.png)
+![](/images/777369c56ba6604fbf993d7e99b51708.webp)
 - beforeCreate：此时data、method和$el均没有初始化。
 - created：此时data和method初始化完成，但是DOM节点并没有挂载。
 - beforeMount：编译模板，并且将此时在el上挂载一个虚拟的DOM节点。
@@ -1155,7 +1155,7 @@ vue --version
 ```
 vue create hello-world
 ```
-![](https://img-blog.csdnimg.cn/img_convert/13c744c80d6451a0710bfb65820f0095.png)
+![](/images/62bf2459d73cb295110ae338bff90d75.webp)
 之后我们看到一个hello-world的文件夹，里边包括教授叫默认生成的一些配置和App.vue，main.js等程序文件。
 ##### 运行Vue项目工程
 cd到hello-world文件夹中，运行如下命令启动一个本地Node服务器来运行Vue项目

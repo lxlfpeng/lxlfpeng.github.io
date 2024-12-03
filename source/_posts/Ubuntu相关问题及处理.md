@@ -277,7 +277,7 @@ update-alternatives --config java
 
 ### 3. 切换版本
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/a6a454fde4ba404c867fe1c84539ce2d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAcXFfMjQ2ODM5NzU=,size_20,color_FFFFFF,t_70,g_se,x_16)
+![在这里插入图片描述](/images/f11b6d2e956b9c7f0259c8813429e4be.webp)
 
 ### 根据序号切换你想要使用的jdk
 

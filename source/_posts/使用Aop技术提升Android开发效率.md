@@ -291,7 +291,7 @@ public void hello(View view){
 }
 ```
 **执行结果 :**
-![](https://upload-images.jianshu.io/upload_images/3067896-a3a8ae335e36fadb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/93cc8d85afdde4cf18bce704e340fcb6.webp)
 ```
    @Around("transactionMethod()")
     public void addTransaction(ProceedingJoinPoint joinPoint){

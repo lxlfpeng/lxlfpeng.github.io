@@ -26,11 +26,11 @@ java -jar jenkins.war
 ##### (3.)jenkins初始化配置
 1. 初次访问http://localhost:8080/jenkins，会需要输入密码，根据指引可以在对于目录找到密码输入。
 2. 进入后下一界面是要安装插件，如下图所示。如果不熟悉推荐直接点“Install suggested plugins”即可，真要增删插件以后也可以通过“Manage Jenkins > Manage Plugins”修改。
-![](https://upload-images.jianshu.io/upload_images/3067896-bca98c5f6eb810e6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/45618340235895cf36275a2b787621d4.webp)
 3. 进入如下界面，等待其自动完成即可
-![](https://upload-images.jianshu.io/upload_images/3067896-3697bafca9c75b48.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/e7596fd14f03d018d30f9fa1bb6be443.webp)
 4. 下一步是创建管理员账号用于以后登录和管理，按自己想要的建即可
-![](https://upload-images.jianshu.io/upload_images/3067896-2a74135fd92843bc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/373ced32c76508ca7984edc2fa92ef17.webp)
 
 [image.png](https://upload-images.jianshu.io/upload_images/3067896-1f5911c48b29f2ab.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 2.全局工具配置->配置JDK，Git，Gradle
@@ -68,20 +68,20 @@ Freestyle project（自由风格的软件项目）：自由风格的软件项目
 这种类型的好处是可以自由设计构建方式，比较方便扩展。缺点是如果你只需要一个大众化/典型的持续集成、交付流程，想使用很多Jenkins内置方法、插件，这种方式就不太方便。
 
 ### 2.General常规配置
-![](https://upload-images.jianshu.io/upload_images/6464255-60c69c788cdaf271.png?imageMogr2/auto-orient/strip|imageView2/2/w/983/format/webp)
+![](/images/b1bba02efb172d1086d1930728b0a34b.webp)
 - 项目名称: 是刚才创建构建任务步骤设置的，当然在这里也可以更改。
 - 描述: 对构建任务的描述。  
 - 丢弃旧的构建： 服务器资源是有限的，有时候保存了太多的历史构建，会导致Jenkins速度变慢，并且服务器硬盘资源也会被占满。当然下方的"保持构建天数" 和 保持构建的最大个数是可以自定义的，需要根据实际情况确定一个合理的值。
 
 ### 3.源码管理
 源码管理就是配置你代码的存放位置。支持主流的github 和gitlab代码仓库。
-![](https://upload-images.jianshu.io/upload_images/6464255-0d7722861c56901e.png?imageMogr2/auto-orient/strip|imageView2/2/w/978/format/webp)
+![](/images/8c6f3b86cba1e10bab178e8ee388eb38.webp)
 - Repository URL：仓库地址
 - Credentials：凭证。可以使用HTTP方式的用户名密码，也可以是RSA文件。 但要通过后面的"ADD"按钮添加凭证。
 - Branches to build：构建的分支。*/master表示master分支，也可以设置为其他分支。
 
 ### 4.构建触发器
-![](https://upload-images.jianshu.io/upload_images/6464255-f1c8d9414165328f.png?imageMogr2/auto-orient/strip|imageView2/2/w/972/format/webp)
+![](/images/dca846d54d6d2c003cd9903719e2d5fd.webp)
 - 触发远程构建(例如，使用脚本): 该选项会提供一个接口，可以用来在代码层面触发构建。
 - Build after other projects are built： 该选项意思是"在其他projects构建后构建"。这里不作介绍，后期可能会用到该选项。
 - Build periodically： 周期性的构建。很好理解，就是每隔一段时间进行构建。日程表类似linux crontab书写格式。如下图的设置，表示每隔30分钟进行一次构建。
@@ -89,11 +89,11 @@ Freestyle project（自由风格的软件项目）：自由风格的软件项目
 - Poll SCM：该选项是配合上面这个选项使用的。当代码仓库发生改动，jenkins并不知道。需要配置这个选项，周期性的去检查代码仓库是否发生改动。
 
 ### 5.构建环境
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-9d5d4ea30830f549.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/e5826f379e9c5593710331da9fdd28f4.webp)
 
 ### 6.开始构建
 选中invoke gradle通过调用gradle脚本进行构建，选择在系统管理中配置的gradle的版本
-![](https://upload-images.jianshu.io/upload_images/3067896-72d6ff4778966e8f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/437a9e1445cdbad38f71452da5146445.webp)
 Eexcute shell： 执行shell命令，该工具是针对linux环境的，windows环境也有对应的工具"Execute Windows batch command"。 在构建之前，可能我们需要执行一些命令，比如压缩包的解压之类的。
 
 ### 7.构建后操作

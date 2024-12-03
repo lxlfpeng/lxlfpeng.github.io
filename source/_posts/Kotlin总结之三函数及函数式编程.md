@@ -337,7 +337,7 @@ val addLambda = { x: Int, y: Int -> x * y }
 - 总是被大括号扩着
 - 其参数（如果存在）在->之前声明（参数类型可以省略）
 - 函数体（如果存在）在->后面
-![](https://upload-images.jianshu.io/upload_images/3067896-8fa76d16ee9c449d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/c052b33a825ab971d91dc7e21d4f9d7f.webp)
 
 1. 无参数的情况
 ``val/var 变量名 = { 操作代码 }``
@@ -1061,7 +1061,7 @@ public inline fun <T> T.also(block: (T) -> Unit): T { block(this); return this }
 | apply | this指代当前对象或者省略 | 返回this | 是 | 1、适用于run函数的任何场景，一般用于初始化一个对象实例的时候，操作对象属性，并最终返回这个对象。
 
 ### 7.Kotlin中的作用域函数选择
-![](https://upload-images.jianshu.io/upload_images/3067896-63675a087f389ac8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/991e7ee32a7e351f8fef03f47ac8fafd.webp)
 
 参考自：
 [kotlin官方文档](https://www.kotlincn.net/docs/reference/constructing-collections.html)

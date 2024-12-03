@@ -20,7 +20,7 @@ FATA[0000] Error response from daemon: No command specified
 
 大部分Linu发行版的基础镜像里面调用CMD命令, 指定容器启动后执行/bin/sh或/bin/bash. 这样镜像启动默认进入交互式的shell
 
-![](https://pic4.zhimg.com/80/v2-264a7f6686fc566126fb87bc6833952f_720w.jpg)
+![](/images/bbeb96acd6fb7fd1b8d2fdac2b0ef7e4.webp)
 
 *译注: 3个不同的Linux镜像(ubuntu, busybox, debian)都在Dockerfile的最后调用 CMD '/bin/bash'*
 

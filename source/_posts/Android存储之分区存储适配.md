@@ -48,7 +48,7 @@ if(Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
     ...
 }
 ```
-![](https://img-blog.csdnimg.cn/c356846ddbe74288b85d27b3cdfd387e.png#pic_center)
+![](/images/3ec191925fd40f626dec9583583c6c47.webp)
 对于Android开发者来说只和外部存储和内部存储打交道，Android提供的开发接口也只是获取内部存储和外部存储的目录地址。而对开发者屏蔽了内置存储卡和外置SD卡相关操作。
 
 **结论内部存储和外部存储可以是在同一块存储介质上面的，只是概念上做了区分，内部存储和外部存储是一块存储介质上的不同区域。**

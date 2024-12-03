@@ -129,7 +129,7 @@ print(response.content)      # 以字节流形式打印
 
 # 三.通过抓包分析网页结构
 通过上文我们了解到通过Requests可以模拟网络请求拿到网页数据。接下来我们就需要对网页数据进行分析它的结构和规律以便对网页数据进行解析。我们可以这么理解浏览器打开网页的过程就是爬虫获取数据的过程，对于静态网页而言两者获取到的结果是一样的。对于动态网页而言，由于很多动态网页都采取了 异步加载技术 (Ajax)，会导致很多时候抓取到的源代码和网站显示的源代码不一致(这个下文会说到)。通过浏览器自带元素审查可以帮助分析页面，浏览器可以通过F12调出抓包功能。
-![](https://upload-images.jianshu.io/upload_images/3067896-40da41d01f8c07a1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/e246e432d5251c9ea6de2016e1656d92.webp)
 - 左上角箭头 用来点击查看网页的元素如果打开我们将鼠标移动到网页元素上面就会自动展开对应的html元素代码。
 - 第二个手机、平板图标是用来模拟移动端显示网页
 - Elements 查看渲染后的网页标签元素（包括异步加载的图片、数据等）的完整网页的html，不一定是最初获得的html文件。
@@ -351,15 +351,15 @@ App几乎都是请求后端接口进行本地渲染的，因此我们通过抓�
 
 ##### 3.配置appium
 1. 安装好appium，打开程序，需要进行配置，host与port默认即可。
-![](https://upload-images.jianshu.io/upload_images/3067896-74a1e5538b02496b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/d0f712c364c8a3d054af062e1f9c262f.webp)
 2. 配置JDK环境和Android Sdk环境。
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-e59e8a093844089b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/e95578bc216a6335f08f5dda715b6435.webp)
 填写Android_home及Java_home后，Save and Restart，
 3. 重启以后回到主界面，点击Start Server vX.X.X按钮。进入控制台日志界面，看到Appium REST http interface listener started on 0.0.0.0:4723就表示启动成功了。
 接着点击“start inspector session”进行配置。
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-ffe371209ce67ee2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/101a9e35ee5fce59554f46bb943f6d53.webp)
 4. 配置inspector
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-f06835cbe6b2cf96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/b23373ccfeaf2f1fac77515f8b42b36e.webp)
 重点是要配置相关参数可以通过键值对进行配置也可以通过右侧的Json文件进行配置:
 - platformName:声明是ios还是android系统。
 - platformVersion:Android内核版本号，可通过命令adb shell getprop ro.build.version.release查看。
@@ -377,7 +377,7 @@ Json配置文件示例:
 }
 ```
 5. 配置完成以后点击start session按钮，进入到操作面板功能中。
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-ea05f084abdd93a9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/3a1f5f85e1d8e8b27e46f136eee00a14.webp)
 
 [小帅比爬虫教程](https://github.com/wistbean/learn_python3_spider)
 [Python爬虫入门教程：超级简单的Python爬虫教程](http://c.biancheng.net/view/2011.html)

@@ -682,7 +682,7 @@ import modea as moa #导入modea并且将命名空间变成moa
 第一次导入后就将模块名加载到内存了，后续的import语句仅是对已经加载大内存中的模块对象增加了一次引用，不会重新执行模块内的语句）
 
 ### 4.Python导入不同包下的模块
-![image.png](https://img-blog.csdnimg.cn/img_convert/cc6fd6dcc51260c9246e4714c4ddf3c2.png)
+![image.png](/images/fc1a98cb87ec01e545be6c65d4af2ceb.webp)
 需要在不同的包里面加int方法
 ```
 import test.mode_b

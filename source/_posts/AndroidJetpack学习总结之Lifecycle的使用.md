@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 }
 #### 4.查看执行结果
 ```
-![执行结果](https://upload-images.jianshu.io/upload_images/3067896-78039b72daecdcfe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![执行结果](/images/7eb4ca2ad39d3aa98664ac0b2bc43ce3.webp)
 
 问题1：它是什么？
 

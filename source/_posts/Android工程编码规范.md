@@ -5,11 +5,11 @@ title: Android工程编码规范
 # 一. AndroidStudio开发工具规范
 1. 使用最新的稳定版本.
 2. 统一文件的编码格式为utf-8.
-![](https://img-blog.csdnimg.cn/8337da441a50418b9a1592cb7086c902.png)
+![](/images/0f96a62ef7972365a0f44923dec209c6.webp)
 3. 清除每个类里面的无效的import导包.
 4. 代码样式统一,比如，tab缩进4个空格，或者 tab size等如果没有特殊情况使用默认的配置即可。
 5. 每行字数每行字符数不得超过 160 字符，设置 Editor -> Code Style.
-![](https://img-blog.csdnimg.cn/88482ff17b0c46b1818565ec5fb6c49d.png)
+![](/images/1b2eea0aa33e36e90c2cb4a886da568c.webp)
 6. 编辑完 .java、.kt、.xml 等文件后必须格式化.
 
 # 二. 命名规范

@@ -340,8 +340,8 @@ ctx.state.data = {
 ### 2.RSSHub Radar使用
 1. 在浏览器Chorme商店里搜索并安装改插件。
 2. 我们在进入一个新页面时， RSSHub Radar 会自动检测当前页面有没有 RSS 和 RSSHub 支持，检测到则会显示一个角标，如果我们想订阅当前页面的 RSS，点击扩展图标， 会弹出一个列表，如下图所示，列表有两项内容：当前页面上的 RSS、适用于当前页面的 RSSHub 你可以选择复制链接或一键订阅到Rss阅读器。
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-691e39784cc835fc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-73619c18ccf7d5f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/9772050c334083d176e0de1870b57aff.webp)
+![image.png](/images/360f7c0d188cc7be204ae90c8cf58add.webp)
 
 
 参考资料:

@@ -163,7 +163,7 @@ buildscript {
 ```
 这个dependencies中的gradle:3.2.0代表的就是使用gradle 插件版本 3.2.0.在编译过程中，如果gradle插件版本与gradle版本不匹配，编译就会失败.
 目前在使用的gradle与gradle插件版本的对应。
-![](https://upload-images.jianshu.io/upload_images/3067896-5c32446bcf99e9a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/00498f0067be35dc70e1964aec0653c0.webp)
 
 [gradle插件对应gradle版本](https://developer.android.google.cn/studio/releases/gradle-plugin?hl=zh_cn)
 # 四. Android项目中配置gradle
@@ -280,7 +280,7 @@ dependencies {
 - **android{}**，在这个闭包中我们可以配置项目构建的各种属性。
 - **buildToolsVersion** 构建工具的版本，其中包括了打包工具aapt、dx等等。可以用高版本的build-tool去构建一个低版本的sdk工程。
 - **compileSdkVersion** 用于指定项目的编译版本，这里指定成28表示使用Android 8.0系统的SDK编译。只影响编译时的行为，不影响运行时的行为。代码中可用的api也要与该声明版本对应，高于声明版本的api则无法找到、使用。Support库的大版本号要与compileSdkVersion的大版本号相同 
-![](https://upload-images.jianshu.io/upload_images/3067896-80cc96d553a093e0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/792e364916fb0cf900bc42fd9d53d6e1.webp)
 - **minSdkVersion** 指明应用程序运行所需的最小API level。如果Android设备的系统API level低于android:minSdkVersion设定的值，那么android系统会阻止用户安装这个应用。如果指明了这个属性，并且在项目中使用了高于这个API level的API， 那么会在编译时报错。
 - **targetSdkVersion** 表示你在该目标版本上已经做过了充分的兼容性处理和测试性处理，系统将会为你的应用程序启用一些最新的功能和特性。应用运行时使用的sdk版本
 例如:
@@ -388,7 +388,7 @@ Maven本地仓库是在计算机上的一个文件夹，用来存放所有的 ja
 ``远程仓库一般是由公司或团队创建的一个仓库，由公司或团队维护；中央仓库也是属于远程仓库的一种不过它是互联网上的仓库，由Maven团队维护；``
 
 ### 3. 依赖搜索顺序
-![Maven 依赖搜索顺序](https://upload-images.jianshu.io/upload_images/3067896-1fad023bac20ada6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![Maven 依赖搜索顺序](/images/e0d14e09d83a6f12e41e6cd0dc5a9d85.webp)
 
 当我们执行 Maven 构建命令时，Maven 开始按照以下顺序查找依赖的库：
 
@@ -398,7 +398,7 @@ Maven本地仓库是在计算机上的一个文件夹，用来存放所有的 ja
 - 步骤 4 ： 在一个或多个远程仓库中搜索依赖的文件，如果找到则下载到本地仓库来被引用，否则 Maven 将停止处理并抛出错误（无法找到依赖的文件）。
 
 ### 2. Maven常见的远程仓库
-![常见的仓库](https://upload-images.jianshu.io/upload_images/3067896-42c71b20c1c5f363.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![常见的仓库](/images/e3d1e44b8f7dd79b9adef47de9adae02.webp)
 
 ###### MavenCentral仓库
 Maven Central 则是由[sonatype.org](https://sonatype.org/)维护的Maven仓库。你可以在[这里](https://repo1.maven.org/maven2/)看到整个仓库。
@@ -607,11 +607,11 @@ dependencies {
 - **api:** 会添加依赖到编译路径，并且会将依赖打包到输出（aar或apk），与implementation不同，这个依赖可以传递，其他module无论在编译时和运行时都可以访问这个依赖的实现
 
 **implementation 和api的区别:**
-![](https://upload-images.jianshu.io/upload_images/3067896-4c6ecc4a018a8fcb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/23de8610327abb05cb110eacb0752a95.webp)
 ``App Module``依赖于``LibraryA`` ,而``LibraryA ``依赖了`` LibraryB ``。如果``LibraryA ``对``LibraryB  ``的依赖用的是 ``implementation ``关键字。那么``LibraryB ``中的接口，仅仅只能给 ``LibraryA`` 使用,``App Module`` 是无法访问到 ``LibraryB`` 提供的接口的。如果``LibraryA ``对``LibraryB `` 的依赖用的是 ``api ``关键字,则``LibraryB ``中的接口，不仅可以给 ``LibraryA`` 使用,而且还可以给``App Module``使用。
 
 - **compileOnly** Gradle把依赖加到编译路径，编译时使用，不会打包到输出（aar或apk）。这可以减少输出的体积，在只在编译时需要，在运行时可选的情况。
-![](https://upload-images.jianshu.io/upload_images/3067896-3644485ad2e712f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/052ff91099c6e29b7177a6628192cae7.webp)
 如果``App Module``依赖于``A Lib、B Lib、C Lib``。``A Lib``和``B Lib``也依赖于``C Lib``。此时我们就可以让``A Lib``和``B Lib``通过``compileOnly ``去依赖于``C Lib``。减少依赖冲突的可能性。
 
 - **runtimeOnly** 与compileOnly对应，gradle添加依赖只打包到APK，运行时使用，但不会添加到编译路径,会导致编译无法通过,一般是不会用到。
@@ -633,18 +633,18 @@ gradlew -q dependencies app:dependencies --configuration releaseRuntimeClasspath
 ```
 gradlew dependencies --info
 ```
-![](https://upload-images.jianshu.io/upload_images/3067896-bddacbaf6a57ad55.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/d251c2c7a10fdab2bb0c2858016ab720.webp)
 
 >同一个库存在 多个版本时, gradle 会自动 使用最高版本的库 应用到 所有地方,如果后面带有 “(*)” 的库就表示 这个库 有被覆盖过。
 ### 2. 使用Gradle View插件查看依赖层级树。
 1. 在plugins中找到Gradle View插件安装,重启As。
 2. 在View->Tool windows->找到Gradle View点击。
-![](https://upload-images.jianshu.io/upload_images/3067896-81f7d67e3098bbce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/2c4a9cb2d42d83e916f1a9d028eef9aa.webp)
 
 ### 3. 传递依赖。
 　在Maven仓库中，构件通过POM（一种XML文件）来描述相关信息以及传递性依赖。Gradle 可以通过分析该文件,获取所有的依赖以及依赖的依赖和依赖的依赖的依赖。
 例如:
-![](https://upload-images.jianshu.io/upload_images/3067896-d62668dcad48238d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/686826a845f7c4a2be685aafaeb3f3be.webp)
 可以看到，我们的项目依赖了hibernate,然而hibernate却依赖了一众别的依赖.借助Gradle的传递性依赖特性，你无需再你的脚本中把这些依赖都声明一遍，你只需要简单的一行，Gradle便会帮你将传递性依赖一起下载下来。
 ```
   implementation 'org.hibernate:hibernate-core:3.6.3.Final'
@@ -660,7 +660,7 @@ implementation ('org.hibernate:hibernate-core:3.6.3.Final'){
  implementation 'org.hibernate:hibernate-core:3.6.3.Final@jar'
 ```
 查看依赖关系为:
-![](https://upload-images.jianshu.io/upload_images/3067896-17d8b402ca84144c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/7c1db5fd69af9d89d87cf831ce20ee8d.webp)
 
 全局性的关闭依赖传递特性:
 ```
@@ -685,17 +685,17 @@ configurations.all {
     }
 ```
 排除前:
-![](https://upload-images.jianshu.io/upload_images/3067896-73cab134d842ba71.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/86f7503926fce17a4b83bbd75f01f3ab.webp)
 排除后:
-![](https://upload-images.jianshu.io/upload_images/3067896-84753a5de1eb6945.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/e48e293c70e8a93a7c0e26a8bf6034fb.webp)
 
 # 九. AAR包.
 ### 1.aar对比jar的优势。
 - jar文件：只包含class文件和清单文件，不包含资源文件，比如图片等所有的 res下的资源文件。
 - aar文件:包含class文件以及res下的所有的资源文件。
 ### 2.创建aar包。
-![](https://upload-images.jianshu.io/upload_images/3067896-70ddcdac48e8f932.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![](https://upload-images.jianshu.io/upload_images/3067896-df95fcc184838636.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/ae2357abdf952ea17d8fedd463faa97c.webp)
+![](/images/45adec68af2b1af576a2efee89d29216.webp)
 
 ### 4.aar包容易出现的问题。
 ##### aar不得包含 assets 原始资源
@@ -729,7 +729,7 @@ implementation('com.chemao.android:chemao-sdk:1.2.3') {
 ##### 多级aar引用导致的问题
 **问题描述**
 ModuleLib B引用了一个aar,ModuleApp A引用了ModuleLib B,此时就会报找不到Lib的问题。
-![](https://upload-images.jianshu.io/upload_images/3067896-05ec136e27cb3dfa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/987d3b72be2541776a713b84f4f0ef85.webp)
 **问题分析**
 对于 ModuleApp A来说，他们依赖了ModuleLib B，不管用不用，他们都会去把ModuleLib B的依赖走一遍，当走到添加的aar本地依赖时，他们去找aar的路径也需要给出，而且给的方式如果是libs这样的路径，它会去找自己包下的libs，里边自然没有。
 **解决方式**
@@ -790,14 +790,14 @@ api 'com.android.support:appcompat-v7:28.0.0'
 api 'androidx.appcompat:appcompat:1.0.0'
 ```
 需要注意的是，build.gradle中的插件版本要在3.2.0以上才可以。
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-8e118aacd0cffbcf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/999186cbb4f27bece3268bf8498361a8.webp)
 
 # 十一. AndroidManifest合并冲突.
 ### 1. 问题描述
 Android Studio 项目每个依赖的module中都可以有一个AndroidManifest.xml文件，但最终的APK 文件只能包含一个 AndroidManifest.xml 文件。在构建应用时，Gradle 构建会将所有清单文件合并到一个封装到 APK 的清单文件中。例如在app的manifest中有application节点下有label属性.app所依赖的mylibrary的manifest中application节点下也有label属性,打包的时候则会出现问题:
-![](https://upload-images.jianshu.io/upload_images/3067896-53a74f698df12fbc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/c64b6f3cc1814e2b01efd05026b1747e.webp)
 打开manifest可以看到合并的信息中有报错:
-![](https://upload-images.jianshu.io/upload_images/3067896-4797fc69cbf7b776.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/ee3ff2b0bbf8c8289ee0597e847046bf.webp)
 ### 2. 解决问题
 清单文件属性冲突时：用tools:replace="属性名"解决。例如上面例子是label属性存在冲突就可以使用:
 ```

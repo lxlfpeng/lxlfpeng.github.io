@@ -5,7 +5,7 @@ title: Android项目Gadle统一依赖管理
 # 一.Gradle管理依赖版本
 
 在中大型Android项目中，都会有多个Module进行协同配合。这些module中可能会依赖同一个库的不同版本，这将导致一些问题，要么是代码冲突，要么是APK包体积增大，亦或是项目构建的时间变长，拖慢开发效率。 例如:下图就是在不同的module中依赖同一个库的不同版本。
-![](https://img-blog.csdnimg.cn/b5ccb025bd254201a4a20504e4a4025c.png)
+![](/images/c63d31316e04ce77f0f00564a522b47f.webp)
 要解决这个问题我们首先要了解在Android项目中目前有那些方案来引入第三方依赖:
 
 1. 直接编写(默认方式)
@@ -238,7 +238,7 @@ dependencies {
 ## 使用步骤
 
 1. 新建Android library工程module名为version_plugin，包名为com.huke.plugin（非固定名可以自取）并删除多余的文件及文件夹。
-   ![](https://img-blog.csdnimg.cn/b60e9f16fab64aea92dca72425bbb08e.png)
+   ![](/images/57c2e3d510848d6ee53cf1c95df38040.webp)
 
 2. 修改version_plugin工程中的 build.gradle文件。
 

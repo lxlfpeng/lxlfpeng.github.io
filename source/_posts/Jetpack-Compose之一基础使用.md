@@ -88,7 +88,7 @@ dependencies {
 ```
 
 ### 2.AndroidStudio创建Compose工程
-![](https://img-blog.csdnimg.cn/img_convert/58e63d8ea11aab4e1e7ce944888228f3.png)
+![](/images/323fd01e2bb576e0107dcd5500528ba1.webp)
 
 # 三.Compose示例分析
 ### 1.Compose简单使用
@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 运行就可以看到效果了:
-![](https://img-blog.csdnimg.cn/img_convert/8ab6bcdb0c18acd6592f666828de711a.png)
+![](/images/04ced3ba4f953ca6479ca00cc9d8bdbc.webp)
 这种写法与使用 XML 布局的方式差别很大，setContent 块定义了 Activity 的布局。不需要使用 XML 文件来定义布局内容，而是调用一个 Compose 函数，比如上面的 Text 函数， 然后 Jetpack Compose 使用自定义 Kotlin 编译器插件将这些 Compose 函数转换为应用的界面元素。
 
 ### 2.Composable注解
@@ -157,7 +157,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 ```
-![](https://img-blog.csdnimg.cn/img_convert/514b51e5287d2550f9f81a0fa5de8a17.png)
+![](/images/4630f49fb655715de2f261376e3a5e13.webp)
 
 **在IDE的右上角有Code，Split，Design三个选项。分别是只显示代码，同时显示代码和布局和只显示布局。**
 
@@ -186,7 +186,7 @@ annotation class Preview(
 ##### (1.)给Preview命名
 - name: String: 为该Preview命名，该名字会在布局预览中显示。
 - group: String: 为该Preview设置group名字，可以在UI中以group为单位显示。
-  ![](https://img-blog.csdnimg.cn/img_convert/e4d9bd94c050e1992ffaa5652f6e3fc4.png)
+  ![](/images/2f085ddc58630bc5d04571b41ab43f9e.webp)
 
 ##### (2.)给Preview设置背景颜色
 - showBackground: Boolean: 是否显示背景，true为显示。
@@ -198,7 +198,7 @@ fun WithGreenBackground() {
     Text("Hello World")
 }
 ```
-![](https://img-blog.csdnimg.cn/img_convert/7383439ba543f4aefbfe57cb7c5139e8.png)
+![](/images/873648909ebe094acfdcfb0d3ae2eb72.webp)
 
 
 >默认情况下，您的可组合项将以透明背景显示。
@@ -216,7 +216,7 @@ fun SquareComposablePreview() {
     }
 }
 ```
-![](https://img-blog.csdnimg.cn/img_convert/a6cb587ab558c5a1f64a1efc16cfde75.png)
+![](/images/6e3098755ae69a2e760a46dbe597459a.webp)
 >请注意，这些值已解释为 Dp，您无需在值末尾添加 .dp
 
 ##### (4.)给Preview设置显示系统界面
@@ -228,7 +228,7 @@ fun DecoratedComposablePreview() {
     Text("Hello World")
 }
 ```
-![](https://img-blog.csdnimg.cn/img_convert/e6ca15e2c4cd2d26b2956f554f06bcf8.png)
+![](/images/c8f0a310d71decb25e3cad61bf4e479a.webp)
 
 ##### (5.)给Preview设置显示语言区域
 如需测试不同的用户语言区域，您需要添加 locale 参数：
@@ -265,7 +265,7 @@ class UserPreviewParameterProvider : PreviewParameterProvider<User> {
 }
 ```
 序列中的每个数据元素都会呈现一个预览：
-![](https://img-blog.csdnimg.cn/img_convert/a80a7c53d1ae38226fa19f9855f23227.png)
+![](/images/a36bb8e9c72f0bd21307994cf10b7e86.webp)
 如果不想每一个数据对应的预览都展示，可通过设置 limit 参数来限制呈现的预览数量:
 ```
 @Composable
@@ -274,7 +274,7 @@ fun showUser(@PreviewParameter(UserPreviewParameterProvider::class, limit = 2) u
     Text(user.name)
 }
 ```
-![](https://img-blog.csdnimg.cn/img_convert/eeaff8e5019ea9a0041aa27e5e2987fe.png)
+![](/images/1d1b0435f24527ed910586f7e39ffab9.webp)
 
 特别需要注意的有两点:
 **上面的参数都是可选参数，还有像背景设置等的参数并不是对实际的App进行设置，只是对Preview中的背景进行设置，为了更容易看清布局。**
@@ -385,10 +385,10 @@ class MainActivity : ComponentActivity() {
 }
 ```
 我们给Modifier设置的padding边距和clickable点击事件的先后顺序不同,会导致组件的可点击区域也会不一样:
-![](https://img-blog.csdnimg.cn/img_convert/15e8b9984942860c77394c567e87d346.gif)
+![](/images/99a790c77e95c512869b85384351291b.webp)
 >modifier 只能设置 padding，没有 margin 属性。先设置了size尺寸再设置padding就是设置控件的内边距，先设置padding再设置size尺寸就是设置组件的外边距。所以，在 Modifier 中设置 padding 的次序很重要。
 # 七.Compose常用的布局容器
-![](https://img-blog.csdnimg.cn/img_convert/5696a1080ad8aee975d1c1b047ce774b.png)
+![](/images/566d4dd0c67d3b824291d73ac65e02df.webp)
 ### 1.Column垂直布局容器
 添加Column，使布局垂直排列
 ```
@@ -397,7 +397,7 @@ Column {
   Text("关羽")
 }
 ```
-![](https://img-blog.csdnimg.cn/img_convert/84784882202aa502699a51f7478b9df1.png)
+![](/images/7db2713bac45867055af6a99a3d99cf4.webp)
 
 Column源码:
 ```
@@ -420,7 +420,7 @@ Row {
     Text("关羽")
     }
 ```
-![](https://img-blog.csdnimg.cn/img_convert/f1d13e00a5d83faa5b8c64f2c65f140d.png)
+![](/images/ac9ebcea28e9fcab889ce5f455bec7cb.webp)
 Row源码:
 ```
 @Composable
@@ -456,7 +456,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 ```
-![](https://img-blog.csdnimg.cn/img_convert/a2e03b43d409eadedc4a8d14d6d8b840.png)
+![](/images/f18f5a0c69e5708884a1037b164fafee.webp)
 Box源码:
 ```
 @Composable

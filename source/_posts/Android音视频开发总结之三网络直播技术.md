@@ -9,13 +9,13 @@ title: Android音视频开发总结之三网络直播技术
 以降低服务端的I/O带宽等方面压力，从而削减服务器带宽成本，降低客户端卡播率。
 
 一个直播功能通用的基础架构涉及三个部分，即音视频采集端、云服务端和音视频播放端。
-![直播app架构图](https://upload-images.jianshu.io/upload_images/3067896-3617714f756c0c60.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![直播app架构图](/images/9575a8c761f932fdd608f29485ef811a.webp)
 可以看到直播的流程可以分为如下几步：
  **音视频采集 —>音视频处理—>音视频编码和封装—>推流到服务器—>服务器流分发—>播放器流播放**
 ![image_14](../image/image_14.png)
 如下图，是一个APP直播功能的架构：
 
-![img](http://image.woshipm.com/wp-files/2019/05/Yz6zqlSoSYIsQSiq9Wme.png)
+![img](/images/6b8da4c5b3eacdd3e9df92df4651e9cf.webp)
 
 从上图中我们可以看到，每一个部分都有各自要处理的一些工作。
 

@@ -10,7 +10,7 @@ title: Windows及Linux平台安装AMP(Apache+MySQL+PHP )
 
 2、如果通过rpm包安装的话可以用  rpm -q  httpd 查看，如果安装的的话会显示包的名称；
 ```
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-db2229209e121a79.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/e35a00e423d1df755b743b645250b157.webp)
 #### 2. 通过yum安装Apache服务程序。
 ```
 yum install httpd -y
@@ -24,20 +24,20 @@ sudo systemctl start httpd
 ```
 sudo systemctl status httpd
 ```
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-b188f8313101113b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/aabe2089e8923e139f84faf9e84492f9.webp)
 
 #### 5. 查看Apache监听的端口。
 ```
 netstat -an|grep :80
 ```
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-5c8f60eca41bee94.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/d8c85a0655bc6f8cce133d1e0ba6cdbe.webp)
 可以看到，80端口处于监听状态，说明服务已经启动，为使客户端能访问Apache服务器的80端口，要打开防火墙的TCP80端口。
 ```
 iptables -I INPUT -p tcp --dport 80 -j ACCEPT
 ```
 #### 6. 查看服务器是否启动成功。
 在地址栏里面输入地址如果看到是如下的就说明启动成功了.
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-515ae581594c7346.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/aaf9587527038bde08f2777a3ef1085c.webp)
 ##### 将网站放到指定的文件夹(默认的是/var/www/html/)然后通过浏览器访问
 
 #### 7. 到/etc/httpd/conf/httpd.conf修改下面两行参数
@@ -70,7 +70,7 @@ yum -y install php
  systemctl restart httpd
 ```
 浏览器访问刚刚创建的页面，如下图则为正常安装成功
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-8823a32ca87f341e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/df55503914b6e3232395572b8d70ebed.webp)
 
 ### 安装mysql
 #### 1. 安装mysql.
@@ -103,11 +103,11 @@ mysql -uroot -p123456
 ```
 mysql -uroot -p
 ```
-![image](http://upload-images.jianshu.io/upload_images/3067896-530b551d53e42bcc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image](/images/5ec8822431fe3b4113fcb69f67871887.webp)
 #### 3. 退出mysql.
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-cbea51946c2ecda7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/5f7c5826eb4ddc6a4c8532338df681a6.webp)
 #### 4. 使用命令show global variables like 'port';查看端口号 
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-14c55829daa8b43f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/ef92206b3484645b714b19090fdf6cfb.webp)
 #### 5. 修改密码
 　　语法：mysql> set password for 用户名@localhost = password('新密码');
 
@@ -165,9 +165,9 @@ systemctl restart firewalld.service
 #### 1. 下载安装文件.
 https://www.apachelounge.com/download/
 https://home.apache.org/~steffenal/VC15/binaries/httpd-2.4.37-win64-VC15.zip
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-c1e5ddf7e5d048b9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/ad7cb5139febca456551d0fbbda60be3.webp)
 将下载下来的压缩包解压到要安装的位置，解压即安装；
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-218b852b054f76d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/b5a9fb971244597777ba7e83ac0e7bd2.webp)
 #### 2. 配置 Apache HTTP Server
 打开 Apache24\conf 目录下的 httpd.conf，修改配置信息:
 将文件目录地址修改为你的安装位置:
@@ -178,7 +178,7 @@ ServerRoot "C:/Apache24"
 
 修改端口号:
 默认的是80端口，但是多数情况下，80端口被占用，所以需要修改80端口。如果确定80端口未被占用则可以不修改，建议还是修改一下:
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-2ae68ae7ae28f374.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/4634c813815bcbca956cc50175e2a66b.webp)
 
 #### 3. 启动Apache HTTP Server：
 - 打开dos窗口的第一种方法：快捷键 win + R 或者 在开始菜单输入 cmd 
@@ -187,16 +187,16 @@ ServerRoot "C:/Apache24"
 
 #### 4. 检测是否启动服务器.
 然后打开浏览器在地址栏输入 [http://localhost:8081/](http://localhost:8081/) 就可以访问页面，页面如下：
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-c877719496591821.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/a2d836c3f0de2cf3925270fdb283bcd6.webp)
 
 ### php的安装.
 #### 1. 下载安装文件:
 https://windows.php.net/download
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-c3768236b3d85272.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/c3011f923d6f7105ee5ac1df46f1bff2.webp)
 下载完成之后将其解压到之前指定好的文件夹中.
 #### 2. 配置php:
 然后，将目录下的php.ini-development文件重命名为php.ini.
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-6d2ade18656c63cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/b8f3f955969e44880b5844f51d498b36.webp)
 打开php.ini 进行如下修改:
 ```
 ;extension_dir="ext"
@@ -234,7 +234,7 @@ AddType application/x-httpd-php .php .html .htm
 写好之后保存文件。
 ### mysql的安装.
 #### 1.下载[官网地址](https://dev.mysql.com/downloads/mysql/)
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-75ee84a76cfd48db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/9f25eed7aac10afd4c1747226300cd1c.webp)
 #### 2.下载完成，将文件解压到你想要安装的盘里。
 #### 3.配置
 -     在mysql的文件夹下创建一个名为data的空文件夹。
@@ -273,7 +273,7 @@ mysqld -install        （如果说已经存在，可以使用sc delete m
 ```
 net start mysql     #启动mysql服务
 ```
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-123747fe11526a3b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/50b6fad237654af5007476911e724f18.webp)
 默认没有密码，直接进入
 ```
 mysql -uroot -p

@@ -36,26 +36,26 @@ SpringBoot的出现解决了传统Spring项目的以下问题：
 
 ### 2.通过Idea创建Springboot项目
 1. idea安装Springboot插件
-![](https://upload-images.jianshu.io/upload_images/3067896-4a45019016ccdf37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/38b1af0e0a391aae044b71ebc0358e4d.webp)
 2. 创建新的工程
-![](https://upload-images.jianshu.io/upload_images/3067896-7b0630cc152932cd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/e5238eed52a7972f3f354fd76455864e.webp)
 
-![](https://upload-images.jianshu.io/upload_images/3067896-3595b0bf62f31a4e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/a9a2a2cd20239567bafd46366d579e69.webp)
 
-![](https://upload-images.jianshu.io/upload_images/3067896-d1b4a7a8a6ae330c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/d2fc6bef8ec2da9ddd1094f2152872d3.webp)
 
-![](https://upload-images.jianshu.io/upload_images/3067896-3b26adcba1f76984.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/d6c519d18da4b136fea1f9a3e5b09311.webp)
 
 ### 3.通过spring.io创建Springboot项目
 1. 在浏览器输入网址：https://start.spring.io/
 2. 选择、填写如下信息：
-![](https://upload-images.jianshu.io/upload_images/3067896-eba3d17828a0c5e4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/d165a8862ee97e1938585fdcf72fb813.webp)
 3. 点击下方图标，即可下载项目压缩包，下载好后将其解压：
-![](https://upload-images.jianshu.io/upload_images/3067896-702589d3fb1d27a2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/443f609484959dafd221f3668cb2c5c1.webp)
 4. 使用idea将其打开即可
 
 # 三.SpringBoot项目结构
-![](https://upload-images.jianshu.io/upload_images/3067896-5eede8b1a647fb28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/5e71322d36fa1634d2562b7fdd9e3daa.webp)
 
 ### 1.路径说明
 - src/main/java:程序代码
@@ -97,10 +97,10 @@ public class HelloController {
 ```
 
 ### 3.启动SpringBoot项目
-![](https://upload-images.jianshu.io/upload_images/3067896-c927eda6d6d06aaa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/124)
+![](/images/62ed3d27275c3b2119e33ebe37bf90ff.webp)
 
 ### 4.浏览器访问：http://localhost:8080/
-![](https://upload-images.jianshu.io/upload_images/3067896-c1aa6d60be3e0b20.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/1875bd6dbd5ff92d574f7c0affc37e88.webp)
 
 # 五.SpringBoot项目配置
 ### 1.SpringBoot全局配置文件
@@ -197,7 +197,7 @@ public class MySQLInfo {
   <mirrorOf>central</mirrorOf>
 </mirror> 
 ```
-![](https://upload-images.jianshu.io/upload_images/3067896-39ac5124fa152333.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/7713f1f51579077f32d2b61adf49a21a.webp)
 
 ### 2.依赖SpringBoot启动器
 如果使用Spring Initializr创建一个SpringBoot项目的话，那么会发现项目的POM文件中会加入了一个parent元素：
@@ -479,10 +479,10 @@ spring.datasource.password = ***
 ### 3.通过jar包发布
 SpringBoot内置了tomcat，打包成jar包就可以直接运行了。
 ##### (1.)运行打包任务
-![](https://img-blog.csdnimg.cn/img_convert/5e400083233b5d8a52a4ce291b00d6f7.png)
+![](/images/ce73061e321e2f673f4d88ef8ef234db.webp)
 ##### (2.)生成jar包
 打包任务完成以后会生成target文件夹。
-![](https://img-blog.csdnimg.cn/img_convert/86a314aef3730a37ba17815ab0e99a3d.png)
+![](/images/b0c767585cfdf8b2561d3b6e534a865e.webp)
 ##### (3.)运行jar包
 在自己的云服务器上面或者是本地服务器上面(必须要安装jdk环境)启动项目。
 ```
@@ -547,7 +547,7 @@ public class Application extends SpringBootServletInitializer {
 打开maven projects任务:
 1. 执行clean任务
 2. 执行package任务
-   ![](https://img-blog.csdnimg.cn/20210511141639435.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3VucmVsaWFibGVfbmFycmF0b3I=,size_16,color_FFFFFF,t_70)
+   ![](/images/627557550f4e536efb889ee75c47f22b.webp)
 ##### (6)将war包配置到tomcat
 1.将war包放置到tomcat的webapps里面去。
 2.在浏览器里面访问 http://localhost:8080/demo-0.0.1-SNAPSHOT/hello。

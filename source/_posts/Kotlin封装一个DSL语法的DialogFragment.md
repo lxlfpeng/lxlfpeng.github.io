@@ -234,4 +234,4 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 ### 5.效果展示
-![](https://upload-images.jianshu.io/upload_images/3067896-28103f390516310a.gif?imageMogr2/auto-orient/strip)
+![](/images/0141a2061aa7b2168233423babe50b32.webp)

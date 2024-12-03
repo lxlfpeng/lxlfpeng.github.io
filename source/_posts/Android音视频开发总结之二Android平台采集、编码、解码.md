@@ -4,7 +4,7 @@ title: Android音视频开发总结之二Android平台采集、编码、解码
 
 # 一. 音视频采集流程
 串联整个音视频录制流程，完成音视频的采集、编码、封包成 mp4 输出。
-![流程图](https://upload-images.jianshu.io/upload_images/3067896-d4e38d8f5a408113.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![流程图](/images/9871c68e4a1502807e06ef6adaea7583.webp)
 通过摄像头和麦克风获得实时的音视频数据；
 
 - 播放流程: 获取流—>解码—>播放。
@@ -55,7 +55,7 @@ MediaRecorder
 直播开发中经常需要获取视频原始帧数据然后前置处理例如：美颜、水印、特效等然后通过编码在通过rtmp或者rtsp等协议方式推流出去，可以完成实时图像传递。
 那么如何获取原始视频帧数据？android camera api有一个设置回调的方法，可以将可以通过它来获取原始视频数据如nv21 、 nv12 、 yv12 等。
 
-![](https://upload-images.jianshu.io/upload_images/3067896-d7e21747730d67ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/606c806e2b6ab13df9b1cc5b86f9348f.webp)
 
 
 ### MediaRecorder实现视频采集
@@ -194,7 +194,7 @@ MediaCodec提供的功能就相对单一，它基本上只用来完成编解码�
 基于MediaCodec 的免费开源方案有m4m，videotranscoder等，不过这些开源方案，表面看上去功能很强大，实际使用的时候会遇到不少坑，只适用于对MediaCodec的原理进行研究。
 
 # 四.音视频解码
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-7572e6e014390d40.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/8778129b244dac7bd2ac63a26b80de24.webp)
 解协议的作用，就是将流媒体协议的数据，解析为标准的相应的封装格式数据。视音频在网络上传播的时候，常常采用各种流媒体协议，例如HTTP，RTMP，或是MMS等等。这些协议在传输视音频数据的同时，也会传输一些信令数据。这些信令数据包括对播放的控制（播放，暂停，停止），或者对网络状态的描述等。解协议的过程中会去除掉信令数据而只保留视音频数据。例如，采用RTMP协议传输的数据，经过解协议操作后，输出FLV格式的数据。
 
 ### 解封装

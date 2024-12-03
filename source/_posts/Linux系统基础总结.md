@@ -355,7 +355,7 @@ sudo 是一种权限管理机制，管理员可以授权于一些普通用户去
 ### 2.Linux访问用户与访问权限
 1.访问用户：所有者，用户组，其他用户
 2.访问权限：
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-c98f45f8055dc4db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/0cad7d04bcd60b6b2e8a6184b6c24498.webp)
 - 读权限（r）： 对文件而言，具有读取文件内容的权限；对目录来说，具有浏览目录的权限。
 - 写权限（w）： 对文件而言，具有新增、修改文件内容的权限；对目录来说，具有删除、移动目录内文件的权限。
 - 可执行权限（x）： 对文件而言，具有执行文件的权限；对目录了来说该用户具有进入目录的权限。

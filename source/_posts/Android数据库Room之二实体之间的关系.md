@@ -58,7 +58,7 @@ data class Address(@PrimaryKey(autoGenerate = true) val id: Int?, val street: St
 ```
 
 以上的示例中，数据实体类 `Address` 内嵌了 `Coordinates` 类，在数据库中对应的表中，会将 `Coordinates` 类的所有字段都分解称为表的字段，最终数据库的表结构为:
-![image.png](https://img-blog.csdnimg.cn/img_convert/33d503a60578ed4022e9af808317c66b.png)
+![image.png](/images/b3d7be3eed81d50e494ae16319b254f1.webp)
 
 注意事项：
 
@@ -370,7 +370,7 @@ data class UserWithPlaylistsAndSongs(
 
 图展示了该关系。
 
-![](https://img-blog.csdnimg.cn/7d6c76a9bdcb4c44bff854688940abcb.png)
+![](/images/d2655d8c59ff6faaf8243c741fa83285.webp)
 音乐在线播放应用示例中关系类的示意图。
 
 如果集合中还有其他表，则可以创建类在剩余的每个表和关系类（此类可在之前的所有表之间建立关系）之间建立关系。这样会在您要查询的所有表之间创建一系列嵌套关系。

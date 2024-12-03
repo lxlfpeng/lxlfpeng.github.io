@@ -17,7 +17,7 @@ title: Java常见的设计模式(下)
 #### 1. 概念
 将一个类的接口转换成客户希望的另外一个接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作。
 例子：笔记本电脑电源一般用的都是5V电压，但是我们的家用电是220V，我们要让笔记本充上电，最好的办法应该是通过一个工具把220V的电压转换成5V，这个工具就是适配器。
-![](https://upload-images.jianshu.io/upload_images/3067896-d7a500c8f31c44a8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/724553622152891467bd6260bad90552.webp)
 #### 2. 适配器模式涉及3个角色
 - **目标 Target（目标抽象类）：**目标抽象类定义客户所需接口，可以是一个抽象类或接口，也可以是具体类，相当于插座。
 - **适配器 Adapter（适配器类）：**适配器可以调用另一个接口，作为一个转换器，对Adaptee和Target进行适配，适配器类是适配器模式的核心，在对象适配器中，它通过继承Target并关联一个Adaptee对象使二者产生联系，相当于插头转换器。
@@ -202,7 +202,7 @@ public class ObjAdapter implements IDC {
        redOutlineCircleDecorator.onDraw();
     }
     ```
-![](https://upload-images.jianshu.io/upload_images/3067896-91273fac435884d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/62ee37b9179c9f886f0d3a834c95a0ab.webp)
 
 **优点：**
 - 相比与静态的继承，装饰器模式正如它定义的，那样可以动态的给一个对象添加额外的职责， 显得更加灵活。静态继承的情况下，如果要添加其他的功能就需要添加新的子类实现功能，然后相互之间继承，以达到一个组合的功能，对于每一个要添加的功能都要，新建类，显得特别麻烦，也使得系统越来越复杂，而对于装饰器来说，为一个特定的Component提供多种不同的Decorator，对于一些要达成的功能，相互组合就可以达成目的。
@@ -284,7 +284,7 @@ public class ObjAdapter implements IDC {
             microSell.sell();
         }
     ```
-![](https://upload-images.jianshu.io/upload_images/3067896-7b01efa112d45dff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/38455377871e51dc78c2b2c792dc39a9.webp)
 
 
 **优点：**
@@ -330,7 +330,7 @@ public class ObjAdapter implements IDC {
             nikeProxy.sell();
         }
     ```
-![](https://upload-images.jianshu.io/upload_images/3067896-207f964a6644a5ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/53941910570c5c4a9f04e4bc5aca4408.webp)
 
 
 可以看到并没有像静态代理那样重新实现一个代理类，而是实现了 InvocationHandler 接口的invoke方法实现的代理。通过Proxy.newProxyInstance()创建了一个代理类来执行sell方法。
@@ -507,7 +507,7 @@ AOP实现主要分为 静态代理 和 动态代理 。
         }
     ```
 结果:
-![](https://upload-images.jianshu.io/upload_images/3067896-3c660e33696ba8f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/79addbe1cf33317966bc0226d24fb3a8.webp)
 #### 4. 优点
 - 观察者和被观察者之间建立一个抽象的耦合，降低了目标与观察者之间的耦合关系。
 - 观察者模式支持广播通讯的触发机制。

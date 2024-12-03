@@ -8,7 +8,7 @@ UML类图是一种结构图，用于描述一个系统的静态结构。类图�
 # 二. 类图中的表示方式
 ### 1.类在类图中的表示方式
 在UML类图中，类使用包含类名、属性(field) 和方法(method) 且带有分割线的矩形来表示，比如下图表示一个Employee类，它包含name、age和email这3个属性，以及modifyInfo()方法。
-![](https://upload-images.jianshu.io/upload_images/3067896-b256fcf39e0fee52.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/a55e5548bce33cf410160b449545c7f6.webp)
 对应代码：
 ```
 public class Employee {
@@ -47,7 +47,7 @@ UML类图中表示可见性的符号有三种，用来``表示属性或方法的
 >中括号中的内容是可选的。
 
 只有方法没有属性的表示方式：
-![](https://upload-images.jianshu.io/upload_images/3067896-a466c298cf2719fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/070d42fcc5d31c2b3d3e85db276a4a6b.webp)
 - public方法method1接收一个类型为Object的参数，返回值类型为void。
 - protected方法method2无参数，返回值类型为String。
 - private方法method3接收类型分别为int、int[]的参数，返回值类型为int。
@@ -56,44 +56,44 @@ UML类图中表示可见性的符号有三种，用来``表示属性或方法的
 在软件系统中，类并不是孤立存在的，类与类之间存在各种关系，对于不同类型的关系，UML提供了不同的表示方式。在UML类图中，常见的有以下几种关系: ``泛化（Generalization）,  实现（Realization），关联（Association)，聚合（Aggregation），组合(Composition)，依赖(Dependency)``
 ### 1.泛化关系（继承关系）
 泛化(Generalization)关系也就是**继承关系**，用于描述父类与子类之间的关系，父类又称作基类或超类，子类又称作派生类。继承关系对应的是extend关键字，在UML类图中用带空心三角形的直线表示，如下图所示中，Student类与Teacher类继承了Person类。
-![](https://upload-images.jianshu.io/upload_images/3067896-b3be0f249e6d0868.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/9481a601ddc3b10c0a927bfa278ef63f.webp)
 ``由子类指向父类。``
 
 ### 2.接口实现关系
  接口之间也可以有与类之间关系类似的继承关系和依赖关系，但是接口和类之间还存在一种**实现(Realization)关系**。这种关系对应implement关键字，在UML类图中用带空心三角形的虚线表示。如下图中，Car类与Ship类都实现了Vehicle接口。
-![](https://upload-images.jianshu.io/upload_images/3067896-0394d94e36edfccf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/3dc4a44001b7b08d3d5a760a3927ed1a.webp)
 ``实现类指向接口``
 
 ### 3.组合关系
 组合关系与聚合关系见得最大不同在于：这里的“部分”脱离了“整体”便不复存在。比如下图：
-![](https://upload-images.jianshu.io/upload_images/3067896-f3e4edc2307e1d34.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/24fb505ab81e376db15f9ad91440c753.webp)
 显然，嘴是头的一部分且不能脱离了头而单独存在。在UML类图中，组合关系用一个带实心菱形和箭头的直线表示。
 >整体与部分的关系，但是整体与部分不可以分开。整体指向部分
 
 ### 4.聚合关系
 聚合是整体与部分的关系，且部分可以离开整体而单独存在。
-![](https://upload-images.jianshu.io/upload_images/3067896-1f212014185c7a80.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/825368394a08a86ba00bb2532a8adf34.webp)
 上图中的Car类与Engine类就是聚合关系（Car类中包含一个Engine类型的成员变量）。由上图我们可以看到，UML中聚合关系用带空心菱形和箭头的直线表示。聚合关系强调是“整体”包含“部分”，但是“部分”可以脱离“整体”而单独存在。比如上图中汽车包含了发动机，而发动机脱离了汽车也能单独存在。
 >整体和部分的关系，整体与部分可以分开。整体指向部分
 
 ### 5.关联关系
 表示一个类的属性保存了对另一个类的一个实例（或多个实例）的**引用**。关联关系又可进一步分为单向关联、双向关联和自关联。 关联关系是类与类之间最常用的一种关系，表示一类对象与另一类对象之间有联系。组合、聚合也属于关联关系，只是关联关系的类间关系比其他两种要弱。
 #####  (1.)单向关联关系
-![](https://upload-images.jianshu.io/upload_images/3067896-5e67a4986746713e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/9596a838fb2d8f0f58f7e38320f4d2d7.webp)
 我们可以看到，在UML类图中单向关联用一个带箭头的直线表示。上图表示每个顾客都有一个地址，这通过让Customer类持有一个类型为Address的成员变量类实现。
 
 #####  (2.)双向关联关系
-![](https://upload-images.jianshu.io/upload_images/3067896-71a96931a3a1d41e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/4d12d92c703d9cad355417df442d87fe.webp)
 从上图中我们很容易看出，所谓的双向关联就是双方各自持有对方类型的成员变量。在UML类图中，双向关联用一个不带箭头的直线表示。上图中在Customer类中维护一个Product[]数组，表示一个顾客购买了那些产品；在Product类中维护一个Customer类型的成员变量表示这个产品被哪个顾客所购买。
 
 ##### 自关联
-![](https://upload-images.jianshu.io/upload_images/3067896-173c1d011057e2f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/eae420ba882da507ea312c769458489a.webp)
 自关联在UML类图中用一个带有箭头且指向自身的直线表示。上图的意思就是Node类包含类型为Node的成员变量，也就是“自己包含自己”。
 ``拥有者指向被拥有者``
 
 ### 6.依赖关系
 依赖关系（Dependence）：假设A类的变化引起了B类的变化，则说名B类依赖于A类。大多数情况下，依赖关系体现在某个类的方法使用另一个类的对象作为参数。依赖(Dependency)关系是一种使用关系，特定事物的改变有可能会影响到使用该事物的其他事物，在需要表示一个事物使用另一个事物时使用依赖关系。大多数情况下，依赖关系体现在某个类的方法使用另一个类的对象作为参数。
-![](https://upload-images.jianshu.io/upload_images/3067896-edadab9d44c34b1e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/240413eab421604eb45deb66bf9faac9.webp)
 从上图我们可以看到，Driver的drive方法只有传入了一个Car对象才能发挥作用，因此我们说Driver类依赖于Car类。在UML类图中，依赖关系用一条带有箭头的虚线表示。
 
 ``使用者指向被使用者``
@@ -125,7 +125,7 @@ UML类图中表示可见性的符号有三种，用来``表示属性或方法的
 对类来说的，即一个类应该只负责一项职责。如类A负责两个不同职责：职责1，职责2。当职责1需求变更而改变A时，可能造成职责2执行错误，所以需要将类A的粒度分解为A1和A2。类的职责要单一，不能将太多的职责放在一个类中。
 **例如:大学学生工作管理程序。**
 分析：大学学生工作主要包括学生生活辅导和学生学业指导两个方面的工作，其中生活辅导主要包括班委建设、出勤统计、心理辅导、费用催缴、班级管理等工作，学业指导主要包括专业引导、学习辅导、科研指导、学习总结等工作。如果将这些工作交给一位老师负责显然不合理，正确的做 法是生活辅导由辅导员负责，学业指导由学业导师负责，其类图如图所示。
-![](https://upload-images.jianshu.io/upload_images/3067896-35a036b269dee9ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/b3e1e762f6b029f858cef33dcb6606ae.webp)
 
 单一职责原则注意事项和细节:
 - 降低类的复杂度，一个类只负责一项职责。
@@ -204,7 +204,7 @@ public class IPhoneDiscount extends IPhone {
 ```
 
 
-![](https://upload-images.jianshu.io/upload_images/3067896-8b801076ab26c586.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/447f586d18b8adec5daf3af1ef790e91.webp)
 
 ### 3.里式替换原则(Liskov Substitution Principle)
 所有引用基类（父类）的地方，都必须能透明地使用其子类的对象。父类可被子类替换，但反之不一定成立。也就是说，代码中可以将父类全部替换为子类，程序不会出现异常。当使用继承时，遵循里氏替换原则。类B继承类A时，除添加新的方法完成新增功能P2外，尽量不要重写父类A的方法，也尽量不要重载父类A的方法。里氏替换原则通俗的来讲就是：子类可以扩展父类的功能，但不能改变父类原有的功能。
@@ -350,7 +350,7 @@ public class Plaintext implements Authentication {
 合成复用可以在运行时动态进行，新对象可以动态地引用与成员对象类型相同的其他对象。
 
 ### 8.总结
-![](https://upload-images.jianshu.io/upload_images/3067896-3174e0e54bc0264b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/c374affe87a93bb04cca6fc91b685aa7.webp)
 
 
 

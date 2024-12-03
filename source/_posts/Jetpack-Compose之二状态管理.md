@@ -226,7 +226,7 @@ fun HelloContent(name: String, onNameChange: (String) -> Unit) {
 ```
 本例代码中 HelloContent 是无状态的，它的状态被提升到了 HelloScreen 中，HelloContent 有name和onNameChange两个参数，name 是状态，通过 HelloScreen 组合项传给 HelloContent而 HelloContent 中发生的更改它也不能自己进行处理，必须将更改传给HelloScreen进行处理并重组界面。 通过状态提升，HelloContent更容易复用和测试，同时和它的状态变量是如何保存的解耦开来。这种解耦意味着当我们修改或者替换HelloScreen时，不用修改HelloContent的实现。
 
-![](https://img-blog.csdnimg.cn/img_convert/9b1891409655e936bf938639e45e661c.png)
+![](/images/d768c945c42086a9b3f8def4ee61b882.webp)
 
 以上的逻辑也叫做：状态下降，事件上升。上例中，状态量从HelloScreen流向HelloContent，而事件则反向传递。 遵循这种编程模式，你可以将展示UI的可组合函数与存储状态变量解耦开来。
 

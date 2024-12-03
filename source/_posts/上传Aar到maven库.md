@@ -136,11 +136,11 @@ afterEvaluate {
 * 对于非 https 的仓库地址，需要使用 `allowInsecureProtocol` 字段，包括引用该仓库的地方
 * 对于需要上传的 maven 仓库，需要显式指定 name，因为在编译后，会生成相关任务，比如这样：
 
-[![](https://img-blog.csdnimg.cn/img_convert/4fac4c22748bc7fb17c3cda116949020.png)](http://i.lckiss.com/wp-content/uploads/2021/08/2021080206190183.png)
+[![](/images/75e08bb1ba51bc38d087fff139ba9d6d.webp)](http://i.lckiss.com/wp-content/uploads/2021/08/2021080206190183.png)
 
 另外，对于 release(MavenPublication) 节点中 `from components.<strong>release<span> </span></strong>`字段，是有含义的~ 官网描述如下：
 
-[![](https://img-blog.csdnimg.cn/img_convert/19f4152760ea79193b5bb931c0e7a7aa.png)](http://i.lckiss.com/wp-content/uploads/2021/08/2021080206253739.png)
+[![](/images/d792bd0073555f70bac00c013fd5d087.webp)](http://i.lckiss.com/wp-content/uploads/2021/08/2021080206253739.png)
 
 换成中文说就是：一个 module 的不同变种。
 

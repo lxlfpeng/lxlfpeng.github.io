@@ -62,7 +62,7 @@ Compose这类的声明式UI框架都是通过函数（组件）的反复执行�
 
 # 四.Compose组合函数的生命周期
 可组合项的生命周期比视图比activity 和 fragment 的生命周期更简单，一般是进入组合、执行0次或者多次重组、退出组合。
-![](https://img-blog.csdnimg.cn/1986ec4205a845049b809f258ba492bf.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAUGFsbWVyWWFuZw==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center)
+![](/images/c9debefa923799713145cb0760fb0779.webp)
 
 - Enter：挂载到树上，首次显示。
 - Composition：重组刷新UI。

@@ -6,7 +6,7 @@ title: Android-ORM框架-GreenDao
 GreenDAO是一个基于**sqlite**的对象关系映射(ORM)的数据库框架，**ORM（Object Relation Mapping对象关系映射）**，其表现形式就是通过GreenDao将数据库和Bean对象关联起来。使用greendao可以节省自己编写SQL语句进行CRUD的时间。
 [GreenDao官网](http://greenrobot.org/greendao/)
 [GitHub地址](https://github.com/greenrobot/greenDAO)
-![greendao原理](https://upload-images.jianshu.io/upload_images/3067896-f6d24344569031e1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![greendao原理](/images/31e0493a22955d3dc02b9c6ebacc9b1b.webp)
 
 # 二.项目工程引入GreenDao
 ### 1.引入GreenDao
@@ -238,7 +238,7 @@ QueryBuilder.LOG_VALUES = true;
 # 六.GreenDao数据库版本迁移
 在版本迭代时，我们经常需要对数据库进行升级，而GreenDAO默认的DaoMaster.DevOpenHelper在进行数据升级时，会把旧表删除，然后创建新表，并没有迁移旧数据到新表中，从而造成数据丢失。
 查看DaoMaster源码可知:
-![](https://upload-images.jianshu.io/upload_images/3067896-b6207a95c471060a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/2efcace7338d84d771015bab0cd9214d.webp)
 [解决方式](https://github.com/yuweiguocn/GreenDaoUpgradeHelper)
 
 参考资料:

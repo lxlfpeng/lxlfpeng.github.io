@@ -5,16 +5,16 @@ title: Android上传aar到Jcenter和Jitpack
 # 一.上传项目到Jcenter
 ### 1.注册jcenter账号
 进入[注册地址](https://bintray.com/)选择右边sign up here 进行注册,建议直接使用github账号授权登录。(qq，网易等邮箱很多时候收不到验证码，所以要想成功完成注册最好用google邮箱)
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-d9485199291874e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/5d02a57b10ae75ab984e58b782de1e6d.webp)
 
 ### 2.创建Repository（仓库）
 注册成功之后创建Repository，作为存放开源库的仓库，最好选择为公共仓库（public），仓库名称和仓库类型为maven，仓库名称在后面上传时需要用到。
-![](https://upload-images.jianshu.io/upload_images/3067896-32a91ba63c936f88.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![](https://upload-images.jianshu.io/upload_images/3067896-379c5431d2343d2d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/eea73bb55e14215bcc1b521decb3916b.webp)
+![](/images/54c34cd1b58ef0dbf9131b20178fa31f.webp)
 
 ### 3.获取 API Key
 登录bintray， Edit profile -> API Key 可以获取上传的秘钥key，后面上传项目的时候需要使用。
-![](https://upload-images.jianshu.io/upload_images/3067896-e2b20e3151b27d7d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/ade53e475358a7f14a17f70e0b489d84.webp)
 
 ### 4.配置引入 bintray-release插件
 项目根目录build.gradle配置，加入bintray-release插件
@@ -73,7 +73,7 @@ publish {
 
 ### 5.上传开源库
 ##### (1.)在项目根目录下执行上传命令
-![](https://upload-images.jianshu.io/upload_images/3067896-e47e44c5dd6f83ef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/69ddabfe7b26d894d314945643df52c7.webp)
 ```
 # window 下执行
 gradlew clean build bintrayUpload -PbintrayUser=Xxxx -PbintrayKey=Xxxxxxxxx -PdryRun=false
@@ -94,11 +94,11 @@ gradlew clean build bintrayUpload //根命令
 # 二.添加到Jcenter中央仓库
 ### 1. Add to JCenter
 上传成功之后就可以打开项目详情，选择 Add to JCenter 就可以申请添加到 JCenter 了，如下图所示：经过上面的步骤，我确实已经把开源库上传到Jcenter了，但是我们还不能引用，要想引用上传的开源库还得提交人工审核，人工审核通过会收到站内message，并且开源库中的Add to Jcenter 也会消失。
-![](https://upload-images.jianshu.io/upload_images/3067896-f84c5fccc75ae139.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/be301d1f3b878377e53655ad2b6473fc.webp)
 
 ### 2. 审核期间引用
 在工程(projrct)的build.gradle文件中，添加maven支持
-![](https://upload-images.jianshu.io/upload_images/3067896-0fbec7ca06c93974.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/8495782680729379a9b1ec7268453cc9.webp)
 
 ```
 allprojects {
@@ -162,7 +162,7 @@ allprojects {
 方式二：拆分上传命令：
 1. 在Terminal执行`gradlew clean build`命令。
 2. 先右击执行generatePomFileForReleasePublication task，再右击执行publishReleasePublicationToMavenLocal task，具体操作看图：
-![](https://upload-images.jianshu.io/upload_images/3067896-e7a8329cec48bf77.JPEG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/c9d4181728269298376675d92ac73b24.webp)
 3. 在Terminal中执行`gradlew bintrayUpload -PbintrayUser=username -PbintrayKey=API Key -PdryRun=false`命令。
 
 ### 2.Lint检查报错
@@ -210,7 +210,7 @@ Execution failed for task ':utils:bintrayUpload'.
 # 五.上传项目到Jitpack
 ### 1.准备好项目以及要发布的开源库
 上传到JitPack的开源库默认使用项目的名称，而不是要发布的开源库的名称，所以尽量给项目起一个比较优雅的名字（这里我们使用同名）。
-![](https://upload-images.jianshu.io/upload_images/3067896-5a83760fa82a1c65.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/7ea1a9d3e1c2233c4dd1cf3cb4034cb9.webp)
 
 ### 2.配置gradle插件
 用到一个的插件**[android-maven-gradle-plugin](https://link.jianshu.com/?t=https://github.com/dcendents/android-maven-gradle-plugin)**
@@ -232,7 +232,7 @@ allprojects {
   ...
 }
 ```
-![](https://upload-images.jianshu.io/upload_images/3067896-e3db40a74b70cf4d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/29dee4c9795fbd1f3e7b158ccf81037a.webp)
 
 2. 在要上传的library的build.gralde文件添加如下代码：
 ```
@@ -248,15 +248,15 @@ android {
 3. 将项目上传到github。
 
 ### 3.在github主页，创建一个Release或Tag
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-8b73d72fbc3be873.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-e0cbc93af0ae81a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-559bb372cce05851.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-eb4410591b3915a9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/4f0d6a6fa9e6f2f3d636e1ae3aa8840f.webp)
+![image.png](/images/540beb26db7ed47d9a84227d985ce4eb.webp)
+![image.png](/images/e081706c7b396f98659b89776455a1d8.webp)
+![image.png](/images/c402e7bb54fa2c1eb585e4d0107673f2.webp)
 
 ### 4.将项目的仓库提交到[jitpack.io](https://jitpack.io/)
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-1b6cdee039735444.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/1e932235725ba95013dd6cd10cc3f304.webp)
 版本提交完成后，JitPack会自动生成引用该library的配置信息:
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-a75ad47745dfa6da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/742f63e3c02cdb2458d4a4c2cd47b04c.webp)
 
 参考资料:
 [开源库上传 jcenter](https://www.maoqitian.com/2019/09/03/%E5%BC%80%E6%BA%90%E5%BA%93%E4%B8%8A%E4%BC%A0-jcenter/)

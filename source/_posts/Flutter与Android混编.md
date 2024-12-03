@@ -125,7 +125,7 @@ dependencies {
 ### 1.混编方案
 一般来说混编方案有以下两种：
 ##### (1.)统一管理方案(不推荐)
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-9f3b20c73ee869b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/e6b2d91cb53653c31113edf4be75aff1.webp)
 也就是Flutter Application创建工程的方案，目的是将iOS工程和Android工程作为Flutter工程的子工程，由Flutter统一管理。
 **优点:**
 - 代码集中，可以很方便的进行项目开发，每个开发都可以进行iOS、Android和Flutter的工程开发。
@@ -135,7 +135,7 @@ dependencies {
 - 每个开发人员本地都要装有自己端的开发环境（iOS/Android）和Flutter的开发环境，并且Flutter SDK版本要保持一致。
 - 耦合度会越来越高。当项目越来越复杂后，整个项目的代码耦合度会越来越高，相关工具链耗时也会越来越长，导致开发效率降低。
 ##### (2.)各端分离方案(推荐)
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-f4bf40233ecc839a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/6befc8db1857031a7ca81469b24e89a9.webp)
 各端分离方案是iOS、Android和Flutter分别作为三个独立项目存在，将Flutter工程的编译产物作为iOS工程和Android工程的依赖模块，原有工程的管理模式不变，对原生工程没有侵入性，无需额外配置工作。 这种方案需要单独创建Flutter项目，然后通过iOS（CocoaPods）和安卓的依赖管理工具将Flutter项目build出来的framework、资源包等放入Native工程以供使用。 这种方式可以将iOS、Android和Flutter项目放在一个目录下面作为一个项目来管理，也可以不在同一目录下，关键是设置Flutter模块依赖时相对路径一定要设置正确。
 
 >通过Flutter Module创建工程的方案就可以完成这种混编。

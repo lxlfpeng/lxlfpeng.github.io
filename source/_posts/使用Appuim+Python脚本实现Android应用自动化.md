@@ -22,15 +22,15 @@ title: 使用Appuim+Python脚本实现Android应用自动化
 
 ### 3.配置appium
 1。 安装好appium，打开程序，需要进行配置，host与port默认即可.
-![](https://upload-images.jianshu.io/upload_images/3067896-74a1e5538b02496b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/d0f712c364c8a3d054af062e1f9c262f.webp)
 2. 配置JDK环境和Android Sdk环境。
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-e59e8a093844089b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/e95578bc216a6335f08f5dda715b6435.webp)
 填写Android_home及Java_home后，Save and Restart，
 3. 重启以后回到主界面，点击Start Server vX.X.X按钮。进入控制台日志界面，看到Appium REST http interface listener started on 0.0.0.0:4723就表示启动成功了。
 接着点击“start inspector session”进行配置。
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-ffe371209ce67ee2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/101a9e35ee5fce59554f46bb943f6d53.webp)
 4. 配置inspector
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-f06835cbe6b2cf96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/b23373ccfeaf2f1fac77515f8b42b36e.webp)
 重点是要配置相关参数可以通过键值对进行配置也可以通过右侧的Json文件进行配置:
 - platformName:声明是ios还是android系统
 - platformVersion:Android内核版本号，可通过命令adb shell getprop ro.build.version.release查看
@@ -47,11 +47,11 @@ Json配置文件示例:
 }
 
 5. 配置完成以后点击start session按钮，进入到操作面板功能中。
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-ea05f084abdd93a9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/3a1f5f85e1d8e8b27e46f136eee00a14.webp)
 
 # 三.使用appuim的录制功能生成自动化代码
 生成的自动化代码脚本有很多语言可以选择，当然人生苦短我选Python。
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-ce842a6abb6ff48f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/4c33421cdc0627919ffc112c01005f24.webp)
 基本制作步骤
 - 开始录制
 - 选择控件

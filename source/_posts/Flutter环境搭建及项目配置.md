@@ -4,37 +4,37 @@ title: Flutter环境搭建及项目配置
 
 # 一. 下载安装Flutter。
 ### 1.1 下载安装包[Flutter SDK](https://flutter.cn/docs/development/tools/sdk/releases)
-![](https://img-blog.csdnimg.cn/img_convert/13389bc73298a5140d18e30a52b5bf64.png)
+![](/images/790e1a6e1da648f24f5196bf5f40a893.webp)
 ### 1.2 下载完成后进行解压:
-![](https://img-blog.csdnimg.cn/img_convert/1520a70bb6f05f07f67edc92911e073a.png)
+![](/images/584c394cafe48aa90501c58928cc1cfd.webp)
 ### 1.3 配置环境变量。
 控制面板->系统和安全->系统->高级系统设置->环境变量->path->编辑->新建
-![](https://img-blog.csdnimg.cn/img_convert/4c9f9e1b3651c111e919e23b53918d58.png)
+![](/images/6f8918090fcbff15309423e45ae357bb.webp)
 ### 1.4 安装flutter依赖并检查。
 cmd命令:
 ```
 flutter doctor
 ```
-![](https://img-blog.csdnimg.cn/img_convert/0d123920a9f71fbf47a59d45bd68db38.png)
+![](/images/3475896c37cedb706b3578e53057ee66.webp)
 ### 1.5 查看flutter版本。
 ```
 flutter doctor -v
 ```
 # 二. Android Studio安装配置。
 ### 2.1 Android studio安装dart和flutter插件。
-![](https://img-blog.csdnimg.cn/img_convert/e220fbf04bebe98e4a0083794a27291c.png)
+![](/images/a06dd7c88bef5014a91d02e60205b377.webp)
 
-![](https://img-blog.csdnimg.cn/img_convert/b587dda4865425709693a0c45d0d9a24.png)
+![](/images/51f7d25a2c5829ad444ea3111bdd2d70.webp)
 ### 2.2 重启Android studio创建flutter工程。
-![](https://img-blog.csdnimg.cn/img_convert/1645f6406d142d09a9cc385c559f36c7.png)
+![](/images/4e2735083e6fe524e45a5eccc77d4335.webp)
 # 三. VsCode配置。
 ### 1. vscode添加flutter支持。
-![](https://img-blog.csdnimg.cn/img_convert/680db4b92a8319dd4144f271e540b614.png)
+![](/images/6a97f539d0e0be528a95c9fd953624c2.webp)
 ### 2. 创建一个flutter的项目。
-![](https://img-blog.csdnimg.cn/img_convert/9d97f3d384cf022008b0e03e45a2fc34.png)
+![](/images/042df2a9de26db86a72770aa551d733b.webp)
 ### 3.使用模拟器调试。
-![](https://img-blog.csdnimg.cn/img_convert/fd6ca0143444500aead64c26378cefaa.png)
-![](https://img-blog.csdnimg.cn/img_convert/6ebf537cff3c2d7b85001cafc54bc2fc.png)
+![](/images/fbb639a186bc1752e41df3bc493e498d.webp)
+![](/images/0bec2b31685de17ebabf29e1818fece6.webp)
 # 四. 创建或者运行项目卡住问题
 创建项目一直卡在Creating Flutter Project没反应。
 运行项目一直卡在:
@@ -99,7 +99,7 @@ class FlutterPlugin implements Plugin<Project> {
 中的：https://storage.googleapis.com/download.flutter.io   替换为：http://download.flutter.io   重新编译。
 
 # 五 . 项目结构分析
-![](https://img-blog.csdnimg.cn/img_convert/9e81949ce1f9db2e4fe0b6a62f84a63f.png)
+![](/images/402bb23d49be831f11d22d832f48fd08.webp)
 - .idea：IDE的生成的一些配置，不用管
 
 - android：创建项目生成的Android原生代码
@@ -164,11 +164,11 @@ Got socket error trying to find package flutter_easyrefresh at https://pub.dartl
 ```
 1. export PUB_HOSTED_URL=https://pub.flutter-io.cn
 ```
-![](https://img-blog.csdnimg.cn/img_convert/d79f36b60537014fe2bca1f3ae9dbb9c.png)
+![](/images/718c0c51fa870ec11a0e05955a2b018e.webp)
 ```
 2. export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
 ```
-![](https://img-blog.csdnimg.cn/img_convert/8aa4947f85aae9619229a3325bcb7a79.png)
+![](/images/721fc8bf64f3643469d44895e517f551.webp)
 
 # 七. 在Flutter中添加资源文件.
 一个应用程序少不了一些静态资源，``例如：图片、字体、配置文件``等。这些静态资源会打包到程序安装包中，可以在运行时访问。

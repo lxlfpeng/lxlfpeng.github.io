@@ -2,7 +2,7 @@
 title: x96max+-电视盒子如何刷入EmuELEC游戏系统
 ---
 
-![](https://upload-images.jianshu.io/upload_images/3067896-f03e5a9a27ada0ce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/368ed8979644e82aaaaf3a9694d0d744.webp)
 
 # 一. 了解相关概念
 ### 1. Kodi是什么?

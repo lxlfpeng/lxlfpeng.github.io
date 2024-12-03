@@ -94,7 +94,7 @@ public class MainActivity extends Activity {
     }
 }
 ```
-![](https://upload-images.jianshu.io/upload_images/4843132-efa010d2efe5b7f5.png?imageMogr2/auto-orient/strip|imageView2/2/w/804/format/webp)
+![](/images/24bd46715e85f975e5da9507eed43c0e.webp)
 原因说的是在使用Handler之前没有调用Looper.prepare()。既然如此我们给它加上Looper.prepare()和Looper.loop();
 ```
 public class MainActivity extends Activity {

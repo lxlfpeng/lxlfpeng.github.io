@@ -277,7 +277,7 @@ SPA应用采用客户端渲染，用户需要等待客户端js解析完成之后
 由于SPA应用采用客户端渲染，在js未完成解析之前，网站HTML是没有内容的，这样导致搜索引擎爬取站点HTML时获取不到内容。
 
 为了解决这两个问题，业界提出了一种新的解决方案，如下图：
-![image.png](https://i-blog.csdnimg.cn/direct/f15c8f9027ee4b67b7202185c23eaa23.png)
+![image.png](/images/293cebdc2a1dfb59606031f96c85377f.webp)
 
 利用服务端渲染解决首屏加载慢和不利于SEO的缺陷，首屏渲染完成之后，客户端渲染接管页面重新成为单页应用以保证良好的用户体验。这种方式称为现代化服务端渲染方式或者同构渲染。
 
@@ -446,7 +446,7 @@ SPA应用采用客户端渲染，用户需要等待客户端js解析完成之后
 ## 客户端渲染
 
 就是我们的页面开始是没内容的，加载js后，js会生成和操纵dom，最后由浏览器渲染出页面，这一系列的操作都是在浏览器完成的。（前端去后端取数据生成DOM树。）
-![1.png](https://obs-emcsapp-public.obs.cn-north-4.myhwclouds.com/image%2Feditor%2Fd591633f-354c-4b1c-b2a3-a3e7b735578d.png)
+![1.png](/images/d720549a009f62efa75240905647176e.webp)
 
 加载出来的是一个空的页面，该页面加载了app.js这个文件，该js文件会产生和操作Dom，最终浏览器渲染和绘制页面。
 **客户端渲染的优点：**
@@ -459,7 +459,7 @@ SPA应用采用客户端渲染，用户需要等待客户端js解析完成之后
 ## Server Side Rendering（服务端渲染）
 
 SSR 目的是对搜索引擎更友好，客户端渲染搜索引擎无法抓取页面相关内容，也就是用户搜不到网站的相关信息，排名就会比较靠后。（DOM树在服务端生成，然后返回给前端。）
-![2.png](https://obs-emcsapp-public.obs.cn-north-4.myhwclouds.com/image%2Feditor%2F6e751487-7cb0-47ba-a276-645314c9a2c4.png)
+![2.png](/images/56ef75e01963265d1b13910adc380d31.webp)
 
 原理：将 html 在服务端渲染，合成完整的 html 文件再输出到浏览器。
 适用场景：客户端的网络比较慢，客户端运行在老的或者直接没有 JavaScript 引擎上

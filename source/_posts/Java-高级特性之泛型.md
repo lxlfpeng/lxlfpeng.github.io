@@ -173,9 +173,9 @@ public class Generic {
     }
 ```
 泛型方法，是在调用方法的时候指明泛型的具体类型 ，泛型方法可以在任何地方和任何场景中使用，包括普通类和泛型类。注意泛型类中定义的普通方法和泛型方法的区别。
-![](https://upload-images.jianshu.io/upload_images/3067896-e0bd82a8ae2a0205.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/80a77f7e564ba048902440d594735b60.webp)
 区别一下普通的方法和泛型方法
-![](https://upload-images.jianshu.io/upload_images/3067896-c3873d6819460025.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/022c37159bb44fd95be19b57439407c0.webp)
 可以看到普通方法中也使用了泛型，但是它只是一个普通的方法，只是它的返回值和传入的类型是在前面已经声明过得泛型，所以，这里才可以继续使用 T 这个类型变量。``仅仅使用了泛型变量并不算是泛型方法``。
 而下面这个泛型方法，首先通过 <E> 标识了它是一个泛型方法，返回值类型和传入的类型一致，通过泛型进行参数化了。
 

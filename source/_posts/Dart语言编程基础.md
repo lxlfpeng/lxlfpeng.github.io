@@ -1045,7 +1045,7 @@ Dart是一种单线程语言，因此Dart程序没有主线程和子线程之分
 
 Dart事件循环机制是由一个 消息循环(Event looper) 和两个消息队列：事件队列(Event queue) 和 微任务队列(MicroTask queue) 构成。
 
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-0e98930ed00977ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/3834a09a65d265a0c57fe6ed7c58c258.webp)
 从上图可知，Dart事件循环机制由一个消息循环(event looper)和两个消息队列构成，其中，两个消息队列是指事件队列(event queue)和微任务队列(Microtask queue)。该机制运行原理为：
 
 - 首先，Dart程序从main函数开始运行，待main函数执行完毕后，event looper开始工作。

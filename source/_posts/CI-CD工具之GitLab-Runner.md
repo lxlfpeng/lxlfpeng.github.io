@@ -160,7 +160,7 @@ Runner的信息是存放在一个配置文件里面的，配置文件的格式�
 
 **查看注册成功的gitlab-runner**
 在gitlab上打开project下的settings > CICD > runners，可以看到我们配置好的runner.
-![](https://upload-images.jianshu.io/upload_images/3067896-38c004c8ed782fb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/d4d253bd98a251de5ba605263db03627.webp)
 
 ### 4.gitlab-runner取消注册
 ```
@@ -185,7 +185,7 @@ gitlab-runner unregister --all-runners
 - Docker Machine (auto-scaling)
 - Kubernetes
 - Custom
-![](https://upload-images.jianshu.io/upload_images/3067896-d521efcbcd1e7129.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/bd2043772e4250d93e436a62b6178462.webp)
 其中比较常用的是shell executor和docker executor。
 
 ### 2.SSH executor
@@ -404,10 +404,10 @@ deploy_project:
 
 将.gitlab-ci.yml文件push到远程仓库.
 现在到Pipelines页面查看，将会看到该Pipline处于等待状态。
-![](https://upload-images.jianshu.io/upload_images/3067896-d19bfec0c7d5ea68.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/999ca3a7f054af8eedf9797a269702c6.webp)
 因为我们只定义了任务并没有定义由哪个runner去执行这个脚本.
 接着我们打开Project的setting->CI/CD->Runners/Expand->对应Runners edit按钮->勾选Indicates whether this runner can pick jobs without tags(指示此运行程序是否可以拾取没有标记的作业)->save change
-![](https://upload-images.jianshu.io/upload_images/3067896-948be32f731268e4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/82fcb269c4d91ffa6e9ce135b06e9eb9.webp)
 再次到Pipelines页面查看，将会看到该该任务执行完毕.
 
 当有新内容push到仓库，或者有代码合并后，GitLab会查找是否有.gitlab-ci.yml文件，如果文件存在，Runners将会根据该文件的内容开始build本次commit。
@@ -823,7 +823,7 @@ before_script:
 # 五.gitlab ci/cd触发
 ### 1.gitlab ci/cd Triggers
 创建一个用于流水线触发的认证token：
-![](https://img-blog.csdnimg.cn/img_convert/4529f375ab95ecb250578808c5912dfc.png)
+![](/images/9003db02006999a4236f7653cbc2e489.webp)
 ##### (1.)使用API触发
 
 使用curl命令进行测试
@@ -835,7 +835,7 @@ curl -X POST \
 ```
 使用postman测试
 
-![](https://img-blog.csdnimg.cn/img_convert/ff003c0f02a2c77d3d95cc06f17c838f.png)
+![](/images/be3a573a86ddf2d5859e187e50db6878.webp)
 
 ##### (2.)gitlabci作业中触发
 ```
@@ -1059,7 +1059,7 @@ assembleDebug:
 ```
 vi /etc/gitlab-runner/config.toml
 ```
-![](https://img-blog.csdnimg.cn/410e2f809177436ebf8eb5add59fcd9d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2RlbzM2MDE=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center)
+![](/images/43ebdc0a34be6adf84eea50f92725ebc.webp)
 ```
 pull_policy = "if-not-present" 避免docker 镜像每次都pull
 ```

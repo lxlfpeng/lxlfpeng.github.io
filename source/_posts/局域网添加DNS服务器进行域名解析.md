@@ -119,7 +119,7 @@ address=/www.baihu.com/172.17.205.32
 
 - 第二个是我设置的地址，这样子可以作为补充。
 
-![](https://img-blog.csdnimg.cn/74283c8620c941a8ad53cc2e6ae49b0d.png)
+![](/images/d88f7700d91b945fe8d15bc17657fbbf.webp)
 
 
 > 如果你 dnsmasq 设置没有继承 路由器主机的 DNS 服务，可以设置第二个 DNS 服务器为路由器主机 ，这样可以保证原来的状态。

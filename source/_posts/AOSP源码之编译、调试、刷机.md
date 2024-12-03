@@ -571,7 +571,7 @@ AS的是AS_HOME/bin/studio.vmoptions
 打开"Project Structure"，中间的窗口选择"android"，在弹出的窗口中左边栏中选择"Modules"，而后在右边的窗口中选择"Sources"。
 在这里我们可以看到项目的所有代码目录，我们可以选中不需要的module，并点击上面的"Excluded"按钮，当被选中的目录变为橙色，即表示完成Exclude操作；
 如果想要取消对某代码目录的Exclude操作，选中该目录，再次点击"Excluded"按钮，等待目录变为蓝色即可。 
-![](https://upload-images.jianshu.io/upload_images/3067896-eb3d17481a7fd066.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/0d5568dc0704484071c79ffafc9f4a59.webp)
 
 ##### (3.) 配置源码正确跳转
 当我们导入完源码后，就可以查看整个系统的源码，但是有个问题，打开的Java代码，查看集成关系或者调用关系的时候，还是会跳转到.class文件中，而不是相应的Java类，
@@ -580,23 +580,23 @@ AS的是AS_HOME/bin/studio.vmoptions
 而非SDK中的代码。 
 -  新建JDK
 Project Structure -> SDKs， 新建 JDK， 其中JDK目录可选择跟原本JDK一致即可，任意取一个名字，这里取empty_jdk 然后删除这里取empty_jdk其classpath和SourcePath的内容，确保使用Android系统源码文件
-![](https://upload-images.jianshu.io/upload_images/3067896-a4250047e60bb859.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/741503e98ebaf38731e46ca6a74996a9.webp)
 jdk_none
 
 -  配置SDK
 Project Structure -> SDKs， 选中与自己编译的AOSP对应的SDk版本(如果没有对应的就到SDKmanager里面取下载一个对应的版本) Android API 28 Platform， 然后选择其Java SDK为前面新建的empty_jdk
-![](https://upload-images.jianshu.io/upload_images/3067896-9d9c4f86a572f6cd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/58a145d0b3b2acc11ec4d057a398cd67.webp)
 sdk_none
 
 - 选择SDK
 Project Structure -> Project -> 选中Project SDK， 选择前面的Android API 28 Platform
-![](https://upload-images.jianshu.io/upload_images/3067896-938d61b84024fdd2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/08d2bfa2c04cf43a3ac7b5322ac72e13.webp)
 project_sdk
 
 -  建立依赖
 Project Structure -> Modules -> android -> Dependencies: Module选择我们上面编辑过的SDK。然后点击下图绿色的+号来选择Jars or directories，将 aosp/frameworks 目录添加进来，再按照同样的步骤将aosp/external 目录， 也可添加其他所关注的源码；
 然后选中其他所有的依赖，点击右边的下移箭头将其他依赖移动到我们添加的目录下面。(或者将其他的所有依赖删除)
-![](https://upload-images.jianshu.io/upload_images/3067896-4bf076e800bb50d9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/06c6777d56a3fe108306901c3f11ddd3.webp)
    
 >注意，一般我们大部分人不在ubuntu下开发app ，为了能在Windows或Mac系统下也能使用Android Studio查看源码，
 可以按照上面的步骤，那样直接拷贝ubuntu下的android.iml和android.ipr文件到Windows或Mac系统下的android源码根目录下，

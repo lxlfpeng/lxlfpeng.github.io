@@ -50,7 +50,7 @@ id 属性用来赋予某个标签唯一的名称（标识符），当我们使�
 
 div、h1（大标题） 、 p（段落）  、hr、table
 
-![](https://upload-images.jianshu.io/upload_images/3067896-7d5b35687c3fb8cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/74710f62de94973a6be0a7845e0ee3f5.webp)
 
 ### 5.HTML行内元素
 ``定义:``
@@ -62,7 +62,7 @@ div、h1（大标题） 、 p（段落）  、hr、table
 - 内联元素只能容纳文本或者其他内联元素
 ``示例:``
 a、  span、iframe、br（换行）、em（强调）、img（图片）、input、label、select 、textarea（多行文本输入框）
-![](https://upload-images.jianshu.io/upload_images/3067896-6c2856c3c3ed7633.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/a248db9f323fec8ca768b80eb9f904ef.webp)
 
 # 二.CSS样式
 CSS样式全称为Cascading Style Sheets，中文翻译为“层叠样式表”，简称样式表,CSS的作用就是定义如何显示html元素，设置他的背景、字体大小颜色、边框等等。
@@ -284,7 +284,7 @@ position: relative
 </body>
 </html>
 ```
-![](https://upload-images.jianshu.io/upload_images/3067896-e217af1f2da7c474.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/b6e758f3e20254bcb74d15522bd2e5e7.webp)
 
 ##### (2.).绝对定位
 ```
@@ -316,7 +316,7 @@ position: absolute
 </body>
 </html>
 ```
-![](https://upload-images.jianshu.io/upload_images/3067896-6f398a3e50ae953c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/0b180a83bafb57ea557e4b22d661fb9c.webp)
 
 ### 8.CSS浮动
 ##### (1.)CSS浮动基础
@@ -328,13 +328,13 @@ position: absolute
 ``注意:``
 浮动会脱离标准文档流，所以文档的普通流的其他元素表现得就像浮动元素不存在一样。
 **例子1:**
-![](https://upload-images.jianshu.io/upload_images/3067896-516ab2bab9753c67.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/12f96db3c626e41ac0dcbab77c992b11.webp)
 ``解释:``当框1向右浮动的时候,他会脱离文档流向右移动,直到他的右边缘碰到包含框的右边缘。
 **例子2:**
-![](https://upload-images.jianshu.io/upload_images/3067896-8dbab0db6510410e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/96e5a68132a516053f66db8ad59f7e4f.webp)
 ``解释:``当框1向左浮动时,他脱离文档流并且向左移动,知道他的左边缘碰到包含框的左边缘。因为它不再处于文档流中,所以他不占据空间,框2就会替代框1的位置,而由于框1浮在上方就会将框2覆盖住,使框2从视图中消失。
 **例子3**
-![](https://upload-images.jianshu.io/upload_images/3067896-afe1c60712449001.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/9d1db7b73a82c140bd7a4cfa530395e8.webp)
 ``解释:``如果包含框太窄,无法容纳水平排列的三个浮动元素,那么其他的浮动块向下移动,直到有足够的空间。如果浮动元素的高度不同,那么当它们向下移动时可能被其他元素"卡住"。
 
 ##### (2.)float实现文字环绕
@@ -348,7 +348,7 @@ position: absolute
         然残存旧时的泪痕，模糊了视线，不敢轻易触碰。</p>
 </div>
 ```
-![](https://upload-images.jianshu.io/upload_images/3067896-1b55b49f84e22a82.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/559b98249e64806d4b68c34b5b914536.webp)
 
 ##### (3.)CSS清除浮动
 ``为何要清除浮动?``
@@ -361,7 +361,7 @@ position: absolute
     <div style="width: 100px;height: 100px;background-color: chartreuse">small</div>
 </div>
 ```
-![正常情况](https://upload-images.jianshu.io/upload_images/3067896-1dcd57e0a8f25e87.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![正常情况](/images/06dc83494fd894afd37e72a8c65ba680.webp)
 将子控件设置为浮动
 ```
 <div style="border-style: outset;width: 400px;background-color: darkorange" >
@@ -369,7 +369,7 @@ position: absolute
     <div style="width: 100px;height: 100px;background-color: chartreuse;float: left">small</div>
 </div>
 ```
-![父控件高度塌陷](https://upload-images.jianshu.io/upload_images/3067896-66c8728a29b1c8e6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![父控件高度塌陷](/images/435018e62db91c884fc3b1c72b028bfb.webp)
 当父元素不给高度的时候，内部元素不浮动时会撑开而浮动的时候，父元素变成一条线。
 解决方式:
 **方式一:给父级元素设置高度，但一般写页面高度都是不固定的。**
@@ -477,19 +477,19 @@ box {
 
 **1. row：**
 默认值，表示水平方向从左到右排列，此时水平方向轴线为主轴
-![](https://upload-images.jianshu.io/upload_images/3067896-57b9def5197b55e6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/10fdef92ae6819e59c1f93d83b7da6c0.webp)
 
 **2. row-reverse：**
 与row相反,主轴为水平方向，起点在容器的右端。 
-![](https://upload-images.jianshu.io/upload_images/3067896-24163a2a23d2b786.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/173cbfebb2520eb6e7268fd324aa6291.webp)
 
 **3. column：**
 表示垂直方向从上到下排列，此时垂直方向轴线为主轴
-![](https://upload-images.jianshu.io/upload_images/3067896-10ef52f7f2630a64.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/026d18a4bc1ac3355fb0b70b233682b1.webp)
 
 **4. column-reverse：**
 与column相反,主轴为垂直方向，起点在容器的下沿。 
-![](https://upload-images.jianshu.io/upload_images/3067896-7ad003cbe3466850.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/dfc029b4ba1ef5ec03095c851c868cba.webp)
 ##### (2.) flex-wrap
 ``定义:``
 用于指定Flex子项是否换行。
@@ -508,15 +508,15 @@ nowrap , wrap , wrap-reverse
 ```
 **1. nowrap**
 默认值，表示不换行，Flex子项平均分配。(不换行，在一行显示，即使子元素的宽度或者高度大于父元素的宽度或者高度，也在一行显示)
-![](https://upload-images.jianshu.io/upload_images/3067896-74445dbddcc89f18.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/7483f20b66fe7aecb448d8a655a82ca1.webp)
 
 **2. wrap**
 表示换行，溢出的Flex子项会被放到下一行。(解决间距的方式就是将Flex子项的父项目的高度设置为两行的高度)
-![](https://upload-images.jianshu.io/upload_images/3067896-75d6d28bc1306141.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/d5d07ed0db354f050a23ba9ee4d68a1b.webp)
 
 **3. wrap-reverse**
 表示反方向换行(换行后有两条轴线，reverse就是把轴线排列的顺序倒置过来)
-![](https://upload-images.jianshu.io/upload_images/3067896-0676ab4d8a1b7ed9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/9b89e840d154f89c6299df7ef11ea185.webp)
 ##### (3.) justify-content
 ``定义:``
 用于指定主轴(水平方向)上Flex子项的对齐方式
@@ -535,24 +535,24 @@ flex-start , flex-end , center , space-between , space-around
 ```
 **1. flex-start**
 start侧对齐，左对齐
-![](https://upload-images.jianshu.io/upload_images/3067896-b13394649199d833.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/c8021353ce18fe74858f5e30c4fe29ce.webp)
 
 **2. flex-end**
 end侧对齐，右对齐
-![](https://upload-images.jianshu.io/upload_images/3067896-330577e953647c50.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/7ed7606cc3c0a857e9d22f8509b95897.webp)
 
 **3. center**
 中心对齐
-![](https://upload-images.jianshu.io/upload_images/3067896-e862d9cb7864858e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/d76841875c7e3a10473d25f5e5b8a3a7.webp)
 
 **4. space-between**
 左边的靠左对齐,右边的靠右对齐,中间的等距排列。(两端对齐)
-![](https://upload-images.jianshu.io/upload_images/3067896-81a5db381b8267b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/e46faa4e3a20d52483da4f512c38e7fd.webp)
 
 **5. space-around**
 对于flex的子元素他们每侧的距离均相等(等距分布)
 1和2之间的距离包含了1的下边距和2的上边距。
-![](https://upload-images.jianshu.io/upload_images/3067896-a34b3844518bdd47.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/c8b571251e4f706b7c32d8362a12572d.webp)
 ##### (4.) align-items
 ``定义``
 用于指定交叉轴(又叫侧轴指的是垂直方向)上Flex子项的对齐方式
@@ -571,23 +571,23 @@ stretch , flex-start , flex-end , center , baseline
 ```
 **1. stretch**
 默认值，当Flex子项未设置高度或者高度值为auto时，stretch起作用，将Flex子项高度设置为行高度。这里需要注意，在只有一行的情况下，行的高度为容器的高度，即Flex子项高度为容器的高度
-![](https://upload-images.jianshu.io/upload_images/3067896-ce233660fe6d533b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/140e7df5036346f3923a1ae9772ee34e.webp)
 
 
 **2. flex-start**
 表示与侧轴开始位置对齐
-![](https://upload-images.jianshu.io/upload_images/3067896-9fbb3758e6c83dd7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/44c0b4a2aed467d7f0346435c8d4954f.webp)
 **3. flex-end**
 表示与侧轴的结束位置对齐
-![](https://upload-images.jianshu.io/upload_images/3067896-1414108b15fb4d45.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/bae260cb8467f068cfb2f007bdfa2cf1.webp)
 
 **4. center**
 表示与侧轴中间对齐
-![](https://upload-images.jianshu.io/upload_images/3067896-3664fb21d4b4e25f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/1a8d1d4c5acee87f427d3471834dc7f5.webp)
 
 **5. baseline**
 表示基线对齐，当行内轴与侧轴在同一线上，即所有Flex子项的基线在同一线上时，效果等同于flex-start。
-![](https://upload-images.jianshu.io/upload_images/3067896-a0dfa3ea981c0780.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/f0b08fecebdf9a93a5e560e62d9d0f4a.webp)
 ##### (5.) align-content
 ``定义:``
 该属性只作用于多行的情况下，用于多行的对齐方式
@@ -652,7 +652,7 @@ JavaScript一种直译式脚本语言，是一种``动态类型``、``弱类型`
 ### 1.JavaScript发展
 ##### (1.)ECMAScript
 因为JavaScript兼容于ECMA标准，因此也称为ECMAScript。JavaScript 由 ECMA（欧洲电脑制造商协会）通过 ECMAScript 实现语言的标准化。
-![](https://upload-images.jianshu.io/upload_images/3067896-5dac64b6fb8f648f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/dd79e9f6bbb82f237ff46382663b8e56.webp)
 
 ##### (2.)TypeScript
 TypeScript 是 JavaScript 的一个超集(TypeScript包含所有的JavaScript功能)，支持 ECMAScript 6 标准。TypeScript 由微软开发的自由和开源的编程语言。
@@ -840,9 +840,9 @@ arr=[]
 #### (2.)JavaScript 赋值运算符。
 ``=	+=	-=	*=	/=	%=``
 #### (3.)JavaScript 比较运算符。
-![](https://upload-images.jianshu.io/upload_images/3067896-230721809bf6bd35.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/a6229cd2d60cec037981867bba4ae714.webp)
 #### (4.)JavaScript 逻辑运算符。
-![](https://upload-images.jianshu.io/upload_images/3067896-f0dac5e5c75005df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/ea2b695272c82c5ca944f47382940aa7.webp)
 
 ### 5.JavaScript流程控制
 #### (1.)判断语句

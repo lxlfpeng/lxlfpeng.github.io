@@ -10,7 +10,7 @@ MVVM架构的核心就是数据驱动，数据驱动的意思就是，数据更�
 - 对于布局的xml文件，将原有的正常布局，外面用<layout></layout>包裹作为跟节点。<data></data>节点下存放用于xml布局的一些变量，工具类之类的。
 
 > 打开布局文件，选中根布局的 ViewGroup，按住 Alt + 回车键，点击 “Convert to data binding layout”，就可以生成 DataBinding 需要的布局规则
-![](https://upload-images.jianshu.io/upload_images/3067896-4e4c412cd99a9ced.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/fcbe0c5b3ef8f844edb62047bd46cf39.webp)
 
 ### 2.DataBinding简单使用
 
@@ -148,7 +148,7 @@ ListItemBinding binding = DataBindingUtil.inflate(layoutInflater, R.layout.list_
 
 ##### (5.)运行结果
 
-![](https://upload-images.jianshu.io/upload_images/3067896-8e2efa4675b68df2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/94981b71bdf55c98b40ccf27bc6e950c.webp)
 
 ### 3.DataBinding中使用include
 对于 include 的布局文件，一样是支持通过 dataBinding 来进行数据绑定，此时一样需要在待 include 的布局中依然使用 layout 标签，声明需要使用到的变量
@@ -281,7 +281,7 @@ public class UserPresenter {
 </layout>
 ```
 方法引用的方式与调用函数的方式类似，既可以选择保持事件回调方法的签名一致：**@{userPresenter.afterTextChanged}**，此时方法名可以不一样，但方法参数和返回值必须和原始的回调函数保持一致。也可以引用不遵循默认签名的函数：**@{()->userPresenter.onUserNameClick(userInfo)}**，这里用到了 Lambda 表达式，这样就可以不遵循默认的方法签名，将`userInfo`对象直接传回点击方法中。此外，也可以使用方法引用 **::** 的形式来进行事件绑定
-![image](https://upload-images.jianshu.io/upload_images/2552605-7bc448098a0cbff7.gif?imageMogr2/auto-orient/strip|imageView2/2/w/359/format/webp)
+![image](/images/9e114b7b6b37c520c1fd4ae28c5727f9.webp)
 > 方法引用和监听器绑定之间的主要区别在于实际监听器实现是在绑定数据时创建的，而不是在事件触发时创建的。
 
 ### 6.Databinding使用类静态方法
@@ -500,7 +500,7 @@ class SingleDataBindingActivity : AppCompatActivity() {
 }
 ```
 
-![](https://upload-images.jianshu.io/upload_images/3067896-7a48bd34ee6b699c.gif?imageMogr2/auto-orient/strip)
+![](/images/0f53b95e4b48945d2dfb365d7e073d42.webp)
 
 ### 2.ObservableField可观察字段
 继承于 Observable 类相对来说使用起来会复杂一些，且需要自己进行 notify 操作才能刷新UI，因此为了简单起见可以选择使用 **ObservableField**。ObservableField 可以理解为官方对 BaseObservable 中字段的注解和刷新等操作的封装，官方原生提供了对基本数据类型的封装，例如 **ObservableBoolean、ObservableByte、ObservableChar、ObservableShort、ObservableInt、ObservableLong、ObservableFloat、ObservableDouble**以及 **ObservableParcelable** ，也可通过 **ObservableField** 泛型来申明其他类型
@@ -576,7 +576,7 @@ class ObservableFieldActivity : AppCompatActivity() {
 ```
 
 对 ObservablePerson 属性值的改变都会立即触发 UI 刷新，概念上与 Observable 区别不大。
-![](https://upload-images.jianshu.io/upload_images/3067896-4dbb5fa4ab161cbe.gif?imageMogr2/auto-orient/strip)
+![](/images/5900bebc60c9bb3653d6266665b15c2f.webp)
 
 ### 3.ObservableCollection可观察集合
 dataBinding 也提供了包装类用于替代原生的 `List` 和 `Map`，分别是 `ObservableList` 和 `ObservableMap`，当其包含的数据发生变化时，绑定的视图也会随之进行刷新。
@@ -719,7 +719,7 @@ class TwoWayBindActivity : AppCompatActivity() {
     }
 }
 ```
-![动画8.gif](https://upload-images.jianshu.io/upload_images/3067896-deadca27271fce05.gif?imageMogr2/auto-orient/strip)
+![动画8.gif](/images/f965b33b9a690a520c369c51b2994c17.webp)
 通过ObservableField可以将数据的变化通知到Ui进行修改，@={}可以将UI数据的变化通知到数据类进行变化,这样就实现了数据的双向绑定.
 ### 2.双向数据绑定避免死循环
 死循环绑定：因为数据源改变会通知view刷新，而view改变又会通知数据源刷新，这样一直循环往复，就形成了死循环绑定 看看dataBinding源码中是如何解决的，路径：android.databinding.adapters.TextViewBindingAdapter：

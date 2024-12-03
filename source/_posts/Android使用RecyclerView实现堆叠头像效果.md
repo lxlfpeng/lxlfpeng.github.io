@@ -3,7 +3,7 @@ title: Android使用RecyclerView实现堆叠头像效果
 ---
 
 第二个盖住第一个视图:
-![在这里插入图片描述](https://img-blog.csdnimg.cn/dd3d64983acd48409778c24ccb9b45d4.png)
+![在这里插入图片描述](/images/7d6d98125ebc92e8620abeb2bb46a2a1.webp)
 item.layout
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -41,7 +41,7 @@ layout:
 ```
 
 第一个盖住第二个视图堆叠:
-![在这里插入图片描述](https://img-blog.csdnimg.cn/112b0f07ca2145409d5ae40cd9a02d49.png)
+![在这里插入图片描述](/images/4792aa21b9842634fbf930034a82a3a5.webp)
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"

@@ -19,23 +19,23 @@ title: 黑苹果引导软件之OpenCore
 ##### 方法一：使用磁盘管理查看MBR和GPT分区类型
 
 1. 鼠标右击**此电脑**，点击**“管理”**。
-   ![](https://img-blog.csdnimg.cn/img_convert/a723e9c898e89086695de58c4fb62c75.png)
+   ![](/images/0dd3d9ffbec0e85784c21cb49fc8a630.webp)
 
 2. 在计算机管理中点击**“磁盘管理”**。
-   ![](https://img-blog.csdnimg.cn/img_convert/32a25ba0cfa7ecbe2c94115372566e99.png)
+   ![](/images/f339191dff4b7223adccb6fbed1687f7.webp)
 
 3. 进入**磁盘管理**可以看到磁盘分区情况，右键点击**“磁盘0”**选择查看**“属性”**。
-   ![](https://img-blog.csdnimg.cn/img_convert/44ccde8ec60236417ca673f7133dd835.png)
+   ![](/images/9c4377933e42476b9f3ce2f7f10fd7b8.webp)
 
 4. 在**属性**界面，点击**“卷”**就可以看到此磁盘的基本信息了，我们可以在**“磁盘分区形式”**看到磁盘0为**GPT**磁盘分区类型，如何查看硬盘分区是MBR还是GPT问题轻松解决。
-   ![](https://img-blog.csdnimg.cn/img_convert/ef80b2dbb1ace5884bd8dbd598558d53.png)
+   ![](/images/c7e1a4977f42ec3d6c1037069e44ec01.webp)
 
 ##### 方法二：使用命令提示符查看MBR和GPT分区类型
 
 1. 按**“Windows + R”**键，在弹出的运行对话框中输入**“diskpart”**，并按**回车**键启动diskpart实用程序。
-   ![](https://img-blog.csdnimg.cn/img_convert/8cca17a8dfba906090ebee225c811da8.png)
+   ![](/images/3e5e147436fee2e15fdc767ffccc5d6a.webp)
 2. 输入**“list disk”**命令，然后按**回车**，查看磁盘信息。
-   ![](https://img-blog.csdnimg.cn/img_convert/bfc37b9d6265ed9ad6e743866af7bc35.png)
+   ![](/images/3d61a372ddb93eb41873389b8fbe73e0.webp)
 3. 在命令行中的**“Gpt”**列下方，带有一个星号（*）为GPT磁盘类型。没有星号（*）为MBR磁盘类型。所以上图中，磁盘0为GPT磁盘类型，磁盘1为MBR磁盘类型，如何查看硬盘分区是MBR还是GPT问题轻松解决。
 
 ### 🐆第三步 MBR分区表转换成GPT分区表
@@ -59,17 +59,17 @@ title: 黑苹果引导软件之OpenCore
 如果你的电脑已经安装了 Windows 系统且预留的 ESP 分区大于200MB，那么无需任何操作，直接划分一个黑苹果的安装分区进行安装系统既可，如果ESP 分区小于 200MB，那么你需要扩大 ESP 分区，或重建 ESP 分区。这一步需要在 Windows PE 环境下操作，请首先刻录好Windows PE U盘。
 
 1. 需要将已有的 ESP 分区删除，然后再磁盘末尾空闲空间重建一个 200M 以上的 ESP 分区（你可以从你准备安装 MacOS 的那部分空间中划分出来一些），操作完成后你的分区结构会类似下图（Windows 在前，200m+ 的 ESP 分区和 MacOS安装分区在后）。然后按下文的指引重建引导。
-   ![](https://img-blog.csdnimg.cn/65f9e4cea7ea4dd8b174db562b828053.png)
+   ![](/images/4c6a4a0242eed59d7ae20d5391c205ec.webp)
 
 2. 由于上一步我们将ESP分区删除了，因此里面的系统引导文件也丢失了，此时是无法正确的引导进入操作系统的，因此需要重建 Windows UEFI 引导。 在 PE 下找到你的 Windows 安装分区和 ESP 分区的盘符，确保这两个分区在文件资源管理器中可见（如果不可见请为 DiskGenius工具为不可见的分区分配盘符）。 下面我们假设 Windows 安装分区盘符为 C:，ESP 分区盘符 V:
-   ![](https://img-blog.csdnimg.cn/452202183f6d4c28a8eb1eacf3d8a985.png)
+   ![](/images/6c68a7cbc6a1a80c8d2f91238722d4d4.webp)
 
 3. 打开命令提示符（cmd），执行以下命令：`bcdboot 你的系统盘盘符:\Windows /s 你的ESP分区盘符 /f uefi /l zh-cn`，如：
    ```
     bcdboot c:\windows /s d: /f uefi /l zh-cn
     Copied!
    ```
-   ![](https://img-blog.csdnimg.cn/6488e511a22145f5a891b14682f9f3e8.png)
+   ![](/images/4c09026458c93b8d0b1da4f88726f036.webp)
    将 C: 和 V: 分别替换为你的盘符即可。
 
 4. 去掉ESP分区的盘符，重启即可。
@@ -82,12 +82,12 @@ title: 黑苹果引导软件之OpenCore
 
 1. 将您的U盘插入电脑(备份好u盘数据)。
 2. 打开Etcher软件(Windows10及以上需要以管理员权限运行)，点击“Select image”选择下载好的MacOS安装镜像；
-   ![image.png](https://img-blog.csdnimg.cn/img_convert/9c5de307cf58b19d8b5be1a97a6f84c7.png)
+   ![image.png](/images/93204a10980b136578bd66dbdd6b8ff3.webp)
 3. 然后点击“Select drive”选择你的U盘，如果你直插有一个U盘，软件会自动选择该u盘；
-   ![image.png](https://img-blog.csdnimg.cn/img_convert/953f2ce9ef02f134896baa2da5adc462.png)
+   ![image.png](/images/14d9fc5ac1bdbe5704d29586d81854c4.webp)
 4. 接着点击“Flsh！”开始刻录黑苹果安装镜像到U盘；
 5. 等到提示“Flash Complete！”Successful device 就完成安装镜像的制作了。
-   ![image.png](https://img-blog.csdnimg.cn/img_convert/2df0f4d9d7b7a6c2a8ca4794b90fcf8b.png)
+   ![image.png](/images/67e571948cbd86d4e6754153bab0dfa4.webp)
 6. 替换自己的EFI文件。
 7. 重启电脑到Bios设置中。
 
@@ -124,40 +124,40 @@ title: 黑苹果引导软件之OpenCore
     * `Legacy RTC Device` - 传统RTC设备
 
 4. 设置USB接入的U盘为第一启动项:
-   ![image.png](https://img-blog.csdnimg.cn/img_convert/926e18b4096020d53317246ca7ed0802.png)
+   ![image.png](/images/5ee1fdd5a54ec8acdda7016c150d3e9e.webp)
 
 5. 保存Bios设置，重启电脑。
 
 ### 🐘第七步 建立MacOS磁盘文件系统
 
 1. 开始引导MacOS系统，这个过程需要1-2分钟，耐心等待进入安装程序，会出现语言选择界面:
-   ![image.png](https://img-blog.csdnimg.cn/img_convert/1ed503313504eac1a8046097454ff964.png)
+   ![image.png](/images/85e9dc734fbe1e2000a1ddad981bb229.webp)
 
 2. 语言选择选择简体中文即可:
-   ![](https://img-blog.csdnimg.cn/4a8f973c69df4fc485009e5a4a750cdd.png)
+   ![](/images/aafc7d7f9072ba5cc6a49a5aa92564a2.webp)
 
 3. MacOS实用工具界面，选择磁盘工具:
-   ![](https://img-blog.csdnimg.cn/4ebb521350e14746ad64e1db650b2aba.png)
+   ![](/images/21608f286cc1803fa19690e8d96834da.webp)
 
 4. 选择`显示所有设备`:
-   ![](https://img-blog.csdnimg.cn/86856f66e18e46638d0d2c358ed00474.png)
+   ![](/images/f7eba96317032765d334c34bd74477ba.webp)
 
 5. 选择你需要安装MacOS的分区，点击`抹掉`按钮，选择默认的`APFS`或者是`Mac OS扩展(日志型)`名称随意，点击`抹掉`按钮:
-   ![image.png](https://img-blog.csdnimg.cn/img_convert/0c657161d33a24f4f76d5b6ab8af56e8.png)
+   ![image.png](/images/e2d1e23968c82123aeed9eb833c85e05.webp)
 
 6. 抹盘成功后，如果所有的硬盘都没有EFI分区那么它会自动生成一个200MB的EFI分区，这样做的好处是不会出现安装过程中的由于EFI分区尺寸小于200MB而引起的无法安装的错误:
-   ![](https://img-blog.csdnimg.cn/f607b0cc6b92414d82cda86e7376f4d6.png)
+   ![](/images/e4ea28dfd69d482d1c0d192e4dd37ced.webp)
 
 7. 到这里，磁盘工具的动作就已经结束了，找到左上角，点击「磁盘工具」选择「退出磁盘工具」即可退出，进入安装界面，进行系统的安装了。
-   ![](https://img-blog.csdnimg.cn/img_convert/050338af15e8bc6cc5423741551d93db.png)
+   ![](/images/5f651944264f5926042ec4771b35da7f.webp)
 
 ### 🦨第八步 安装MacOS系统
 
 1. 进入安装界面，进行安装，系统会多次重启，耐心等待即可。
-   ![](https://img-blog.csdnimg.cn/89b922fc12af4b39b4900a6c6f6d1278.png)
+   ![](/images/a71f978c658e27b84bb4b384f70a0277.webp)
 
 2. MacOS初始化设置，按照自己需求的情况进行配置即可(略过)。
-   ![](https://img-blog.csdnimg.cn/img_convert/92cf4569811c024e04c4e1bdd821b23b.png)
+   ![](/images/1d804dd2a28f8ed9976215295c7116f4.webp)
 
 ### 🐿️第九步 完善MacOS引导
 
@@ -187,22 +187,22 @@ title: 黑苹果引导软件之OpenCore
 1. 下载[EasyUEFI 破解版下载地址](https://sqlsec.lanzouw.com/i4amxzmj1cj)
 
 1. 绿色版本点击即可使用， 打开后的主界面：
-   ![](https://img-blog.csdnimg.cn/img_convert/2c6b4613768aa4a59b83f6ebd5fcf796.png)
+   ![](/images/5d7120291d79a1419dc2306a87bfdfae.webp)
 
 2. 选择「管理 EFI 启动项」：
-   ![](https://img-blog.csdnimg.cn/img_convert/7478bb3e97941c20751347fa4c2e791d.png)
+   ![](/images/5c941f61e108e59a799b1eadba9ee8f2.webp)
 
 3. 首先点击「创建新项」：
-   ![](https://img-blog.csdnimg.cn/img_convert/bffdab02021fe909060c08ae47f75c9f.png)
+   ![](/images/f1d9656342b57d77652f33f579f1c3b5.webp)
 
 4. 操作系统类型选择「Linux 或者其他操作系统」，描述随便写一个，目标分区选择「硬盘的第一个 ESP 引导分区」，然后点击「浏览数据」，选择 EFI/OC/ 目录下的 OpenCpre.efi后，点击确定：
-   ![](https://img-blog.csdnimg.cn/img_convert/ad30e88d6ddf0450754e3d7b24f78b65.png)
+   ![](/images/eef7b53837d4a1a49dfb43e7adaff31f.webp)
 
 5. 接着将刚刚添加的启动项，「上移」到第一位：
-   ![](https://img-blog.csdnimg.cn/img_convert/ba3d5c72e1777ddbb814008fbe85d17a.png)
+   ![](/images/4bd5065e6ea82faa0ec5aeb1bc07a218.webp)
 
 6. 最终的效果，拔掉 U 盘后，每次开机选择操作系统的界面如下：
-   ![](https://img-blog.csdnimg.cn/img_convert/48159c104dfb5885daa3080399e97788.png)
+   ![](/images/bd3f0260224c5c1d2a8b536a663bfaef.webp)
 
 > 如果使用了 DG 或者 EasyUEFI 手动添加引导但是依然没有 OC 为第 1 启动的话，很简单，直接 **BIOS** 里面将你手动添加的引导设置为第 1 启动即可。
 
@@ -223,10 +223,10 @@ title: 黑苹果引导软件之OpenCore
 1. 打开[OpenCore](https://dortania.github.io/OpenCore-Install-Guide/ktext.html#firmware-drivers)官网。
 
 2. 找到[OpenCore的下载链接](https://github.com/acidanthera/OpenCorePkg/releases) 下载`open core`:
-   ![](https://img-blog.csdnimg.cn/d89b0217327449f8a2dc6173c2fc0995.png)
+   ![](/images/a21049f32517e455671a0ddfc7e97e90.webp)
 
 3. 复制出EFI，解压以后X64\EFI是我们需要的文件。
-   ![](https://img-blog.csdnimg.cn/20201206183831431.png)
+   ![](/images/1c0d998d4a64afb15528b408ac0107f9.webp)
 
 ### 3. OpenCore的EFI文件结构
 
@@ -315,15 +315,15 @@ EFI
 1. 在开始之前，先登录苹果 [iCloud.com](https://heipg.cn/link/aHR0cHM6Ly93d3cuaWNsb3VkLmNvbS8=)，进入“查找我的iPhone”，选择“所有设备”清除所有登录过的黑苹果，如果你没有打开过“查找我的Mac”，则这一步可以省略。
 2. 在[OpenCore-configurator官网](https://mackie100projects.altervista.org/opencore-configurator/) 下载对应版本的OpenCore-configurator进行安装。
 3. 安装**OpenCore-configurator**后，挂载efi 打开分区 使用**OpenCore-configurator**打开你的config，选择`Platformlnfo-机型平台设置`进入机型平台设置:
-   ![](https://img-blog.csdnimg.cn/463e928f67d94955916daa0d7a32bf6b.png)
+   ![](/images/baf0c9a57a261d12782643eb159f5ca2.webp)
 
 4. 选择和你机型相像的配置，会自动生成id:
-   ![](https://img-blog.csdnimg.cn/img_convert/1080e42b277f3142555c5a449f19058d.png)
+   ![](/images/6c9a63ae89564c77b6e2526a4b9406c5.webp)
 
 5. 复制Serial Number前往[Apple官网](https://checkcoverage.apple.com/cn/zh/)查询序列号，如果显示有购买日期和机型等保修信息，说明这个序列号别人在用，不建议使用，点击Generate New生成新的Serial Number，然后继续进行查询，直到查询三码出现提示：很抱歉，这个序列号无效。请检查您的信息并再试一次，（一般都提示这个）即可:
-   ![](https://img-blog.csdnimg.cn/img_convert/03376f0ff2cd831ac5a5f510be4299af.png)
+   ![](/images/75f05c789f8739ff33cb5e6d95453526.webp)
    如果你运气特别好，有可能生成出来官方正版且未被激活的白苹果序列号
-   ![](https://img-blog.csdnimg.cn/img_convert/86b6781c330395bc310a777a994cfc62.png)
+   ![](/images/5a2ad6047af54e706b1916ec79eafcc0.webp)
 6. 使用OpenCore-configurator保存即可。
 # 五.Windows和MacOS系统时间不匹配的问题
 

@@ -22,7 +22,7 @@ ADB的主要左右有两大类，一类是直接对Android进行调试。二类�
 
 ### 2.配置环境变量
 在win10中依次打开我的电脑->属性->高级系统设置->环境变量->Path
-![](https://upload-images.jianshu.io/upload_images/3067896-7c2dba4296555a86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/08fb9683d35d002db9b99a43bbfde503.webp)
 配置完成以后打开DOS命令行,输入``adb version``如果能看到ADB的版本则说明ADB安装成功了。
 ```
 Android Debug Bridge version 1.0.41

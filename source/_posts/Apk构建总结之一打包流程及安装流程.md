@@ -5,10 +5,10 @@ title: Apk构建总结之一打包流程及安装流程
 # 一. 分析已经打好的apk
 要了解APK的打包流程,我们首先来了解下打包完成以后APK包里面包含哪些东西。.apk文件其实就是一个压缩文件，把文件的后缀改成.zip就可以用解压软件解压了：
 ### 1. 将apk后缀改成rar包
-![apk文件](https://upload-images.jianshu.io/upload_images/3067896-2ab70df8121136a8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![rar文件](https://upload-images.jianshu.io/upload_images/3067896-9cdaaf641b6daeb6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![apk文件](/images/6e6a7c906151d588c5efd717072ff845.webp)
+![rar文件](/images/90739fe9838162f745201f8d151f4392.webp)
 ### 2. 解压rar包
-![目录](https://upload-images.jianshu.io/upload_images/3067896-c97dea4dd1c727cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![目录](/images/4f590a772f52dc439b3bead52549efe0.webp)
 
 apk是一个压缩包，里面有lib，META-INF，classes.dex，res，resources.arsc文件夹和文件。下面看看它们各自的作用。
 
@@ -25,7 +25,7 @@ apk是一个压缩包，里面有lib，META-INF，classes.dex，res，resources.
 # 二. 打包的详细流程
 ### 1.编译打包流程图
 Android Studio默认采用gradle组织完成打包过程，对开发者来说简单的执行相关的task即可，这种透明的打包过程也让我们忽略了很多细节。
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-67de627d81d77ee5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/1c43f15e6a9787dc394b14a0e66e7491.webp)
 打包工具详解.
 工具名称 | 功能介绍 |路径
 |-|-|-|
@@ -67,41 +67,41 @@ aidl工具解析接口定义文件然后生成相应的Java代码接口供程序
 
 # 三.Android SDK 目录结构
 通过上文可以了解到APK打包的脚本都是在SDK文件夹下面的：
-![SDK目录结构](https://upload-images.jianshu.io/upload_images/3067896-9078e1fc33ba7c24.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![SDK目录结构](/images/c9e8b64995856ca415f5d37f826e82c8.webp)
 ##### 1.build-tools目录
-![build-tools](https://upload-images.jianshu.io/upload_images/3067896-ebd8932847787e3f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![build-tools](/images/0449033303732721dcbfb4433bdc6ec7.webp)
 编译工具目录，包含了转化为davlik虚拟机的编译工具,比如adb、和aapt、aidl、dx等文件。
 ##### 2.emulator目录
 Android模拟器模拟器目录。
 ##### 3.extras目录
 该文件下存放了Google提供的USB驱动，Intel提供的硬件加速附件工具包。
 ##### 4.platforms目录
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-e12d91b180093d5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/94b50927da5a97425409e822879bec28.webp)
 是每个平台SDK真正的文件，存放不同版本的Android系统。对应android studio build.gradle中的compileSdkVersion
 ##### 5.platform-tools目录
-![platform-tools](https://upload-images.jianshu.io/upload_images/3067896-f0c6f8cbff200fe0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![platform-tools](/images/e1bdc71b744c71ef88560dd804617141.webp)
 各个版本的通用工具。比如 adb、sqlite3、fastboot等.
 ##### 6.sources目录
-![sources](https://upload-images.jianshu.io/upload_images/3067896-a6f7dc00ec18cddd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![sources](/images/c00739984dfe4ca1c21b3da4c744dd62.webp)
 包含了各个版本的SDK源码。
 ##### 7.system-images
-![system-images](https://upload-images.jianshu.io/upload_images/3067896-e34b2a719a168258.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![system-images](/images/f62add76997d1796aad8ced685538062.webp)
 存放的是创建Android虚拟机时的镜像文件(已经编译好的镜像文件,模拟器可以直接加载)。
 
 ### 8.tools
 tools：这个文件夹下存放了大量Android开发、调试的工具。包括测试、调试、第三方工具。模拟器、数据管理工具等。
 
 # 四. Android Studio工程结构。
-![项目主结构](https://upload-images.jianshu.io/upload_images/3067896-7f0db1bfd143eb39.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![项目主结构](/images/8d932709d5fa2da071609fb80b8d870e.webp)
 
 ### 1.gradle目录。
-![gradle](https://upload-images.jianshu.io/upload_images/3067896-e83169fcd389b56d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![gradle](/images/fdf8ad1ba3bb722c491b96a3c6c68147.webp)
 gradle 运行时自动生成的目录（自动编译工具产生的文件）,版本由wrapper指定。一般情况不做修改，不需要纳入项目源代码管理中。
 ### 2..idea目录。
-![idea](https://upload-images.jianshu.io/upload_images/3067896-26615a3e8b02bc82.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![idea](/images/add165050d9bec659e1c2504d0ad48ef.webp)
 Intellij IDEA 运行时候生成的文件目录，一般情况不做修改，不需要纳入项目源代码管理中。 
 ### 3.app(module)目录。
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-6c8becc00115a64f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/19c5a71cb39e491d66a621702b37462e.webp)
 - app/build：app模块编译输出的文件
 - app/libs：  放置引用的类库文件
 - app/src： 放置应用的主要文件目录
@@ -138,7 +138,7 @@ Intellij IDEA 运行时候生成的文件目录，一般情况不做修改，不
 - app/proguard-rules.pro：app模块的代码混淆配置文件
 
 ### 4.gradle目录及配置项.
-![image.png](https://upload-images.jianshu.io/upload_images/3067896-8d2ee56be1395c7e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](/images/e0c28b2bf54d6d1c7d375ade941b0f89.webp)
 - gradle/wrapper/gradle-wrapper.jar
 - gradle/wrapper/gradle-wrapper.properties 主要指定了该项目需要什么版本的Gradle，从哪里下载该版本的Gradle，下载下来放到哪里
 - .gitignore： 忽略的文件或者目录
@@ -171,7 +171,7 @@ Intellij IDEA 运行时候生成的文件目录，一般情况不做修改，不
 - /data/system/packages.xml中内容详解(这里列举的标签内容不一定完整，只是列举核心内容，packages.xml的完整定义详见官方文档)：
 
 ### 4.安装流程
-![](https://upload-images.jianshu.io/upload_images/3067896-d2b375ecddbc2b64.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](/images/162d23b9226028105f5920770e6119de.webp)
 ##### 拷贝apk文件到指定目录
 在Android系统中，apk安装文件是会被保存起来的，默认情况下，用户安装的apk首先会被拷贝到 /data/app 目录下。
 /data/app目录是用户有权限访问的目录，在安装apk的时候会自动选择该目录存放用户安装的文件，而系统出厂的apk文件则被放到了 /system 分区下,包括 /system/app，/system/vendor/app，以及 /system/priv-app 等等，该分区只有Root权限的用户才能访问，这也就是为什么在没有Root手机之前，我们无法删除系统出厂的app的原因了。

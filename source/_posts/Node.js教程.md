@@ -221,7 +221,7 @@ yarn config set cache-folder “D:\yarn\cache”
 # Webpack打包
 ## Webpack简介
 官网[https://webpack.docschina.org/](https://webpack.docschina.org/)。webpack是一个前端资源加载/打包工具。它将根据模块的依赖关系进行静态分析，然后将这些模块按照指定的规则生成对应的静态资源。如下图所示：
-![](https://img-blog.csdnimg.cn/910e9662198f46b185f8a2463560d83a.png)
+![](/images/26a141e60d1c55553eeb9805eb61ddf7.webp)
 
 ## 安装Webpack
 首先确保本地环境支持Node.js，再使用npm安装webpack，如果觉得npm安装速度慢，可使用淘宝镜像及其命令cnpm

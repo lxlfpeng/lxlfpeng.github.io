@@ -32,7 +32,7 @@ Room是Google推出的数据库框架，是一个 ORM (Object Relational Mapping
 * [**Database:**](https://developer.android.google.cn/reference/android/arch/persistence/room/Database)
   包含数据库持有者，并作为应用程序持久关系数据的基础连接的主要访问点：数据库扩展了RoomDatabase的抽象类。可以通过databaseBuilder或Room.inMemoryDatabaseBuilder获得它的一个实例。
 
-![Room组件架构图](https://img-blog.csdnimg.cn/img_convert/8b77aa49c406074aa2415d7664fb0053.png)
+![Room组件架构图](/images/d3c68a1489a57f9199abe051eaa582fa.webp)
 
 # 二.Room使用
 
@@ -94,7 +94,7 @@ android {
 3. ``"room.expandProjection":"true":`` 配置 Room 以重写查询，使其顶部星形投影在展开后仅包含 DAO 方法返回类型中定义的列。
 
 如果配置了schemaLocation，编译后，会在对应路径生成schemas文件夹，json包含了各个版本的概要，表结构等信息：
-![](https://img-blog.csdnimg.cn/2020122121395854.png#pic_center)
+![](/images/40d72af4335ce21b071905ef52d56c57.webp)
 
 
 如果在创建数据库的时候未指定具体位置生成的位置则是在 data/data/包名/database 下，如果需要指定额外的位置则在上文数据库构建的时候传数据库名前面带上你需要指定的路径。
