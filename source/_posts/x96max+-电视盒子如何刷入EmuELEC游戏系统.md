@@ -1,6 +1,7 @@
 ---
 title: x96max+-电视盒子如何刷入EmuELEC游戏系统
 date: 2021-07-11
+index_img: /images/368ed8979644e82aaaaf3a9694d0d744.webp
 categories: 
   - 电视盒子
 ---
