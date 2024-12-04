@@ -11,7 +11,7 @@
 
 nav:
   # Navigation bar logo image
-  logo:
+  logo: /images/about_avatar.webp
   display_title: true
   # Whether to fix navigation bar
   fixed: false
@@ -21,7 +21,10 @@ menu:
   # List||fas fa-list:
   #   Music: /music/ || fas fa-music
   #   Movie: /movies/ || fas fa-video
-
+  首页: / || fas fa-home
+  分类:  /categories
+  标签: /tags/ || fas fa-tags
+  时间轴: /archives/ || fas fa-archive
 # --------------------------------------
 # Code Blocks Settings
 # --------------------------------------
@@ -52,10 +55,10 @@ social:
 # Image Settings
 # --------------------------------------
 
-favicon: /img/favicon.png
+favicon: /images/favicon.png
 
 avatar:
-  img: /img/butterfly-icon.png
+  img: /images/about_avatar.webp
   effect: false
 
 # Disable all banner images
@@ -147,7 +150,7 @@ index_top_img_height:
 
 # The subtitle on homepage
 subtitle:
-  enable: false
+  enable: true
   # Typewriter Effect
   effect: true
   # Customize typed.js
@@ -162,7 +165,8 @@ subtitle:
   # 3 - jinrishici.com
   source: false
   # If you close the typewriter effect, the subtitle will only show the first line of sub
-  sub:
+  sub: 
+      - "学而不思则罔，思而不学则殆"
 
 # Article layout on the homepage
 # 1: Cover on the left, info on the right
@@ -257,9 +261,14 @@ footer:
   owner:
     enable: true
     since: 2019
-  custom_text:
+  custom_text: '
+    <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a>
+    <i class="iconfont icon-love"></i>
+    <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a>
+  '
+  
   # Copyright of theme and framework
-  copyright: true
+  copyright: false
 
 # --------------------------------------
 # Aside Settings
@@ -289,7 +298,7 @@ aside:
     enable: true
     content: This is my Blog
   card_recent_post:
-    enable: true
+    enable: false
     # If set 0 will show all
     limit: 5
     # Sort: date / updated
@@ -465,7 +474,7 @@ math:
 search:
   # Choose: algolia_search / local_search / docsearch
   # leave it empty if you don't need search
-  use:
+  use: local_search
   placeholder:
 
   # Algolia Search
@@ -519,7 +528,7 @@ comments:
   # Leave it empty if you don't need comments
   # Choose: Disqus/Disqusjs/Livere/Gitalk/Valine/Waline/Utterances/Facebook Comments/Twikoo/Giscus/Remark42/Artalk
   # Format of two comments system : Disqus,Waline
-  use:
+  use: Giscus
   # Display the comment name next to the button
   text: true
   # Lazyload: The comment system will be load when comment element enters the browser's viewport.
@@ -616,9 +625,9 @@ twikoo:
 # Giscus
 # https://giscus.app/
 giscus:
-  repo:
-  repo_id:
-  category_id:
+  repo: lxlfpeng/blog_comments
+  repo_id: R_kgDONYoexA
+  category_id: DIC_kwDONYoexM4Ck4JQ
   light_theme: light
   dark_theme: dark
   js:
