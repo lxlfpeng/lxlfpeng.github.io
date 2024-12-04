@@ -22,7 +22,7 @@ favicon: /images/favicon.png
 
 # 用于苹果设备的图标
 # Icon for Apple touch
-apple_touch_icon: /img/fluid.png
+apple_touch_icon: /images/favicon.png
 
 # 浏览器标签页中的标题分隔符，效果：文章名 - 站点名
 # Title separator in browser tab, eg: article - site
@@ -904,7 +904,7 @@ giscus:
   theme-light: light
   theme-dark: dark
   mapping: pathname
-  reactions-enabled: 1
+  reactions-enabled: 0
   emit-metadata: 0
   input-position: top
   lang: zh-CN

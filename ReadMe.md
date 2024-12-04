@@ -108,6 +108,48 @@ categories:
 - hexo help # 查看帮助
 - hexo version # 查看 Hexo 的版本
 
+# Hexo添加评论功能
+纯静态网站或博客，由于没有数据存储功能，经常借助第三方的评论系统以插件的方式集成进来，而又以 Github 的 Discussions和 Issues 功能实现的居多。
+
+- giscus - 可借助组件库在 React、Vue 和 Svelte 中使用，支持多种语言
+- gitalk - 基于 Github Issue 和 Preact 开发的评论插件
+- utterances - 借助 Github issues 实现的轻量的评论组件，giscus 灵感就是来源于它
+
+
+# 使用giscus给Hexo添加评论
+giscus 是一个基于 GitHub Discussions 的评论插件。它的特点是简单易用，无需注册，支持多种主题，支持多语言，支持自定义配置。所有评论都存储在你的 GitHub Discussions 中，不会丢失，方便管理。
+
+### 1.在Github上创建仓库
+创建一个**公开**的仓库,如果也可以用部署githubPage的仓库.
+### 2.打开仓库的Discussions功能
+
+进入到 Github 项目的 Settings -> General -> Features -> Discussions 即可打开该功能。
+### 3.安装giscus app
+点击链接安装gisacus 在浏览器里面打开https://github.com/apps/giscus,选择Only select repositories仅选择需要的 repo 就可以了，不需要所有的 repo 都放开。选中对应的仓库.
+
+### 4.生成giscus配置
+首先，对你的仓库有一些前置要求：
+- 必须是 公开的 GitHub 仓库
+- 安装了 giscus app
+- 在仓库中 启用 Discussions 功能
+访问页面 https://giscus.app/zh-CN，在`配置`章节中设置相关的配置，可以获取到类似下面内容：
+
+
+输入你的仓库，然后我们选择用 <title> 做映射，它会作为 discussion 的标题。
+
+分类选择 announcements。
+启用以下特性：
+
+reaction
+评论输入框在上方
+懒加载
+
+以上配置都搞好以后，会得到一段 script 代码。
+
+
+### 5.将生成的giscus配置应用到hexo的主题中
+https://hexo.fluid-dev.com/docs/guide/#%E8%AF%84%E8%AE%BA
+
 # 参考资料    
 [Hexo Fluid 用户手册](https://hexo.fluid-dev.com/docs/guide/)
 
