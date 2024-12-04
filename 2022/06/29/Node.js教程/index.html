@@ -1,283 +1,151 @@
-
-
-<!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
-
-
-
-<head>
-  <meta charset="UTF-8">
-
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/images/favicon.png">
-  
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="peng">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="Node.js简介什么是Node.jsjs 属于一种脚本性语言，然而脚本语言运行需要一个解析器来解析，对于我们原来写的 js 代码大部分都是运行在网页上，所以浏览器本身就担当了解析器的角色。而现在对于独立运行在服务器的 js 代码，node 就属于那个解析器。Node.js 是基于Chrome V8 引擎的JavaScript 运行环境，简单理解就是一个可以让JavaScript脱离浏览器，执行的">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Node.js教程 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Node.js简介什么是Node.jsjs 属于一种脚本性语言，然而脚本语言运行需要一个解析器来解析，对于我们原来写的 js 代码大部分都是运行在网页上，所以浏览器本身就担当了解析器的角色。而现在对于独立运行在服务器的 js 代码，node 就属于那个解析器。Node.js 是基于Chrome V8 引擎的JavaScript 运行环境，简单理解就是一个可以让JavaScript脱离浏览器，执行的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Node.js教程">
 <meta property="og:url" content="http://example.com/2022/06/29/Node.js%E6%95%99%E7%A8%8B/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="鹏哥的Blog">
 <meta property="og:description" content="Node.js简介什么是Node.jsjs 属于一种脚本性语言，然而脚本语言运行需要一个解析器来解析，对于我们原来写的 js 代码大部分都是运行在网页上，所以浏览器本身就担当了解析器的角色。而现在对于独立运行在服务器的 js 代码，node 就属于那个解析器。Node.js 是基于Chrome V8 引擎的JavaScript 运行环境，简单理解就是一个可以让JavaScript脱离浏览器，执行的">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/images/26a141e60d1c55553eeb9805eb61ddf7.webp">
+<meta property="og:image" content="http://example.com/images/about_avatar.webp">
 <meta property="article:published_time" content="2022-06-28T16:00:00.000Z">
 <meta property="article:modified_time" content="2024-12-03T06:38:33.059Z">
 <meta property="article:author" content="peng">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/images/26a141e60d1c55553eeb9805eb61ddf7.webp">
-  
-  
-  
-  <title>Node.js教程 - Hexo</title>
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
-
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
-
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.png"><link rel="canonical" href="http://example.com/2022/06/29/Node.js%E6%95%99%E7%A8%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
     }
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
   
-
-
-  
-<meta name="generator" content="Hexo 7.3.0"></head>
-
-
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>鹏哥的Blog</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/" target="_self">
-                <i class="iconfont icon-home-fill"></i>
-                <span>首页</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/" target="_self">
-                <i class="iconfont icon-archive-fill"></i>
-                <span>归档</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/" target="_self">
-                <i class="iconfont icon-category-fill"></i>
-                <span>分类</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/" target="_self">
-                <i class="iconfont icon-tags-fill"></i>
-                <span>标签</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/" target="_self">
-                <i class="iconfont icon-user-fill"></i>
-                <span>关于</span>
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              <i class="iconfont icon-search"></i>
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
-              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
-            </a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  
-
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="Node.js教程"></span>
-          
-        </div>
-
-        
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-06-29 00:00" pubdate>
-          2022年6月29日 凌晨
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          4.2k 字
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          35 分钟
-        
-      </span>
-    
-
-    
-    
-  </div>
-
-
-        
-      </div>
-
       
-    </div>
-  </div>
-</div>
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
 
-</div>
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
 
-  </header>
-
-  <main>
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
     
       
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <h1 id="seo-header">Node.js教程</h1>
-            
-            
-              <div class="markdown-body">
-                
-                <h1 id="Node-js简介"><a href="#Node-js简介" class="headerlink" title="Node.js简介"></a>Node.js简介</h1><h3 id="什么是Node-js"><a href="#什么是Node-js" class="headerlink" title="什么是Node.js"></a>什么是Node.js</h3><p>js 属于一种脚本性语言，然而脚本语言运行需要一个解析器来解析，对于我们原来写的 js 代码大部分都是运行在网页上，所以浏览器本身就担当了解析器的角色。而现在对于独立运行在服务器的 js 代码，node 就属于那个解析器。<br>Node.js 是基于Chrome V8 引擎的JavaScript 运行环境，简单理解就是一个可以让JavaScript脱离浏览器，执行的平台，并对JavaScript功能进行了增强（文件系统，模块，包，操作系统API，网络通讯，数据库操作等）</p>
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Node.js教程',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #181B25;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/about_avatar.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Node.js教程</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Node.js教程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-06-28T16:00:00.000Z" title="发表于 2022-06-29 00:00:00">2022-06-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-03T06:38:33.059Z" title="更新于 2024-12-03 14:38:33">2024-12-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/NodeJs/">NodeJs</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Node-js简介"><a href="#Node-js简介" class="headerlink" title="Node.js简介"></a>Node.js简介</h1><h3 id="什么是Node-js"><a href="#什么是Node-js" class="headerlink" title="什么是Node.js"></a>什么是Node.js</h3><p>js 属于一种脚本性语言，然而脚本语言运行需要一个解析器来解析，对于我们原来写的 js 代码大部分都是运行在网页上，所以浏览器本身就担当了解析器的角色。而现在对于独立运行在服务器的 js 代码，node 就属于那个解析器。<br>Node.js 是基于Chrome V8 引擎的JavaScript 运行环境，简单理解就是一个可以让JavaScript脱离浏览器，执行的平台，并对JavaScript功能进行了增强（文件系统，模块，包，操作系统API，网络通讯，数据库操作等）</p>
 <p>Node.js官网的描述:</p>
 <ul>
 <li>Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行环境</li>
@@ -302,15 +170,15 @@
 <h1 id="Windows安装Node-js"><a href="#Windows安装Node-js" class="headerlink" title="Windows安装Node.js"></a>Windows安装Node.js</h1><h2 id="1-下载"><a href="#1-下载" class="headerlink" title="1.下载"></a>1.下载</h2><p><strong><a target="_blank" rel="noopener" href="http://nodejs.cn/download/">Node.js官网下载</a></strong> 根据自身系统下载对应的安装包</p>
 <h2 id="2-安装"><a href="#2-安装" class="headerlink" title="2.安装"></a>2.安装</h2><p>双击安装包，点击Next，勾选使用许可协议，点击Next，选择安装位置（可根据个人情况更换路径）,可以选择勾选Add to Path,将Node.js环境添加到系统变量里面去。</p>
 <h2 id="3-验证是否安装成功"><a href="#3-验证是否安装成功" class="headerlink" title="3.验证是否安装成功"></a>3.验证是否安装成功</h2><p>进入cmd命令行窗口，输入node -v查看Node.js版本</p>
-<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh"><span class="hljs-keyword">node</span> <span class="hljs-title">-v</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br></pre></td></tr></table></figure>
 <p>如果安装正常就可以看到Node.js的版本。</p>
 <h2 id="4-交互模式"><a href="#4-交互模式" class="headerlink" title="4.交互模式"></a>4.交互模式</h2><p>在命令提示符输入node，此刻你将进入Node.js的交互环境。 在交互环境下，你可以输入任意JavaScript语句，例如100+200，回车后将得到输出结果。 </p>
-<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">C:\Users\peng&gt;<span class="hljs-keyword">node</span><br><span class="hljs-title">Welcome</span> to Node.js v16.<span class="hljs-number">14.2</span>.<br><span class="hljs-keyword">Type</span> <span class="hljs-string">&quot;.help&quot;</span> for more <span class="hljs-literal">inf</span>ormation.<br>&gt; <span class="hljs-number">100</span>+<span class="hljs-number">100</span><br><span class="hljs-number">200</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\peng&gt;node</span><br><span class="line">Welcome to Node.js v16.14.2.</span><br><span class="line">Type &quot;.help&quot; for more information.</span><br><span class="line">&gt; 100+100</span><br><span class="line">200</span><br></pre></td></tr></table></figure>
 <p>要退出Node.js交互环境，连按两次Ctrl+C。</p>
 <p>也可以写一个<code>test.js</code>的文件，内容如下：</p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">console</span>.log(<span class="hljs-number">100</span> + <span class="hljs-number">200</span> + <span class="hljs-number">300</span>);<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">console.log(100 + 200 + 300);</span><br></pre></td></tr></table></figure>
 <p>再执行如下命令，就可以看到结果：</p>
-<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">C:\Workspace&gt;<span class="hljs-keyword">node</span> <span class="hljs-title">calc</span>.js<br><span class="hljs-number">600</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C:\Workspace&gt;node calc.js</span><br><span class="line">600</span><br></pre></td></tr></table></figure>
 <p>Node的交互模式和直接运行<code>.js</code>文件有什么区别？</p>
 <ul>
 <li>直接输入<code>node</code>进入交互模式，相当于启动了Node解释器，但是等待你一行一行地输入源代码，每输入一行就执行一行。</li>
@@ -340,7 +208,7 @@
 <h3 id="修改Npm缓存目录"><a href="#修改Npm缓存目录" class="headerlink" title="修改Npm缓存目录"></a>修改Npm缓存目录</h3><p>npm 默认缓存目录是 <code>C:\Users\Administrator\AppData\Roaming\npm-cache </code>，不仅不便于管理而且占用C盘空间，为了保留C盘的剩余空间，有必要，把 npm的 缓存路径修改到其他盘符下。</p>
 <ol>
 <li><p>设置 npm 缓存路径</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">npm<span class="hljs-built_in"> config </span><span class="hljs-built_in">set</span> cache <span class="hljs-string">&quot;D:\nodejs\npm_cache&quot;</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config set cache &quot;D:\nodejs\npm_cache&quot;</span><br></pre></td></tr></table></figure>
 <p>修改完成之后， 使用<code>npm config ls </code>命令就会看到变化。而且 .npmrc 文件也会有变化，这个文件在C盘的用户目录下，比如 C:\Users\Administrator。</p>
 </li>
 <li><p>恢复npm默认路径</p>
@@ -350,35 +218,35 @@
 <li>通过命令<code>npm config ls</code>,获取到.npmrc文件的位置。</li>
 <li>删除.npmrc文件，这个文件在C盘的用户目录下，比如 <code>C:\Users\Administrator</code>。</li>
 </ul>
-<h3 id="Npm清空缓存"><a href="#Npm清空缓存" class="headerlink" title="Npm清空缓存"></a>Npm清空缓存</h3><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs coffeescript"><span class="hljs-built_in">npm</span> cache clean -f<br></code></pre></td></tr></table></figure>
+<h3 id="Npm清空缓存"><a href="#Npm清空缓存" class="headerlink" title="Npm清空缓存"></a>Npm清空缓存</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm cache clean -f</span><br></pre></td></tr></table></figure>
 
 <h3 id="Npm设置淘宝镜像源"><a href="#Npm设置淘宝镜像源" class="headerlink" title="Npm设置淘宝镜像源"></a>Npm设置淘宝镜像源</h3><p>由于npm官方的服务器在国外，在国内使用可能会遇到很多网络问题，而且速度也非常慢，为了方便我们的开发，我们需要手动切换npm到国内的镜像源。国内最稳定的镜像源是淘宝提供的。</p>
 <ol>
 <li><p>使用如下命令设置为淘宝的镜像源：</p>
-<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">npm config set registry https:<span class="hljs-comment">//registry.npm.taobao.org</span><br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config set registry https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure></li>
 <li><p>使用如下命令检验是否成功：</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">npm<span class="hljs-built_in"> config </span><span class="hljs-built_in">get</span> registry<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config get registry</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>如果想还原npm仓库地址，只需再把地址配置成npm镜像就可以了</p>
-<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">npm config set registry https:<span class="hljs-comment">//registry.npmjs.org/</span><br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config set registry https://registry.npmjs.org/</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h3 id="安装淘宝CNpm"><a href="#安装淘宝CNpm" class="headerlink" title="安装淘宝CNpm"></a>安装淘宝CNpm</h3><p>还可以使用淘宝镜像提供的<code>cnpm</code>工具，通过<code>cnpm</code>来安装包一般速度会更快一些</p>
 <ol>
 <li><p>安装cnpm 输入以下命令</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">npm install -<span class="hljs-selector-tag">g</span> cnpm <span class="hljs-attr">--registry</span>=https:<span class="hljs-comment">//registry.npm.taobao.org</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>输入cnpm -v输入是否正常。</p>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">cnpm -v</span><br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm -v</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h3 id="yarn包管理工具"><a href="#yarn包管理工具" class="headerlink" title="yarn包管理工具"></a>yarn包管理工具</h3><p>yarn是由facebook推出的包管理客户端，它会缓存已经下载过的包并做了一些其他方面的优化，速度要比npm快，还添加了一些别的npm不具备的特性。</p>
 <h5 id="安装yarn包管理工具"><a href="#安装yarn包管理工具" class="headerlink" title="安装yarn包管理工具"></a>安装yarn包管理工具</h5><ol>
-<li>进行全局安装:<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">npm  <span class="hljs-keyword">install</span> -g yarn<br></code></pre></td></tr></table></figure></li>
-<li>检查是否安装成功：<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">yarn -v</span><br></code></pre></td></tr></table></figure></li>
-<li>查看 yarn 配置<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">yarn<span class="hljs-built_in"> config </span><span class="hljs-built_in">get</span> registry<br></code></pre></td></tr></table></figure>
-或者<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">yarn config list<br></code></pre></td></tr></table></figure></li>
+<li>进行全局安装:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm  install -g yarn</span><br></pre></td></tr></table></figure></li>
+<li>检查是否安装成功：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn -v</span><br></pre></td></tr></table></figure></li>
+<li>查看 yarn 配置<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn config get registry</span><br></pre></td></tr></table></figure>
+或者<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn config list</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h5 id="yarn-换源"><a href="#yarn-换源" class="headerlink" title="yarn 换源"></a>yarn 换源</h5><p>换成淘宝的镜像源:</p>
-<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">yarn config set registry https:<span class="hljs-comment">//registry.npm.taobao.org</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn config set registry https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
 
 <h5 id="yarn-常用命令"><a href="#yarn-常用命令" class="headerlink" title="yarn 常用命令"></a>yarn 常用命令</h5><ul>
 <li>yarn init &#x2F;&#x2F; 同npm init，执行输入信息后，会生成package.json文件</li>
@@ -398,8 +266,8 @@
 <li>yarn add –dev&#x2F;-D &#x2F;&#x2F; 加到 devDependencies</li>
 <li>yarn add –peer&#x2F;-P &#x2F;&#x2F; 加到 peerDependencies</li>
 <li>yarn add –optional&#x2F;-O &#x2F;&#x2F; 加到 optionalDependencies</li>
-<li>yarn add –exact&#x2F;-E &#x2F;&#x2F; 安装包的精确版本。例如yarn add <a href="mailto:&#x66;&#111;&#x6f;&#x40;&#x31;&#x2e;&#50;&#x2e;&#x33;">&#x66;&#111;&#x6f;&#x40;&#x31;&#x2e;&#50;&#x2e;&#x33;</a>会接受1.9.1版，但是yarn add <a href="mailto:&#x66;&#x6f;&#111;&#64;&#x31;&#x2e;&#x32;&#x2e;&#x33;">&#x66;&#x6f;&#111;&#64;&#x31;&#x2e;&#x32;&#x2e;&#x33;</a> –exact只会接受1.2.3版</li>
-<li>yarn add –tilde&#x2F;-T &#x2F;&#x2F; 安装包的次要版本里的最新版。例如yarn add <a href="mailto:&#x66;&#111;&#111;&#x40;&#49;&#46;&#50;&#46;&#x33;">&#x66;&#111;&#111;&#x40;&#49;&#46;&#50;&#46;&#x33;</a> –tilde会接受1.2.9，但不接受1.3.0</li>
+<li>yarn add –exact&#x2F;-E &#x2F;&#x2F; 安装包的精确版本。例如yarn add <a href="mailto:&#102;&#111;&#x6f;&#x40;&#x31;&#x2e;&#x32;&#x2e;&#x33;">&#102;&#111;&#x6f;&#x40;&#x31;&#x2e;&#x32;&#x2e;&#x33;</a>会接受1.9.1版，但是yarn add <a href="mailto:&#102;&#x6f;&#x6f;&#x40;&#x31;&#46;&#50;&#46;&#51;">&#102;&#x6f;&#x6f;&#x40;&#x31;&#46;&#50;&#46;&#51;</a> –exact只会接受1.2.3版</li>
+<li>yarn add –tilde&#x2F;-T &#x2F;&#x2F; 安装包的次要版本里的最新版。例如yarn add <a href="mailto:&#x66;&#111;&#111;&#x40;&#x31;&#46;&#x32;&#x2e;&#51;">&#x66;&#111;&#111;&#x40;&#x31;&#46;&#x32;&#x2e;&#51;</a> –tilde会接受1.2.9，但不接受1.3.0</li>
 <li>yarn publish 发布包</li>
 <li>yarn remove <packageName>：移除一个包，会自动更新package.json和yarn.lock</li>
 <li>yarn upgrade 用于更新包到基于规范范围的最新版本</li>
@@ -409,81 +277,81 @@
 </ul>
 <h5 id="Yarn修改缓存位置修改"><a href="#Yarn修改缓存位置修改" class="headerlink" title="Yarn修改缓存位置修改"></a>Yarn修改缓存位置修改</h5><p>npm、yarn的cache都是磁盘占用大户，如果缓存在系统盘导致系统盘越来越小，可以考虑更改cache指定到其他盘。</p>
 <p>查询yarn缓存目录</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">yarn cache <span class="hljs-built_in">dir</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn cache dir</span><br></pre></td></tr></table></figure>
 <p>改变yarn缓存位置</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">yarn<span class="hljs-built_in"> config </span><span class="hljs-built_in">set</span> cache-folder <span class="hljs-string">&quot;路径&quot;</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn config set cache-folder &quot;路径&quot;</span><br></pre></td></tr></table></figure>
 <p>查询npm某个包的版本，例如yarn</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm <span class="hljs-built_in">ls</span> yarn<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm ls yarn</span><br></pre></td></tr></table></figure>
 <p>查看 yarn 全局cache位置</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">yarn cache <span class="hljs-built_in">dir</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn cache dir</span><br></pre></td></tr></table></figure>
 <p>修改缓存的位置</p>
-<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lasso">yarn config <span class="hljs-built_in">set</span> <span class="hljs-keyword">cache</span><span class="hljs-params">-folder</span> “D:\yarn\<span class="hljs-keyword">cache</span>”<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn config set cache-folder “D:\yarn\cache”</span><br></pre></td></tr></table></figure>
 
-<h1 id="Webpack打包"><a href="#Webpack打包" class="headerlink" title="Webpack打包"></a>Webpack打包</h1><h2 id="Webpack简介"><a href="#Webpack简介" class="headerlink" title="Webpack简介"></a>Webpack简介</h2><p>官网<a target="_blank" rel="noopener" href="https://webpack.docschina.org/">https://webpack.docschina.org/</a>。webpack是一个前端资源加载&#x2F;打包工具。它将根据模块的依赖关系进行静态分析，然后将这些模块按照指定的规则生成对应的静态资源。如下图所示：<br><img src="/images/26a141e60d1c55553eeb9805eb61ddf7.webp" srcset="/img/loading.gif" lazyload></p>
+<h1 id="Webpack打包"><a href="#Webpack打包" class="headerlink" title="Webpack打包"></a>Webpack打包</h1><h2 id="Webpack简介"><a href="#Webpack简介" class="headerlink" title="Webpack简介"></a>Webpack简介</h2><p>官网<a target="_blank" rel="noopener" href="https://webpack.docschina.org/">https://webpack.docschina.org/</a>。webpack是一个前端资源加载&#x2F;打包工具。它将根据模块的依赖关系进行静态分析，然后将这些模块按照指定的规则生成对应的静态资源。如下图所示：<br><img src="/images/26a141e60d1c55553eeb9805eb61ddf7.webp"></p>
 <h2 id="安装Webpack"><a href="#安装Webpack" class="headerlink" title="安装Webpack"></a>安装Webpack</h2><p>首先确保本地环境支持Node.js，再使用npm安装webpack，如果觉得npm安装速度慢，可使用淘宝镜像及其命令cnpm</p>
 <ul>
 <li>全局安装webpack命令行如下</li>
 <li><pre><code class="coffeescript">npm install webpack -g
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stata"><span class="hljs-comment">* 项目安装webpack命令行如下</span><br><span class="hljs-comment">* ```css</span><br>  npm install webpack --<span class="hljs-keyword">save</span>-dev<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">* 项目安装webpack命令行如下</span><br><span class="line">* ```css</span><br><span class="line">  npm install webpack --save-dev</span><br></pre></td></tr></table></figure>
 </code></pre>
 </li>
 </ul>
 <h2 id="使用Webpack进行打包"><a href="#使用Webpack进行打包" class="headerlink" title="使用Webpack进行打包"></a>使用Webpack进行打包</h2><p>体验一下webpack是如何解析依赖关系并打包的，本地目录里新建两个子目录app（开发用目录）和release（发布用目录）。</p>
 <ol>
 <li><p>app目录里新建一个Hello.js：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">var</span> showTxt = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;div&#x27;</span>);<br>    showTxt.<span class="hljs-property">textContent</span> = <span class="hljs-string">&quot;Hello webpack!&quot;</span>;<br>    <span class="hljs-keyword">return</span> showTxt;<br>&#125;;<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function() &#123;</span><br><span class="line">    var showTxt = document.createElement(&#x27;div&#x27;);</span><br><span class="line">    showTxt.textContent = &quot;Hello webpack!&quot;;</span><br><span class="line">    return showTxt;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
 <li><p>app目录里新建一个main.js，并依赖Hello.js：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> showTxt = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./Hello.js&#x27;</span>);<br><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>).<span class="hljs-title function_">appendChild</span>(<span class="hljs-title function_">showTxt</span>());<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var showTxt = require(&#x27;./Hello.js&#x27;);</span><br><span class="line">document.getElementById(&#x27;root&#x27;).appendChild(showTxt());</span><br></pre></td></tr></table></figure></li>
 <li><p>release目录里新建一个index.html：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>WebpackTest<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&#x27;root&#x27;</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;bundle.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">  &lt;meta charset=&quot;utf-8&quot;&gt;</span><br><span class="line">  &lt;title&gt;WebpackTest&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div id=&#x27;root&#x27;&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;script src=&quot;bundle.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 <p>该html的body里加载的bundle.js哪里来的？这就是接下来webpack需要做的。</p>
 </li>
 <li><p>将app下开发者写的main.js和Hello.js打包生成bundle.js，并放进release目录。执行：</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">webpack .<span class="hljs-regexp">/app/m</span>ain.js .<span class="hljs-regexp">/release/</span>bundle.js<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">webpack ./app/main.js ./release/bundle.js</span><br></pre></td></tr></table></figure></li>
 </ol>
 <p>会发现release目录下多了个bundle.js。观察上述打包过程，webpack先解析main.js，发现它依赖Hello.js，于是将这两个文件打包进指定的release目录，生成bundle.js。用浏览器打开index.html会看到页面正确显示了Hello webpack!。</p>
 <ol start="5">
-<li>webpack提供了web服务器，先安装：<figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs q">npm install --<span class="hljs-built_in">save</span>-<span class="hljs-built_in">dev</span> webpack-<span class="hljs-built_in">dev</span>-server<br></code></pre></td></tr></table></figure></li>
-<li>安装完后，执行：<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs axapta">webpack-dev-<span class="hljs-keyword">server</span><br></code></pre></td></tr></table></figure>
+<li>webpack提供了web服务器，先安装：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev webpack-dev-server</span><br></pre></td></tr></table></figure></li>
+<li>安装完后，执行：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">webpack-dev-server</span><br></pre></td></tr></table></figure>
 现在访问<code>http://localhost:8080</code>就能看到我们第一个webpack页面了。</li>
 </ol>
 <h1 id="Node-js示例"><a href="#Node-js示例" class="headerlink" title="Node.js示例"></a>Node.js示例</h1><p>使用Node.js搭建一个的本地静态文件服务器的方法:</p>
 <h3 id="Node-js原生代码示例"><a href="#Node-js原生代码示例" class="headerlink" title="Node.js原生代码示例"></a>Node.js原生代码示例</h3><p>server.js(不需要引入任何第三方依赖)</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> url = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;url&quot;</span>),<br>    fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;fs&quot;</span>),<br>    http = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;http&quot;</span>),<br>    path = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;path&quot;</span>);<br>http.<span class="hljs-title function_">createServer</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">req, res</span>) &#123;<br>    <span class="hljs-keyword">var</span> pathname = __dirname + url.<span class="hljs-title function_">parse</span>(<span class="hljs-string">&quot;/public&quot;</span>+req.<span class="hljs-property">url</span>).<span class="hljs-property">pathname</span>;<span class="hljs-comment">//资源指向public目录</span><br>    <span class="hljs-keyword">if</span> (path.<span class="hljs-title function_">extname</span>(pathname) == <span class="hljs-string">&quot;&quot;</span>) &#123;<br>        pathname += <span class="hljs-string">&quot;/&quot;</span>;<br>    &#125;<br>    <span class="hljs-keyword">if</span> (pathname.<span class="hljs-title function_">charAt</span>(pathname.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>) == <span class="hljs-string">&quot;/&quot;</span>) &#123;<br>        pathname += <span class="hljs-string">&quot;index.html&quot;</span>;<br>    &#125;<br>    fs.<span class="hljs-title function_">exists</span>(pathname, <span class="hljs-keyword">function</span> (<span class="hljs-params">exists</span>) &#123;<br>        <span class="hljs-keyword">if</span> (exists) &#123;<br>            <span class="hljs-keyword">switch</span>(path.<span class="hljs-title function_">extname</span>(pathname))&#123;<br>                <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;.html&quot;</span>:<br>                    res.<span class="hljs-title function_">writeHead</span>(<span class="hljs-number">200</span>, &#123;<span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;text/html&quot;</span>&#125;);<br>                    <span class="hljs-keyword">break</span>;<br>                <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;.js&quot;</span>:<br>                    res.<span class="hljs-title function_">writeHead</span>(<span class="hljs-number">200</span>, &#123;<span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;text/javascript&quot;</span>&#125;);<br>                    <span class="hljs-keyword">break</span>;<br>                <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;.css&quot;</span>:<br>                    res.<span class="hljs-title function_">writeHead</span>(<span class="hljs-number">200</span>, &#123;<span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;text/css&quot;</span>&#125;);<br>                    <span class="hljs-keyword">break</span>;<br>                <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;.gif&quot;</span>:<br>                    res.<span class="hljs-title function_">writeHead</span>(<span class="hljs-number">200</span>, &#123;<span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;image/gif&quot;</span>&#125;);<br>                    <span class="hljs-keyword">break</span>;<br>                <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;.jpg&quot;</span>:<br>                    res.<span class="hljs-title function_">writeHead</span>(<span class="hljs-number">200</span>, &#123;<span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;image/jpeg&quot;</span>&#125;);<br>                    <span class="hljs-keyword">break</span>;<br>                <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;.png&quot;</span>:<br>                    res.<span class="hljs-title function_">writeHead</span>(<span class="hljs-number">200</span>, &#123;<span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;image/png&quot;</span>&#125;);<br>                    <span class="hljs-keyword">break</span>;<br>                <span class="hljs-attr">default</span>:<br>                    res.<span class="hljs-title function_">writeHead</span>(<span class="hljs-number">200</span>, &#123;<span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;application/octet-stream&quot;</span>&#125;);<br>            &#125;<br>            fs.<span class="hljs-title function_">readFile</span>(pathname, <span class="hljs-keyword">function</span> (<span class="hljs-params">err, data</span>) &#123;<br>                res.<span class="hljs-title function_">end</span>(data);<br>            &#125;);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            res.<span class="hljs-title function_">writeHead</span>(<span class="hljs-number">404</span>, &#123;<br>                <span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;text/html&quot;</span><br>            &#125;);<br>            res.<span class="hljs-title function_">end</span>(<span class="hljs-string">&quot;&lt;h1&gt;404 Not Found&lt;/h1&gt;&quot;</span>);<br>        &#125;<br>    &#125;);<br>&#125;).<span class="hljs-title function_">listen</span>(<span class="hljs-number">3003</span>);<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;监听3003端口&quot;</span>);<br></code></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">&quot;url&quot;</span>),</span><br><span class="line">    fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>),</span><br><span class="line">    http = <span class="built_in">require</span>(<span class="string">&quot;http&quot;</span>),</span><br><span class="line">    path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line">http.<span class="title function_">createServer</span>(<span class="keyword">function</span> (<span class="params">req, res</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> pathname = __dirname + url.<span class="title function_">parse</span>(<span class="string">&quot;/public&quot;</span>+req.<span class="property">url</span>).<span class="property">pathname</span>;<span class="comment">//资源指向public目录</span></span><br><span class="line">    <span class="keyword">if</span> (path.<span class="title function_">extname</span>(pathname) == <span class="string">&quot;&quot;</span>) &#123;</span><br><span class="line">        pathname += <span class="string">&quot;/&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (pathname.<span class="title function_">charAt</span>(pathname.<span class="property">length</span> - <span class="number">1</span>) == <span class="string">&quot;/&quot;</span>) &#123;</span><br><span class="line">        pathname += <span class="string">&quot;index.html&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    fs.<span class="title function_">exists</span>(pathname, <span class="keyword">function</span> (<span class="params">exists</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (exists) &#123;</span><br><span class="line">            <span class="keyword">switch</span>(path.<span class="title function_">extname</span>(pathname))&#123;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&quot;.html&quot;</span>:</span><br><span class="line">                    res.<span class="title function_">writeHead</span>(<span class="number">200</span>, &#123;<span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;text/html&quot;</span>&#125;);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&quot;.js&quot;</span>:</span><br><span class="line">                    res.<span class="title function_">writeHead</span>(<span class="number">200</span>, &#123;<span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;text/javascript&quot;</span>&#125;);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&quot;.css&quot;</span>:</span><br><span class="line">                    res.<span class="title function_">writeHead</span>(<span class="number">200</span>, &#123;<span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;text/css&quot;</span>&#125;);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&quot;.gif&quot;</span>:</span><br><span class="line">                    res.<span class="title function_">writeHead</span>(<span class="number">200</span>, &#123;<span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;image/gif&quot;</span>&#125;);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&quot;.jpg&quot;</span>:</span><br><span class="line">                    res.<span class="title function_">writeHead</span>(<span class="number">200</span>, &#123;<span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;image/jpeg&quot;</span>&#125;);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&quot;.png&quot;</span>:</span><br><span class="line">                    res.<span class="title function_">writeHead</span>(<span class="number">200</span>, &#123;<span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;image/png&quot;</span>&#125;);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="attr">default</span>:</span><br><span class="line">                    res.<span class="title function_">writeHead</span>(<span class="number">200</span>, &#123;<span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/octet-stream&quot;</span>&#125;);</span><br><span class="line">            &#125;</span><br><span class="line">            fs.<span class="title function_">readFile</span>(pathname, <span class="keyword">function</span> (<span class="params">err, data</span>) &#123;</span><br><span class="line">                res.<span class="title function_">end</span>(data);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            res.<span class="title function_">writeHead</span>(<span class="number">404</span>, &#123;</span><br><span class="line">                <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;text/html&quot;</span></span><br><span class="line">            &#125;);</span><br><span class="line">            res.<span class="title function_">end</span>(<span class="string">&quot;&lt;h1&gt;404 Not Found&lt;/h1&gt;&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;).<span class="title function_">listen</span>(<span class="number">3003</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;监听3003端口&quot;</span>);</span><br></pre></td></tr></table></figure>
 
 <h3 id="使用serve-static框架示例"><a href="#使用serve-static框架示例" class="headerlink" title="使用serve-static框架示例"></a>使用serve-static框架示例</h3><p>第一步：在Node.js安装目录安装：</p>
-<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">npm install connect<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install connect</span><br></pre></td></tr></table></figure>
 
 <p>第二步：在Node.js安装目录安装：</p>
-<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livescript"><span class="hljs-built_in">npm</span> install serve-<span class="hljs-keyword">static</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install serve-static</span><br></pre></td></tr></table></figure>
 
 <p>第三步：新建server.js (可以放在项目里去运行也可以放在Node.js安装目录下运行)：</p>
-<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs abnf">var connect <span class="hljs-operator">=</span> require(<span class="hljs-string">&quot;connect&quot;</span>)<span class="hljs-comment">;</span><br>var serveStatic <span class="hljs-operator">=</span> require(<span class="hljs-string">&quot;serve-static&quot;</span>)<span class="hljs-comment">;</span><br><br>var app <span class="hljs-operator">=</span> connect()<span class="hljs-comment">;</span><br>app.use(serveStatic(<span class="hljs-string">&quot;D:\项目文件夹&quot;</span>))<span class="hljs-comment">;</span><br><br>app.listen(<span class="hljs-number">5000</span>)<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var connect = require(&quot;connect&quot;);</span><br><span class="line">var serveStatic = require(&quot;serve-static&quot;);</span><br><span class="line"></span><br><span class="line">var app = connect();</span><br><span class="line">app.use(serveStatic(&quot;D:\项目文件夹&quot;));</span><br><span class="line"></span><br><span class="line">app.listen(5000);</span><br></pre></td></tr></table></figure>
 
 <p>第四步：</p>
-<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">运行<span class="hljs-keyword">node</span> <span class="hljs-title">server</span>.js<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">运行node server.js</span><br></pre></td></tr></table></figure>
 
 <h3 id="使用express框架示例"><a href="#使用express框架示例" class="headerlink" title="使用express框架示例"></a>使用express框架示例</h3><p>1.下载express依赖</p>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">npm <span class="hljs-keyword">install</span> express<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install express</span><br></pre></td></tr></table></figure>
 
 <p>2.新建server.js (可以放在项目里去运行也可以放在Node.js安装目录下运行)：</p>
-<figure class="highlight zephir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs zephir"><span class="hljs-comment">//server.js</span><br><span class="hljs-keyword">var</span> express = <span class="hljs-keyword">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>);<br><span class="hljs-keyword">var</span> app = express();<br><br>app.<span class="hljs-keyword">use</span>(express.<span class="hljs-keyword">static</span>(<span class="hljs-string">&#x27;public&#x27;</span>));<span class="hljs-comment">//express.static是express提供的内置的中间件用来设置静态文件路径</span><br><br>app.get(<span class="hljs-string">&#x27;/index.htm&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(req, res)</span> </span>&#123;<br>    res.sendFile(__dirname + <span class="hljs-string">&quot;/&quot;</span> + <span class="hljs-string">&quot;index.htm&quot;</span>);<br>&#125;)<br><br><span class="hljs-keyword">var</span> server = app.listen(<span class="hljs-number">3000</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>&#123;<br>    console.log(<span class="hljs-string">&quot;监听3000端口&quot;</span>)<br>&#125;)<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//server.js</span><br><span class="line">var express = require(&#x27;express&#x27;);</span><br><span class="line">var app = express();</span><br><span class="line"></span><br><span class="line">app.use(express.static(&#x27;public&#x27;));//express.static是express提供的内置的中间件用来设置静态文件路径</span><br><span class="line"></span><br><span class="line">app.get(&#x27;/index.htm&#x27;, function (req, res) &#123;</span><br><span class="line">    res.sendFile(__dirname + &quot;/&quot; + &quot;index.htm&quot;);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">var server = app.listen(3000, function () &#123;</span><br><span class="line">    console.log(&quot;监听3000端口&quot;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 
 <p>3.运行<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=node&spm=1001.2101.3001.7020">node</a> server.js</p>
 <h3 id="使用koa框架示例"><a href="#使用koa框架示例" class="headerlink" title="使用koa框架示例"></a>使用koa框架示例</h3><p>1.安装koa koa-<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=static&spm=1001.2101.3001.7020">static</a></p>
-<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livescript"><span class="hljs-built_in">npm</span> install koa koa-<span class="hljs-keyword">static</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install koa koa-static</span><br></pre></td></tr></table></figure>
 
 <p>注意：koa要求node的版本较高(node v7.6.0+)，如果出现如下错误，要升级node</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs javascript">koa-<span class="hljs-keyword">static</span>@<span class="hljs-number">4.0</span><span class="hljs-number">.1</span>@koa-<span class="hljs-keyword">static</span>\index.<span class="hljs-property">js</span>:<span class="hljs-number">39</span><br><span class="hljs-keyword">return</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">serve</span> (<span class="hljs-params">ctx, next</span>) &#123;<br>             ^^^^^^^^<br><span class="hljs-title class_">SyntaxError</span>: <span class="hljs-title class_">Unexpected</span> token <span class="hljs-keyword">function</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">koa-static@4.0.1@koa-static\index.js:39</span><br><span class="line">return async function serve (ctx, next) &#123;</span><br><span class="line">             ^^^^^^^^</span><br><span class="line">SyntaxError: Unexpected token function</span><br></pre></td></tr></table></figure>
 
 <p>2.server.js代码如下</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> <span class="hljs-title class_">Koa</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;koa&#x27;</span>);<br><span class="hljs-keyword">const</span> app = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Koa</span>();<br><span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;path&#x27;</span>);<br><span class="hljs-keyword">const</span> serve = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;koa-static&#x27;</span>);<br><br><span class="hljs-keyword">const</span> main = <span class="hljs-title function_">serve</span>(path.<span class="hljs-title function_">join</span>(__dirname+<span class="hljs-string">&#x27;/public&#x27;</span>));<br>app.<span class="hljs-title function_">use</span>(main);<br><br>app.<span class="hljs-title function_">listen</span>(<span class="hljs-number">3001</span>,<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)&#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;监听3001端口&quot;</span>)<br>&#125;);<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">const Koa = require(&#x27;koa&#x27;);</span><br><span class="line">const app = new Koa();</span><br><span class="line">const path = require(&#x27;path&#x27;);</span><br><span class="line">const serve = require(&#x27;koa-static&#x27;);</span><br><span class="line"></span><br><span class="line">const main = serve(path.join(__dirname+&#x27;/public&#x27;));</span><br><span class="line">app.use(main);</span><br><span class="line"></span><br><span class="line">app.listen(3001,function()&#123;</span><br><span class="line">    console.log(&quot;监听3001端口&quot;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
 <h3 id="使用fastify框架示例"><a href="#使用fastify框架示例" class="headerlink" title="使用fastify框架示例"></a>使用fastify框架示例</h3><p>1.安装fastify serve-static</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">npm install fastify serve-<span class="hljs-keyword">static</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install fastify serve-<span class="keyword">static</span></span><br></pre></td></tr></table></figure>
 
 <p>2.server.js代码如下</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> serveStatic = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;serve-static&#x27;</span>);<br><span class="hljs-keyword">const</span> fastify = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fastify&#x27;</span>)();<br><span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;path&#x27;</span>);<br> <br>fastify.<span class="hljs-title function_">use</span>(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-title function_">serveStatic</span>(path.<span class="hljs-title function_">resolve</span>(__dirname, <span class="hljs-string">&#x27;public&#x27;</span>)));<br> <br>fastify.<span class="hljs-title function_">listen</span>(<span class="hljs-number">3002</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;监听3002端口&quot;</span>);<br>&#125;)<br></code></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> serveStatic = <span class="built_in">require</span>(<span class="string">&#x27;serve-static&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fastify = <span class="built_in">require</span>(<span class="string">&#x27;fastify&#x27;</span>)();</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"> </span><br><span class="line">fastify.<span class="title function_">use</span>(<span class="string">&#x27;/&#x27;</span>, <span class="title function_">serveStatic</span>(path.<span class="title function_">resolve</span>(__dirname, <span class="string">&#x27;public&#x27;</span>)));</span><br><span class="line"> </span><br><span class="line">fastify.<span class="title function_">listen</span>(<span class="number">3002</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;监听3002端口&quot;</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 
 <h1 id="Deno介绍"><a href="#Deno介绍" class="headerlink" title="Deno介绍"></a>Deno介绍</h1><p>Node.js 作者 Ryan Dahl 在 2020 年 5 月发布了 <a target="_blank" rel="noopener" href="https://github.com/denoland/deno">deno</a> 1.0 版本，Deno 是一个 JavaScript&#x2F;TypeScript 的运行时，默认使用安全环境执行代码，有着卓越的开发体验。<br>Ryan 在 JS Conf Berlin 上总结了 Node.js 的 7 个设计失误:</p>
 <ol>
@@ -504,365 +372,79 @@
 <li>内置了很多常见工具：bundle、fmt、test、lint等。</li>
 </ol>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="http://nqdeng.github.io/7-days-nodejs/#1">七天学会NodeJS</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2022/06/29/Node.js%E6%95%99%E7%A8%8B/">http://example.com/2022/06/29/Node.js%E6%95%99%E7%A8%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2022/08/20/%E4%BD%BF%E7%94%A8RssHub%E4%B8%BA%E7%BD%91%E9%A1%B5%E7%94%9F%E6%88%90RSS%E8%AE%A2%E9%98%85%E6%BA%90/" title="使用RssHub为网页生成RSS订阅源"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">使用RssHub为网页生成RSS订阅源</div></div><div class="info-2"><div class="info-item-1">一.RSSHub简介众所周知，网站提供 RSS 并不能为他的站点带来更多的流量，反而会减少主站的访客数。因此很多的网站没有提供Rss订阅源供大家使用。 RSSHub就是这样的一款神器，借助 RSSHub 可以方便地通过 RSS 订阅知乎、豆瓣、Facebook 等现代媒体社交平台。RSSHub RSSHub 是一个开源、简单易用、易于扩展的 RSS 生成器，可以给任何奇奇怪怪的内容生成 RSS 订阅源。 RSSHub 借助于开源社区的力量快速发展中，聚集了众多 RSS 爱好者来为现代的网站构建 RSS 订阅源，目前已适配数百家网站的上千项内容。  GitHub开源地址：https://github.com/DIYgod/RSSHub 官方文档：https://docs.rsshub.app/usage.html#sheng-cheng-ding-yue-yuan 部署文档：https://docs.rsshub.app/install/ 可以配合浏览器扩展 RSSHub Radar 和 移动端辅助 App RSSBud (iOS) 与 RSSAid (Android)...</div></div></div></a><a class="pagination-related" href="/2022/06/11/AndroidJetpack-Compose%E4%B9%8B%E5%85%AD%E5%AE%9E%E6%88%98%E6%80%BB%E7%BB%93/" title="AndroidJetpack-Compose之六实战总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">AndroidJetpack-Compose之六实战总结</div></div><div class="info-2"><div class="info-item-1">官方推荐将 Composable...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">37</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Node-js%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">Node.js简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFNode-js"><span class="toc-number">1.0.1.</span> <span class="toc-text">什么是Node.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Node-js%E7%9A%84%E5%BA%94%E7%94%A8%E9%A2%86%E5%9F%9F"><span class="toc-number">1.0.2.</span> <span class="toc-text">Node.js的应用领域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Node-js%E5%8A%A3%E5%8A%BF"><span class="toc-number">1.0.3.</span> <span class="toc-text">Node.js劣势</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Windows%E5%AE%89%E8%A3%85Node-js"><span class="toc-number">2.</span> <span class="toc-text">Windows安装Node.js</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD"><span class="toc-number">2.1.</span> <span class="toc-text">1.下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85"><span class="toc-number">2.2.</span> <span class="toc-text">2.安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%AA%8C%E8%AF%81%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F"><span class="toc-number">2.3.</span> <span class="toc-text">3.验证是否安装成功</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.4.</span> <span class="toc-text">4.交互模式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Npm%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="toc-number">3.</span> <span class="toc-text">Npm包管理工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Npm%E5%8C%85%E7%AE%A1%E7%90%86%E7%AE%80%E4%BB%8B"><span class="toc-number">3.0.1.</span> <span class="toc-text">Npm包管理简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Npm%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4"><span class="toc-number">3.0.2.</span> <span class="toc-text">Npm常见命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9Npm%E7%BC%93%E5%AD%98%E7%9B%AE%E5%BD%95"><span class="toc-number">3.0.3.</span> <span class="toc-text">修改Npm缓存目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Npm%E6%B8%85%E7%A9%BA%E7%BC%93%E5%AD%98"><span class="toc-number">3.0.4.</span> <span class="toc-text">Npm清空缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Npm%E8%AE%BE%E7%BD%AE%E6%B7%98%E5%AE%9D%E9%95%9C%E5%83%8F%E6%BA%90"><span class="toc-number">3.0.5.</span> <span class="toc-text">Npm设置淘宝镜像源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%B7%98%E5%AE%9DCNpm"><span class="toc-number">3.0.6.</span> <span class="toc-text">安装淘宝CNpm</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#yarn%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="toc-number">3.0.7.</span> <span class="toc-text">yarn包管理工具</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%89%E8%A3%85yarn%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7"><span class="toc-number">3.0.7.0.1.</span> <span class="toc-text">安装yarn包管理工具</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#yarn-%E6%8D%A2%E6%BA%90"><span class="toc-number">3.0.7.0.2.</span> <span class="toc-text">yarn 换源</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#yarn-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">3.0.7.0.3.</span> <span class="toc-text">yarn 常用命令</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Yarn%E4%BF%AE%E6%94%B9%E7%BC%93%E5%AD%98%E4%BD%8D%E7%BD%AE%E4%BF%AE%E6%94%B9"><span class="toc-number">3.0.7.0.4.</span> <span class="toc-text">Yarn修改缓存位置修改</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Webpack%E6%89%93%E5%8C%85"><span class="toc-number">4.</span> <span class="toc-text">Webpack打包</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Webpack%E7%AE%80%E4%BB%8B"><span class="toc-number">4.1.</span> <span class="toc-text">Webpack简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Webpack"><span class="toc-number">4.2.</span> <span class="toc-text">安装Webpack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Webpack%E8%BF%9B%E8%A1%8C%E6%89%93%E5%8C%85"><span class="toc-number">4.3.</span> <span class="toc-text">使用Webpack进行打包</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Node-js%E7%A4%BA%E4%BE%8B"><span class="toc-number">5.</span> <span class="toc-text">Node.js示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Node-js%E5%8E%9F%E7%94%9F%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="toc-number">5.0.1.</span> <span class="toc-text">Node.js原生代码示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8serve-static%E6%A1%86%E6%9E%B6%E7%A4%BA%E4%BE%8B"><span class="toc-number">5.0.2.</span> <span class="toc-text">使用serve-static框架示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8express%E6%A1%86%E6%9E%B6%E7%A4%BA%E4%BE%8B"><span class="toc-number">5.0.3.</span> <span class="toc-text">使用express框架示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8koa%E6%A1%86%E6%9E%B6%E7%A4%BA%E4%BE%8B"><span class="toc-number">5.0.4.</span> <span class="toc-text">使用koa框架示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8fastify%E6%A1%86%E6%9E%B6%E7%A4%BA%E4%BE%8B"><span class="toc-number">5.0.5.</span> <span class="toc-text">使用fastify框架示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Deno%E4%BB%8B%E7%BB%8D"><span class="toc-number">6.</span> <span class="toc-text">Deno介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">7.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
 
-                
-              </div>
-            
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
 
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/NodeJs/" class="category-chain-item">NodeJs</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-</div>
-
-
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>Node.js教程</div>
-      <div>http://example.com/2022/06/29/Node.js教程/</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>peng</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2022年6月29日</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>许可协议</div>
-          <div>
-            
-              
-              
-                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-cc-by"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/2022/08/20/%E4%BD%BF%E7%94%A8RssHub%E4%B8%BA%E7%BD%91%E9%A1%B5%E7%94%9F%E6%88%90RSS%E8%AE%A2%E9%98%85%E6%BA%90/" title="使用RssHub为网页生成RSS订阅源">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">使用RssHub为网页生成RSS订阅源</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/2022/06/11/AndroidJetpack-Compose%E4%B9%8B%E5%85%AD%E5%AE%9E%E6%88%98%E6%80%BB%E7%BB%93/" title="AndroidJetpack-Compose之六实战总结">
-                        <span class="hidden-mobile">AndroidJetpack-Compose之六实战总结</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
-            </div>
-
-            
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header">
-    <i class="iconfont icon-list"></i>
-    <span>目录</span>
-  </p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    
-
-    
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> 
-    </div>
-  
-  
-  
-</div>
-
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
     })
-  </script>
+    return ele
+  }
 
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
 
-<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
-
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init(Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc));
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
     }
 
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
         }
       }
-    });
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
     }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
+  }
 
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
         }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
       }
-    });
-  });
-</script>
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
 
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
 
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
 
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
-  
-
-  <noscript>
-    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
-  </noscript>
-</body>
-</html>
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
