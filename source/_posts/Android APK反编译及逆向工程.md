@@ -2,7 +2,8 @@
 title: Android APK反编译及逆向工程
 date: 2017-08-21 
 categories: 
-  - Android开发
+  - Android逆向工程
+tags:
   - 逆向工程
 ---
 

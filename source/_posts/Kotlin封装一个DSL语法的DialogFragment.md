@@ -2,7 +2,9 @@
 title: Kotlin封装一个DSL语法的DialogFragment
 date: 2020-07-12
 categories: 
-  - Kotlin
+  - Android开发
+tags:
+  - Koltin   
 ---
 
 # 一.领域特定语言 DSL的概念

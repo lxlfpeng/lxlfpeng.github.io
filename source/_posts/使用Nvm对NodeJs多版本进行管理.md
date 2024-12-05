@@ -3,6 +3,8 @@ title: 使用Nvm对NodeJs多版本进行管理
 date: 2021-02-19
 categories: 
   - NodeJs
+tags:
+  - Javascript
 ---
 
 # 一.Nvm解决了什么问题
