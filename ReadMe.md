@@ -153,6 +153,8 @@ https://hexo.fluid-dev.com/docs/guide/#%E8%AF%84%E8%AE%BA
 # 参考资料    
 [Hexo Fluid 用户手册](https://hexo.fluid-dev.com/docs/guide/)
 
+[Hexo Butterfly 用户手册](https://butterfly.js.org/posts/21cfbf15/)
+
 [Nunjucks Error: 解决方案](https://blog.csdn.net/weixin_45333934/article/details/108274320)
 
 [Nunjucks Error: 解决方案2](https://huanglizhu.github.io/2020/05/21/hexo%20deploy%E4%B8%AD%E6%8A%A5%E9%94%99_Nunjucks%20Error/)
