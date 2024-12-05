@@ -34,18 +34,29 @@ hexo server
 - scaffolds/post.md：新建文章时的文章模板。
 - source/_posts：文章的默认创建与读取目录。
 - themes：主题文件的默认安装目录。
-
 ### 文章发布
 ```
 hexo new yourtitle
 hexo server
 ```
 
+# 主题
+[官方主题](https://hexo.io/themes/)：官方提供的各种主题.
+### 安装主题的方式
+1. 通过 Git 克隆主题
+```
+git clone https://github.com/hexojs/hexo-theme-landscape.git themes/landscape
+```
+2. 通过Git的submodule子模块的方式安装主题.
+
+3. 通过npm进行安装``npm install hexo-theme-landscape``.
+
+4. 手动下载主题到theme文件中.
+
+>总结:推荐将自己喜欢的主题克隆到自己的github仓库,再通过Git的submodule子模块进行安装,这样既可以在原有的主题上可以进行修改,也可以在主题仓库升级的过程中进行升级.
+
 ### 更换主题
-官方默认主题很丑，那我们别的不做，首先来替换一个好看点的主题。
-
-[官方主题](https://hexo.io/themes/)：官方提供的各种主题
-
+将项目根目录中创建一个以_config.开头的以主题名为结束的.yml,主题相关的配置都可以写到这个里面,然后在主配置文件_config.yml中指定主题即可.``theme: hexo-theme-landscape``
 
 # Hexo 博客上传到 GitHub
 1. 安装 Hexo Git 部署插件
