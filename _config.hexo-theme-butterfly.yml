@@ -25,14 +25,15 @@ menu:
   分类:  /categories
   标签: /tags/ || fas fa-tags
   时间轴: /archives/ || fas fa-archive
+  # 关于: /about/ || fas fa-heart
 # --------------------------------------
 # Code Blocks Settings
 # --------------------------------------
 
 code_blocks:
   # Code block theme: darker / pale night / light / ocean / false
-  theme: light
-  macStyle: false
+  theme: pale night
+  macStyle: true
   # Code block height limit (unit: px)
   height_limit: false
   word_wrap: false
@@ -48,8 +49,8 @@ code_blocks:
 # Formal:
 #   icon: link || the description || color
 social:
-  # fab fa-github: https://github.com/xxxxx || Github || '#24292e'
-  # fas fa-envelope: mailto:xxxxxx@gmail.com || Email || '#4a7dbe'
+  fab fa-github: https://github.com/lxlfpeng || Github || '#4a7dbe'
+  fas fa-envelope: mailto:565289282@gmail.com || Email || '#4a7dbe'
 
 # --------------------------------------
 # Image Settings
@@ -65,10 +66,10 @@ avatar:
 disable_top_img: false
 
 # If the banner of page not setting, it will show the default_top_img
-default_top_img:
+default_top_img: 'linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347)'
 
 # The banner image of index page
-index_img:
+index_img: /images/home_bg.webp
 
 # The banner image of archive page
 archive_img:
@@ -82,7 +83,7 @@ tag_img:
 tag_per_img:
 
 # Note: category page, not categories page
-category_img:
+category_img: /images/home_bg.webp
 
 # The banner image of category page, you can set the banner image for each category
 # Format:
@@ -90,7 +91,7 @@ category_img:
 category_per_img:
 
 # The background image of footer
-footer_img: false
+footer_img: true
 
 # Website Background
 # Can set it to color or image url
@@ -130,7 +131,7 @@ post_meta:
     # Choose: left / center
     position: left
     # Choose: created / updated / both
-    date_type: both
+    date_type: created
     # Choose: date / relative
     date_format: date
     categories: true
@@ -167,6 +168,7 @@ subtitle:
   # If you close the typewriter effect, the subtitle will only show the first line of sub
   sub: 
       - "学而不思则罔，思而不学则殆"
+      - "今日事&#44;今日毕"
 
 # Article layout on the homepage
 # 1: Cover on the left, info on the right
@@ -260,7 +262,7 @@ noticeOutdate:
 footer:
   owner:
     enable: true
-    since: 2019
+    since: 2015
   custom_text: '
     <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a>
     <i class="iconfont icon-love"></i>
@@ -288,15 +290,15 @@ aside:
     category: true
   card_author:
     enable: true
-    description:
+    description: "过往不恋 未来不迎 当下不负"
     button:
       enable: true
       icon: fab fa-github
-      text: Follow Me
-      link: https://github.com/xxxxxx
+      text: Follow Me 
+      link: https://github.com/lxlfpeng
   card_announcement:
     enable: true
-    content: This is my Blog
+    content: 欢迎来到我的博客!
   card_recent_post:
     enable: false
     # If set 0 will show all
@@ -314,7 +316,7 @@ aside:
   card_categories:
     enable: true
     # If set 0 will show all
-    limit: 8
+    limit: 10
     # Choose: none / true / false
     expand: none
     sort_order:
@@ -429,7 +431,7 @@ copy:
 
 # Need to install the hexo-wordcount plugin
 wordcount:
-  enable: false
+  enable: true
   # Display the word count of the article in post meta
   post_wordcount: true
   # Display the time to read the article in post meta
@@ -439,9 +441,9 @@ wordcount:
 
 # Busuanzi count for PV / UV in site
 busuanzi:
-  site_uv: true
-  site_pv: true
-  page_pv: true
+  site_uv: false
+  site_pv: false
+  page_pv: false
 
 # --------------------------------------
 # Math
@@ -630,6 +632,7 @@ giscus:
   category_id: DIC_kwDONYoexM4Ck4JQ
   light_theme: light
   dark_theme: dark
+  lang: zh-CN
   js:
   option:
 
@@ -793,7 +796,7 @@ preloader:
 enter_transitions: true
 
 # Default display mode - light (default) / dark
-display_mode: light
+display_mode: dark
 
 # Configuration for beautifying the content of the article
 beautify:
@@ -839,7 +842,7 @@ activate_power_mode:
 # canvas_ribbon
 # See: https://github.com/hustcc/ribbon.js
 canvas_ribbon:
-  enable: false
+  enable: true
   # The size of ribbon
   size: 150
   # The opacity of ribbon (0 ~ 1)
@@ -897,7 +900,7 @@ clickShowText:
 # https://github.com/francoischalifour/medium-zoom
 # https://fancyapps.com/fancybox/
 # Leave it empty if you don't need lightbox
-lightbox:
+lightbox: fancybox
 
 # --------------------------------------
 # Tag Plugins settings

@@ -3,6 +3,10 @@ title: 非关系型数据库Redis简介
 date: 2021-06-10
 categories: 
   - 数据库
+tags: 
+  - 数据库
+  - 后端开发
+  - 数据存储
 ---
 
 # 一.Redis简介

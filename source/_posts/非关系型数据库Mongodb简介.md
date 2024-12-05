@@ -3,6 +3,10 @@ title: 非关系型数据库Mongodb简介
 date: 2021-05-25
 categories: 
   - 数据库
+tags: 
+  - 数据库
+  - 后端开发
+  - 数据存储
 ---
 
 # 一.MongoDB简介
