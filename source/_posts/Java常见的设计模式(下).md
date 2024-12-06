@@ -2,6 +2,8 @@
 title: Java常见的设计模式(下)
 date: 2020-03-11
 categories: 
+  - 编程基础
+tags: 
   - 设计模式
 ---
 

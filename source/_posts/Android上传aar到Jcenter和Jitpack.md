@@ -3,6 +3,8 @@ title: Android上传aar到Jcenter和Jitpack
 date: 2017-08-01
 categories: 
   - Android开发
+tags:
+  - Gradle
 ---
 
 # 一.上传项目到Jcenter

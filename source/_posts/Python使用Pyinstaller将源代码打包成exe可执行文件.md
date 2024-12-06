@@ -2,7 +2,7 @@
 title: Python使用Pyinstaller将源代码打包成exe可执行文件
 date: 2020-11-06
 categories: 
-  - Python
+  - Python开发
 ---
 
 # Pyinstaller简介

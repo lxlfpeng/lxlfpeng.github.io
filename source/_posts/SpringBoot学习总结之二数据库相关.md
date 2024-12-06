@@ -2,6 +2,8 @@
 title: SpringBoot学习总结之二数据库相关
 date: 2021-04-25 
 categories: 
+  - Java后端开发
+tags:
   - SpringBoot
 ---
 

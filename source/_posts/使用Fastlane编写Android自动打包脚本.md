@@ -4,7 +4,7 @@ date: 2021-07-15
 categories: 
   - Android开发
 tags:
-  - 自动化
+  - Android自动化打包
 ---
 
 # 一.什么是Fastlane?

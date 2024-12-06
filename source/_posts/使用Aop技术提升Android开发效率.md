@@ -3,6 +3,9 @@ title: 使用Aop技术提升Android开发效率
 date: 2017-01-25
 categories: 
   - Android开发
+tags: 
+  - AOP
+  - 切面编程
 ---
 
 # 一.AOP概念

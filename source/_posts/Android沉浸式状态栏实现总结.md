@@ -3,23 +3,25 @@ title: Android沉浸式状态栏实现总结
 date: 2022-10-28
 categories: 
   - Android开发
+tags:
+  - Android状态栏
 ---
 
 
 # Android api 30+ 可用新的api实现沉浸式状态栏等方案
 状态栏字体颜色修改：
 //状态栏字体改为白色
-```
+```kotlin
 WindowCompat.getInsetsController(window,window.decorView).isAppearanceLightStatusBars = false
 ```
 //状态栏字体改为黑色
-```
+```kotlin
 WindowCompat.getInsetsController(window,window.decorView).isAppearanceLightStatusBars = true
 ```
 
 
 在API 11及其以上 Window Tranfer flag已经过时了，我们使用如下的方法
-```      
+```kotlin      
 window.statusBarColor = Color.TRANSPARENT
 window.navigationBarColor = Color.TRANSPARENT
 //内容扩展到状态栏

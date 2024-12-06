@@ -2,6 +2,8 @@
 title: Windows及Linux平台安装AMP(Apache+MySQL+PHP )
 date: 2016-12-31
 categories: 
+  - Windows系统
+tags:
   - PHP
 ---
 

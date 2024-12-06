@@ -5,7 +5,8 @@ categories:
   - 数据库
 tags: 
   - 数据库
-  - 后端开发
+  - MongoDB
+  - NoSQL
   - 数据存储
 ---
 

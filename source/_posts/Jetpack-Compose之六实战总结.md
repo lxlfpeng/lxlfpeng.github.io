@@ -1,10 +1,10 @@
 ---
-title: AndroidJetpack-Compose之六实战总结
+title: Jetpack-Compose之六实战总结
 date: 2022-06-11
 categories: 
-  - Android开发
+  - JetpackCompose
 tags:
-  - JetpackCompose  
+  - JetpackCompose   
 ---
 
 官方推荐将 Composable 函数写在顶级函数，方便以后复用。

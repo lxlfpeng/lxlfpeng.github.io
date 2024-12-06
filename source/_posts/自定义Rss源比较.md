@@ -3,6 +3,9 @@ title: 自定义Rss源比较
 date: 2022-09-01
 categories: 
   - RSS订阅
+tags:
+  - Huginn
+  - Rss
 ---
 
 # 万物皆可RSS

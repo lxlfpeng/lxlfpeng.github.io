@@ -5,8 +5,9 @@ categories:
   - 数据库
 tags: 
   - 数据库
-  - 后端开发
+  - Redis
   - 数据存储
+  - NoSQL
 ---
 
 # 一.Redis简介

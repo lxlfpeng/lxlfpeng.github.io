@@ -2,9 +2,9 @@
 title: Android反编译技术基础介绍
 date: 2017-09-02
 categories: 
-  - Android逆向工程
+  - Android开发
 tags:
-  - 逆向工程
+  - Android逆向工程
 ---
 
 # 一.APK简介

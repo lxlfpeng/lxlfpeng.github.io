@@ -1,8 +1,15 @@
 ---
 title: Win10及11安装Wsl2
 date: 2023-02-19
+index_img: /images/cc3fde25723873a32d2d9398535bd722.webp
+top_img: /images/cc3fde25723873a32d2d9398535bd722.webp
+cover: /images/cc3fde25723873a32d2d9398535bd722.webp
 categories: 
-  - Linux系统
+  - Windows系统
+tags:
+  - wsl
+  - ubuntu
+  - linux
 ---
 
 # 一.安装Wsl2
@@ -129,7 +136,7 @@ ubuntu2004 config --default-user USERNAME
 
 Gnome与xfce相比，xfce由于其轻巧，它可以安装在低端台式机上。Xfce优雅的外观，增强了用户体验，它对用户非常友好，性能优于其他桌面环境，它提供了许多可定制的接触点以供灵活使用。
 
-```
+```sh
 sudo apt update
 sudo apt install xfce4
 ```
@@ -138,10 +145,10 @@ sudo apt install xfce4
 
 Gnome与xfce相比，Gnome它具有简单但有效的用户界面。用户在屏幕上有更多动态的工作区域。它具有内置的恢复功能，可帮助用户保持工作的连续性非常适合初学者浏览所有功能并学习。它为开发着的应用程序的运行提供了一个完美的兼容平台。
 
-```
+```sh
 sudo apt update
 sudo apt install ubuntu-desktop
-或者
+#或者
 sudo apt install ubuntu-gnome-desktop
 ```
 
@@ -149,32 +156,32 @@ sudo apt install ubuntu-gnome-desktop
 
 ##### 安装Xrdp远程控制服务
 Xrdp 是一个微软远程桌面协议（RDP）的开源实现，它允许你通过图形界面控制远程系统。通过 RDP，你可以登录远程机器，并且创建一个真实的桌面会话，就像你登录本地机器一样。Xrdp包含在默认的Ubuntu存储库中。 要安装它，请运行：
-```
+```sh
 sudo apt install xrdp
 ```
 安装完成后，Xrdp 服务将会自动启动。你可以输入下面的命令，验证它是否再运行，有running代表服务成功运行。：
-```
+```sh
 sudo systemctl status xrdp
 ```
 如果您的电脑未安装systemctl命令则可以使用:
-```
+```sh
 sudo service xrdp status
 ```
 或者:
-```
+```sh
 sudo /etc/init.d/xrdp start
 ```
 xrdp默认使用的端口号是3389，如果要改用其他的端口号，则可以再/etc/xrdp/xrdp.ini配置文件中进行修改:
-```
+```sh
 sudo vim /etc/xrdp/xrdp.ini
 ```
 编辑xrdp.ini 把port从3389改成3390，然后重新启动xrdp:
-```
+```sh
 sudo systemctl restart xrdp
 ```
 
 或者使用命令的方式直接修改对应的端口号。
-```
+```sh
 sudo sed -i 's/3389/3390/g' /etc/xrdp/xrdp.ini
 ```
 
@@ -188,25 +195,25 @@ sudo sed -i 's/3389/3390/g' /etc/xrdp/xrdp.ini
 
 需要在该用户目录创建一个.xsession 不懂没关系，在SSH中输入：
 
-```
+```sh
 touch .xsession
 ```
 根据自己的电脑上的运行的桌面环境来确定执行哪个:
-```
+```sh
 # gnome桌面
 echo gnome-session > ~/.xsession
 ```
-```
+```sh
 # xfce桌面
 echo xfce4-session >~/.xsession
 ```
 然后把它放到用户目录下
 
-```
+```sh
 sudo chown username:username .xsession
 ```
 然后重新启动xrdp:
-```
+```sh
 sudo systemctl restart xrdp
 ```
 

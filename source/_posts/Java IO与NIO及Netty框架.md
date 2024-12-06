@@ -2,7 +2,7 @@
 title: Java IO与NIO及Netty框架
 date: 2017-11-19
 categories: 
-  - Java开发
+  - Java语言
 ---
 
 # 一.I/O模型

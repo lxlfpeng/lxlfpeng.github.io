@@ -2,7 +2,7 @@
 title: Java多线程模型及线程安全问题总结
 date: 2020-03-22
 categories: 
-  - 设计模式
+  - Java语言
 ---
 
 # 一.线程和进程

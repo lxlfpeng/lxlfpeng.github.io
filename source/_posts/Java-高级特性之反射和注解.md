@@ -2,7 +2,7 @@
 title: Java-高级特性之反射和注解
 date: 2016-09-11
 categories: 
-  - Java开发
+  - Java语言
 ---
 
 # 一.Java反射机制。

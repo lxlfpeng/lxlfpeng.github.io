@@ -2,7 +2,7 @@
 title: Kotlin依赖注入框架Koin的使用
 date: 2021-04-25
 categories: 
-  - Kotlin
+  - Kotlin语言
 ---
 
 # 一.引入Koin依赖

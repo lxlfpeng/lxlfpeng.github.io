@@ -3,6 +3,9 @@ title: 使用Python(PyRSS2Gen)制作RSS源
 date: 2022-08-22
 categories: 
   - RSS订阅
+tags:
+  - PyRSS2Gen
+  - Rss
 ---
 
 # 一.Rss订阅源的本质

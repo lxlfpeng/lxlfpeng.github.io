@@ -1,8 +1,10 @@
 ---
 title: 使用Shell脚本助力Linux系统自动化
-date: 2017-08-09
+date: 2020-08-09
 categories: 
   - Linux系统
+tags:
+  - Shell
 ---
 
 # 一.Shell和Shell脚本

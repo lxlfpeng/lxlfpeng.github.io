@@ -2,7 +2,9 @@
 title: UEFI与BIOS-有什么区别
 date: 2021-07-09
 categories: 
-  - 操作系统
+  - Windows系统
+tags:
+  - Bios
 ---
 
 # 一.BIOS

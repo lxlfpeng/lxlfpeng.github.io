@@ -3,6 +3,9 @@ title: Retrofit上传文件及下载文件
 date: 2016-07-18
 categories: 
   - Android开发
+tags:
+  - Retrofit
+  - Android文件下载  
 ---
 
 # 一.Retrofit文件上传

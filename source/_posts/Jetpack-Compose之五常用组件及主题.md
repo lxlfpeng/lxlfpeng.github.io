@@ -1,10 +1,10 @@
 ---
-title: AndroidJetpack-Compose之五常用组件及主题
+title: Jetpack-Compose之五常用组件及主题
 date: 2022-06-09
 categories: 
-  - Android开发
+  - JetpackCompose
 tags:
-  - JetpackCompose    
+  - JetpackCompose     
 ---
 
 # 使用Material design 设计主题Theme

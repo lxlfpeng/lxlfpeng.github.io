@@ -2,7 +2,7 @@
 title: Flutter与Android混编
 date: 2020-11-13
 categories: 
-  - Fluter开发
+  - Flutter开发
 ---
 
 # 一.Flutter工程模式

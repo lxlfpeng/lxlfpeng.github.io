@@ -1,8 +1,10 @@
 ---
-title: Dagger2全面使用总结
+title: Android依赖注入框架Dagger2全面使用总结
 date: 2017-02-17
 categories: 
   - Android开发
+tags: 
+  - 依赖注入
 ---
 
 # 一 依赖注入

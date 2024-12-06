@@ -3,6 +3,8 @@ title: Apk构建总结之二构建工具(Ant、Maven、Gradle)
 date: 2019-08-05
 categories: 
   - Android开发
+tags:
+  - Gradle
 ---
 
 # 一. 构建工具

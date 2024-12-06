@@ -3,6 +3,9 @@ title: 使用Huginn打造自动化信息处理中心
 date: 2022-08-28
 categories: 
   - RSS订阅
+tags:
+  - Huginn
+  - Rss
 ---
 
 # 一.Huginn简介

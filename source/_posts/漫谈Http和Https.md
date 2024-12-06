@@ -1,10 +1,11 @@
 ---
 title: 漫谈Http和Https
+index_img: /images/a58a9e4c7f56b6574ef299b35d84a74e.webp
+top_img: /images/a58a9e4c7f56b6574ef299b35d84a74e.webp
+cover: /images/a58a9e4c7f56b6574ef299b35d84a74e.webp
 date: 2017-08-2
 categories: 
   - 网络基础
-tags:
-  - 网络
 ---
 
 # 一.Http

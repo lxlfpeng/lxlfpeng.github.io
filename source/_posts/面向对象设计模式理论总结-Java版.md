@@ -2,6 +2,8 @@
 title: 面向对象设计模式理论总结-Java版
 date: 2017-05-19
 categories: 
+  - 编程基础
+tags: 
   - 设计模式
 ---
 

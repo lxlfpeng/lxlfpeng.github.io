@@ -2,7 +2,7 @@
 title: Python图像处理库Pillow(PIL)的简单使用
 date: 2020-11-16
 categories: 
-  - Python
+  - Python开发
 ---
 
 # 一.PIL和Pillow图像处理库

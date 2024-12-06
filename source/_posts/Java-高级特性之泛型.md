@@ -2,7 +2,7 @@
 title: Java-高级特性之泛型
 date: 2016-11-12
 categories: 
-  - Java开发
+  - Java语言
 ---
 
 # 一. Java 中的泛型

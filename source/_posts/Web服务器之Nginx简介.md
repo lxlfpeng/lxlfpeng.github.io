@@ -2,7 +2,9 @@
 title: Web服务器之Nginx简介
 date: 2021-02-18
 categories: 
-  - Nginx服务器
+  - 服务器
+tags:
+  - Nginx
 ---
 
 # 一.Nginx简介

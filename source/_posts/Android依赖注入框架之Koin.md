@@ -1,8 +1,10 @@
 ---
-title: Android kotlin之koin
+title: Android依赖注入框架之Koin
 date: 2020-10-12
 categories: 
   - Android开发
+tags:
+  - 依赖注入
 ---
 
 # 一.依赖引入

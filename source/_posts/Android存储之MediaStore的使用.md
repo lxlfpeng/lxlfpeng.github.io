@@ -3,6 +3,9 @@ title: Android存储之MediaStore的使用
 date: 2021-10-19
 categories: 
   - Android开发
+tags:
+  - Android存储
+  - Android分区存储
 ---
 
 ### Android系统内容提供者ContentProvider

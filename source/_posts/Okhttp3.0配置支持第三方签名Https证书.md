@@ -3,6 +3,9 @@ title: Okhttp3.0配置支持第三方签名Https证书
 date: 2017-06-11
 categories: 
   - Android开发
+tags:
+  - Okhttp
+  - Https  
 ---
 
 # 一.Https简介

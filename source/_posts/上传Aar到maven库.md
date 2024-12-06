@@ -3,6 +3,8 @@ title: 上传Aar到maven库
 date: 2022-09-10
 categories: 
   - Android开发
+tags:
+  - Gradle
 ---
 
 # 方式一:
