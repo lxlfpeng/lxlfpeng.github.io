@@ -34,5 +34,6 @@ def download_and_convert_image(image_url, save_dir="source/images"):
 
 # 示例：下载并转换图片
 if __name__ == "__main__":
-    image_url = "https://img1.baidu.com/it/u=693645169,1871738766&fm=253&fmt=auto&app=138&f=JPEG?w=807&h=500"  # 替换为实际的图片 URL
+    image_url = "https://datascientest.com/en/files/2023/11/mysql.webp"  # 替换为实际的图片 URL
+    #image_url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSK3XzeNSfofI2fbLJ87dFpGBOSmygV1F_LgQ&s"  # 替换为实际的图片 URL
     download_and_convert_image(image_url)

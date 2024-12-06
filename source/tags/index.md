@@ -5,4 +5,5 @@ type: 'tags'
 orderby: random
 order: 1
 comments: false
+top_img: /images/tag_img.webp
 ---

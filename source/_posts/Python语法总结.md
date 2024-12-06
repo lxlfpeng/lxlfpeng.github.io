@@ -1,6 +1,10 @@
 ---
 title: Python语法总结
-date: 2016-12-22 
+date: 2016-12-22
+index_img: /images/b84e6e02bfdc6e8abdd155bfb6a23c61.webp
+top_img: /images/b84e6e02bfdc6e8abdd155bfb6a23c61.webp
+cover: /images/b84e6e02bfdc6e8abdd155bfb6a23c61.webp 
+sticky: 5
 categories: 
   - Python开发
 ---

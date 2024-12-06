@@ -1,6 +1,10 @@
 ---
 title: Ubuntu相关问题及处理
 date: 2021-08-13
+index_img: /images/fb37ca12540fb58a6073b431b513a309.webp
+top_img: /images/fb37ca12540fb58a6073b431b513a309.webp
+cover: /images/fb37ca12540fb58a6073b431b513a309.webp
+sticky: 5
 categories: 
   - Linux系统
 ---

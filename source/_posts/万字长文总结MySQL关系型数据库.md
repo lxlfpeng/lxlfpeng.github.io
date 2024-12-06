@@ -1,6 +1,10 @@
 ---
 title: 万字长文总结MySQL关系型数据库
 date: 2020-01-12
+sticky: true
+index_img: /images/6d9745d8ee86584dd4929e520fb298d8.webp
+top_img: /images/6d9745d8ee86584dd4929e520fb298d8.webp
+cover: /images/6d9745d8ee86584dd4929e520fb298d8.webp
 categories: 
   - 数据库
 tags: 

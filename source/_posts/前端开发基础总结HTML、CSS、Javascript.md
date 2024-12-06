@@ -1,6 +1,9 @@
 ---
 title: 前端开发基础总结HTML、CSS、Javascript
 date: 2019-03-18
+index_img: /images/2e7bc322990bbb0cf755e515faa9cb11.webp
+top_img: /images/2e7bc322990bbb0cf755e515faa9cb11.webp
+cover: /images/2e7bc322990bbb0cf755e515faa9cb11.webp
 categories: 
   - Web前端开发
 tags:

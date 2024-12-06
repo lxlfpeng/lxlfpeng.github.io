@@ -1,6 +1,10 @@
 ---
 title: AndroidStudio使用技巧
 date: 2020-11-02
+index_img: /images/87f42f55c8644e1103e4c56020007b5e.webp
+top_img: /images/87f42f55c8644e1103e4c56020007b5e.webp
+cover: /images/87f42f55c8644e1103e4c56020007b5e.webp
+sticky: 2
 categories: 
   - Android开发
 ---

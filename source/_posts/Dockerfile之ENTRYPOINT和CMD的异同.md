@@ -1,5 +1,8 @@
 ---
 title: Dockerfile之ENTRYPOINT和CMD的异同
+index_img: /images/075436a543601219ed7b207a2164f00d.webp
+top_img: /images/075436a543601219ed7b207a2164f00d.webp
+cover: /images/075436a543601219ed7b207a2164f00d.webp 
 date: 2020-02-18
 categories: 
   - Docker容器

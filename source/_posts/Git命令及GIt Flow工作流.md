@@ -1,6 +1,7 @@
 ---
 title: Git命令及GIt Flow工作流
 date: 2015-10-31
+sticky: true
 categories: 
   - Git
 ---

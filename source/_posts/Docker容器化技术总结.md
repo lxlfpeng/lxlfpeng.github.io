@@ -1,6 +1,10 @@
 ---
 title: Docker容器化技术总结
-date: 2021-01-05 
+date: 2021-01-05
+index_img: /images/075436a543601219ed7b207a2164f00d.webp
+top_img: /images/075436a543601219ed7b207a2164f00d.webp
+cover: /images/075436a543601219ed7b207a2164f00d.webp 
+sticky: 6
 categories: 
   - Docker容器
 ---

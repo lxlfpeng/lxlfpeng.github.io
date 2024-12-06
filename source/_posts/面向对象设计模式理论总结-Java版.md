@@ -1,6 +1,10 @@
 ---
 title: 面向对象设计模式理论总结-Java版
+index_img: /images/311e68177cc2ec89577840663136ab3e.webp
+top_img: /images/311e68177cc2ec89577840663136ab3e.webp
+cover: /images/311e68177cc2ec89577840663136ab3e.webp
 date: 2017-05-19
+sticky: 3
 categories: 
   - 编程基础
 tags: 

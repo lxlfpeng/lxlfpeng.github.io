@@ -1,6 +1,7 @@
 ---
 title: Linux系统基础总结
 date: 2019-07-04 
+sticky: true
 categories: 
   - Linux系统
 ---

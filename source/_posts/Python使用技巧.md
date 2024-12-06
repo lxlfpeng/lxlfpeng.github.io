@@ -1,6 +1,7 @@
 ---
 title: Python使用技巧
 date: 2018-08-11
+sticky: true
 categories: 
   - Python开发
 ---
