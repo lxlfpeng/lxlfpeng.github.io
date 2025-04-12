@@ -1,0 +1,729 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Android工程编码规范 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一. AndroidStudio开发工具规范 使用最新的稳定版本. 统一文件的编码格式为utf-8. 清除每个类里面的无效的import导包. 代码样式统一,比如，tab缩进4个空格，或者 tab size等如果没有特殊情况使用默认的配置即可。 每行字数每行字符数不得超过 160 字符，设置 Editor -&gt; Code Style. 编辑完 .java、.kt、.xml 等文件后必须格式化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android工程编码规范">
+<meta property="og:url" content="https://lxlfpeng.github.io/2022/01/25/Android%E5%B7%A5%E7%A8%8B%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一. AndroidStudio开发工具规范 使用最新的稳定版本. 统一文件的编码格式为utf-8. 清除每个类里面的无效的import导包. 代码样式统一,比如，tab缩进4个空格，或者 tab size等如果没有特殊情况使用默认的配置即可。 每行字数每行字符数不得超过 160 字符，设置 Editor -&gt; Code Style. 编辑完 .java、.kt、.xml 等文件后必须格式化">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2022-01-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.828Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2022/01/25/Android%E5%B7%A5%E7%A8%8B%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Android工程编码规范',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Android工程编码规范</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Android工程编码规范</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2022-01-24T16:00:00.000Z" title="发表于 2022-01-25 00:00:00">2022-01-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-AndroidStudio开发工具规范"><a href="#一-AndroidStudio开发工具规范" class="headerlink" title="一. AndroidStudio开发工具规范"></a>一. AndroidStudio开发工具规范</h1><ol>
+<li>使用最新的稳定版本.</li>
+<li>统一文件的编码格式为utf-8.<br><img src="/images/0f96a62ef7972365a0f44923dec209c6.webp"></li>
+<li>清除每个类里面的无效的import导包.</li>
+<li>代码样式统一,比如，tab缩进4个空格，或者 tab size等如果没有特殊情况使用默认的配置即可。</li>
+<li>每行字数每行字符数不得超过 160 字符，设置 Editor -&gt; Code Style.<br><img src="/images/1b2eea0aa33e36e90c2cb4a886da568c.webp"></li>
+<li>编辑完 .java、.kt、.xml 等文件后必须格式化.</li>
+</ol>
+<h1 id="二-命名规范"><a href="#二-命名规范" class="headerlink" title="二. 命名规范"></a>二. 命名规范</h1><h2 id="1-包名"><a href="#1-包名" class="headerlink" title="1. 包名"></a>1. 包名</h2><p>包名全部小写，不允许出现中文、大写字母或者下划线。</p>
+<h2 id="2-类名"><a href="#2-类名" class="headerlink" title="2. 类名"></a>2. 类名</h2><p>类名采用大驼峰命名法，用名词或名词词组命名，每个单词的首字母大写。尽量避免缩写，除非该缩写是众所周知的， 比如 HTML、URL，如果类名称中包含单词缩写，则单词缩写的每个字母均应大写。</p>
+<table>
+<thead>
+<tr>
+<th>类</th>
+<th>描述</th>
+<th>例如</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Activity</code>类</td>
+<td>模块名 +<code>Activity</code></td>
+<td>闪屏页类<code>SplashActivity</code></td>
+</tr>
+<tr>
+<td><code>Fragment</code>类</td>
+<td>模块名 +<code>Fragment</code></td>
+<td>主页类<code>HomeFragment</code></td>
+</tr>
+<tr>
+<td><code>Service</code>类</td>
+<td>模块名 +<code>Service</code></td>
+<td>时间服务<code>TimeService</code></td>
+</tr>
+<tr>
+<td><code>BroadcastReceiver</code>类</td>
+<td>功能名 +<code>Receiver</code></td>
+<td>推送接收<code>JPushReceiver</code></td>
+</tr>
+<tr>
+<td><code>ContentProvider</code>类</td>
+<td>功能名 +<code>Provider</code></td>
+<td><code>ShareProvider</code></td>
+</tr>
+<tr>
+<td>自定义 View</td>
+<td>功能名 + View&#x2F;ViewGroup(组件名称)</td>
+<td><code>ShapeButton</code></td>
+</tr>
+<tr>
+<td>Dialog对话框</td>
+<td>功能名+Dialog</td>
+<td><code>ImagePickerDialog</code></td>
+</tr>
+<tr>
+<td><code>Adapter</code>类</td>
+<td>模块名 +<code>Adapter</code></td>
+<td>课程详情适配器<code>LessonDetailAdapter</code></td>
+</tr>
+<tr>
+<td>解析类</td>
+<td>功能名 +<code>Parser</code></td>
+<td>首页解析类<code>HomePosterParser</code></td>
+</tr>
+<tr>
+<td>工具方法类</td>
+<td>功能名 +<code>Utils</code>或<code>Manager</code></td>
+<td>线程池管理类：<code>ThreadPoolManager</code></td>
+</tr>
+<tr>
+<td>日志工具类：<code>LogUtils</code>（<code>Logger</code>也可）</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>打印工具类：<code>PrinterUtils</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>数据库类</td>
+<td>功能名 +<code>DBHelper</code></td>
+<td>新闻数据库：<code>NewsDBHelper</code></td>
+</tr>
+<tr>
+<td>自定义的共享基础类</td>
+<td><code>Base</code>+ 基础</td>
+<td><code>BaseActivity</code>,<code>BaseFragment</code></td>
+</tr>
+<tr>
+<td>抽象类</td>
+<td><code>Base</code>&#x2F;<code>Abstract</code>开头</td>
+<td><code>AbstractLogin</code></td>
+</tr>
+<tr>
+<td>异常类</td>
+<td><code>Exception</code>结尾</td>
+<td><code>LoginException</code></td>
+</tr>
+</tbody></table>
+<p>接口（interface）：命名规则与类一样采用大驼峰命名法。</p>
+<h2 id="3-方法名"><a href="#3-方法名" class="headerlink" title="3. 方法名"></a>3. 方法名</h2><p>方法名都以 <code>lowerCamelCase</code> 风格编写。方法名通常是动词或动词短语。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>initXX()</code></td>
+<td>初始化相关方法，使用 init 为前缀标识，如初始化布局<code>initView()</code></td>
+</tr>
+<tr>
+<td><code>isXX()</code>,<code>checkXX()</code></td>
+<td>方法返回值为 boolean 型的请使用 is&#x2F;check 为前缀标识</td>
+</tr>
+<tr>
+<td><code>getXX()</code></td>
+<td>返回某个值的方法，使用 get 为前缀标识</td>
+</tr>
+<tr>
+<td><code>setXX()</code></td>
+<td>设置某个属性值</td>
+</tr>
+<tr>
+<td><code>handleXX()</code>,<code>processXX()</code></td>
+<td>对数据进行处理的方法</td>
+</tr>
+<tr>
+<td><code>displayXX()</code>,<code>showXX()</code></td>
+<td>弹出提示框和提示信息，使用 display&#x2F;show 为前缀标识</td>
+</tr>
+<tr>
+<td><code>updateXX()</code></td>
+<td>更新数据</td>
+</tr>
+<tr>
+<td><code>saveXX()</code>,<code>insertXX()</code></td>
+<td>保存或插入数据</td>
+</tr>
+<tr>
+<td><code>resetXX()</code></td>
+<td>重置数据</td>
+</tr>
+<tr>
+<td><code>clearXX()</code></td>
+<td>清除数据</td>
+</tr>
+<tr>
+<td><code>removeXX()</code>,<code>deleteXX()</code></td>
+<td>移除数据或者视图等，如<code>removeView()</code></td>
+</tr>
+<tr>
+<td><code>drawXX()</code></td>
+<td>绘制数据或效果相关的，使用 draw 前缀标识</td>
+</tr>
+</tbody></table>
+<h2 id="4-变量命名"><a href="#4-变量命名" class="headerlink" title="4. 变量命名"></a>4. 变量命名</h2><p>这里的变量为广义的变量，包括了常量、局部变量、全局变量等，它们的基础规则是：</p>
+<ul>
+<li>类型需要是名词 &#x2F; 名词短语；</li>
+<li>采用 <code>lowerCamelCase</code> 风格；</li>
+</ul>
+<p>在具体的变量命名时，会根据该变量的类型不同而附加额外的命名规则：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+<th>例如</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>常量</td>
+<td>大写 &amp; 下划线隔开，Kotlin 一定要 const val</td>
+<td><code>const val TYPE_NORMAL = 1</code> <code>static final TYPE_NORMAL = 1</code></td>
+</tr>
+<tr>
+<td>临时变量名</td>
+<td>整型：<code>i</code>、<code>j</code>、<code>k</code>、<code>m</code>、<code>n</code>，字符型一般用<code>c</code>、<code>d</code>、<code>e</code></td>
+<td><code>for(int i = 0;i &lt; len; i++)</code></td>
+</tr>
+<tr>
+<td>其他变量</td>
+<td><code>lowerCamelCase</code>风格即可，私有变量也不要使用<code>m</code>开头</td>
+<td><code>private int tmp;</code></td>
+</tr>
+<tr>
+<td>Kotlin</td>
+<td>只读变量使用<code>val</code>，可变变量使用<code>var</code>，尽可能使用<code>val</code></td>
+<td><code>var tmp = 0</code> <code>val defaultIndex = 0</code></td>
+</tr>
+</tbody></table>
+<h2 id="5-资源文件"><a href="#5-资源文件" class="headerlink" title="5. 资源文件"></a>5. 资源文件</h2><p>资源文件命名为全部小写，采用下划线命名法。</p>
+<h3 id="动画资源文件（anim-和-animator-）"><a href="#动画资源文件（anim-和-animator-）" class="headerlink" title="动画资源文件（anim&#x2F; 和 animator&#x2F;）"></a>动画资源文件（anim&#x2F; 和 animator&#x2F;）</h3><p>安卓主要包含属性动画和视图动画，其视图动画包括补间动画和逐帧动画。属性动画文件需要放在 <code>res/animator/</code> 目录下，视图动画文件需放在 <code>res/anim/</code> 目录下。命名规则：<code>&#123;模块名_&#125;逻辑名称</code>。</p>
+<blockquote>
+<p>说明：<code>&#123;&#125;</code> 中的内容为可选，<code>逻辑名称</code> 可由多个单词加下划线组成。例如：<code>refresh_progress.xml</code>、<code>market_cart_add.xml</code>、<code>market_cart_remove.xml</code>。</p>
+</blockquote>
+<p>如果是普通的补间动画或者属性动画，可采用：<code>动画类型_方向</code> 的命名方式。</p>
+<p>例如：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>fade_in</code></td>
+<td>淡入</td>
+</tr>
+<tr>
+<td><code>fade_out</code></td>
+<td>淡出</td>
+</tr>
+<tr>
+<td><code>push_down_in</code></td>
+<td>从下方推入</td>
+</tr>
+<tr>
+<td><code>push_down_out</code></td>
+<td>从下方推出</td>
+</tr>
+<tr>
+<td><code>push_left</code></td>
+<td>推向左方</td>
+</tr>
+<tr>
+<td><code>slide_in_from_top</code></td>
+<td>从头部滑动进入</td>
+</tr>
+<tr>
+<td><code>zoom_enter</code></td>
+<td>变形进入</td>
+</tr>
+<tr>
+<td><code>slide_in</code></td>
+<td>滑动进入</td>
+</tr>
+<tr>
+<td><code>shrink_to_middle</code></td>
+<td>中间缩小</td>
+</tr>
+</tbody></table>
+<h3 id="图片资源文件（drawable-和-mipmap-）"><a href="#图片资源文件（drawable-和-mipmap-）" class="headerlink" title="图片资源文件（drawable&#x2F; 和 mipmap&#x2F;）"></a>图片资源文件（drawable&#x2F; 和 mipmap&#x2F;）</h3><p><code>res/drawable/</code> 目录下放的是位图文件（.png、.9.png、.jpg、.gif）或编译为可绘制对象资源子类型的 XML 文件，而 <code>res/mipmap/</code> 目录下放的是不同密度的启动图标，所以 <code>res/mipmap/</code> 只用于存放启动图标，其余图片资源文件都应该放到 <code>res/drawable/</code> 目录下。</p>
+<p>命名规则：<code>类型&#123;_模块名&#125;_逻辑名称</code>、<code>类型&#123;_模块名&#125;_颜色</code>。</p>
+<blockquote>
+<p>说明：<code>&#123;&#125;</code> 中的内容为可选；<code>类型</code> 可以是可绘制对象资源类型，也可以是控件类型最后可加后缀 <code>_small</code> 表示小图，<code>_big</code> 表示大图。</p>
+</blockquote>
+<p>例如：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>btn_main_about.png</code></td>
+<td>主页关于按键<code>类型_模块名_逻辑名称</code></td>
+</tr>
+<tr>
+<td><code>btn_back.png</code></td>
+<td>返回按键<code>类型_逻辑名称</code></td>
+</tr>
+<tr>
+<td><code>divider_maket_white.png</code></td>
+<td>商城白色分割线<code>类型_模块名_颜色</code></td>
+</tr>
+<tr>
+<td><code>ic_edit.png</code></td>
+<td>编辑图标<code>类型_逻辑名称</code></td>
+</tr>
+<tr>
+<td><code>bg_main.png</code></td>
+<td>主页背景<code>类型_逻辑名称</code></td>
+</tr>
+<tr>
+<td><code>btn_red.png</code></td>
+<td>红色按键<code>类型_颜色</code></td>
+</tr>
+<tr>
+<td><code>btn_red_big.png</code></td>
+<td>红色大按键<code>类型_颜色</code></td>
+</tr>
+<tr>
+<td><code>ic_avatar_small.png</code></td>
+<td>小头像图标<code>类型_逻辑名称</code></td>
+</tr>
+<tr>
+<td><code>bg_input.png</code></td>
+<td>输入框背景<code>类型_逻辑名称</code></td>
+</tr>
+<tr>
+<td><code>divider_white.png</code></td>
+<td>白色分割线<code>类型_颜色</code></td>
+</tr>
+<tr>
+<td><code>bg_main_head.png</code></td>
+<td>主页头部背景<code>类型_模块名_逻辑名称</code></td>
+</tr>
+<tr>
+<td><code>def_search_cell.png</code></td>
+<td>搜索页面默认单元图片<code>类型_模块名_逻辑名称</code></td>
+</tr>
+<tr>
+<td><code>ic_more_help.png</code></td>
+<td>更多帮助图标<code>类型_逻辑名称</code></td>
+</tr>
+<tr>
+<td><code>divider_list_line.png</code></td>
+<td>列表分割线<code>类型_逻辑名称</code></td>
+</tr>
+<tr>
+<td><code>sel_search_ok.xml</code></td>
+<td>搜索界面确认选择器<code>类型_模块名_逻辑名称</code></td>
+</tr>
+<tr>
+<td><code>shape_music_ring.xml</code></td>
+<td>音乐界面环形形状<code>类型_模块名_逻辑名称</code></td>
+</tr>
+</tbody></table>
+<p>如果有多种形态，如按钮选择器：<code>sel_btn_xx.xml</code>，采用如下命名：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>sel_btn_xx</code></td>
+<td>作用在<code>btn_xx</code>上的<code>selector</code></td>
+</tr>
+<tr>
+<td><code>btn_xx_normal</code></td>
+<td>默认状态效果</td>
+</tr>
+<tr>
+<td><code>btn_xx_pressed</code></td>
+<td><code>state_pressed</code>点击效果</td>
+</tr>
+<tr>
+<td><code>btn_xx_focused</code></td>
+<td><code>state_focused</code>聚焦效果</td>
+</tr>
+<tr>
+<td><code>btn_xx_disabled</code></td>
+<td><code>state_enabled</code>不可用效果</td>
+</tr>
+<tr>
+<td><code>btn_xx_checked</code></td>
+<td><code>state_checked</code>选中效果</td>
+</tr>
+<tr>
+<td><code>btn_xx_selected</code></td>
+<td><code>state_selected</code>选中效果</td>
+</tr>
+<tr>
+<td><code>btn_xx_hovered</code></td>
+<td><code>state_hovered</code>悬停效果</td>
+</tr>
+<tr>
+<td><code>btn_xx_checkable</code></td>
+<td><code>state_checkable</code>可选效果</td>
+</tr>
+<tr>
+<td><code>btn_xx_activated</code></td>
+<td><code>state_activated</code>激活效果</td>
+</tr>
+<tr>
+<td><code>btn_xx_window_focused</code></td>
+<td><code>state_window_focused</code>窗口聚焦效果</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>注意：使用 Android Studio 的插件 SelectorChapek 可以快速生成 selector，前提是命名要规范。</p>
+</blockquote>
+<h3 id="布局资源文件（layout-）"><a href="#布局资源文件（layout-）" class="headerlink" title="布局资源文件（layout&#x2F;）"></a>布局资源文件（layout&#x2F;）</h3><p>命名规则：<code>类型_模块名</code>、<code>&#123;模块名_&#125;类型_逻辑名称</code>。(也采用 PBF，方便查看，尤其在大项目中)</p>
+<blockquote>
+<p>说明：<code>&#123;&#125;</code> 中的内容为可选。</p>
+</blockquote>
+<p>例如：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Activity</code></td>
+<td><code>main_activity.xml</code></td>
+<td>主窗体<code>模块名_类型</code></td>
+</tr>
+<tr>
+<td><code>Fragment</code></td>
+<td><code>music_fragment.xml</code></td>
+<td>音乐片段<code>模块名_类型</code></td>
+</tr>
+<tr>
+<td><code>Dialog</code></td>
+<td><code>loading_dialog.xml</code></td>
+<td>加载对话框<code>逻辑名称_类型</code></td>
+</tr>
+<tr>
+<td><code>PopupWindow</code></td>
+<td><code>info_ppw.xml</code></td>
+<td>信息弹窗（PopupWindow）<code>逻辑名称_类型</code></td>
+</tr>
+<tr>
+<td><code>adapter</code>的列表项</td>
+<td><code>main_song_item.xml</code></td>
+<td>主页歌曲列表项<code>模块名_类型_逻辑名称</code></td>
+</tr>
+</tbody></table>
+<h3 id="布局资源-id-命名"><a href="#布局资源-id-命名" class="headerlink" title="布局资源 id 命名"></a>布局资源 id 命名</h3><p>命名规则：view 缩写{_模块名}_逻辑名，例如： btn_main_search、btn_back。<br><strong>注意:使用databinding,viewbinding 直接获取布局文件控件的时候，id 命名采用驼峰样式。</strong></p>
+<h3 id="菜单资源文件（menu-）"><a href="#菜单资源文件（menu-）" class="headerlink" title="菜单资源文件（menu&#x2F;）"></a>菜单资源文件（menu&#x2F;）</h3><p>菜单相关的资源文件应放在该目录下。命名规则：<code>&#123;模块名_&#125;逻辑名称</code></p>
+<blockquote>
+<p>说明：<code>&#123;&#125;</code> 中的内容为可选。</p>
+</blockquote>
+<h3 id="字符串资源文件strings"><a href="#字符串资源文件strings" class="headerlink" title="字符串资源文件strings"></a>字符串资源文件strings</h3><p><code>&lt;string&gt;</code> 的 <code>name</code> 命名使用下划线命名法，采用以下规则：<code>&#123;模块名_&#125;逻辑名称</code>，这样方便同一个界面的所有 <code>string</code> 都放到一起，方便查找。</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>main_menu_about</code></td>
+<td>主菜单按键文字</td>
+</tr>
+<tr>
+<td><code>friend_title</code></td>
+<td>好友模块标题栏</td>
+</tr>
+<tr>
+<td><code>friend_dialog_del</code></td>
+<td>好友删除提示</td>
+</tr>
+<tr>
+<td><code>login_check_email</code></td>
+<td>登录验证</td>
+</tr>
+<tr>
+<td><code>dialog_title</code></td>
+<td>弹出框标题</td>
+</tr>
+<tr>
+<td><code>button_ok</code></td>
+<td>确认键</td>
+</tr>
+<tr>
+<td><code>loading</code></td>
+<td>加载文字</td>
+</tr>
+</tbody></table>
+<h3 id="样式资源文件tyles"><a href="#样式资源文件tyles" class="headerlink" title="样式资源文件tyles"></a>样式资源文件tyles</h3><p><code>&lt;style&gt;</code> 的 <code>name</code> 命名使用大驼峰命名法，几乎每个项目都需要适当的使用 <code>styles.xml</code> 文件，因为对于一个视图来说，有一个重复的外观是很常见的，将所有的外观细节属性（<code>colors</code>、<code>padding</code>、<code>font</code>）放在 <code>styles.xml</code> 文件中。在应用中对于大多数文本内容，最起码你应该有一个通用的 <code>styles.xml</code> 文件，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;style name=&quot;ContentText&quot;&gt;</span><br><span class="line">    &lt;item name=&quot;android:textSize&quot;&gt;@dimen/font_normal&lt;/item&gt;</span><br><span class="line">    &lt;item name=&quot;android:textColor&quot;&gt;@color/basic_black&lt;/item&gt;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+<p>应用到 TextView 中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;TextView</span><br><span class="line">    android:layout_width=&quot;wrap_content&quot;</span><br><span class="line">    android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">    android:text=&quot;@string/price&quot;</span><br><span class="line">    style=&quot;@style/ContentText&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<p>或许你需要为按钮控件做同样的事情，将一组相关的和重复 android:xxxx 的属性放到一个通用的 <style> 中。</p>
+<h3 id="颜色资源文件（color-）"><a href="#颜色资源文件（color-）" class="headerlink" title="颜色资源文件（color&#x2F;）"></a>颜色资源文件（color&#x2F;）</h3><p>color&#x2F; 是专门用于存放颜色相关资源的文件夹。命名规则：<code>类型&#123;_模块名&#125;_逻辑名称</code>。</p>
+<blockquote>
+<p>说明：<code>&#123;&#125;</code> 中的内容为可选。例如：<code>sel_btn_font.xml</code>。</p>
+</blockquote>
+<p><code>&lt;color&gt;</code> 的 <code>name</code> 命名使用下划线命名法，在你的 <code>colors.xml</code> 文件中应该只是映射颜色的名称一个 ARGB 值，而没有其它的。不要使用它为不同的按钮来定义 ARGB 值。</p>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<pre><code>  &lt;!-- grayscale --&gt;
+  &lt;color name=&quot;white&quot;     &gt;#FFFFFF&lt;/color&gt;
+  &lt;color name=&quot;gray_light&quot;&gt;#DBDBDB&lt;/color&gt;
+  &lt;color name=&quot;gray&quot;      &gt;#939393&lt;/color&gt;
+  &lt;color name=&quot;gray_dark&quot; &gt;#5F5F5F&lt;/color&gt;
+  &lt;color name=&quot;black&quot;     &gt;#323232&lt;/color&gt;
+
+  &lt;!-- basic colors --&gt;
+  &lt;color name=&quot;green&quot;&gt;#27D34D&lt;/color&gt;
+  &lt;color name=&quot;blue&quot;&gt;#2A91BD&lt;/color&gt;
+  &lt;color name=&quot;orange&quot;&gt;#FF9D2F&lt;/color&gt;
+  &lt;color name=&quot;red&quot;&gt;#FF432F&lt;/color&gt;
+</code></pre>
+</resources>
+
+<p>向应用设计者那里要这个调色板，名称不需要跟 <code>&quot;green&quot;</code>、<code>&quot;blue&quot;</code> 等等相同。<code>&quot;brand_primary&quot;</code>、<code>&quot;brand_secondary&quot;</code>、<code>&quot;brand_negative&quot;</code> 这样的名字也是完全可以接受的。像这样规范的颜色很容易修改或重构，会使应用一共使用了多少种不同的颜色变得非常清晰。通常一个具有审美价值的 UI 来说，减少使用颜色的种类是非常重要的。</p>
+<p><strong>注意：如果某些颜色和主题有关，那就单独写一个 <code>colors_theme.xml</code>。</strong></p>
+<h1 id="注释规范"><a href="#注释规范" class="headerlink" title="注释规范"></a>注释规范</h1><h2 id="4-1-类注释"><a href="#4-1-类注释" class="headerlink" title="4.1 类注释"></a>4.1 类注释</h2><p>每个类完成后应该有作者姓名和联系方式的注释，对自己的代码负责。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @Author ：xxx</span><br><span class="line"> * @Date   ：xxxx/xx/xx</span><br><span class="line"> * @Email  ：xxxxxx@xxx.com</span><br><span class="line"> * @Desc   ：欢迎界面</span><br><span class="line"> */</span><br><span class="line">public class WelcomeActivity &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>具体可以在 AS 中自己配制，进入 Settings -&gt; Editor -&gt; File and Code Templates -&gt; Includes -&gt; File Header，输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @Author : $&#123;USER&#125;</span><br><span class="line"> * @Date   : $&#123;YEAR&#125;/$&#123;MONTH&#125;/$&#123;DAY&#125;</span><br><span class="line"> * @Email  : xxx@xx</span><br><span class="line"> * @Desc   :</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+<p>这样便可在每次新建类的时候自动加上该头注释。</p>
+<h2 id="4-2-方法注释"><a href="#4-2-方法注释" class="headerlink" title="4.2 方法注释"></a>4.2 方法注释</h2><p>每一个成员方法（包括自定义成员方法、覆盖方法、属性方法）的方法头都必须做方法头注释，在方法前一行输入 <code>/** + 回车</code> 或者设置 <code>Fix doc comment</code>（Settings -&gt; Keymap -&gt; Fix doc comment）快捷键，AS 便会帮你生成模板，我们只需要补全参数即可。</p>
+<h2 id="4-3-块注释"><a href="#4-3-块注释" class="headerlink" title="4.3 块注释"></a>4.3 块注释</h2><p>块注释与其周围的代码在同一缩进级别。它们可以是 <code>/* ... */</code> 风格，也可以是 <code>// ...</code> 风格（ <strong><code>//</code> 后最好带一个空格</strong> ）。对于多行的 <code>/* ... */</code> 注释，后续行必须从 <code>*</code> 开始， 并且与前一行的 <code>*</code> 对齐。</p>
+<h2 id="4-4-全局变量的注释"><a href="#4-4-全局变量的注释" class="headerlink" title="4.4 全局变量的注释"></a>4.4 全局变量的注释</h2><p>全局变量的注释样式如下（注意注释之间有空格）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * The next available accessibility id.</span><br><span class="line"> */</span><br><span class="line">private static int nextAccessibilityViewId;</span><br><span class="line">/**</span><br><span class="line"> * The animation currently associated with this view.</span><br><span class="line"> */</span><br><span class="line">protected Animation currentAnimation = null;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-5-其他一些注释"><a href="#4-5-其他一些注释" class="headerlink" title="4.5 其他一些注释"></a>4.5 其他一些注释</h2><p>AS 已帮你集成了一些注释模板，我们只需要直接使用即可，在代码中输入 <code>TODO</code>、<code>FIXME</code> 等这些注释模板，回车后便会出现如下注释。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// TODO: 17/3/14 需要实现，但目前还未实现的功能的说明</span><br><span class="line">// FIXME: 17/3/14 需要修正，甚至代码是错误的，不能工作，需要修复的说明</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-5-注释必须遵守的规范"><a href="#4-5-注释必须遵守的规范" class="headerlink" title="4.5 注释必须遵守的规范"></a>4.5 注释必须遵守的规范</h2><ul>
+<li>提测的代码不应该有 TODO 这样的注释</li>
+</ul>
+<h1 id="GIT管理规范"><a href="#GIT管理规范" class="headerlink" title="GIT管理规范"></a>GIT管理规范</h1></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2022/01/25/Android%E5%B7%A5%E7%A8%8B%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/">https://lxlfpeng.github.io/2022/01/25/Android%E5%B7%A5%E7%A8%8B%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2022/04/10/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%92%8C%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E8%81%94%E7%B3%BB/" title="Web服务器和应用服务器的区别与联系"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Web服务器和应用服务器的区别与联系</div></div><div class="info-2"><div class="info-item-1">Web服务器与应用服务器Web服务器简介什么是Web服务器WEB即超文本（hypertext）、超媒体（hypermedia）和超文本传输协议（HTTP），获取这些静态资源实际上是在请求服务器上的文件。这些文件都一直保存在服务器的磁盘上一个固定的文件路径，并生成一个对应的地址。HTML页面就是WEB的数据元素，处理这些数据元素的应用软件就叫WEB服务器，WEB服务器常与客户端打交道，它要处理的主要信息有：session、request、response、HTML、JS、CS等。 常用的Web服务器 Nginx Apache Jetty （也支持动态页面处理，但主要还是静态页面） IIS  应用服务器简介什么是应用服务器应用服务器是为客户端提供对业务逻辑的访问这种服务器，根据客户端的请求会将数据转化为动态内容，一般还需要数据库的支持，应用服务器的搭建很多时候依赖于应用程序的开发语言，各种编程语言生态下对应不同的软件， 比如使用Java语言开发的项目通常选择...</div></div></div></a><a class="pagination-related" href="/2022/01/13/Jetpack-Compose%E4%B9%8B%E4%B8%89%E9%99%84%E5%B8%A6%E6%95%88%E5%BA%94(%E5%89%AF%E4%BD%9C%E7%94%A8)/" title="Jetpack-Compose之三附带效应(副作用)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Jetpack-Compose之三附带效应(副作用)</div></div><div class="info-2"><div class="info-item-1">一.Compose组合函数的特点1.Compose组合函数执行顺序不定可组合函数并不是按顺序执行的，这些函数可以按任何顺序运行(Compose 可以选择识别出某些界面元素的优先级高于其他界面元素，因而首先绘制这些元素)。 123456@Composablefun Row() &#123;   StartScreen()   MiddleScreen()   EndScreen()&#125; 对 StartScreen、MiddleScreen 和 EndScreen 这三个组合函数的调用不是按顺序进行的。 所以不能在Row中设置一个全局变量，让 StartScreen()修改这个变量的值，并让 MiddleScreen() 利用这个全局变量的值进行更改，每个组合函数都应该保持独立。 2.Compose可组合函数可以并行运行Compose 可以通过并行运行可组合函数来优化重组。这样Compose 就可以利用多个核心，并以较低的优先级运行可组合函数（不在屏幕上）。 这种优化意味着，可组合函数可能会在后台线程池中执行。如果某个可组合函数对 ViewModel 调用一个函数，则...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-AndroidStudio%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E8%A7%84%E8%8C%83"><span class="toc-number">1.</span> <span class="toc-text">一. AndroidStudio开发工具规范</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83"><span class="toc-number">2.</span> <span class="toc-text">二. 命名规范</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8C%85%E5%90%8D"><span class="toc-number">2.1.</span> <span class="toc-text">1. 包名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%B1%BB%E5%90%8D"><span class="toc-number">2.2.</span> <span class="toc-text">2. 类名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%96%B9%E6%B3%95%E5%90%8D"><span class="toc-number">2.3.</span> <span class="toc-text">3. 方法名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%8F%98%E9%87%8F%E5%91%BD%E5%90%8D"><span class="toc-number">2.4.</span> <span class="toc-text">4. 变量命名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6"><span class="toc-number">2.5.</span> <span class="toc-text">5. 资源文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E7%94%BB%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%EF%BC%88anim-%E5%92%8C-animator-%EF%BC%89"><span class="toc-number">2.5.1.</span> <span class="toc-text">动画资源文件（anim&#x2F; 和 animator&#x2F;）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E7%89%87%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%EF%BC%88drawable-%E5%92%8C-mipmap-%EF%BC%89"><span class="toc-number">2.5.2.</span> <span class="toc-text">图片资源文件（drawable&#x2F; 和 mipmap&#x2F;）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%83%E5%B1%80%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%EF%BC%88layout-%EF%BC%89"><span class="toc-number">2.5.3.</span> <span class="toc-text">布局资源文件（layout&#x2F;）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%83%E5%B1%80%E8%B5%84%E6%BA%90-id-%E5%91%BD%E5%90%8D"><span class="toc-number">2.5.4.</span> <span class="toc-text">布局资源 id 命名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8F%9C%E5%8D%95%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%EF%BC%88menu-%EF%BC%89"><span class="toc-number">2.5.5.</span> <span class="toc-text">菜单资源文件（menu&#x2F;）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6strings"><span class="toc-number">2.5.6.</span> <span class="toc-text">字符串资源文件strings</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B7%E5%BC%8F%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6tyles"><span class="toc-number">2.5.7.</span> <span class="toc-text">样式资源文件tyles</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

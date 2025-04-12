@@ -1,0 +1,754 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CI-CD工具之GitLab-Runner | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.GitLab-CI和GitLab-Runner简介1.GitLab-CI是什么?GitLab-CI就是一套配合GitLab使用的持续集成系统（当然，还有其它的持续集成系统，同样可以配合GitLab使用，比如Jenkins）。GitLab8.0以后的版本默认集成了GitLab-CI并且默认启用的。 2.GitLab-Runner是什么?Gitlab只是个代码仓库，想要实现CI&#x2F;CD还需">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CI-CD工具之GitLab-Runner">
+<meta property="og:url" content="https://lxlfpeng.github.io/2021/07/11/CI-CD%E5%B7%A5%E5%85%B7%E4%B9%8BGitLab-Runner/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.GitLab-CI和GitLab-Runner简介1.GitLab-CI是什么?GitLab-CI就是一套配合GitLab使用的持续集成系统（当然，还有其它的持续集成系统，同样可以配合GitLab使用，比如Jenkins）。GitLab8.0以后的版本默认集成了GitLab-CI并且默认启用的。 2.GitLab-Runner是什么?Gitlab只是个代码仓库，想要实现CI&#x2F;CD还需">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2021-07-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.840Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2021/07/11/CI-CD%E5%B7%A5%E5%85%B7%E4%B9%8BGitLab-Runner/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CI-CD工具之GitLab-Runner',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">CI-CD工具之GitLab-Runner</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">CI-CD工具之GitLab-Runner</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2021-07-10T16:00:00.000Z" title="发表于 2021-07-11 00:00:00">2021-07-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CI-CD/">CI/CD</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">11.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>41分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-GitLab-CI和GitLab-Runner简介"><a href="#一-GitLab-CI和GitLab-Runner简介" class="headerlink" title="一.GitLab-CI和GitLab-Runner简介"></a>一.GitLab-CI和GitLab-Runner简介</h1><h3 id="1-GitLab-CI是什么"><a href="#1-GitLab-CI是什么" class="headerlink" title="1.GitLab-CI是什么?"></a>1.GitLab-CI是什么?</h3><p>GitLab-CI就是一套配合GitLab使用的持续集成系统（当然，还有其它的持续集成系统，同样可以配合GitLab使用，比如Jenkins）。GitLab8.0以后的版本默认集成了GitLab-CI并且默认启用的。</p>
+<h3 id="2-GitLab-Runner是什么"><a href="#2-GitLab-Runner是什么" class="headerlink" title="2.GitLab-Runner是什么?"></a>2.GitLab-Runner是什么?</h3><p>Gitlab只是个代码仓库，想要实现CI&#x2F;CD还需安装gitlab-runner，gitlab-runner相当于是Gitlab-CI中的任务的执行器，Gitlab会在需要执行任务时调用它。<br>GitLab-CI的作用是管理各个项目的构建状态，运行构建任务这种浪费资源的事情就交给 GitLab Runner 来做。因为 GitLab Runner 可以安装到不同的机器上，所以在构建任务运行期间并不会影响到 GitLab 的性能 ，Runner可以分布在不同的主机上，同一个主机上也可以有多个Runner。<br>一般GitLab里面的每一个工程都会定义一个属于这个工程的软件集成脚本(.gitlab-ci.yml)，用来描述如何自动化地完成一些软件集成工作。当这个工程的仓库代码发生变动时，比如有人push了代码，GitLab就会将这个变动通知GitLab-CI。这时GitLab-CI会找出与这个工程相关联的GitLab-Runner，并通知这些Runner把代码更新到本地并执行预定义好的执行脚本。<br>所以，GitLab-Runner就是一个用来执行软件集成脚本的东西。你可以想象一下：Runner就像一个个的工人，而GitLab-CI就是这些工人的一个管理中心，所有工人都要在GitLab-CI里面登记注册，管理中心(GitLab-CI)会将任务分配给工人进行执行。</p>
+<blockquote>
+<p>gitlab-runner可以在不同的主机上部署，也可以在同一个主机上设置多个gitlab-runner ，还可以根据不同的环境设置不同的环境，比如我们需要区分研发环境，测试环境以及正式环境等。</p>
+</blockquote>
+<h3 id="3-GitLab-CI执行步骤"><a href="#3-GitLab-CI执行步骤" class="headerlink" title="3.GitLab-CI执行步骤"></a>3.GitLab-CI执行步骤</h3><p>.gitlab-ci.yml文件会告诉GitLab Runner 去做哪些任务。默认情况下，.gitlab-ci.yml会定义一个pipeline，pipeline分为三个阶段：build，test，deploy。没有使用的的阶段会被忽略执行。<br>因此，简而言之，CI所需要的步骤可以归结为：</p>
+<ol>
+<li>配置一个Runner。</li>
+<li>添加<code>.gitlab-ci.yml</code>到项目的根目录。<br>配置好以后，在每一次push到Git仓库的过程中，Runner会自动开启pipline，pipline将显示在项目的Pipline页面中。</li>
+</ol>
+<p>GitLab-CI完整流程:</p>
+<ol>
+<li>本地代码改动。</li>
+<li>变动代码推送到GitLab上。</li>
+<li>GitLab 将这个变动通知GitLab-CI。</li>
+<li>GitLab-CI找出这个工程相关联的gitlab-runner。</li>
+<li>gitlab-runner把代码更新到本地。</li>
+<li>根据预设置的条件配置好环境。</li>
+<li>根据预定义的脚本(一般是.gitlab-ci.yml)执行。</li>
+<li>把执行结果通知给GitLab。</li>
+<li>GitLab显示最终执行的结果。</li>
+</ol>
+<h3 id="4-GitLab-Runner执行器"><a href="#4-GitLab-Runner执行器" class="headerlink" title="4.GitLab-Runner执行器"></a>4.GitLab-Runner执行器</h3><p>Runner需要一个环境来运行jobs. 这个环境称之为执行环境（executor）。GitLab Runner 支持多种执行环境，包括 SSH，Docker，VirtualBox 等。</p>
+<ul>
+<li>Shell</li>
+<li>Docker</li>
+<li>Docker Machine and Docker Machine SSH (auto-scaling)</li>
+<li>Parallels</li>
+<li>VirtualBox</li>
+<li>SSH</li>
+<li>Kubernetes</li>
+</ul>
+<p>推荐使用shell方式，对应的jdk，maven工具可以自行安装与配置，这种配置比较简单。如果选择docker，那么要指定一个镜像，这个镜像必须在docker images中或者hub docker中可以找到，并且需要的编译工具都需要在docker中安装好。</p>
+<h1 id="二-GitLab-Runner安装及注册"><a href="#二-GitLab-Runner安装及注册" class="headerlink" title="二.GitLab-Runner安装及注册"></a>二.GitLab-Runner安装及注册</h1><h3 id="1-GitLab-Runner安装"><a href="#1-GitLab-Runner安装" class="headerlink" title="1.GitLab-Runner安装"></a>1.GitLab-Runner安装</h3><p>GitLab-Runner安装分为两种:</p>
+<ul>
+<li>本地安装</li>
+<li>Docker安装</li>
+</ul>
+<h5 id="1-本地安装GitLab-Runner"><a href="#1-本地安装GitLab-Runner" class="headerlink" title="(1.)本地安装GitLab-Runner"></a>(1.)本地安装GitLab-Runner</h5><ol>
+<li>下载二进制文件<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo wget -O /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64</span><br></pre></td></tr></table></figure></li>
+<li>接着授予可执行权限<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo chmod +x /usr/local/bin/gitlab-runner</span><br></pre></td></tr></table></figure></li>
+<li>创建一个gitlab-ci用户<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo useradd --comment &#x27;GitLab Runner&#x27; --create-home gitlab-runner --shell /bin/bash  </span><br></pre></td></tr></table></figure></li>
+<li>安装，并作为服务启动<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner  --user root</span><br></pre></td></tr></table></figure></li>
+<li>GitLab-Runner常用命令<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ sudo gitlab-runner list //查看各个 Runner 的状态</span><br><span class="line">$ sudo gitlab-runner stop //停止服务</span><br><span class="line">$ sudo gitlab-runner start //启动服务</span><br><span class="line">$ sudo gitlab-runner restart //重启服务</span><br></pre></td></tr></table></figure>
+或者直接用脚本安装:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo wget -O /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64</span><br><span class="line"></span><br><span class="line">curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash</span><br><span class="line"></span><br><span class="line">sudo apt-get install gitlab-runner</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h5 id="2-Docker安装GitLab-Runner-推荐"><a href="#2-Docker安装GitLab-Runner-推荐" class="headerlink" title="(2.)Docker安装GitLab-Runner(推荐)"></a>(2.)Docker安装GitLab-Runner(推荐)</h5><ol>
+<li>首先下载gitlab-runner的Docker镜像<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull docker.io/gitlab/gitlab-runner</span><br></pre></td></tr></table></figure></li>
+<li>使用如下命令运行gitlab-runner；<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name gitlab-runner --privileged=true -v /var/run/docker.sock:/var/run/docker.sock -v /srv/gitlab-runner/config:/etc/gitlab-runner gitlab/gitlab-runner:latest</span><br></pre></td></tr></table></figure>
+此时我们如果查看gitlab-runner的容器日志的话，会发现如下错误，config.toml文件找不到，<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: Failed to load config stat /etc/gitlab-runner/config.toml: no such file or directory  builds=0</span><br></pre></td></tr></table></figure>
+这个问题不必担心，当我们将gitlab-runner注册到Gitlab时，会自动生成该文件；</li>
+<li>进入docker容器<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it --user root containerid /bin/bash</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="2-GitLab-Runner的分类"><a href="#2-GitLab-Runner的分类" class="headerlink" title="2.GitLab-Runner的分类"></a>2.GitLab-Runner的分类</h3><p>GitLab-Runner服务启动以后如何才能和GitLab-CI关联起来?这里就需要对GitLab-Runner进行注册。GitLab-CI会生成一个唯一的Token，在对GitLab-Runner进行注册的时候绑定GitLab-CI的主机地址和token就能将GitLab-Runner和GitLab-CI关联起来。<br>gitlab-runner分为三种：Shared Runner、Group Runner、Specific Runner。</p>
+<h5 id="1-Shared-Runners"><a href="#1-Shared-Runners" class="headerlink" title="(1.)Shared Runners"></a>(1.)Shared Runners</h5><p>shared Runners 是gitlab 管理员统一配置的runner，作用于整个gitlab的所有项目，所以要gitlab的admin权限来进行创建，只要你的项目是在当前的gitlab下，就可以使用shared runner。<br>即是共享runner，gitlab上所有的project都可以通过指定tag去使用，可以在Settings &gt; CICD &gt; runner中查看，如果某个project不想使用share runner，可以Project&gt;Settings &gt; CICD &gt; runner下设置disable，默认一般是enable.</p>
+<h5 id="2-Group-Runner"><a href="#2-Group-Runner" class="headerlink" title="(2.)Group Runner"></a>(2.)Group Runner</h5><p>Group Runner是配置则是在用户组里面配置的，相当于给一个分组设置runner，因此，分组中所有的项目都可以使用。需要Group的管理这及以上的权限。<br>Group runner需要满足两个条件</p>
+<ul>
+<li>用户在用户组里面</li>
+<li>项目在用户组里面</li>
+</ul>
+<h5 id="3-Specific-Runner"><a href="#3-Specific-Runner" class="headerlink" title="(3.)Specific Runner"></a>(3.)Specific Runner</h5><p>Specific Runner：这种Runner只能为指定的工程服务。拥有该工程访问权限的人都能够为该工程创建Shared Runner，在gitlab上打开project下的settings-&gt; CICD-&gt; runners。</p>
+<h5 id="4-三种GitLab-Runner总结"><a href="#4-三种GitLab-Runner总结" class="headerlink" title="(4.)三种GitLab-Runner总结"></a>(4.)三种GitLab-Runner总结</h5><table>
+<thead>
+<tr>
+<th>种类</th>
+<th>创建权限</th>
+<th>使用权限</th>
+<th>token位置</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Specific Runner</td>
+<td>只有系统管理员能够创建</td>
+<td>全局的runner，所有的项目都可以使用</td>
+<td>管理员-&gt;admin area(小扳手图标)-&gt;OverView-&gt;Runners</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Group Runner</td>
+<td>Group的管理员及以上的权限</td>
+<td>分组中所有的项目都可以使用</td>
+<td>对应Group项目-&gt;setttings-&gt;CICD-&gt;runners</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Specific Runner</td>
+<td>项目的开发者</td>
+<td>项目特有的runner，只有该项目才能使用</td>
+<td>对应Project项目-&gt;setttings-&gt;CICD-&gt;runners</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>个人建议使用Group Runner，可以根据不同种类的项目，创建不同的分组，比如：Android、IOS、服务端等，然后针对每个分组创建对应的Group Runner，这样相互之间不会有影响，同时又不需要为每个工程单独创建runner。</p>
+</blockquote>
+<blockquote>
+<p>在gitlab admin area中可以管理你gitlab所有注册的runners。share runner可以转为group runner或者specific runner，但是不可以逆转。</p>
+</blockquote>
+<h3 id="3-注册gitlab-runner到GitLab-CI"><a href="#3-注册gitlab-runner到GitLab-CI" class="headerlink" title="3.注册gitlab-runner到GitLab-CI"></a>3.注册gitlab-runner到GitLab-CI</h3><p>执行命令:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gitlab-runner register</span><br></pre></td></tr></table></figure>
+<p>配置Runner:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Runtime platform      arch=amd64 os=linux pid=11348</span><br><span class="line">revision=943fc252 version=13.6.0</span><br><span class="line">Running in system-mode.</span><br><span class="line">Enter the GitLab instance URL (for example, https://gitlab.com/):#输入gitlab的url </span><br><span class="line"></span><br><span class="line">Enter the registration token: #输入注册令牌</span><br><span class="line"></span><br><span class="line">Enter a description for the runner: #输入runner的描述 [gitlab-cicd]:</span><br><span class="line">test</span><br><span class="line">Enter tags for the runner (comma-separated): #输入标签</span><br><span class="line">test</span><br><span class="line">Registering runner... succeeded runner=K-_PmTnN</span><br><span class="line">Enter an executor: virtualbox, custom, shell, ssh, docker+machine, docker-ssh+machine, kubernetes, docker, docker-ssh, parallels: #输入以何种方式提供runner</span><br><span class="line">shell  #这里选择最简单的shell方式</span><br></pre></td></tr></table></figure>
+<p>注册的步骤在不同平台下大同小异：运行<code>gitlab-runner register</code>命令，会输出一个交互界面，在里面依次输入 GitLab 实例地址、CI Token、Runner 描述、<br>标签列表（用于区分不同类型的 Runner，使不同阶段的 job 在不同的 Runner 中运行）、执行环境类型，如果选择基于 Docker 的执行环境，则需要再输入一个默认的的image(镜像).<br>注册之后，Runner 会将配置写入<code>/etc/gitlab-runner/config.toml</code> 文件中，如果文件内容不丢失，gitlab-runner 程序会自动读取配置内容并运行，无需重复注册。<br>当然，如果你需要一些更高级的配置，则可以直接修改 <code>/etc/gitlab-runner/config.toml</code> 。具体的配置可以见官方文档。在配置文件更改后，runner daemon 会自动重新加载配置，无需重启。</p>
+<blockquote>
+<p>gitlab-runner register config.toml 中的部分配置也可以通过环境变量注入，且所有配置都可以通过注册命令的参数传入。</p>
+</blockquote>
+<p><strong>gitlab-runner配置文件位置</strong><br>Runner的信息是存放在一个配置文件里面的，配置文件的格式一般是.toml。这个配置文件的存放位置有以下几种情况：</p>
+<ul>
+<li>如果是以root用户身份运行<code>gitlab-ci-multi-runner register</code>，那么配置文件默认是<code>/etc/gitlab-runner/config.toml</code></li>
+<li>如果是以非root用户身份运行<code>gitlab-ci-multi-runner register</code>，那么配置文件默认是<code>~/.gitlab-runner/config.toml</code></li>
+</ul>
+<p><strong>查看注册成功的gitlab-runner</strong><br>在gitlab上打开project下的settings &gt; CICD &gt; runners，可以看到我们配置好的runner.<br><img src="/images/d4d253bd98a251de5ba605263db03627.webp"></p>
+<h3 id="4-gitlab-runner取消注册"><a href="#4-gitlab-runner取消注册" class="headerlink" title="4.gitlab-runner取消注册"></a>4.gitlab-runner取消注册</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#使用令牌注销</span><br><span class="line">gitlab-runner unregister --url http://gitlab.example.com/ --token t0k3n</span><br><span class="line"></span><br><span class="line">#使用名称注销（同名删除第一个）</span><br><span class="line">gitlab-runner unregister --name test-runner</span><br><span class="line"></span><br><span class="line">#注销所有</span><br><span class="line">gitlab-runner unregister --all-runners</span><br></pre></td></tr></table></figure>
+
+<h1 id="三-GitLab-Runner的executor-执行器"><a href="#三-GitLab-Runner的executor-执行器" class="headerlink" title="三.GitLab-Runner的executor(执行器)"></a>三.GitLab-Runner的executor(执行器)</h1><h3 id="1-executor-执行器-的分类"><a href="#1-executor-执行器-的分类" class="headerlink" title="1.executor(执行器)的分类"></a>1.executor(执行器)的分类</h3><p>在Gitlab-Runner注册中我们需要选择executor(执行器)，gitlab-runner又有很多种类型的执行器（就是所谓的executor）。</p>
+<ul>
+<li>SSH</li>
+<li>Shell</li>
+<li>Parallels</li>
+<li>VirtualBox</li>
+<li>Docker</li>
+<li>Docker Machine (auto-scaling)</li>
+<li>Kubernetes</li>
+<li>Custom<br><img src="/images/bd2043772e4250d93e436a62b6178462.webp"><br>其中比较常用的是shell executor和docker executor。</li>
+</ul>
+<h3 id="2-SSH-executor"><a href="#2-SSH-executor" class="headerlink" title="2.SSH executor"></a>2.SSH executor</h3><p>通过ssh连接到远程主机，然后在远程主机上启动一个进程来执行GitLab CI构建过程。连接时需指定url、port、user、password&#x2F;identity_file等参数；若想要上传artificate，需要将Runner安装在ssh 连接到的远程主机上。</p>
+<h3 id="3-VirtualBox-Parallel-executor"><a href="#3-VirtualBox-Parallel-executor" class="headerlink" title="3.VirtualBox&#x2F;Parallel executor"></a>3.VirtualBox&#x2F;Parallel executor</h3><p>通过ssh远程连接到虚拟机，在虚拟机中执行GitLab CI构建过程，可能会创建虚拟机快照以加速下一次构建。类似地，需指定user、password&#x2F;identity_file；同SSH方式类似，若想要上传artificate，需要将Runner安装在VirtualBox的虚拟机中；正式开启CI流程前，需提前在VirtualBox中创建或导入一个Base Virtual Machine，并在其中安装 OpenSSH Server以及依赖等。</p>
+<h3 id="4-Kuberentes-executor"><a href="#4-Kuberentes-executor" class="headerlink" title="4.Kuberentes executor"></a>4.Kuberentes executor</h3><ul>
+<li>让Runner连接到连Kubernetes API Server，为每一个Job动态创建一个Pod来执行GitLab CI构建过程。</li>
+<li>且此Pod除了包含固有的Infra Container外，还一定会包含Build Container和Help Container，另外，可能包含Service Container。简单而言，Build Container用于执行.gitlab-ci.yml文件中在stage标签中定义的脚本。Help Container则用于辅助Build Container的执行构建工作，具体是负责git和certificate store相关的操作。</li>
+<li>最后Service Container的用途则对应着.gitlab-ci.yml文件中定义的service标签，即一个辅助容器，为Build Container提供服务，其基本实现原理是Docker Link。最后，每一个Job都会包含四个阶段（Job构建过程的生命周期）：Prepare、Pre-Build、Build和Post-Build。这几个阶段的具体作用，我在这里就不阐述了，比较简单，可以阅读这里，也可以在源码中找到。</li>
+</ul>
+<h3 id="5-shell-executor"><a href="#5-shell-executor" class="headerlink" title="5.shell executor"></a>5.shell executor</h3><p>这种方式使用安装Runner的同一台主机启动一个进程来执行GitLab CI构建过程，在host中执行shell，比较简单，但对运维不友好，因为构建用到的所有程序，<br>都需要安装到host主机中，比如maven项目就需要安装java和mvn的软件包和配置环境。并且在这种方式中如果需要使用Docker镜像的话，由于runner在host主机中会以gitlab-runner用户执行脚本，<br>所以需要把gitlab-runner加入docker组才行，但是这样gitlab-runner会拥有root用户的权限，因此对host不安全，如果想要构建docker镜像，采用这种方式，需要慎重。这种方式的好处是凡是支持安装Runner的机器类型，都可以用使用shell的方式。这意味着Windows PowerShell、Bash、Sh和CMD都是可以的。</p>
+<h3 id="6-docker-executor"><a href="#6-docker-executor" class="headerlink" title="6.docker executor"></a>6.docker executor</h3><p>这种方式是在docker容器中执行shell，docker服务需要选择定制化的镜像，该镜像必须拥有shell运行时需要的一切命令。在在.gitlab-ci.yml文件中可以定义的镜像.<br>对于docker executor，每次都是启动一个新的container构建，新的container是一个非常clear的环境，因此上次构建使用到的base image和构建的缓存都无法使用.</p>
+<p>以下几个场景可能需要应用内部去调用docker命令，实现docker镜像&#x2F;容器的操作。 列举以下场景：</p>
+<ol>
+<li>如果你使用流水线工具，需要docker命令去构建和管理镜像，但流水线工具是以docker容器的方式运行。</li>
+<li>如果你是在kubernetes环境部署，应用需要同docker进行交互。</li>
+</ol>
+<p>在Docker中实现运行Docker的两种方法</p>
+<ul>
+<li>docker-in-docker 方法</li>
+<li>通过挂载docker.sock（DooD方法）运行docker</li>
+</ul>
+<h5 id="1-docker-in-docker"><a href="#1-docker-in-docker" class="headerlink" title="(1.)docker-in-docker"></a>(1.)docker-in-docker</h5><p>在docker容器种使用docekr.这种方式需要以特权方式执行docker，带来不安全的因素。同时，构建也是非常慢的。因此也需要使用缓存去加速构建。<br>原理是：docker先从registry拉取上次构建的镜像。然后构建的时候指定–cache-from&#x3D;<last-image>，也就是说以上次的镜像作为缓存构建。<br>构建完毕后，上次镜像，作为下次的构建缓存使用。但是需要注意的是，仍需要花费一部分时间在download image上。如果registry在内网，其实下载和上传都是蛮快的，可以接受。<br><a target="_blank" rel="noopener" href="https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#use-docker-in-docker-executor">文档</a><br>这种方式是使用需要运行在特权模式privileged下的特殊的 Docker 镜像——docker-in-docker（dind）和所安装的 docker 工具来执行脚本，GitLab Runner 注册选择 docker 和privileged模式。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo gitlab-runner register -n \</span><br><span class="line">   --url https://gitlab.com/ \</span><br><span class="line">   --registration-token REGISTRATION_TOKEN \</span><br><span class="line">   --executor docker \</span><br><span class="line">   --description &quot;My Docker Runner&quot; \</span><br><span class="line">   --docker-image &quot;docker:stable&quot; \</span><br><span class="line">   --docker-privileged</span><br></pre></td></tr></table></figure>
+<p>以上命令将注册一个使用docker:stable镜像的 Runner，它使用privileged模式启动构建和服务容器。这也是使用docker-in-docker模式必须使用的设置</p>
+<blockquote>
+<p>注意：通过–docker-privileged启用特权模式，禁用容器的所有安全机制，并将主机暴露在权限提升中，这可能导致容器中断。更多信息查看 Docker 官方文档运行时特权和 linux 功能<br>上面的命令得到对应配置文件如下</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[[runners]]</span><br><span class="line">  url = &quot;https://gitlab.com/&quot;</span><br><span class="line">  token = TOKEN</span><br><span class="line">  executor = &quot;docker&quot;</span><br><span class="line">  [runners.docker]</span><br><span class="line">    tls_verify = false</span><br><span class="line">    image = &quot;docker:stable&quot;</span><br><span class="line">    privileged = true</span><br><span class="line">    disable_cache = false</span><br><span class="line">    volumes = [&quot;/cache&quot;]</span><br><span class="line">  [runners.cache]</span><br><span class="line">    Insecure = false</span><br></pre></td></tr></table></figure>
+<p>.gitlab-ci.yml例子如下，<a target="_blank" rel="noopener" href="https://gitlab.com/gitlab-examples/docker">参考</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">image: docker:latest</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">  - docker:dind</span><br><span class="line"></span><br><span class="line">build:</span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">    - docker build -t test .</span><br></pre></td></tr></table></figure>
+<p>缺点和不足如下：</p>
+<ul>
+<li>使用 docker-in-docker 时，每个作业都处于干净的环境中，没有过去的历史记录。并发任务执行正常，因为每个构建都有自己的 Docker 引擎实例，因此它们不会相互冲突。但这也意味着工作可能会变慢，因为没有层缓存</li>
+<li>默认情况下，docker:dind 使用的–storage-driver vfs 是最慢的形式。要使用其他驱动程序，请参阅 使用 overlayfs 驱动程序</li>
+<li>由于 docker:dind 容器和运行器容器不共享其根文件系统，因此任务的工作目录可用作子容器的安装点。例如，如果您要与子容器共享文件，则可以在&#x2F;builds&#x2F;$CI_PROJECT_PATH 其下创建子目录并将其用作挂载点（有关更详细的说明，请查看问题＃41227）使用 Docker 套接字绑定</li>
+</ul>
+<h5 id="2-docker-socket-binding-挂载宿主机Docker"><a href="#2-docker-socket-binding-挂载宿主机Docker" class="headerlink" title="(2.)docker socket binding(挂载宿主机Docker)"></a>(2.)docker socket binding(挂载宿主机Docker)</h5><p>镜像中安装docker-ce。运行镜像时把host的docker.socks映射到容器内，这样容器内就可以直接使用host的docker服务。容器内看到的镜像和容器都是host上的。</p>
+<blockquote>
+<p>注意：如果在使用 GitLab Runner 11.11 或更高版本时绑定 Docker 套接字，则无法再将其 docker:dind 用作服务，因为也会对服务进行卷绑定，从而使这些服务不兼容</p>
+</blockquote>
+<p>docker本身具有挂载相应的目录，文件到容器之中的能力，我们直接将docker命令以及docker daemon的socket文件挂载进运行容器之中即可运行docker命令。 但是注意，在容器内部实际上使用的是宿主机的docker进程，因此我们对镜像以及容器的处理其实都是在宿主机这个视角下。<br>同时同宿主机的docker环境交互，不便于镜像的管理，会在宿主机上留下过多的镜像残留垃圾。</p>
+<p>Runner 注册命令如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo gitlab-runner register -n \</span><br><span class="line">   --url https://gitlab.com/ \</span><br><span class="line">   --registration-token REGISTRATION_TOKEN \</span><br><span class="line">   --executor docker \</span><br><span class="line">   --description &quot;My Docker Runner&quot; \</span><br><span class="line">   --docker-image &quot;docker:stable&quot; \</span><br><span class="line">   --docker-volumes /var/run/docker.sock:/var/run/docker.sock</span><br></pre></td></tr></table></figure>
+<p>以上命令将注册一个使用docker:stable镜像的 Runner。注意：他是用的是 Runner 本身的 Docekr 守护程序，而 docker 命令生成的任何容器都是 Runner 的兄弟，而不是 Runner 的子节点。<br>上面的命令得到对应配置文件如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[[runners]]</span><br><span class="line">  url = &quot;https://gitlab.com/&quot;</span><br><span class="line">  token = REGISTRATION_TOKEN</span><br><span class="line">  executor = &quot;docker&quot;</span><br><span class="line">  [runners.docker]</span><br><span class="line">    tls_verify = false</span><br><span class="line">    image = &quot;docker:stable&quot;</span><br><span class="line">    privileged = false</span><br><span class="line">    disable_cache = false</span><br><span class="line">    volumes = [&quot;/var/run/docker.sock:/var/run/docker.sock&quot;, &quot;/cache&quot;]</span><br><span class="line">  [runners.cache]</span><br><span class="line">    Insecure = false</span><br></pre></td></tr></table></figure>
+<p>对应的.gitlab-ci.yml例子如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">image: docker:stable</span><br><span class="line"></span><br><span class="line">before_script:</span><br><span class="line">  - docker info</span><br><span class="line"></span><br><span class="line">build:</span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">    - docker build -t my-docker-image .</span><br><span class="line">    - docker run my-docker-image /script/to/run/tests</span><br></pre></td></tr></table></figure>
+<p>可以看到，这个模式不需要使用服务，直接通过套接字通信。此模式也是有一些需要注意的地方：</p>
+<ul>
+<li>由于是共享 docker 守护程序，项目的操作会真实产生影响。比如项目如果运行docker rm -f $(docker ps -a -q)，那么将会删除所有容器</li>
+<li>并发可能会有冲突，比如创建相同的名称的容器</li>
+<li>由于创建的容器是 Runnner 的兄弟，所以文件与目录的共享是在主机上下文完成，而不是构建容器上下文</li>
+</ul>
+<p>由于此方式最终实际上是使用的host的docker daemon，因此，镜像和构建的缓存都是直接使用host中的缓存。当然，有利就有弊，此种方式的缺点有：</p>
+<ul>
+<li>由于共享了主机的docker socket，所以docker命令都是向主机发出的命令，比如docker rm -f $(docker ps -a -q)会把主机上的所有docker容器删除了，包括gitlab-runner容器。</li>
+<li>并发工作可能无法正常执行；创建具有特定名称的容器，则它们可能会相互冲突。</li>
+<li>将源仓库中的文件和目录共享到容器中可能无法正常工作，因为卷安装是在主机而不是构建容器的上下文中完成的。</li>
+<li>你必须时刻注意，你的docker命令是在主机执行的，而不是容器内部。</li>
+<li>需要修改gitlab-runner的配置，挂载主机的docker socket，但是不同的host system的sock文件路径不同，这目前只能在host上配置。</li>
+<li>在k8s中，docker binding脱离了k8s的控制，是非常危险的行为。有的k8s集群通过名称空间做环境隔离，想想一下，开发环境的docker命令删除了线上环境的容器。</li>
+</ul>
+<p>如何绑定docker.sock?<br>修改gitlab-runner服务的配置文件 &#x2F;srv&#x2F;gitlab-runner&#x2F;config&#x2F;config.toml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volumes = [&quot;/cache&quot;,&quot;/var/run/docker.sock:/var/run/docker.sock&quot;]</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-Docker中实现运行Docker总结"><a href="#3-Docker中实现运行Docker总结" class="headerlink" title="(3.)Docker中实现运行Docker总结"></a>(3.)Docker中实现运行Docker总结</h5><p>选择两种方式都各有好坏，可根据实际情况进行选择。这里还是推荐用第二种，因为第一种真的很干净，所以很慢，但是需要做好权限管理和控制，避免危险的脚本<br>还有一点是，指定镜像版本的时候，最好指定具体的版本。比如使用第一种模式，引入服务docker:dind，最好使用docker:18.09.8-dind。避免镜像拉取策略，每次拉取最新的镜像，导致实际是docker:19.0-dind，与安装的 docker 版本不符，发生一些意想不到的错误。<br>两种方法的优缺点</p>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>挂载宿主机docker</td>
+<td>简单，易上手</td>
+</tr>
+<tr>
+<td>使用docker in docker的官方镜像</td>
+<td>安全，隔离性好</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>挂载宿主机docker，多用在以容器运行的环境，而且对安全要求不高的平台。</p>
+</blockquote>
+<h3 id="7-executor-执行器-总结"><a href="#7-executor-执行器-总结" class="headerlink" title="7.executor(执行器)总结"></a>7.executor(执行器)总结</h3><p>docker executor是最好的选择。尤其是构建软件的版本（或docker image），一般都可以通过cicd文件配置。运维只需要安装gitlab-runner程序就可以了，绝大多数时候无需对gitlab-runner程序进行配置。<br>这就是说，所有的运维工作都可以使用cicd文件管理，如果你想新增一个gitlab-runner服务，只需要安装即可。不过现在国内的docker executor文档比较少且不详细，经常需要查阅官网资料，这对英语水平有一定要求。</p>
+<h1 id="四-GitLab编写ci、cd流程文件"><a href="#四-GitLab编写ci、cd流程文件" class="headerlink" title="四.GitLab编写ci、cd流程文件"></a>四.GitLab编写ci、cd流程文件</h1><h3 id="1-Pipeline-Stages-Jobs"><a href="#1-Pipeline-Stages-Jobs" class="headerlink" title="1.Pipeline &amp; Stages &amp; Jobs#"></a>1.Pipeline &amp; Stages &amp; Jobs#</h3><p>.gitlab-ci.yml文件会告诉GitLab Runner 做什么。<br>如果将.gitlab-ci.yml文件添加到存储库的根目录，并将GitLab项目配置为使用Runner，则每次提交或推送都会触发CI 管道。也就是说在对存储库进行任何推送时，<br>在GitLab都会寻找.gitlab-ci.yml文件，并对此次commit开始并根据该文件的内容在Runners上启动作业，jobs的内容来源于.gitlab-ci.yml文件。<br>定义pipeline的全部阶段（stage），阶段内所有任务并行执行，全部执行成功开始下一阶段任务，任何阶段内任意job执行失败都会导致pipeline失败，所有stage，job执行成功后pipeline会显示pass。如果未定义stages，则默认有build、test、deploy三个阶段，如果未定义stage，则默认test阶段</p>
+<p>一个 Pipeline 大概相对于一个构建任务，里面可以包含多个流程，如安装依赖、运行测试、编译、部署测试服务器、部署生产服务器等流程，<br>Git 提交时会触发 Pipeline。而一个 Pipeline 中又可以包含一至多个 Stage，即用来定义安装依赖、运行测试之类的流程的。然后，一个 Stage 中又包含了一至多个 Job，<br>Jobs 表示一个 Stage 中具体的构建工作，即某个 Stage 里面执行的工作。我们可以在 Stages 里面定义这些 Job，它们之间的关系如下图所示：</p>
+<p>注意：<br>Stages 会按 .gitlab-ci.yml 中配置的顺序执行，当前面的 Stage 执行完毕后才会继续执行后面的 Stage，如果一个 Stage 失败，那么后面的 Stage 不会执行，该构建任务失败。<br>Stage 中的 Jobs 会并行执行，当这个 Stage 中所有的 Job 都执行完毕，该 Stage 才算执行成功。换而言之，只要有一个 Job 执行失败，整个 Pipeline 也就失败了。</p>
+<h3 id="2-创建一个简单的-gitlab-ci-yml"><a href="#2-创建一个简单的-gitlab-ci-yml" class="headerlink" title="2.创建一个简单的.gitlab-ci.yml"></a>2.创建一个简单的.gitlab-ci.yml</h3><p>注意：.gitlab-ci.yml是一个YAML文件，所以必须要格外注意锁紧。使用空格，而不是tabs。<br>在项目的根目录创建一个名为.gitlab-ci.yml的文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">stages:</span><br><span class="line">- build</span><br><span class="line">- test</span><br><span class="line">- deploy</span><br><span class="line"></span><br><span class="line">build_project:</span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">  - echo &quot;配置构建环境.....&quot;</span><br><span class="line">  - echo &quot;开始构建.....&quot;</span><br><span class="line">  - echo &quot;构建完成&quot;</span><br><span class="line"></span><br><span class="line">test_project:</span><br><span class="line">  stage: test</span><br><span class="line">  script:</span><br><span class="line">  - echo &quot;配置测试环境.....&quot;</span><br><span class="line">  - echo &quot;执行测试脚本.....&quot;</span><br><span class="line">  - echo &quot;测试完毕&quot;</span><br><span class="line"></span><br><span class="line">deploy_project:</span><br><span class="line">  stage: deploy</span><br><span class="line">  script:</span><br><span class="line">  - echo &quot;配置部署项目....&quot;</span><br><span class="line">  - echo &quot;部署项目....&quot;</span><br><span class="line">  - echo &quot;部署完成&quot;</span><br></pre></td></tr></table></figure>
+
+<p>在每个jobs之前，before_script定义的命令都将会被执行。<br>.gitlab-ci.yml定义了三个build_maven，test_springboot和deploy_springboot（名字可以随便取）jobs，他们执行不同的命令。<br>其中包含如何运行和何时运行的限制。jobs必须定义一个stages元素，而且总是必须包含script关键字。</p>
+<p>如果你想检验.gitlab-ci.yml文件的语法是否正确，在GitLab实例页面中有一个命令行工具&#x2F;ci&#x2F;lint。也可以从项目中的CI&#x2F;CD-&gt;ci&#x2F;lint 找到命令行工具进行验证。 关于更多.gitlab-ci.yml的信息和语法，请阅读.gitlab-ci.yml参考文档。</p>
+<p>将.gitlab-ci.yml文件push到远程仓库.<br>现在到Pipelines页面查看，将会看到该Pipline处于等待状态。<br><img src="/images/999ca3a7f054af8eedf9797a269702c6.webp"><br>因为我们只定义了任务并没有定义由哪个runner去执行这个脚本.<br>接着我们打开Project的setting-&gt;CI&#x2F;CD-&gt;Runners&#x2F;Expand-&gt;对应Runners edit按钮-&gt;勾选Indicates whether this runner can pick jobs without tags(指示此运行程序是否可以拾取没有标记的作业)-&gt;save change<br><img src="/images/82fcb269c4d91ffa6e9ce135b06e9eb9.webp"><br>再次到Pipelines页面查看，将会看到该该任务执行完毕.</p>
+<p>当有新内容push到仓库，或者有代码合并后，GitLab会查找是否有.gitlab-ci.yml文件，如果文件存在，Runners将会根据该文件的内容开始build本次commit。</p>
+<h3 id="3-Job关键字"><a href="#3-Job关键字" class="headerlink" title="3.Job关键字"></a>3.Job关键字</h3><h5 id="1-不可以被用于-Job名-的保留字"><a href="#1-不可以被用于-Job名-的保留字" class="headerlink" title="(1.)不可以被用于 Job名 的保留字"></a>(1.)不可以被用于 Job名 的保留字</h5><table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>是否必须</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>image</td>
+<td>no</td>
+<td>使用的docker镜像。</td>
+</tr>
+<tr>
+<td>services</td>
+<td>no</td>
+<td>使用的docker服务。</td>
+</tr>
+<tr>
+<td>stages</td>
+<td>no</td>
+<td>定义构建场景</td>
+</tr>
+<tr>
+<td>types</td>
+<td>no</td>
+<td>stages的别名(不赞成使用)</td>
+</tr>
+<tr>
+<td>before_script</td>
+<td>no</td>
+<td>定义每个任务的脚本启动前所需执行的命令</td>
+</tr>
+<tr>
+<td>after_script</td>
+<td>no</td>
+<td>定义每个任务的脚本执行结束后所需执行的命令</td>
+</tr>
+<tr>
+<td>variables</td>
+<td>no</td>
+<td>定义构建变量</td>
+</tr>
+<tr>
+<td>cache</td>
+<td>no</td>
+<td>定义哪些文件需要缓存，让后续执行可用</td>
+</tr>
+</tbody></table>
+<h5 id="2-Job-的保留字"><a href="#2-Job-的保留字" class="headerlink" title="(2.)Job 的保留字"></a>(2.)Job 的保留字</h5><table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>是否必须</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>script</td>
+<td>yes</td>
+<td>Runner执行的命令或脚本。可以包含多条命令</td>
+</tr>
+<tr>
+<td>image</td>
+<td>no</td>
+<td>使用的docker镜像。详见</td>
+</tr>
+<tr>
+<td>services</td>
+<td>no</td>
+<td>使用的docker服务。详见</td>
+</tr>
+<tr>
+<td>stage</td>
+<td>no</td>
+<td>定义job stage（默认：test）</td>
+</tr>
+<tr>
+<td>type</td>
+<td>no</td>
+<td>stage的别名（已弃用）</td>
+</tr>
+<tr>
+<td>variables</td>
+<td>no</td>
+<td>定义job级别的变量</td>
+</tr>
+<tr>
+<td>only</td>
+<td>no</td>
+<td>定义一列git分支，并为其创建job</td>
+</tr>
+<tr>
+<td>except</td>
+<td>no</td>
+<td>定义一列git分支，不创建job</td>
+</tr>
+<tr>
+<td>tags</td>
+<td>no</td>
+<td>定义一列tags，用来指定选择哪个Runner（同时Runner也要设置tags）</td>
+</tr>
+<tr>
+<td>allow_failure</td>
+<td>no</td>
+<td>允许job失败。失败的job不影响commit状态</td>
+</tr>
+<tr>
+<td>when</td>
+<td>no</td>
+<td>定义何时开始job。可以是on_success，on_failure，always或者manual</td>
+</tr>
+<tr>
+<td>dependencies</td>
+<td>no</td>
+<td>定义job依赖关系，这样他们就可以互相传递artifacts</td>
+</tr>
+<tr>
+<td>cache</td>
+<td>no</td>
+<td>定义应在后续运行之间缓存的文件列表</td>
+</tr>
+<tr>
+<td>before_script</td>
+<td>no</td>
+<td>重写一组在作业前执行的命令</td>
+</tr>
+<tr>
+<td>after_script</td>
+<td>no</td>
+<td>重写一组在作业后执行的命令</td>
+</tr>
+<tr>
+<td>environment</td>
+<td>no</td>
+<td>定义此作业完成部署的环境名称</td>
+</tr>
+<tr>
+<td>coverage</td>
+<td>no</td>
+<td>定义给定作业的代码覆盖率设置</td>
+</tr>
+</tbody></table>
+<h5 id="3-only-and-except-保留字"><a href="#3-only-and-except-保留字" class="headerlink" title="(3.)only and except 保留字"></a>(3.)only and except 保留字</h5><table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>branches</td>
+<td>当一个分支被push上来</td>
+</tr>
+<tr>
+<td>tags</td>
+<td>当一个打了tag的分支被push上来</td>
+</tr>
+<tr>
+<td>api</td>
+<td>当一个pipline被piplines api所触发调起，详见piplines api</td>
+</tr>
+<tr>
+<td>external</td>
+<td>当使用了GitLab以外的CI服务</td>
+</tr>
+<tr>
+<td>pipelines</td>
+<td>针对多项目触发器而言，当使用CI_JOB_TOKEN并使用gitlab所提供的api创建多个pipelines的时候</td>
+</tr>
+<tr>
+<td>pushes</td>
+<td>当pipeline被用户的git push操作所触发的时候</td>
+</tr>
+<tr>
+<td>schedules</td>
+<td>针对预定好的pipline而言（每日构建一类）</td>
+</tr>
+<tr>
+<td>triggers</td>
+<td>用token创建piplines的时候</td>
+</tr>
+<tr>
+<td>web</td>
+<td>在GitLab页面上Pipelines标签页下，你按了run pipline的时候</td>
+</tr>
+</tbody></table>
+<h4 id="4-gitlab-runner标签关键字（Tags）"><a href="#4-gitlab-runner标签关键字（Tags）" class="headerlink" title="(4.)gitlab-runner标签关键字（Tags）"></a>(4.)gitlab-runner标签关键字（Tags）</h4><p>注册runner的时候，可以给它添加一个Tag(标签)。添加标签以后，就可以在CI&#x2F;CD配置文件里，通过标签来调用特定的Runner.<br>例如我们有三个runner:build_runner.test_runner.deploy_runner，经过如下配置，build_project会在build_runner上执行，test_project会在test_runner上执行，<br>deploy_project会在deploy_runner上执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">stages:</span><br><span class="line">- build</span><br><span class="line">- test</span><br><span class="line">- deploy</span><br><span class="line"></span><br><span class="line">build_project:</span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">  - echo &quot;配置构建环境.....&quot;</span><br><span class="line">  - echo &quot;开始构建.....&quot;</span><br><span class="line">  - echo &quot;构建完成&quot;</span><br><span class="line">  tags:</span><br><span class="line">  - build_runner</span><br><span class="line"></span><br><span class="line">test_project:</span><br><span class="line">  stage: test</span><br><span class="line">  script:</span><br><span class="line">  - echo &quot;配置测试环境.....&quot;</span><br><span class="line">  - echo &quot;执行测试脚本.....&quot;</span><br><span class="line">  - echo &quot;测试完毕&quot;</span><br><span class="line">  tags:</span><br><span class="line">  - test_runner</span><br><span class="line">  </span><br><span class="line">deploy_project:</span><br><span class="line">  stage: deploy</span><br><span class="line">  script:</span><br><span class="line">  - echo &quot;配置部署项目....&quot;</span><br><span class="line">  - echo &quot;部署项目....&quot;</span><br><span class="line">  - echo &quot;部署完成&quot;</span><br><span class="line">  tags:</span><br><span class="line">  - deploy_runner</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>variables	no	定义job层次的变量</li>
+<li>only	no	定义哪些分支或tag的修改触发该流程</li>
+<li>except	no	定义哪些分支或tag的修改不触发该流程</li>
+<li>tags	no	定义哪个标签的runner来执行，该标签指runner配置时的名称，不是Git的tag分支</li>
+<li>dependencies	no	定义该job依赖于哪项job的结果，用于把之前job的附件传进来</li>
+<li>artifacts	no	定义job产生的附件，可用于下载和保存以及传递，没有该项设置产生的过程文件都会被删除</li>
+<li>cache	no	定义缓存的文件或文件夹，如果是在job外定义则为全局变量</li>
+<li>before_script	no	定义job执行前的操作</li>
+<li>after_script	no	定义job执行后的操作</li>
+<li>retry	no	定义任务失败后的重复执行次数或时间</li>
+<li>parallel	no	定义并行的任务数量，限于2~50</li>
+</ul>
+<h3 id="4-Job重要的关键字解析"><a href="#4-Job重要的关键字解析" class="headerlink" title="4.Job重要的关键字解析"></a>4.Job重要的关键字解析</h3><h5 id="1-after-script"><a href="#1-after-script" class="headerlink" title="(1.)after_script"></a>(1.)after_script</h5><p>before_script 和 script 在一个上下文中是串行执行的，after_script 是独立执行的。所以根据执行器(在runner注册的时候，可以选择执行器，docker，shell 等)的不同，工作树之外的变化可能不可见，例如，在before_script中执行软件的安装。</p>
+<p>你可以在任务中定义 before_script，after_script，也可以将其定义为顶级元素，定义为顶级元素将为每一个任务都执行相应阶段的脚本或命令。</p>
+<h5 id="2-variables"><a href="#2-variables" class="headerlink" title="(2.)variables"></a>(2.)variables</h5><p>GitLab CI允许你为.gitlab-ci.yml增加变量，该变量将会被设置入任务环境。这些变量是你存储在git仓库里，并且非敏感的项目配置，例如:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">variables:</span><br><span class="line">    DATABASE_URL: &quot;postgres://postgres@postgres/my_database&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意:整数和字符串一样，对于设置变量名和变量值来说都是合法的。但浮点数是非法的。</p>
+</blockquote>
+<p>script<br>script是一段由Runner执行的shell脚本，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">job:</span><br><span class="line">    script: &quot;bundle exec rspec&quot;</span><br></pre></td></tr></table></figure>
+<p>这个参数也可以使用数组包涵好几条命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">job:</span><br><span class="line">    script:</span><br><span class="line">        - uname -a</span><br><span class="line">        - bundle exec rspec</span><br></pre></td></tr></table></figure>
+<p>注意：有些时候，script命令需要被单引号或者双引号所包裹。例如：当命令中包涵冒号的时候，该命令需要被引号所包裹。这样YAML解析器才知道该命令语句不是“key: value”语法的一部分。当命令中包涵以下字符时需要注意打引号:&#96;: { } [ ] , &amp; * # ? | - &lt; &gt; &#x3D; ! % @ &#96;&#96;</p>
+<h5 id="3-Stages"><a href="#3-Stages" class="headerlink" title="(3.)Stages"></a>(3.)Stages</h5><p>Stages 表示构建阶段，说白了就是上面提到的流程。默认有3个stages：build， test， deploy。也可以自行添加多个.我们可以在一次 Pipeline 中定义多个 Stages，这些 Stages 会有以下特点：</p>
+<ul>
+<li>所有 Stages 会按照顺序运行，即当一个 Stage 完成后，下一个 Stage 才会开始</li>
+<li>只有当所有 Stages 完成后，该构建任务 (Pipeline) 才会成功</li>
+<li>如果任何一个 Stage 失败，那么后面的 Stages 不会执行，该构建任务 (Pipeline) 失败</li>
+</ul>
+<p>stage翻译为阶段的意思，在构建的过程中，必须要有一个先后顺序。最上面的stages配置意思是，先构建阶段为build的job，然后再构建阶段为test的job，下面build_job和test_job都是job，<br>如果不配置stages，默认为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">stages:</span><br><span class="line">- build</span><br><span class="line">- test</span><br><span class="line">- deploy</span><br></pre></td></tr></table></figure>
+<p>stages的允许定义多个，灵活的场景阶段的pipline。定义的元素的顺序决定了任务执行的顺序。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">stages:</span><br><span class="line">  - build</span><br><span class="line">  - test</span><br><span class="line">  - deploy</span><br></pre></td></tr></table></figure>
+<p>build场景的任务将被并行执行。test、deploy 同理<br>build 任务成功后，test 执行。test 成功后，deploy 执行<br>所有的都成功了，提交将会标记为成功<br>任何一步任务失败了，提交标记为失败并之后的场景，任务都不回执行。</p>
+<h5 id="4-Jobs"><a href="#4-Jobs" class="headerlink" title="(4.)Jobs"></a>(4.)Jobs</h5><p>Jobs 表示构建工作，表示某个 Stage 里面执行的工作。我们可以在 Stages 里面定义多个 Jobs，这些 Jobs 会有以下特点：</p>
+<ol>
+<li>相同 Stage 中的 Jobs 会并行执行</li>
+<li>相同 Stage 中的 Jobs 都执行成功时，该 Stage 才会成功</li>
+<li>如果任何一个 Job 失败，那么该 Stage 失败，即该构建任务 (Pipeline) 失败</li>
+</ol>
+<h5 id="5-only-and-except"><a href="#5-only-and-except" class="headerlink" title="(5.)only and except"></a>(5.)only and except</h5><p>only和except两个参数说明了job什么时候将会被创建:</p>
+<p>only定义了job需要执行的所在分支或者标签<br>except定义了job不会执行的所在分支或者标签<br>以下是这两个参数的几条用法规则：</p>
+<p>only和except如果都存在在一个job声明中，则所需引用将会被only和except所定义的分支过滤.<br>only和except允许使用正则<br>only和except允许使用指定仓库地址，但是不forks仓库<br>例子解析：</p>
+<p>job将会只在issue-开头的refs下执行，反之则其他所有分支被跳过：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">job:</span><br><span class="line">    # use regexp</span><br><span class="line">    only:</span><br><span class="line">        - /^issue-.*$/</span><br><span class="line">    # use special keyword</span><br><span class="line">    except:</span><br><span class="line">        - branches</span><br></pre></td></tr></table></figure>
+<p>job只会在打了tag的分支，或者被api所触发，或者每日构建任务上运行，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">job:</span><br><span class="line">    # use special keywords</span><br><span class="line">    only:</span><br><span class="line">        - tags      # tag 分支 commit 之后触发</span><br><span class="line">        - triggers  # API 触发</span><br><span class="line">        - schedules # 每日构建触发</span><br></pre></td></tr></table></figure>
+<p>job将会在父仓库gitlab-org&#x2F;gitlab-ce的非master分支有提交时运行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">job:</span><br><span class="line">    only:</span><br><span class="line">        - branches@gitlab-org/gitlab-ce</span><br><span class="line">    except:</span><br><span class="line">        - master@gitlab-org/gitlab-ce</span><br></pre></td></tr></table></figure>
+<p>在计划被触发时或者master分支被push时触发，并且先决条件是kubernetes服务是活跃的（你启用了kubernetes服务作为执行器，相关请看gitlab ci runner的文档，ce用户一般用求不到）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">job:</span><br><span class="line">    only:</span><br><span class="line">        refs:</span><br><span class="line">            - master</span><br><span class="line">            - schedules</span><br><span class="line">        kubernetes: active</span><br></pre></td></tr></table></figure>
+
+<h5 id="6-artifacts"><a href="#6-artifacts" class="headerlink" title="(6.)artifacts"></a>(6.)artifacts</h5><p>artifacts 被用于在 job 作业成功后将制定列表里的文件或文件夹附加到 job 上，传递给下一个 job ，如果要在两个 job 之间传递 artifacts，你必须设置dependencies，下面有几个例子</p>
+<p>传递所有binaries和.config：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">artifacts:</span><br><span class="line">    paths:</span><br><span class="line">        - binaries/</span><br><span class="line">        - .config</span><br></pre></td></tr></table></figure>
+<p>传递所有git没有追踪的文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">artifacts:</span><br><span class="line">    untracked: true</span><br></pre></td></tr></table></figure>
+<p>传递binaries文件夹里所有内容和git没有追踪的文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">artifacts:</span><br><span class="line">    untracked: true</span><br><span class="line">    paths:</span><br><span class="line">        - binaries/</span><br></pre></td></tr></table></figure>
+<p>禁止传递来的artifact:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">job:</span><br><span class="line">    stage: build</span><br><span class="line">    script: make build</span><br><span class="line">    dependencies: []</span><br></pre></td></tr></table></figure>
+<p>只为打tags的行为创建artifacts。artifacts将会在job执行完毕后送到GitLab ui前台来，你可以直接下载它(tag、details、pipeline 的下载按钮上都会出现)。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">default-job:</span><br><span class="line">    script:</span><br><span class="line">        - mvn test -U</span><br><span class="line">    except:</span><br><span class="line">        - tags</span><br><span class="line"></span><br><span class="line">release-job:</span><br><span class="line">    script:</span><br><span class="line">        - mvn package -U</span><br><span class="line">    artifacts:</span><br><span class="line">        paths:</span><br><span class="line">            - target/*.war</span><br><span class="line">        only:</span><br><span class="line">            - tags</span><br><span class="line">artifacts:name</span><br></pre></td></tr></table></figure>
+<p>name指令允许你对artifacts压缩包重命名，你可以为每个artifect压缩包都指定一个特别的名字，这样对你在gitlab上下载artifect的压缩包有用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">job:</span><br><span class="line">    artifacts:</span><br><span class="line">        name: &quot;$CI_JOB_NAME&quot;</span><br><span class="line">artifacts:when</span><br></pre></td></tr></table></figure>
+<p>用于job失败或者未失败时使用。artifacts:when能设置以下值：</p>
+<p>on_success 这个值是默认的，当job成功时上传artifacts<br>on_failure 当job执行失败时，上传artifacts<br>always 不管失败与否，都上传</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">job:</span><br><span class="line">    artifacts:</span><br><span class="line">        when: on_failure    #当失败时上传artifacts</span><br><span class="line">artifacts:expire_in</span><br><span class="line">artifacts:expire_in 用于设置 artifacts 上传包的失效时间. 如果不设置，artifacts 的打包是永远存在于 gitlab上 的。当指定 artifacts 过期时间的时候， 在该期间内，artifacts 包将储存在 gitLab 上。并且你可以在 job 页面找到一个 keep 按钮，按了以后可以覆盖过期时间，让 artifacts 永远存在。过期之后，用户将无法访问到 artifacts 包。时间的例子如下:</span><br></pre></td></tr></table></figure>
+<p>‘3 mins 4 sec’<br>‘2 hrs 20 min’<br>‘2h20min’<br>‘6 mos 1 day’<br>‘47 yrs 6 mos and 4d’<br>‘3 weeks and 2 days’</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">job:</span><br><span class="line">    artifacts:</span><br><span class="line">        expire_in: 1 week # 一周后过期</span><br></pre></td></tr></table></figure>
+
+<h5 id="7-Triggers"><a href="#7-Triggers" class="headerlink" title="(7.)Triggers"></a>(7.)Triggers</h5><p>Triggers被用于重建特定分支，tag或者commit，他是api触发的。</p>
+<h5 id="8-image"><a href="#8-image" class="headerlink" title="(8.)image"></a>(8.)image</h5><p>使用的docker 镜像，这里docker镜像的地址，也可用：image:name和image:entrypoint。</p>
+<h5 id="9-services"><a href="#9-services" class="headerlink" title="(9.)services"></a>(9.)services</h5><p>使用docker服务映像。也可用：services:name，services:alias，services:entrypoint，和services:command。</p>
+<h3 id="5-Job综合示例"><a href="#5-Job综合示例" class="headerlink" title="5.Job综合示例"></a>5.Job综合示例</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"># 定义 stages（阶段）。任务将按此顺序执行。</span><br><span class="line">stages:</span><br><span class="line">  - build</span><br><span class="line">  - test</span><br><span class="line">  - deploy</span><br><span class="line"></span><br><span class="line"># 定义 job（任务）</span><br><span class="line">job1:</span><br><span class="line">  stage: test</span><br><span class="line">  tags:</span><br><span class="line">    - XX #只有标签为XX的runner才会执行这个任务</span><br><span class="line">  only:        </span><br><span class="line">    - dev    #只有dev分支提交代码才会执行这个任务。也可以是分支名称或触发器名称</span><br><span class="line">    - /^future-.*$/ #正则表达式，只有future-开头的分支才会执行</span><br><span class="line">  script:</span><br><span class="line">    - echo &quot;I am job1&quot;</span><br><span class="line">    - echo &quot;I am in test stage&quot;</span><br><span class="line"></span><br><span class="line"># 定义 job</span><br><span class="line">job2:</span><br><span class="line">  stage: test    #如果此处没有定义stage，其默认也是test</span><br><span class="line">  only:</span><br><span class="line">    - master    #只有master分支提交代码才会执行这个任务</span><br><span class="line">  script:</span><br><span class="line">    - echo &quot;I am job2&quot;</span><br><span class="line">    - echo &quot;I am in test stage&quot;</span><br><span class="line">  allow_failure: true #允许失败，即不影响下步构建    </span><br><span class="line"></span><br><span class="line"># 定义 job</span><br><span class="line">job3:</span><br><span class="line">  stage: build</span><br><span class="line">  except:    </span><br><span class="line">    - dev #除了dev分支，其它分支提交代码都会执行这个任务</span><br><span class="line">  script:</span><br><span class="line">    - echo &quot;I am job3&quot;</span><br><span class="line">    - echo &quot;I am in build stage&quot;    </span><br><span class="line">  when: always #不管前面几步成功与否，永远会执行这一步。它有几个值：on_success （默认值）\on_failure\always\manual（手动执行）</span><br><span class="line">    </span><br><span class="line"># 定义 job</span><br><span class="line">.job4:    #对于临时不想执行的job，可以选择在前面加个&quot;.&quot;，这样就会跳过此步任务，否则你除了要注释掉这个jobj外，还需要注释上面为deploy的stage</span><br><span class="line">  stage: deploy</span><br><span class="line">  script:</span><br><span class="line">    - echo &quot;I am job4&quot;    </span><br><span class="line"></span><br><span class="line"># 模板，相当于公用函数，有重复任务时很有用</span><br><span class="line">.job_template: &amp;job_definition  # 创建一个锚，&#x27;job_definition&#x27;</span><br><span class="line">  image: ruby:2.1</span><br><span class="line">  services:</span><br><span class="line">    - postgres</span><br><span class="line">    - redis</span><br><span class="line"></span><br><span class="line">test1:</span><br><span class="line">  &lt;&lt;: *job_definition           # 利用锚&#x27;job_definition&#x27;来合并</span><br><span class="line">  script:</span><br><span class="line">    - test1 project</span><br><span class="line"></span><br><span class="line">test2:</span><br><span class="line">  &lt;&lt;: *job_definition           # 利用锚&#x27;job_definition&#x27;来合并</span><br><span class="line">  script:</span><br><span class="line">    - test2 project    </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">before_script:</span><br><span class="line">  - echo &quot;每个job之前都会执行&quot;    </span><br><span class="line">  </span><br><span class="line">after_script:</span><br><span class="line">  - echo &quot;每个job之后都会执行&quot;    </span><br><span class="line"></span><br><span class="line">#下面几个都相当于全局变量，都可以添加到具体job中，这时会被子job的覆盖     </span><br><span class="line">variables:    #变量</span><br><span class="line">  DATABASE_URL: &quot;postgres://postgres@postgres/my_database&quot;  #在job中可以用$&#123;DATABASE_URL&#125;来使用这个变量。常用的预定义变量有CI_COMMIT_REF_NAME（项目所在的分支或标签名称），CI_JOB_NAME（任务名称），CI_JOB_STAGE（任务阶段）</span><br><span class="line">  GIT_STRATEGY: &quot;none&quot; #GIT策略，定义拉取代码的方式，有3种：clone/fetch/none，默认为clone，速度最慢，每步job都会重新clone一次代码。我们一般将它设置为none，在具体任务里设置为fetch就可以满足需求，毕竟不是每步都需要新代码，那也不符合我们测试的流程</span><br><span class="line"></span><br><span class="line">cache:    #缓存</span><br><span class="line">  #因为缓存为不同管道和任务间共享，可能会覆盖，所以有时需要设置key</span><br><span class="line">  key: $&#123;CI_COMMIT_REF_NAME&#125;  # 启用每分支缓存。</span><br><span class="line">  #key: &quot;$CI_JOB_NAME/$CI_COMMIT_REF_NAME&quot; # 启用每个任务和每个分支缓存。需要注意的是，如果是在windows中运行这个脚本，需要把$换成%</span><br><span class="line">  untracked: true    #缓存所有Git未跟踪的文件</span><br><span class="line">  paths:    #以下2个文件夹会被缓存起来，下次构建会解压出来</span><br><span class="line">    - node_modules/</span><br><span class="line">    - dist/  </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="6-使用docker关键字"><a href="#6-使用docker关键字" class="headerlink" title="6.使用docker关键字"></a>6.使用docker关键字</h3><p>image该关键字指定一个任务（job）所使用的docker镜像，例如image: python:latest使用Python的最新镜像。<br>镜像下载的策略：</p>
+<ul>
+<li>never： 当使用这个策略，会禁止Gitlab Runner从Docker hub或者其他地方下拉镜像，只能使用自己手动下拉的镜像</li>
+<li>if-not-present： 当使用这个策略，Runner会先检测本地是否有镜像，有的话使用该镜像，如果没有再去下拉。这个策略如果再配合定期删除镜像，就能达到比较好的效果。</li>
+<li>always： 这个是gitlab-ci默认使用的策略，即每一次都是重新下拉镜像，导致的结果就是比较耗时间</li>
+</ul>
+<p>services<br>该关键字指向其他Docker镜像，这些镜像会与image关键字指定的镜像绑定（link）。比如可以绑定一个mysql服务，存储单元测试所需要的假数据。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">default_job:</span><br><span class="line">image: python:3.6</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">- mysql:5.7</span><br><span class="line"></span><br><span class="line">before_script:</span><br><span class="line">- apt-get install mysql-client</span><br><span class="line">  复制代码before_script和after_script</span><br><span class="line">  before_script关键字定义了一组在每个任务开始之前需要执行的命令，after_script则相反。例如可以在before_script做好ssh连接的准备，见下文。</span><br><span class="line">  注：before_script可以针对全部任务，也可以针对单个任务。</span><br></pre></td></tr></table></figure>
+
+<h1 id="五-gitlab-ci-cd触发"><a href="#五-gitlab-ci-cd触发" class="headerlink" title="五.gitlab ci&#x2F;cd触发"></a>五.gitlab ci&#x2F;cd触发</h1><h3 id="1-gitlab-ci-cd-Triggers"><a href="#1-gitlab-ci-cd-Triggers" class="headerlink" title="1.gitlab ci&#x2F;cd Triggers"></a>1.gitlab ci&#x2F;cd Triggers</h3><p>创建一个用于流水线触发的认证token：<br><img src="/images/9003db02006999a4236f7653cbc2e489.webp"></p>
+<h5 id="1-使用API触发"><a href="#1-使用API触发" class="headerlink" title="(1.)使用API触发"></a>(1.)使用API触发</h5><p>使用curl命令进行测试</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST \</span><br><span class="line">     -F token=b2ba95b229f5fd0eb834454bc9aad8 \</span><br><span class="line">     -F ref=main \</span><br><span class="line">     http://192.168.1.200/api/v4/projects/31/trigger/pipeline</span><br></pre></td></tr></table></figure>
+<p>使用postman测试</p>
+<p><img src="/images/be3a573a86ddf2d5859e187e50db6878.webp"></p>
+<h5 id="2-gitlabci作业中触发"><a href="#2-gitlabci作业中触发" class="headerlink" title="(2.)gitlabci作业中触发"></a>(2.)gitlabci作业中触发</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">script:</span><br><span class="line">  - &quot;curl -X POST -F token=TOKEN -F ref=REF_NAME http://192.168.1.200/api/v4/projects/31/trigger/pipeline&quot;</span><br></pre></td></tr></table></figure>
+<p>优化：将token以变量的方式存储到项目中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">stages:         </span><br><span class="line">  - build</span><br><span class="line"> </span><br><span class="line">build-job: </span><br><span class="line">  tags:</span><br><span class="line">    - build     </span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">    - &quot;curl -X POST -F token=$&#123;CITOKEN&#125; -F ref=main  http://192.168.1.200/api/v4/projects/29/trigger/pipeline&quot;</span><br><span class="line">    - echo &quot;Compile complete.&quot;</span><br><span class="line">    - sleep 1</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-触发并传递参数"><a href="#3-触发并传递参数" class="headerlink" title="(3.)触发并传递参数"></a>(3.)触发并传递参数</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST \</span><br><span class="line">     -F token=TOKEN \</span><br><span class="line">     -F &quot;ref=main&quot; \</span><br><span class="line">     -F &quot;variables[BUILD_TOOL]=mavenandmaven&quot; \</span><br><span class="line">     http://192.168.1.200/api/v4/projects/31/trigger/pipeline</span><br></pre></td></tr></table></figure>
+<p>.gitlab-ci.yml:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ciTriggerTest:</span><br><span class="line">  tags:</span><br><span class="line">    - build</span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">    - echo $&#123;BUILD_TOOL&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="六-Android-项目配置-gitlab-ci-持续集成"><a href="#六-Android-项目配置-gitlab-ci-持续集成" class="headerlink" title="六.Android 项目配置 gitlab-ci 持续集成"></a>六.Android 项目配置 gitlab-ci 持续集成</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">image: openjdk:8-jdk</span><br><span class="line"></span><br><span class="line">variables:</span><br><span class="line">  ANDROID_COMPILE_SDK: &quot;28&quot;</span><br><span class="line">  ANDROID_BUILD_TOOLS: &quot;28.0.2&quot;</span><br><span class="line">  ANDROID_SDK_TOOLS:   &quot;4333796&quot;</span><br><span class="line"></span><br><span class="line">before_script:</span><br><span class="line">  - apt-get --quiet update --yes</span><br><span class="line">  - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1</span><br><span class="line">  - wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-$&#123;ANDROID_SDK_TOOLS&#125;.zip</span><br><span class="line">  - unzip -d android-sdk-linux android-sdk.zip</span><br><span class="line">  - echo y | android-sdk-linux/tools/bin/sdkmanager &quot;platforms;android-$&#123;ANDROID_COMPILE_SDK&#125;&quot; &gt;/dev/null</span><br><span class="line">  - echo y | android-sdk-linux/tools/bin/sdkmanager &quot;platform-tools&quot; &gt;/dev/null</span><br><span class="line">  - echo y | android-sdk-linux/tools/bin/sdkmanager &quot;build-tools;$&#123;ANDROID_BUILD_TOOLS&#125;&quot; &gt;/dev/null</span><br><span class="line">  - export ANDROID_HOME=$PWD/android-sdk-linux</span><br><span class="line">  - export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/</span><br><span class="line">  - chmod +x ./gradlew</span><br><span class="line">  # temporarily disable checking for EPIPE error and use yes to accept all licenses</span><br><span class="line">  - set +o pipefail</span><br><span class="line">  - yes | android-sdk-linux/tools/bin/sdkmanager --licenses</span><br><span class="line">  - set -o pipefail</span><br><span class="line"></span><br><span class="line">stages:</span><br><span class="line">  - build</span><br><span class="line">  - test</span><br><span class="line"></span><br><span class="line">lintDebug:</span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint</span><br><span class="line"></span><br><span class="line">assembleDebug:</span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew assembleDebug</span><br><span class="line">  artifacts:</span><br><span class="line">    paths:</span><br><span class="line">    - app/build/outputs/</span><br><span class="line"></span><br><span class="line">debugTests:</span><br><span class="line">  stage: test</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew -Pci --console=plain :app:testDebug</span><br></pre></td></tr></table></figure>
+
+<p>推荐一个 Docker Android 镜像：<a target="_blank" rel="noopener" href="https://hub.docker.com/r/runmymind/docker-android-sdk">docker-android-sdk</a><br>对 CI  .gitlab-ci.yml  文件内容修改，更换镜像，避免每次都下载 Android SDK ：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">image: runmymind/docker-android-sdk:latest</span><br><span class="line"></span><br><span class="line">before_script:</span><br><span class="line">  - chmod +x ./gradlew</span><br><span class="line"></span><br><span class="line">stages:</span><br><span class="line">  - build</span><br><span class="line"></span><br><span class="line">assembleDebug:</span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew clean</span><br><span class="line">    - ./gradlew assembleDebug</span><br><span class="line">  artifacts:</span><br><span class="line">    paths:</span><br><span class="line">    - app/build/outputs/</span><br><span class="line">  only:</span><br><span class="line">    - master</span><br><span class="line"></span><br><span class="line">assembleRelease:</span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew clean</span><br><span class="line">    - ./gradlew assembleRelease</span><br><span class="line">  artifacts:</span><br><span class="line">    paths:</span><br><span class="line">    - app/build/outputs/</span><br><span class="line">  only:</span><br><span class="line">    - master</span><br></pre></td></tr></table></figure>
+
+<p>.gitlab-ci.yml脚本文件语法介绍</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"># 就是上文说的stages</span><br><span class="line">stages:</span><br><span class="line">  - build_debug # 这里就是一个stage，可以定义多个stage，这个stage就是下面的build_debug</span><br><span class="line"></span><br><span class="line"># 构建之前会执行的脚本，这里导入本地的环境变量</span><br><span class="line">before_script:</span><br><span class="line">  - export ANDROID_HOME=/Users/work/Android/SDK</span><br><span class="line">  - export PATH=$PATH:$&#123;ANDROID_HOME&#125;/tools</span><br><span class="line">  - export PATH=$PATH:$&#123;ANDROID_HOME&#125;/platform-tools</span><br><span class="line">  - chmod +x ./gradlew</span><br><span class="line"></span><br><span class="line"># 声明一个名叫build_debug的构建任务</span><br><span class="line">build_debug:</span><br><span class="line">  stage: build_debug</span><br><span class="line">  # 构建中，执行一些脚本</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew --stacktrace assembleDevelopDebug</span><br><span class="line">  # 指定监听哪一个分支或什么时候触发Pipeline</span><br><span class="line">  only: </span><br><span class="line">    - tags #这里tags的作用是当修改gitlab项目tag的时候会触发</span><br><span class="line">    - test # 监听GitLab的这个分支</span><br><span class="line">  #    - master</span><br><span class="line">  # 指定由哪一个runner运行</span><br><span class="line">  tags:</span><br><span class="line">    - dev # 这个dev是上文注册Runner时的tag，和注册时候tag一样的话就会用对应的Runner来执行任务</span><br><span class="line">  # 指定成功后应附加到任务的文件和目录的列表</span><br><span class="line">  artifacts:</span><br><span class="line">    paths:</span><br><span class="line">      - app/build/outputs/</span><br><span class="line"></span><br><span class="line"># 构建完成之后执行的脚本</span><br><span class="line">#after_script:</span><br><span class="line">#  - 这里如果是要配合monkey的话，一般在这个地方执行monkey的脚本</span><br></pre></td></tr></table></figure>
+
+<p>配置Android工程<br>runner配置好后，接下来的工作就是配置Android项目，只需要在工程目录下创建.gitlab-ci.yml配置文件，然后往里面填充你想要实现的步骤即可，有点类似Jenkins中的pipeline脚本。不过，感觉gitlab ci的配置更加简单一些。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">image: gitlab-ci-android:V2 # 用来编译 android 项目的镜像</span><br><span class="line">variables:</span><br><span class="line">  GRADLE_OPTS: &quot;-Dorg.gradle.daemon=false&quot; # 禁用 gradle 守护进程</span><br><span class="line">before_script:</span><br><span class="line">  #  配置 gradle 的缓存目录</span><br><span class="line">  - export GRADLE_USER_HOME=/cache/.gradle</span><br><span class="line">  #  获取权限</span><br><span class="line">  - chmod +x ./gradlew</span><br><span class="line">  - chmod +x ./update-version-code.sh</span><br><span class="line">stages:</span><br><span class="line">  - build</span><br><span class="line"># 提交代码自动编译</span><br><span class="line">build:</span><br><span class="line">  stage: build</span><br><span class="line">  only:</span><br><span class="line">    - master</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew assembleDebug</span><br><span class="line">  tags:</span><br><span class="line">    - android</span><br><span class="line"># 构建测试包</span><br><span class="line">qa:</span><br><span class="line">  stage: build</span><br><span class="line">  only:</span><br><span class="line">    - qa</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew assembleDebug</span><br><span class="line">    - sh -x /cache/deploy-android.sh</span><br><span class="line">  artifacts:</span><br><span class="line">    paths:</span><br><span class="line">      - app/build/outputs/apk/debug/</span><br><span class="line">  tags:</span><br><span class="line">    - android</span><br></pre></td></tr></table></figure>
+<p>上面配置的大致意思是：当开发往qa分支提交代码时，会触发构建测试包，打包完成后，会将包上传到一个文件服务器上，方便下载安装。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">image: seanghay/android-ci</span><br><span class="line">before_script:</span><br><span class="line">  - chmod +x ./gradlew</span><br><span class="line">stages:</span><br><span class="line">  - build</span><br><span class="line">cache:</span><br><span class="line">  paths:</span><br><span class="line">    - .gradle/wrapper</span><br><span class="line">    - .gradle/caches</span><br><span class="line">assembleDebug:</span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew assembleDebug</span><br><span class="line">    - cp app/build/outputs/apk/debug/app-debug.apk app-debug.apk</span><br><span class="line">  artifacts:</span><br><span class="line">    paths:</span><br><span class="line">      - app-debug.apk</span><br></pre></td></tr></table></figure>
+
+
+<p>配置 runner 缓存路径<br>在服务器上找一个文件夹挂载到 docker 容器里边，给 .gradle 做一个缓存，这样每次编译的时候，就不用一直下载 gradle 了，这里我挂载的是 &#x2F;home&#x2F;android-cache 文件夹：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/gitlab-runner/config.toml</span><br></pre></td></tr></table></figure>
+<p><img src="/images/43ebdc0a34be6adf84eea50f92725ebc.webp"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pull_policy = &quot;if-not-present&quot; 避免docker 镜像每次都pull</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意，如果你的 gitlab 服务器迁移了之后，如果不想再重新注册 runner，可以改这个配置文件的 url 和 token 为迁移后的值</p>
+</blockquote>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="http://blinkfox.com/2018/11/22/ruan-jian-gong-ju/devops/gitlab-ci-jie-shao-he-shi-yong/#toc-heading-8">GitLab CI&#x2F;CD 介绍和使用</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/e0553d3ac743/">超简单配置Android持续集成自动化打包流程 - GitHub+GitLab-CI+蒲公英+钉钉</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/aimqqroad-13/p/10115799.html">Android 项目配置 gitlab-ci 持续集成</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/Captive_Rainbow_/article/details/90407356">Android 持续集成实践（二）——配置 Docker + gitlab-runner 实现线上自动编译</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/Captive_Rainbow_/article/details/90480269">Android 持续集成实践（三）——编写 .gitlab-ci.yml 实现自动化</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/Captive_Rainbow_/article/details/90634669">Android 持续集成实践（四）——配置 WebHook 通知编译结果</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2021/07/11/CI-CD%E5%B7%A5%E5%85%B7%E4%B9%8BGitLab-Runner/">https://lxlfpeng.github.io/2021/07/11/CI-CD%E5%B7%A5%E5%85%B7%E4%B9%8BGitLab-Runner/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2021/07/15/%E4%BD%BF%E7%94%A8Fastlane%E7%BC%96%E5%86%99Android%E8%87%AA%E5%8A%A8%E6%89%93%E5%8C%85%E8%84%9A%E6%9C%AC/" title="使用Fastlane编写Android自动打包脚本"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">使用Fastlane编写Android自动打包脚本</div></div><div class="info-2"><div class="info-item-1">一.什么是Fastlane?Fastlane 是一款为 iOS 和 Android 开发者提供的自动化构建工具，它可以帮助开发者将 App 打包、签名、测试、发布、信息整理、提交 App Store 等工作完整的连接起来， 实现完全自动化的工作流。Fastlane本身没有一套特殊语法，使用的Ruby语言。Fastlane的插件工具叫做action，每一个action都对应一个具体的功能。 二.安装FastlaneFastlane是基于Ruby编写得因此需要先安装Ruby开发环境，如果使用Docker可以拉取Ruby镜像进行操作。gem是ruby的包管理工具，首先确认下你的gem版本，最好是2.6+， 12gem -v2.6.6 正式开始安装fastlane之前，建议再换一下源： 1gem sources --add https://gems.ruby-china.org/ --remove https://ruby     gems.org/ 换完后确认一下： 123gem sources -l*** CURRENT SOURCES...</div></div></div></a><a class="pagination-related" href="/2021/07/11/x96max+-%E7%94%B5%E8%A7%86%E7%9B%92%E5%AD%90%E5%A6%82%E4%BD%95%E5%88%B7%E5%85%A5EmuELEC%E6%B8%B8%E6%88%8F%E7%B3%BB%E7%BB%9F/" title="x96max+-电视盒子如何刷入EmuELEC游戏系统"><img class="cover" src="/images/368ed8979644e82aaaaf3a9694d0d744.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">x96max+-电视盒子如何刷入EmuELEC游戏系统</div></div><div class="info-2"><div class="info-item-1">一. 了解相关概念1. Kodi是什么?Kodi（以前称为XBMC）是一个免费的开放源代码媒体播放器软件应用程序，它可以运行在Linux、OSX、Windows、Android等多种操作系统和硬件平台。它是一个优秀的开源的（GPL）媒体中心软件。最初为Xbox而开发，叫XBMC(全称是XBOX Media Center)，也就是XBOX平台的媒体中心。因为全世界开发者的参与，这个软件已经拥有远远超过以往的功能，这已经不能用‘一个简单播放器’来包含所有的一切了。因为这个原因，XBMC.14后更名为Kodi。Kodi的图形用户界面让用户方便地从硬盘、光盘、局域网和互联网浏览和观看视频、图片，收听广播和音乐。Kodi项目由非营利的XBMC基金会管理，并由分布在世界各地的志愿者参与开发。不仅如此Kodi还能通过插件提供各种扩展的功能，有Kodi开发团队，也有第三方人员开发的插件。kodi中文网 2. LibreELEC是什么?LibreELEC 是基于 Linux 的多媒体播放系统，其宗旨是在一个高度精简的 Linux 系统下通过 KODI 播放多媒体音视频，LibreELEC 是...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-GitLab-CI%E5%92%8CGitLab-Runner%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">一.GitLab-CI和GitLab-Runner简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-GitLab-CI%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.0.1.</span> <span class="toc-text">1.GitLab-CI是什么?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-GitLab-Runner%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.0.2.</span> <span class="toc-text">2.GitLab-Runner是什么?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-GitLab-CI%E6%89%A7%E8%A1%8C%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.0.3.</span> <span class="toc-text">3.GitLab-CI执行步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-GitLab-Runner%E6%89%A7%E8%A1%8C%E5%99%A8"><span class="toc-number">1.0.4.</span> <span class="toc-text">4.GitLab-Runner执行器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-GitLab-Runner%E5%AE%89%E8%A3%85%E5%8F%8A%E6%B3%A8%E5%86%8C"><span class="toc-number">2.</span> <span class="toc-text">二.GitLab-Runner安装及注册</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-GitLab-Runner%E5%AE%89%E8%A3%85"><span class="toc-number">2.0.1.</span> <span class="toc-text">1.GitLab-Runner安装</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E6%9C%AC%E5%9C%B0%E5%AE%89%E8%A3%85GitLab-Runner"><span class="toc-number">2.0.1.0.1.</span> <span class="toc-text">(1.)本地安装GitLab-Runner</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-Docker%E5%AE%89%E8%A3%85GitLab-Runner-%E6%8E%A8%E8%8D%90"><span class="toc-number">2.0.1.0.2.</span> <span class="toc-text">(2.)Docker安装GitLab-Runner(推荐)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-GitLab-Runner%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">2.0.2.</span> <span class="toc-text">2.GitLab-Runner的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-Shared-Runners"><span class="toc-number">2.0.2.0.1.</span> <span class="toc-text">(1.)Shared Runners</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-Group-Runner"><span class="toc-number">2.0.2.0.2.</span> <span class="toc-text">(2.)Group Runner</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-Specific-Runner"><span class="toc-number">2.0.2.0.3.</span> <span class="toc-text">(3.)Specific Runner</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-%E4%B8%89%E7%A7%8DGitLab-Runner%E6%80%BB%E7%BB%93"><span class="toc-number">2.0.2.0.4.</span> <span class="toc-text">(4.)三种GitLab-Runner总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%B3%A8%E5%86%8Cgitlab-runner%E5%88%B0GitLab-CI"><span class="toc-number">2.0.3.</span> <span class="toc-text">3.注册gitlab-runner到GitLab-CI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-gitlab-runner%E5%8F%96%E6%B6%88%E6%B3%A8%E5%86%8C"><span class="toc-number">2.0.4.</span> <span class="toc-text">4.gitlab-runner取消注册</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-GitLab-Runner%E7%9A%84executor-%E6%89%A7%E8%A1%8C%E5%99%A8"><span class="toc-number">3.</span> <span class="toc-text">三.GitLab-Runner的executor(执行器)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-executor-%E6%89%A7%E8%A1%8C%E5%99%A8-%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">3.0.1.</span> <span class="toc-text">1.executor(执行器)的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-SSH-executor"><span class="toc-number">3.0.2.</span> <span class="toc-text">2.SSH executor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-VirtualBox-Parallel-executor"><span class="toc-number">3.0.3.</span> <span class="toc-text">3.VirtualBox&#x2F;Parallel executor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Kuberentes-executor"><span class="toc-number">3.0.4.</span> <span class="toc-text">4.Kuberentes executor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-shell-executor"><span class="toc-number">3.0.5.</span> <span class="toc-text">5.shell executor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-docker-executor"><span class="toc-number">3.0.6.</span> <span class="toc-text">6.docker executor</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-docker-in-docker"><span class="toc-number">3.0.6.0.1.</span> <span class="toc-text">(1.)docker-in-docker</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-docker-socket-binding-%E6%8C%82%E8%BD%BD%E5%AE%BF%E4%B8%BB%E6%9C%BADocker"><span class="toc-number">3.0.6.0.2.</span> <span class="toc-text">(2.)docker socket binding(挂载宿主机Docker)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-Docker%E4%B8%AD%E5%AE%9E%E7%8E%B0%E8%BF%90%E8%A1%8CDocker%E6%80%BB%E7%BB%93"><span class="toc-number">3.0.6.0.3.</span> <span class="toc-text">(3.)Docker中实现运行Docker总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-executor-%E6%89%A7%E8%A1%8C%E5%99%A8-%E6%80%BB%E7%BB%93"><span class="toc-number">3.0.7.</span> <span class="toc-text">7.executor(执行器)总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-GitLab%E7%BC%96%E5%86%99ci%E3%80%81cd%E6%B5%81%E7%A8%8B%E6%96%87%E4%BB%B6"><span class="toc-number">4.</span> <span class="toc-text">四.GitLab编写ci、cd流程文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Pipeline-Stages-Jobs"><span class="toc-number">4.0.1.</span> <span class="toc-text">1.Pipeline &amp; Stages &amp; Jobs#</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84-gitlab-ci-yml"><span class="toc-number">4.0.2.</span> <span class="toc-text">2.创建一个简单的.gitlab-ci.yml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Job%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">4.0.3.</span> <span class="toc-text">3.Job关键字</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E4%B8%8D%E5%8F%AF%E4%BB%A5%E8%A2%AB%E7%94%A8%E4%BA%8E-Job%E5%90%8D-%E7%9A%84%E4%BF%9D%E7%95%99%E5%AD%97"><span class="toc-number">4.0.3.0.1.</span> <span class="toc-text">(1.)不可以被用于 Job名 的保留字</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-Job-%E7%9A%84%E4%BF%9D%E7%95%99%E5%AD%97"><span class="toc-number">4.0.3.0.2.</span> <span class="toc-text">(2.)Job 的保留字</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-only-and-except-%E4%BF%9D%E7%95%99%E5%AD%97"><span class="toc-number">4.0.3.0.3.</span> <span class="toc-text">(3.)only and except 保留字</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-gitlab-runner%E6%A0%87%E7%AD%BE%E5%85%B3%E9%94%AE%E5%AD%97%EF%BC%88Tags%EF%BC%89"><span class="toc-number">4.0.3.1.</span> <span class="toc-text">(4.)gitlab-runner标签关键字（Tags）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Job%E9%87%8D%E8%A6%81%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97%E8%A7%A3%E6%9E%90"><span class="toc-number">4.0.4.</span> <span class="toc-text">4.Job重要的关键字解析</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-after-script"><span class="toc-number">4.0.4.0.1.</span> <span class="toc-text">(1.)after_script</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-variables"><span class="toc-number">4.0.4.0.2.</span> <span class="toc-text">(2.)variables</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-Stages"><span class="toc-number">4.0.4.0.3.</span> <span class="toc-text">(3.)Stages</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-Jobs"><span class="toc-number">4.0.4.0.4.</span> <span class="toc-text">(4.)Jobs</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-only-and-except"><span class="toc-number">4.0.4.0.5.</span> <span class="toc-text">(5.)only and except</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-artifacts"><span class="toc-number">4.0.4.0.6.</span> <span class="toc-text">(6.)artifacts</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#7-Triggers"><span class="toc-number">4.0.4.0.7.</span> <span class="toc-text">(7.)Triggers</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#8-image"><span class="toc-number">4.0.4.0.8.</span> <span class="toc-text">(8.)image</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#9-services"><span class="toc-number">4.0.4.0.9.</span> <span class="toc-text">(9.)services</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-Job%E7%BB%BC%E5%90%88%E7%A4%BA%E4%BE%8B"><span class="toc-number">4.0.5.</span> <span class="toc-text">5.Job综合示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E4%BD%BF%E7%94%A8docker%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">4.0.6.</span> <span class="toc-text">6.使用docker关键字</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94-gitlab-ci-cd%E8%A7%A6%E5%8F%91"><span class="toc-number">5.</span> <span class="toc-text">五.gitlab ci&#x2F;cd触发</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-gitlab-ci-cd-Triggers"><span class="toc-number">5.0.1.</span> <span class="toc-text">1.gitlab ci&#x2F;cd Triggers</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E4%BD%BF%E7%94%A8API%E8%A7%A6%E5%8F%91"><span class="toc-number">5.0.1.0.1.</span> <span class="toc-text">(1.)使用API触发</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-gitlabci%E4%BD%9C%E4%B8%9A%E4%B8%AD%E8%A7%A6%E5%8F%91"><span class="toc-number">5.0.1.0.2.</span> <span class="toc-text">(2.)gitlabci作业中触发</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E8%A7%A6%E5%8F%91%E5%B9%B6%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0"><span class="toc-number">5.0.1.0.3.</span> <span class="toc-text">(3.)触发并传递参数</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD-Android-%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE-gitlab-ci-%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90"><span class="toc-number">6.</span> <span class="toc-text">六.Android 项目配置 gitlab-ci 持续集成</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

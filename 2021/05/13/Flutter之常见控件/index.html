@@ -1,0 +1,450 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Flutter之常见控件 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Flutter列表控件在 Flutter 中，ListView 可以沿一个方向（垂直或水平方向）来排列其所有子 Widget，常被用于需要展示一组连续视图元素的场景。ListView 构造方法:  ListView：仅适用于列表中含有少量元素的场景 ListView.build：适用于子 Widget 比较多的场景 ListView.separated：适用于需要设置分割线的场景   构造方法名">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flutter之常见控件">
+<meta property="og:url" content="https://lxlfpeng.github.io/2021/05/13/Flutter%E4%B9%8B%E5%B8%B8%E8%A7%81%E6%8E%A7%E4%BB%B6/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="Flutter列表控件在 Flutter 中，ListView 可以沿一个方向（垂直或水平方向）来排列其所有子 Widget，常被用于需要展示一组连续视图元素的场景。ListView 构造方法:  ListView：仅适用于列表中含有少量元素的场景 ListView.build：适用于子 Widget 比较多的场景 ListView.separated：适用于需要设置分割线的场景   构造方法名">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2021-05-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.841Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2021/05/13/Flutter%E4%B9%8B%E5%B8%B8%E8%A7%81%E6%8E%A7%E4%BB%B6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Flutter之常见控件',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Flutter之常见控件</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Flutter之常见控件</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2021-05-12T16:00:00.000Z" title="发表于 2021-05-13 00:00:00">2021-05-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Flutter%E5%BC%80%E5%8F%91/">Flutter开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>17分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Flutter列表控件"><a href="#Flutter列表控件" class="headerlink" title="Flutter列表控件"></a>Flutter列表控件</h1><p>在 Flutter 中，ListView 可以沿一个方向（垂直或水平方向）来排列其所有子 Widget，常被用于需要展示一组连续视图元素的场景。<br>ListView 构造方法:</p>
+<ul>
+<li>ListView：仅适用于列表中含有少量元素的场景</li>
+<li>ListView.build：适用于子 Widget 比较多的场景</li>
+<li>ListView.separated：适用于需要设置分割线的场景<table>
+<thead>
+<tr>
+<th>构造方法名</th>
+<th>特点</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ListView</td>
+<td>一次性创建好所有子 Widget</td>
+<td>适用于展示少量连续子 Widget 的场景。</td>
+</tr>
+<tr>
+<td>ListView.build</td>
+<td>提供了子 Widget 创建方法，仅在需要展示时才创建</td>
+<td>适用于子 Widget 较多，且视觉效果呈现某种规律性的场景。</td>
+</tr>
+<tr>
+<td>ListView.separated</td>
+<td>提供了子 Widget 创建方法，仅在需要展示时才创建，且提供了自定义分割线的功能</td>
+<td>适用于子 Widget 较多，且视觉效果呈现某种规律性、每个子 Widget 之间需要分割线的场景。</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h3 id="1-ListView"><a href="#1-ListView" class="headerlink" title="1.ListView"></a>1.ListView</h3><p>可以通过设置 children 参数，将所有子 Widget 包含到 listView 中，但这种创建方法要求提前将所有子 Widget 一次性创建好，而不是等到真正需要在屏幕上显示时才创建，即这种方法是导致性能下降 。因此，这种方式只适合列表中含有少量元素的场景:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">class ListPage extends StatelessWidget &#123;</span><br><span class="line">  @override</span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    return Scaffold(</span><br><span class="line">      body: ListView(</span><br><span class="line">        children: &lt;Widget&gt;[</span><br><span class="line">          ListTile(</span><br><span class="line">            leading: Icon(</span><br><span class="line">              Icons.home,</span><br><span class="line">              color: Colors.cyan, // 图标颜色</span><br><span class="line">            ),</span><br><span class="line">            title: Text(&quot;首页&quot;),</span><br><span class="line">            selected: true, // 设置状态为选中状态</span><br><span class="line">          ),</span><br><span class="line">          ListTile(</span><br><span class="line">            leading: Icon(</span><br><span class="line">              Icons.add_shopping_cart,</span><br><span class="line">              color: Colors.black54,</span><br><span class="line">            ),</span><br><span class="line">            title: Text(&quot;购物车&quot;),</span><br><span class="line">          ),</span><br><span class="line">          ListTile(</span><br><span class="line">            leading: Icon(</span><br><span class="line">              Icons.account_circle,</span><br><span class="line">              color: Colors.black54,</span><br><span class="line">            ),</span><br><span class="line">            title: Text(&quot;我的&quot;),</span><br><span class="line">          )</span><br><span class="line">        ],</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-ListView-builder"><a href="#2-ListView-builder" class="headerlink" title="2.ListView.builder"></a>2.ListView.builder</h3><ul>
+<li>itemBuilder：列表项的创建方法。当列表滚动到相应位置时，ListView 会调用该方法创建对应的子 Widget</li>
+<li>itemCount：列表项的数目。如果不设置或设置为空，则表示 ListView 为无限列表</li>
+<li>itemExtent：列表项高度。可选参数，但对于定高的列表项元素，建议设置该参数的值（不设置时，ListView 会动态的根据子 Widget 创建完成后的结果，决定自身的视图高度，以及子 Widget 在 ListView 中的相对位置）<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class ListBuild extends StatelessWidget &#123;</span><br><span class="line">  @override</span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    return Scaffold(</span><br><span class="line">      body: ListView.builder(</span><br><span class="line">        itemBuilder: (context, index) =&gt; ListTile(</span><br><span class="line">          leading: Icon(Icons.adb),</span><br><span class="line">          title: Text(&quot;下标&quot; + index.toString()),</span><br><span class="line">        ),</span><br><span class="line">        itemExtent: 46, // 列表项高度</span><br><span class="line">        itemCount: 50, //列表项总数，不设置为无限加载</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="3-ListView-separatorBuilder"><a href="#3-ListView-separatorBuilder" class="headerlink" title="3.ListView.separatorBuilder"></a>3.ListView.separatorBuilder</h3><p>设置列表项之间的分隔线，可以根据下标设置不同的分隔线</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">class ListSeparated extends StatelessWidget &#123;</span><br><span class="line">  @override</span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    return Scaffold(</span><br><span class="line">      appBar: AppBar(</span><br><span class="line">        title: Text(&quot;Android小白营&quot;),</span><br><span class="line">      ),</span><br><span class="line">      body: ListView.separated(</span><br><span class="line">        itemBuilder: (context, index) =&gt; GestureDetector(</span><br><span class="line">          child: ListTile(</span><br><span class="line">            leading: Icon(Icons.adb),</span><br><span class="line">            title: Text(&quot;下标&quot; + index.toString()),</span><br><span class="line">          ),</span><br><span class="line">          onTap: () =&gt; Fluttertoast.showToast(msg: index.toString()), // 列表项点击事件</span><br><span class="line">        ),</span><br><span class="line">        separatorBuilder: (BuildContext context, index) &#123;</span><br><span class="line">          divider divider;</span><br><span class="line">          if (index % 2 == 0) &#123;</span><br><span class="line">            divider = Divider(</span><br><span class="line">              thickness: 1, // 分隔线宽度</span><br><span class="line">              height: 0,</span><br><span class="line">              color: Colors.black12, // 分隔线颜色</span><br><span class="line">            );</span><br><span class="line">          &#125; else &#123;</span><br><span class="line">            divider = Divider(</span><br><span class="line">              thickness: 2,</span><br><span class="line">              height: 0,</span><br><span class="line">              color: Colors.deepOrangeAccent,</span><br><span class="line">            );</span><br><span class="line">          &#125;</span><br><span class="line">          return divider;</span><br><span class="line">        &#125;,</span><br><span class="line">        itemCount: 100,</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Flutter设置margin和padding"><a href="#Flutter设置margin和padding" class="headerlink" title="Flutter设置margin和padding"></a>Flutter设置margin和padding</h1><h3 id="方式一使用Container包裹"><a href="#方式一使用Container包裹" class="headerlink" title="方式一使用Container包裹"></a>方式一使用Container包裹</h3><p>用Container包裹起来然后在Container上面设置:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">padding: EdgeInsets.fromLTRB(10, 10, 15, 20),//内边距，里边的蓝块，需要给宽高</span><br><span class="line">margin: EdgeInsets.fromLTRB(100, 10, 15, 15),//外边距，父容器本身相对外部容器的移动</span><br></pre></td></tr></table></figure>
+<h3 id="方式二使用Padding和SizedBox-组件"><a href="#方式二使用Padding和SizedBox-组件" class="headerlink" title="方式二使用Padding和SizedBox 组件"></a>方式二使用Padding和SizedBox 组件</h3><p>Flutter开发，万物皆Widget，对于内边距，我们一般是在目标控件包裹一层父级控件Padding，并通过Padding控件的padding属性指定内边距数值，例如:<br>统一指定上下左右的内边距</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Padding(</span><br><span class="line">  padding: const EdgeInsets.all(20.0),</span><br><span class="line">  child: Text(text),</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+<p>指定左侧内边距</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Padding(</span><br><span class="line">  padding: EdgeInsets.only(left: 20.0),</span><br><span class="line">  child: Text(text),</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+<p>指定上下左右内边距</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Padding(</span><br><span class="line">  padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),//此处也可以使用EdgeInsets.only</span><br><span class="line">  child: Text(text),</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+<p>对于外边距，Flutter没有类似Padding的控件，但是很多时候我们又想要实现控件间的间距效果，这个时候SizedBox控件就派上用场了，它是一种类似于Android平台的space占位view，只占空间不显示，使用方法也很简单：</p>
+<p>设置上下外边距</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SizedBox(</span><br><span class="line">  height: 20.0,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>设置左右外边距</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SizedBox(</span><br><span class="line">  width: 20.0,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>2.使用Spacer填充尽可能大的空间</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Row(</span><br><span class="line">  children: &lt;Widget&gt;[</span><br><span class="line">      Text(&quot;1&quot;),</span><br><span class="line">      Spacer(), // use Spacer</span><br><span class="line">      Text(&quot;2&quot;),</span><br><span class="line">  ],</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h1 id="FlutterFlex弹性布局"><a href="#FlutterFlex弹性布局" class="headerlink" title="FlutterFlex弹性布局"></a>FlutterFlex弹性布局</h1><h3 id="弹性系数"><a href="#弹性系数" class="headerlink" title="弹性系数"></a>弹性系数</h3><p>如果为 0 或 null，则 child 是没有弹性的，即不会被扩伸占用的空间。<br>如果大于 0，所有的Expanded按照其flex的比例来分割主轴的全部空闲空间。</p>
+<h3 id="Expanded占据剩余的空间"><a href="#Expanded占据剩余的空间" class="headerlink" title="Expanded占据剩余的空间"></a>Expanded占据剩余的空间</h3><p>Expanded使用与类似与Column，Row，Flex等展示多个组件集合的组件，Expanded包含的组件可以占据剩余的空间。<br>Expanded组件可以使Row、Column、Flex等子组件在其主轴方向上展开并填充可用空间(例如，Row在水平方向，Column在垂直方向)。如果多个子组件展开，可用空间会被其flex factor(表示扩展的速度、比例)分割。<br>Expanded组件必须用在Row、Column、Flex内，并且从Expanded到封装它的Row、Column、Flex的路径必须只包括StatelessWidgets或StatefulWidgets组件(不能是其他类型的组件，像RenderObjectWidget，它是渲染对象，不再改变尺寸了，因此Expanded不能放进RenderObjectWidget)。</p>
+<blockquote>
+<p>注意一点：在Row中使用Expanded的时候，无法指定Expanded中的子组件的宽度width，但可以指定其高度height。同理，在Column中使用Expanded的时候，无法指定Expanded中的子组件的高度height，可以指定宽度width。</p>
+</blockquote>
+<h1 id="Flutter给组件设置点击事件"><a href="#Flutter给组件设置点击事件" class="headerlink" title="Flutter给组件设置点击事件"></a>Flutter给组件设置点击事件</h1><ul>
+<li>在flutter 开发中用InkWell或者GestureDetector将某个组件包起来，可添加点击事件。</li>
+<li>GestureDetector 使用点击无水波纹出现，InkWell可以实现水波纹效果。</li>
+</ul>
+<h3 id="1-InkWell有点击效果"><a href="#1-InkWell有点击效果" class="headerlink" title="1. InkWell有点击效果"></a>1. InkWell有点击效果</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">InkWell(</span><br><span class="line">      onTap: ()&#123;&#125;,</span><br><span class="line">      child: Container())</span><br></pre></td></tr></table></figure>
+<h3 id="2-GestureDetector-设置点击"><a href="#2-GestureDetector-设置点击" class="headerlink" title="2. GestureDetector 设置点击"></a>2. GestureDetector 设置点击</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GestureDetector(</span><br><span class="line">            child: Text(&quot;GestureDetector 点击&quot;),</span><br><span class="line">            onTap: () &#123;&#125;)</span><br></pre></td></tr></table></figure>
+
+<h1 id="Flutter快捷键生成控件"><a href="#Flutter快捷键生成控件" class="headerlink" title="Flutter快捷键生成控件"></a>Flutter快捷键生成控件</h1><ul>
+<li>输入stless就可以创建一个StatelessWidget。</li>
+<li>输入stful就可以创建一个StatefulWidget。</li>
+</ul>
+<h1 id="Flutter圆角控件"><a href="#Flutter圆角控件" class="headerlink" title="Flutter圆角控件"></a>Flutter圆角控件</h1><h3 id="1-通过Card的shape属性"><a href="#1-通过Card的shape属性" class="headerlink" title="1.通过Card的shape属性"></a>1.通过Card的shape属性</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Card(</span><br><span class="line">            shape: RoundedRectangleBorder(</span><br><span class="line">                borderRadius: BorderRadiusDirectional.circular(20)),</span><br><span class="line">            clipBehavior: Clip.antiAlias,</span><br><span class="line">            child: Image.asset(</span><br><span class="line">              &quot;images/landscape0.jpeg&quot;,</span><br><span class="line">              width: double.maxFinite,</span><br><span class="line">            ),</span><br><span class="line">          )</span><br></pre></td></tr></table></figure>
+<p>唯一值的注意的地方就是borderRadius看准了，不要用错了，要不然没效果。</p>
+<h3 id="2-通过Container的decoration"><a href="#2-通过Container的decoration" class="headerlink" title="2.通过Container的decoration"></a>2.通过Container的decoration</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Container(</span><br><span class="line">          decoration: ShapeDecoration(</span><br><span class="line">              image: DecorationImage(</span><br><span class="line">                  image: AssetImage(&quot;images/landscape1.jpeg&quot;),</span><br><span class="line">                  fit: BoxFit.fitWidth),</span><br><span class="line">              shape: RoundedRectangleBorder(</span><br><span class="line">                  borderRadius: BorderRadiusDirectional.circular(20))),</span><br><span class="line">          width: double.maxFinite,</span><br><span class="line">          height: 300,</span><br><span class="line">          child: Align(</span><br><span class="line">            child: Padding(</span><br><span class="line">              padding: const EdgeInsets.all(8.0),</span><br><span class="line">              child: Text(</span><br><span class="line">                &quot;Container decoration实现圆角(radius = 20)&quot;,</span><br><span class="line">                style: TextStyle(color: Colors.white),</span><br><span class="line">              ),</span><br><span class="line">            ),</span><br><span class="line">            alignment: Alignment.bottomCenter,</span><br><span class="line">          ),</span><br><span class="line">        )</span><br></pre></td></tr></table></figure>
+<p>使用的DecorationImage，相当于把图片当做一个背景，这里需要注意的就是Container的child的尺寸问题，就算不放内容，也需要设置一个带尺寸的child Widget。</p>
+<h3 id="3-直接使用ClipRRect"><a href="#3-直接使用ClipRRect" class="headerlink" title="3.直接使用ClipRRect"></a>3.直接使用ClipRRect</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ClipRRect(</span><br><span class="line">              borderRadius: BorderRadius.circular(20),</span><br><span class="line">              child: Image.asset(&quot;images/landscape2.jpeg&quot;),</span><br><span class="line">            ),</span><br></pre></td></tr></table></figure>
+<p>这种方式是最简单的，直接使用即可。</p>
+<h1 id="装饰容器DecoratedBox"><a href="#装饰容器DecoratedBox" class="headerlink" title="装饰容器DecoratedBox"></a>装饰容器DecoratedBox</h1><p>DecoratedBox可以在其子组件绘制前(或后)绘制一些装饰（Decoration），如背景、边框、渐变等。DecoratedBox定义如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 在子控件绘制之前或之后绘制一个装饰</span><br><span class="line">    const DecoratedBox(&#123;</span><br><span class="line">    Key key,</span><br><span class="line">    @required this.decoration,//要绘制的装饰器</span><br><span class="line">    this.position = DecorationPosition.background,//绘制在子组件上面(DecorationPosition.background)还是下面(DecorationPosition.foreground)</span><br><span class="line">    Widget child</span><br><span class="line">    &#125;)</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+<ul>
+<li>decoration：代表将要绘制的装饰，它的类型为Decoration。Decoration是一个抽象类，它定义了一个接口 createBoxPainter()，子类的主要职责是需要通过实现它来创建一个画笔，该画笔用于绘制装饰。</li>
+<li>position：此属性决定在哪里绘制Decoration，它接收DecorationPosition的枚举类型，该枚举类有两个值：</li>
+<li>background：在子组件之后绘制，即背景装饰。</li>
+<li>foreground：在子组件之上绘制，即前景。<br>BoxDecoration<br>我们通常会直接使用BoxDecoration类，它是一个Decoration的子类，实现了常用的装饰元素的绘制。<br>定义：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/** 装饰器，可以用来修饰其他的组件，和Android里面的shape很相似</span><br><span class="line">    const BoxDecoration(&#123;</span><br><span class="line">    this.color,//背景色</span><br><span class="line">    this.image,//图片</span><br><span class="line">    this.border,//描边</span><br><span class="line">    this.borderRadius,//圆角大小</span><br><span class="line">    this.boxShadow,//阴影</span><br><span class="line">    this.gradient,//过度效果</span><br><span class="line">    this.backgroundBlendMode,//背景混合模式</span><br><span class="line">    this.shape = BoxShape.rectangle,//形状,BoxShape.circle和borderRadius不能同时使用</span><br><span class="line">    &#125;)</span><br><span class="line"> */</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="Flutter-Container组件宽度撑满屏幕"><a href="#Flutter-Container组件宽度撑满屏幕" class="headerlink" title="Flutter Container组件宽度撑满屏幕"></a>Flutter Container组件宽度撑满屏幕</h1><p>在flutter开发中，如果不给Container组件设置宽度的话，它的宽度是取决于子组件的宽度，如何给Container设置撑满屏幕的宽度呢？<br>以下两种方式都可：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Container(</span><br><span class="line">  color: Colors.red,</span><br><span class="line">  width: MediaQuery.of(context).size.width,</span><br><span class="line">  child: Text(&quot;宽度有多宽&quot;),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Container(</span><br><span class="line">  color: Colors.red,</span><br><span class="line">  width: double.infinity,</span><br><span class="line">  child: Text(&quot;宽度有多宽&quot;),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h1 id="Flutter中的颜色"><a href="#Flutter中的颜色" class="headerlink" title="Flutter中的颜色"></a>Flutter中的颜色</h1><h3 id="1-常规使用"><a href="#1-常规使用" class="headerlink" title="1.常规使用"></a>1.常规使用</h3><p>Flutter中颜色的设置有很多方法，但是一般我使用的有4种.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Color c1 = Color(0xFF3CAAFA);</span><br><span class="line">Color c2 = Color.fromRGBO(60, 170, 250, 1);</span><br><span class="line">Color c3 = Color.fromARGB(255, 60, 170, 250);</span><br><span class="line">Color c5 = Colors.blue;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>Color(int value)<br>Color(0xFF3CAAFA),value接收的是一个十六进制（0x开头),FF表示的是十六进制透明度(00-FF),3CAAFA是十六进制色值。</p>
+</li>
+<li><p>Color.fromRGBO(int r, int g, int b, double opacity)<br>Color.fromRGBO(60, 170, 250, 1)，r、g、b分别表示red、green、blue，常规的红绿蓝三色，取值范围为0-255，opacity表示透明度，取值0.0-1.0。</p>
+</li>
+<li><p>Color.fromARGB(int a, int r, int g, int b)<br>Color.fromARGB(255, 60, 170, 250),a表示透明度，取值0-255，rgb同上一样。</p>
+</li>
+<li><p>Colors._()<br>Colors类定义了很多颜色，可以直接使用，例如 Colors.blue,其实就是第一种Color(int value)的封装。</p>
+</li>
+</ol>
+<h3 id="2-在Flutter中使用16进制颜色"><a href="#2-在Flutter中使用16进制颜色" class="headerlink" title="2.在Flutter中使用16进制颜色"></a>2.在Flutter中使用16进制颜色</h3><h5 id="1-方法一-使用原生方法"><a href="#1-方法一-使用原生方法" class="headerlink" title="(1.)方法一: 使用原生方法"></a>(1.)方法一: 使用原生方法</h5><p>Flutter中, Color类仅接收整数作为参数. 你也可以使用fromARGB或者fromRGBO.</p>
+<p>比如拿到了一个16进制颜色#b74093. 因为Color还需要传入透明度, 255就是最大值(也就是不透明), 转为16进制就是0xFF, 所以我们只需这样表示:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const color = Color(0xffb74093);</span><br></pre></td></tr></table></figure>
+<p>正规一点的写法(可选, 因为大小写不敏感):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const color = Color(0xFFB74093);</span><br></pre></td></tr></table></figure>
+<h5 id="2-方法二-接收字符串格式-转为Color"><a href="#2-方法二-接收字符串格式-转为Color" class="headerlink" title="(2.)方法二: 接收字符串格式, 转为Color"></a>(2.)方法二: 接收字符串格式, 转为Color</h5><p>创建一个HexColor类:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class HexColor extends Color &#123;</span><br><span class="line">  static int _getColorFromHex(String hexColor) &#123;</span><br><span class="line">    hexColor = hexColor.toUpperCase().replaceAll(&quot;#&quot;, &quot;&quot;);</span><br><span class="line">    if (hexColor.length == 6) &#123;</span><br><span class="line">      hexColor = &quot;FF&quot; + hexColor;</span><br><span class="line">    &#125;</span><br><span class="line">    return int.parse(hexColor, radix: 16);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后进行调用:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Color color1 = HexColor(&quot;b74093&quot;);</span><br><span class="line">Color color2 = HexColor(&quot;#b74093&quot;);</span><br><span class="line">Color color3 = HexColor(&quot;#88b74093&quot;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-封装Color使用"><a href="#3-封装Color使用" class="headerlink" title="3.封装Color使用"></a>3.封装Color使用</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class Colours &#123;</span><br><span class="line">  static const Color app_main = Color(0xFFFE9A4E);</span><br><span class="line">  static const Color dark_app_main = Color(0xFFFE9A4E);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>调用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">theme: ThemeData(</span><br><span class="line">		...</span><br><span class="line">        primaryColor: Colours.colorPrimary,</span><br><span class="line">        primaryColorDark: Colours.colorPrimaryDark,</span><br><span class="line">        accentColor: Colours.colorAccent,</span><br><span class="line">        dividerColor: Colours.dividerColor,</span><br><span class="line">      ),</span><br></pre></td></tr></table></figure>
+
+<h1 id="Flutter根据状态显示隐藏widget"><a href="#Flutter根据状态显示隐藏widget" class="headerlink" title="Flutter根据状态显示隐藏widget"></a>Flutter根据状态显示隐藏widget</h1><h3 id="1-占位方案"><a href="#1-占位方案" class="headerlink" title="1.占位方案"></a>1.占位方案</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">buildTestWidget() &#123;</span><br><span class="line">    if (xxx) &#123;</span><br><span class="line">        // 真正需要展示的空间</span><br><span class="line">        return Widget();    </span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        // 空白的占位符，不能返回null</span><br><span class="line">        return Container(</span><br><span class="line">            width: 0,</span><br><span class="line">            height: 0</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-Visibility控件"><a href="#2-Visibility控件" class="headerlink" title="2.Visibility控件"></a>2.Visibility控件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Visibility(</span><br><span class="line">  child: Text(&quot;不可见&quot;),</span><br><span class="line">  maintainSize: true, </span><br><span class="line">  maintainAnimation: true,</span><br><span class="line">  maintainState: true,</span><br><span class="line">  visible: false, ), //false 为不可见</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-Offstage控件"><a href="#3-Offstage控件" class="headerlink" title="3.Offstage控件"></a>3.Offstage控件</h3><p>offstage为true时表示不渲染，也不占位，相当于gone。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Offstage(</span><br><span class="line">  offstage: true, //这里控制 true  false 布尔值</span><br><span class="line">  child: &#x27;子控件&#x27;,</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-可以通过if条件控制控件的显示或隐藏"><a href="#4-可以通过if条件控制控件的显示或隐藏" class="headerlink" title="4.可以通过if条件控制控件的显示或隐藏"></a>4.可以通过if条件控制控件的显示或隐藏</h3><p>用 Row 或者 Column 控件，控件里面有一个包含Widget的list，所以可以根据条件把需要展示的 Widget 放入 list 中，然后再使用 Row 或 Column 控件来展示 list，达到控制显示还是不显示的目的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Column(</span><br><span class="line">  children: &lt;Widget&gt;[</span><br><span class="line">    if (show) Text(&quot;根据show值显示或隐藏&quot;),</span><br><span class="line">    Text(&quot;始终显示&quot;),</span><br><span class="line">  ],)</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-使用Opacity控件"><a href="#5-使用Opacity控件" class="headerlink" title="5.使用Opacity控件"></a>5.使用Opacity控件</h3><p>opacity 其实是根据visible 控制透明度而已，其实还是占位的，相当于invisible，而且也是会渲染绘制的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Opacity(</span><br><span class="line">            opacity: visible ? 1.0 : 0.0,</span><br><span class="line">            child: Padding(</span><br><span class="line">              padding: EdgeInsets.all(30),</span><br><span class="line">              child: Text(&#x27;Now you see me, now you don\&#x27;t!&#x27;),</span><br><span class="line">            ),</span><br><span class="line">          ),</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="Flutter中的输入框"><a href="#Flutter中的输入框" class="headerlink" title="Flutter中的输入框"></a>Flutter中的输入框</h1><p>TextField输入框</p>
+<h3 id="1-获取输入内容"><a href="#1-获取输入内容" class="headerlink" title="1.获取输入内容"></a>1.获取输入内容</h3><p>获取输入内容有两种方式：</p>
+<ul>
+<li>定义两个变量，用于保存用户名和密码，然后在onChange触发时，各自保存一下输入内容。</li>
+<li>通过controller直接获取。</li>
+</ul>
+<h3 id="2-监听文本变化"><a href="#2-监听文本变化" class="headerlink" title="2.监听文本变化"></a>2.监听文本变化</h3><p>监听文本变化也有两种方式：</p>
+<ul>
+<li>设置onChange回调<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TextField(</span><br><span class="line">     autofocus: true,</span><br><span class="line">     onChanged: (v) &#123;</span><br><span class="line">       print(&quot;onChange: $v&quot;);</span><br><span class="line">     &#125;</span><br><span class="line"> )</span><br></pre></td></tr></table></figure></li>
+<li>通过controller监听<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@override</span><br><span class="line">  void initState() &#123;</span><br><span class="line">    //监听输入改变  </span><br><span class="line">    _unameController.addListener(()&#123;</span><br><span class="line">      print(_unameController.text);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>onChanged是专门用于监听文本变化，而controller的功能却多一些，除了能监听文本变化外，它还可以设置默认值、选择文本</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="Flutter中的常见错误"><a href="#Flutter中的常见错误" class="headerlink" title="Flutter中的常见错误"></a>Flutter中的常见错误</h1><h3 id="1-Navigator-operation-requested-with-a-context-that-does-not-include-a-Navigator"><a href="#1-Navigator-operation-requested-with-a-context-that-does-not-include-a-Navigator" class="headerlink" title="1. Navigator operation requested with a context that does not include a Navigator."></a>1. Navigator operation requested with a context that does not include a Navigator.</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class  MyApp  extends StatelessWidget &#123;</span><br><span class="line">  @override</span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    return MaterialApp(</span><br><span class="line">      home: Scaffold(</span><br><span class="line">        body: Center(</span><br><span class="line">          child: FlatButton(</span><br><span class="line">              onPressed: () &#123;</span><br><span class="line">                Navigator.of(context).push(</span><br><span class="line">                    MaterialPageRoute(builder: (context) =&gt; SecondPage()));</span><br><span class="line">              &#125;,</span><br><span class="line">              child: Text(&#x27;跳转&#x27;)),</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当我们在 build 函数中使用Navigator.of(context)的时候，这个context实际上是通过 MyApp 这个widget创建出来的Element对象，而of方法向上寻找祖先节点的时候（MyApp的祖先节点）并不存在MaterialApp，也就没有它所提供的Navigator。<br>所以当我们把Scaffold部分拆成另外一个widget的时候，我们在FirstPage的build函数中，获得了FirstPage的BuildContext，然后向上寻找发现了MaterialApp，并找到它提供的Navigator，于是就可以愉快进行页面跳转了。</p>
+<h1 id="Flutter的TabBar组件（顶部Tab切换组件）"><a href="#Flutter的TabBar组件（顶部Tab切换组件）" class="headerlink" title="Flutter的TabBar组件（顶部Tab切换组件）"></a>Flutter的TabBar组件（顶部Tab切换组件）</h1><h3 id="1-TabBar组件的常用属性"><a href="#1-TabBar组件的常用属性" class="headerlink" title="1.TabBar组件的常用属性"></a>1.TabBar组件的常用属性</h3><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>tabs</td>
+<td>显示的标签内容，一般使用 Tab 对象,也可以是其他的Widget</td>
+</tr>
+<tr>
+<td>controller</td>
+<td>TabController 对象</td>
+</tr>
+<tr>
+<td>isScrollable</td>
+<td>是否可滚动</td>
+</tr>
+<tr>
+<td>indicatorColor</td>
+<td>指示器颜色</td>
+</tr>
+<tr>
+<td>indicatorWeight</td>
+<td>指示器高度</td>
+</tr>
+<tr>
+<td>indicatorPadding</td>
+<td>底部指示器的 Padding</td>
+</tr>
+<tr>
+<td>indicator</td>
+<td>指示器 decoration，例如边框等</td>
+</tr>
+<tr>
+<td>indicatorSize</td>
+<td>指示器大小计算方式，TabBarIndicatorSize.label 跟文字等宽,TabBarIndicatorSize.tab 跟每个 tab 等宽</td>
+</tr>
+<tr>
+<td>labelColor</td>
+<td>选中 label 颜色</td>
+</tr>
+<tr>
+<td>labelStyle</td>
+<td>选中 label 的 Style</td>
+</tr>
+<tr>
+<td>labelPadding</td>
+<td>每个 label 的 padding 值</td>
+</tr>
+<tr>
+<td>unselectedLabelColor</td>
+<td>未选中 label 颜色</td>
+</tr>
+<tr>
+<td>unselectedLabelStyle</td>
+<td>未选中 label 的 Style</td>
+</tr>
+</tbody></table>
+<h3 id="2-TabBar的实现方式1（不常用）"><a href="#2-TabBar的实现方式1（不常用）" class="headerlink" title="2.TabBar的实现方式1（不常用）"></a>2.TabBar的实现方式1（不常用）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">import &#x27;package:flutter/material.dart&#x27;;</span><br><span class="line"></span><br><span class="line">void main() &#123;</span><br><span class="line">  runApp(</span><br><span class="line">    MaterialApp(</span><br><span class="line">      home: DefaultTabController(</span><br><span class="line">        length: 6,</span><br><span class="line">        child: Scaffold(</span><br><span class="line">          appBar: AppBar(</span><br><span class="line">              title: Text(&quot;TabBarDemo&quot;),</span><br><span class="line">              bottom: TabBar(</span><br><span class="line">                tabs: &lt;Widget&gt;[</span><br><span class="line">                  Tab(text: &quot;热门&quot;),</span><br><span class="line">                  Tab(text: &quot;推荐&quot;),</span><br><span class="line">                  Tab(text: &quot;关注&quot;),</span><br><span class="line">                  Tab(text: &quot;收藏&quot;),</span><br><span class="line">                  Tab(text: &quot;新增&quot;),</span><br><span class="line">                  Tab(text: &quot;点赞&quot;),</span><br><span class="line">                ],</span><br><span class="line">              ),</span><br><span class="line">          ),</span><br><span class="line">          body: TabBarView(</span><br><span class="line">            children: &lt;Widget&gt;[</span><br><span class="line">              Center(</span><br><span class="line">                child: Text(&quot;这是热门的内容&quot;)</span><br><span class="line">              ),</span><br><span class="line">              Center(</span><br><span class="line">                  child: Text(&quot;这是推荐的内容&quot;)</span><br><span class="line">              ),</span><br><span class="line">              Center(</span><br><span class="line">                  child: Text(&quot;这是关注的内容&quot;)</span><br><span class="line">              ),</span><br><span class="line">              Center(</span><br><span class="line">                  child: Text(&quot;这是收藏的内容&quot;)</span><br><span class="line">              ),</span><br><span class="line">              Center(</span><br><span class="line">                  child: Text(&quot;这是新增的内容&quot;)</span><br><span class="line">              ),</span><br><span class="line">              Center(</span><br><span class="line">                  child: Text(&quot;这是点赞的内容&quot;)</span><br><span class="line">              )</span><br><span class="line">            ],</span><br><span class="line">          ),</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">    )</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-TabBar的实现方式2（常用）"><a href="#3-TabBar的实现方式2（常用）" class="headerlink" title="3.TabBar的实现方式2（常用）"></a>3.TabBar的实现方式2（常用）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">import &#x27;package:flutter/material.dart&#x27;;</span><br><span class="line"></span><br><span class="line">void main() &#123;</span><br><span class="line">  runApp(MaterialApp(</span><br><span class="line">    title: &quot;TabBarWidget&quot;,</span><br><span class="line">    home: MyApp(),</span><br><span class="line">  ));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class MyApp extends StatefulWidget &#123;</span><br><span class="line">  @override</span><br><span class="line">  _MyAppState createState() =&gt; _MyAppState();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class _MyAppState extends State&lt;MyApp&gt; with SingleTickerProviderStateMixin&#123;</span><br><span class="line">  TabController _tabController;</span><br><span class="line"></span><br><span class="line">  @override</span><br><span class="line">  void initState() &#123;</span><br><span class="line">    super.initState();</span><br><span class="line">    _tabController = TabController(vsync: this,length: 6);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  @override</span><br><span class="line">  void dispose() &#123;</span><br><span class="line">    _tabController.dispose();</span><br><span class="line">    super.dispose();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  @override</span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    return Scaffold(</span><br><span class="line">      appBar: AppBar(</span><br><span class="line">        title: Text(&quot;顶部Tab切换&quot;),</span><br><span class="line">        bottom: TabBar(</span><br><span class="line">          tabs: &lt;Widget&gt;[</span><br><span class="line">            Tab(text: &quot;热门&quot;),</span><br><span class="line">            Tab(text: &quot;推荐&quot;),</span><br><span class="line">            Tab(text: &quot;关注&quot;),</span><br><span class="line">            Tab(text: &quot;收藏&quot;),</span><br><span class="line">            Tab(text: &quot;新增&quot;),</span><br><span class="line">            Tab(text: &quot;点赞&quot;),</span><br><span class="line">          ],</span><br><span class="line">          controller: _tabController,  // 记得要带上tabController</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">      body: TabBarView(</span><br><span class="line">        controller: _tabController,</span><br><span class="line">        children: &lt;Widget&gt;[</span><br><span class="line">          Center(</span><br><span class="line">              child: Text(&quot;这是热门的内容&quot;)</span><br><span class="line">          ),</span><br><span class="line">          Center(</span><br><span class="line">              child: Text(&quot;这是推荐的内容&quot;)</span><br><span class="line">          ),</span><br><span class="line">          Center(</span><br><span class="line">              child: Text(&quot;这是关注的内容&quot;)</span><br><span class="line">          ),</span><br><span class="line">          Center(</span><br><span class="line">              child: Text(&quot;这是收藏的内容&quot;)</span><br><span class="line">          ),</span><br><span class="line">          Center(</span><br><span class="line">              child: Text(&quot;这是新增的内容&quot;)</span><br><span class="line">          ),</span><br><span class="line">          Center(</span><br><span class="line">              child: Text(&quot;这是点赞的内容&quot;)</span><br><span class="line">          )</span><br><span class="line">        ],</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>flutter TabBarView 没有跟Scaffold 一起使用的时候，容易报 Horizontal viewport was given unbounded height 错误，例如将其作为Column的子元素，就会出现该错误。错误提示意思是水平视图高是无限的，这里由于是用在Column中， 所以水平应该理解为垂直方向。解决该问题就是需要在其父级添加高度限制。<br>例如在其外层包裹Expanded，并设置flex。如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Widget build(BuildContext context) &#123;</span><br><span class="line">    return Column(</span><br><span class="line">      children: &lt;Widget&gt;[</span><br><span class="line">        header(),// 自定义组件</span><br><span class="line">        Expanded(// 设置高度。直接将TabBarView作为Column子元素，而不设置高度，会报错</span><br><span class="line">          flex: 1,</span><br><span class="line">          child: TabBarView(....),// 省略无关代码</span><br><span class="line">        ),</span><br><span class="line">      ],</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>写动态tabbar将 singleTickerProviderStateMixin 改成 TickerProviderStateMixin 才能调用setState重绘</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">class _TravelPageState extends State&lt;TravelPage&gt; with TickerProviderStateMixin&#123;</span><br><span class="line">  TabController _tabController;</span><br><span class="line">  TravelTabModel travelTabModel;</span><br><span class="line">  List&lt;TravelTab&gt; tabs = [];</span><br><span class="line">  @override</span><br><span class="line">  void initState() &#123;</span><br><span class="line">    _tabController = TabController(length: 0, vsync: this);</span><br><span class="line">    TravelTabDao.fetch().then((TravelTabModel model)&#123;</span><br><span class="line">      print(model);</span><br><span class="line">      _tabController = TabController(length: model.tabs.length, vsync: this);</span><br><span class="line">      setState(() &#123;</span><br><span class="line">       tabs = model.tabs;</span><br><span class="line">       travelTabModel = model;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;).catchError((e)&#123;</span><br><span class="line">      print(e);</span><br><span class="line">    &#125;);</span><br><span class="line">    super.initState();</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Flutter中的状态栏"><a href="#Flutter中的状态栏" class="headerlink" title="Flutter中的状态栏"></a>Flutter中的状态栏</h1><p>通过SafeArea包裹内容来防止布局的内容填充到状态栏里面。</p>
+<h1 id="Flutter的嵌套层级深"><a href="#Flutter的嵌套层级深" class="headerlink" title="Flutter的嵌套层级深"></a>Flutter的嵌套层级深</h1><p>解决方法<br>解决Flutter Widget地狱的方法有很多种，根据我的开发经验，着重介绍以下几种方法。</p>
+<ul>
+<li>将组件转化为方法，这一种方式非常常用。</li>
+<li>将组件转化为 StatelessWidget 或者 StatefulWidget ，我们习惯只把重复用到的组件做封装，实际上这样写更好，这个我会在后面提到。</li>
+<li>第三种灵感来自于掘金的一篇文章《Flutter嵌套深？扩展函数了解一下》，有兴趣的朋友可以看一下。</li>
+</ul>
+<h1 id="Flutter-自定义-Widget-的方式"><a href="#Flutter-自定义-Widget-的方式" class="headerlink" title="Flutter 自定义 Widget 的方式"></a>Flutter 自定义 Widget 的方式</h1><p>当我们在实际开发中，可能 Flutter 的基础 Widget 组件并不能满足我们的需求，这时我们就需要自定义 Widget 来实现我们的需求。<br>Flutter 有多种实现自定义 Widget 的方式：</p>
+<ul>
+<li>通过继承 Widget 来修改和扩展它的功能；</li>
+<li>通过组合 Widget 来扩展功能；<br>使用 CustomPaint 绘制自定义 Widget。这几种方式都有各自的优势和特点，相对来说 CustomPaint 绘制实现自定义是这里面比较复杂的一种自定义 Widget 方式。<br>Flutter 中的很多基础 Widget 也是通过继承 Widget 进行扩展形成新的 Widget 或者是自己绘制 Widget。其实在大部分的平台都存在 Canvas 这个对象，它可以实现绘制布局、组件等功能，<br>当然 Flutter 也可以通过 Canvas 来实现 Widget 的绘制。自定义Widget 在开发中也非常常见，例如：我们可以自定义封装实现一个加载中的对话框、实现一个通用的 ToolBar 等等。</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/879ee03cab23">『Flutter』组件通信传值学习</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903777565147150">Flutter | 深入理解BuildContext</a><br><a target="_blank" rel="noopener" href="https://github.com/flutterchina/dio/blob/master/README-ZH.md">Dio官方文档</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903902182113288">Flutter基础（十一）网络请求（Dio）与JSON数据解析</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904039340048391">Flutter如何高效的JSON转Model</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/xudailong_blog/article/details/98967330">Flutter动态加载TabBar</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904057321046029">善用 Provider 榨干 Flutter 最后一点性能</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/182985171">实操flutter避免嵌套地狱的5种方法</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2021/05/13/Flutter%E4%B9%8B%E5%B8%B8%E8%A7%81%E6%8E%A7%E4%BB%B6/">https://lxlfpeng.github.io/2021/05/13/Flutter%E4%B9%8B%E5%B8%B8%E8%A7%81%E6%8E%A7%E4%BB%B6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2021/05/25/%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93Mongodb%E7%AE%80%E4%BB%8B/" title="非关系型数据库Mongodb简介"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">非关系型数据库Mongodb简介</div></div><div class="info-2"><div class="info-item-1">一.MongoDB简介什么是NoSQLNoSQL：Not Only SQL ，本质也是一种数据库的技术，相对于传统数据库技术，它不会遵循一些约束，比如：sql标准、ACID属性，表结构等。优点:  满足对数据库的高并发读写； 对海量数据的高效存储和访问； 对数据库高扩展性和高可用性； 灵活的数据结构，满足数据结构不固定的场景；  缺点:  一般不支持事务； 运维人员数据维护相对复杂；  什么是MongoDBMongoDB 是一个基于分布式文件存储的数据库。由C++语言编写，旨在为WEB应用提供可扩展的高性能数据存储解决方案。MongoDB 将数据存储为一个文档，数据结构由键值(key&#x3D;&gt;value)对组成，MongoDB文档类似于json对象，字段值可以包含其他文档，数组及文档数组。 MongoDB是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。 MongoDB的特点MongoDB...</div></div></div></a><a class="pagination-related" href="/2021/04/25/Kotlin%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%A1%86%E6%9E%B6Koin%E7%9A%84%E4%BD%BF%E7%94%A8/" title="Kotlin依赖注入框架Koin的使用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Kotlin依赖注入框架Koin的使用</div></div><div class="info-2"><div class="info-item-1">一.引入Koin依赖Koin是一款轻量级的依赖注入框架，根据官方的描述，它无代理，无代码生成，无反射。 12345678def koinVersion = &quot;2.2.2&quot;   //Koin for android   implementation &quot;org.koin:koin-android:$koinVersion&quot;   //Koin for scope feature   implementation &quot;org.koin:koin-android-scope:$koinVersion&quot;   //Koin for viewModel feature   implementation &quot;org.koin:koin-android-viewmodel:$koinVersion&quot;  二.Koin基础使用在application中来做startkoin初始化的动作 123456789101112class MyApp : Application() &#123;    override fun...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Flutter%E5%88%97%E8%A1%A8%E6%8E%A7%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text">Flutter列表控件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-ListView"><span class="toc-number">1.0.1.</span> <span class="toc-text">1.ListView</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-ListView-builder"><span class="toc-number">1.0.2.</span> <span class="toc-text">2.ListView.builder</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-ListView-separatorBuilder"><span class="toc-number">1.0.3.</span> <span class="toc-text">3.ListView.separatorBuilder</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flutter%E8%AE%BE%E7%BD%AEmargin%E5%92%8Cpadding"><span class="toc-number">2.</span> <span class="toc-text">Flutter设置margin和padding</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%E4%BD%BF%E7%94%A8Container%E5%8C%85%E8%A3%B9"><span class="toc-number">2.0.1.</span> <span class="toc-text">方式一使用Container包裹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%E4%BD%BF%E7%94%A8Padding%E5%92%8CSizedBox-%E7%BB%84%E4%BB%B6"><span class="toc-number">2.0.2.</span> <span class="toc-text">方式二使用Padding和SizedBox 组件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#FlutterFlex%E5%BC%B9%E6%80%A7%E5%B8%83%E5%B1%80"><span class="toc-number">3.</span> <span class="toc-text">FlutterFlex弹性布局</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%B9%E6%80%A7%E7%B3%BB%E6%95%B0"><span class="toc-number">3.0.1.</span> <span class="toc-text">弹性系数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Expanded%E5%8D%A0%E6%8D%AE%E5%89%A9%E4%BD%99%E7%9A%84%E7%A9%BA%E9%97%B4"><span class="toc-number">3.0.2.</span> <span class="toc-text">Expanded占据剩余的空间</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flutter%E7%BB%99%E7%BB%84%E4%BB%B6%E8%AE%BE%E7%BD%AE%E7%82%B9%E5%87%BB%E4%BA%8B%E4%BB%B6"><span class="toc-number">4.</span> <span class="toc-text">Flutter给组件设置点击事件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-InkWell%E6%9C%89%E7%82%B9%E5%87%BB%E6%95%88%E6%9E%9C"><span class="toc-number">4.0.1.</span> <span class="toc-text">1. InkWell有点击效果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-GestureDetector-%E8%AE%BE%E7%BD%AE%E7%82%B9%E5%87%BB"><span class="toc-number">4.0.2.</span> <span class="toc-text">2. GestureDetector 设置点击</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flutter%E5%BF%AB%E6%8D%B7%E9%94%AE%E7%94%9F%E6%88%90%E6%8E%A7%E4%BB%B6"><span class="toc-number">5.</span> <span class="toc-text">Flutter快捷键生成控件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flutter%E5%9C%86%E8%A7%92%E6%8E%A7%E4%BB%B6"><span class="toc-number">6.</span> <span class="toc-text">Flutter圆角控件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%80%9A%E8%BF%87Card%E7%9A%84shape%E5%B1%9E%E6%80%A7"><span class="toc-number">6.0.1.</span> <span class="toc-text">1.通过Card的shape属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%80%9A%E8%BF%87Container%E7%9A%84decoration"><span class="toc-number">6.0.2.</span> <span class="toc-text">2.通过Container的decoration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E7%9B%B4%E6%8E%A5%E4%BD%BF%E7%94%A8ClipRRect"><span class="toc-number">6.0.3.</span> <span class="toc-text">3.直接使用ClipRRect</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A3%85%E9%A5%B0%E5%AE%B9%E5%99%A8DecoratedBox"><span class="toc-number">7.</span> <span class="toc-text">装饰容器DecoratedBox</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flutter-Container%E7%BB%84%E4%BB%B6%E5%AE%BD%E5%BA%A6%E6%92%91%E6%BB%A1%E5%B1%8F%E5%B9%95"><span class="toc-number">8.</span> <span class="toc-text">Flutter Container组件宽度撑满屏幕</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flutter%E4%B8%AD%E7%9A%84%E9%A2%9C%E8%89%B2"><span class="toc-number">9.</span> <span class="toc-text">Flutter中的颜色</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%B8%B8%E8%A7%84%E4%BD%BF%E7%94%A8"><span class="toc-number">9.0.1.</span> <span class="toc-text">1.常规使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%9C%A8Flutter%E4%B8%AD%E4%BD%BF%E7%94%A816%E8%BF%9B%E5%88%B6%E9%A2%9C%E8%89%B2"><span class="toc-number">9.0.2.</span> <span class="toc-text">2.在Flutter中使用16进制颜色</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E6%96%B9%E6%B3%95%E4%B8%80-%E4%BD%BF%E7%94%A8%E5%8E%9F%E7%94%9F%E6%96%B9%E6%B3%95"><span class="toc-number">9.0.2.0.1.</span> <span class="toc-text">(1.)方法一: 使用原生方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E6%96%B9%E6%B3%95%E4%BA%8C-%E6%8E%A5%E6%94%B6%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F-%E8%BD%AC%E4%B8%BAColor"><span class="toc-number">9.0.2.0.2.</span> <span class="toc-text">(2.)方法二: 接收字符串格式, 转为Color</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%B0%81%E8%A3%85Color%E4%BD%BF%E7%94%A8"><span class="toc-number">9.0.3.</span> <span class="toc-text">3.封装Color使用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flutter%E6%A0%B9%E6%8D%AE%E7%8A%B6%E6%80%81%E6%98%BE%E7%A4%BA%E9%9A%90%E8%97%8Fwidget"><span class="toc-number">10.</span> <span class="toc-text">Flutter根据状态显示隐藏widget</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8D%A0%E4%BD%8D%E6%96%B9%E6%A1%88"><span class="toc-number">10.0.1.</span> <span class="toc-text">1.占位方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Visibility%E6%8E%A7%E4%BB%B6"><span class="toc-number">10.0.2.</span> <span class="toc-text">2.Visibility控件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Offstage%E6%8E%A7%E4%BB%B6"><span class="toc-number">10.0.3.</span> <span class="toc-text">3.Offstage控件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87if%E6%9D%A1%E4%BB%B6%E6%8E%A7%E5%88%B6%E6%8E%A7%E4%BB%B6%E7%9A%84%E6%98%BE%E7%A4%BA%E6%88%96%E9%9A%90%E8%97%8F"><span class="toc-number">10.0.4.</span> <span class="toc-text">4.可以通过if条件控制控件的显示或隐藏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E4%BD%BF%E7%94%A8Opacity%E6%8E%A7%E4%BB%B6"><span class="toc-number">10.0.5.</span> <span class="toc-text">5.使用Opacity控件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flutter%E4%B8%AD%E7%9A%84%E8%BE%93%E5%85%A5%E6%A1%86"><span class="toc-number">11.</span> <span class="toc-text">Flutter中的输入框</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%8E%B7%E5%8F%96%E8%BE%93%E5%85%A5%E5%86%85%E5%AE%B9"><span class="toc-number">11.0.1.</span> <span class="toc-text">1.获取输入内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%9B%91%E5%90%AC%E6%96%87%E6%9C%AC%E5%8F%98%E5%8C%96"><span class="toc-number">11.0.2.</span> <span class="toc-text">2.监听文本变化</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flutter%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF"><span class="toc-number">12.</span> <span class="toc-text">Flutter中的常见错误</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Navigator-operation-requested-with-a-context-that-does-not-include-a-Navigator"><span class="toc-number">12.0.1.</span> <span class="toc-text">1. Navigator operation requested with a context that does not include a Navigator.</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flutter%E7%9A%84TabBar%E7%BB%84%E4%BB%B6%EF%BC%88%E9%A1%B6%E9%83%A8Tab%E5%88%87%E6%8D%A2%E7%BB%84%E4%BB%B6%EF%BC%89"><span class="toc-number">13.</span> <span class="toc-text">Flutter的TabBar组件（顶部Tab切换组件）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-TabBar%E7%BB%84%E4%BB%B6%E7%9A%84%E5%B8%B8%E7%94%A8%E5%B1%9E%E6%80%A7"><span class="toc-number">13.0.1.</span> <span class="toc-text">1.TabBar组件的常用属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-TabBar%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F1%EF%BC%88%E4%B8%8D%E5%B8%B8%E7%94%A8%EF%BC%89"><span class="toc-number">13.0.2.</span> <span class="toc-text">2.TabBar的实现方式1（不常用）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-TabBar%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F2%EF%BC%88%E5%B8%B8%E7%94%A8%EF%BC%89"><span class="toc-number">13.0.3.</span> <span class="toc-text">3.TabBar的实现方式2（常用）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flutter%E4%B8%AD%E7%9A%84%E7%8A%B6%E6%80%81%E6%A0%8F"><span class="toc-number">14.</span> <span class="toc-text">Flutter中的状态栏</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flutter%E7%9A%84%E5%B5%8C%E5%A5%97%E5%B1%82%E7%BA%A7%E6%B7%B1"><span class="toc-number">15.</span> <span class="toc-text">Flutter的嵌套层级深</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Flutter-%E8%87%AA%E5%AE%9A%E4%B9%89-Widget-%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-number">16.</span> <span class="toc-text">Flutter 自定义 Widget 的方式</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

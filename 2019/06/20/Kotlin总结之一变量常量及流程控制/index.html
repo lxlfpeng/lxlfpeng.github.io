@@ -1,0 +1,436 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Kotlin总结之一变量常量及流程控制 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.Kotlin中的变量1.var 与 val var 用此关键字声明的变量，可以多次重复赋值，可读且可写，相当于Java中普通变量。  val 用此关键字声明的变量表示只读变量，即可读但不可写。相当于Java中用final修饰的变量。123456var str: String &#x3D; &quot;&quot;    &#x2F;&#x2F;str是变量名，String表明该变量是String类型变量，后面就是赋值语句。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kotlin总结之一变量常量及流程控制">
+<meta property="og:url" content="https://lxlfpeng.github.io/2019/06/20/Kotlin%E6%80%BB%E7%BB%93%E4%B9%8B%E4%B8%80%E5%8F%98%E9%87%8F%E5%B8%B8%E9%87%8F%E5%8F%8A%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.Kotlin中的变量1.var 与 val var 用此关键字声明的变量，可以多次重复赋值，可读且可写，相当于Java中普通变量。  val 用此关键字声明的变量表示只读变量，即可读但不可写。相当于Java中用final修饰的变量。123456var str: String &#x3D; &quot;&quot;    &#x2F;&#x2F;str是变量名，String表明该变量是String类型变量，后面就是赋值语句。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2019-06-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.844Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2019/06/20/Kotlin%E6%80%BB%E7%BB%93%E4%B9%8B%E4%B8%80%E5%8F%98%E9%87%8F%E5%B8%B8%E9%87%8F%E5%8F%8A%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Kotlin总结之一变量常量及流程控制',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Kotlin总结之一变量常量及流程控制</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Kotlin总结之一变量常量及流程控制</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2019-06-19T16:00:00.000Z" title="发表于 2019-06-20 00:00:00">2019-06-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Kotlin%E8%AF%AD%E8%A8%80/">Kotlin语言</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>16分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-Kotlin中的变量"><a href="#一-Kotlin中的变量" class="headerlink" title="一.Kotlin中的变量"></a>一.Kotlin中的变量</h1><h3 id="1-var-与-val"><a href="#1-var-与-val" class="headerlink" title="1.var 与 val"></a>1.var 与 val</h3><ul>
+<li>var 用此关键字声明的变量，可以多次重复赋值，<code>可读且可写</code>，相当于Java中普通变量。 </li>
+<li>val 用此关键字声明的变量表示只读变量，即<code>可读但不可写</code>。相当于Java中用final修饰的变量。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var str: String = &quot;&quot;    //str是变量名，String表明该变量是String类型变量，后面就是赋值语句。</span><br><span class="line">var str2= &quot;&quot;            //省略了声明变量类型，它可以根据赋的值而自动推断出类型。</span><br><span class="line">str=&quot;1234&quot;              //var 声明的变量可以重新赋值。</span><br><span class="line"></span><br><span class="line">val str3= &quot; &quot;           //val申明的变量不能够再次赋值</span><br><span class="line">str3= &quot;123456 &quot;         //再次赋值会报错 </span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="2-可空变量和不可空变量"><a href="#2-可空变量和不可空变量" class="headerlink" title="2.可空变量和不可空变量"></a>2.可空变量和不可空变量</h3><p>定义变量时，可在类型后面加一个问号?，表示该变量是可为空的(初始化的时候不需要赋值)，不加表示该变量不可为null(初始化时必须要进行赋值)。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var s:String? = null   //通过?表示该变量是可为空</span><br><span class="line">var s2:String = null   //如果该变量被赋值为null，则编译不能通过</span><br><span class="line">s = &quot;yyy&quot;              //可空变量可以直接赋值</span><br><span class="line">var length= s?.length  //如果s为null，则不执行length方法</span><br><span class="line">var length= s!!.length //如果s为null，则会报错，终止程序执行</span><br></pre></td></tr></table></figure>
+<p>对于可以为null的变量，在使用该变量的时候，必须用变量名+?的形式进行调用，表示如果该变量为null，则不执行该变量调用的方法。如上表示当s为null时，不会执行length方法，从而避免了java中频繁的空指针异常。<br><strong>?和!!的区别</strong><br>?：表示当前对象是否可以为空，当对象为空时，不会执行后面的代码。<br>!!：通知编译器不做非空校验。如果运行时发现变量为空，就抛出异常。</p>
+<h3 id="3-变量后期初始化与延迟初始化"><a href="#3-变量后期初始化与延迟初始化" class="headerlink" title="3.变量后期初始化与延迟初始化"></a>3.变量后期初始化与延迟初始化</h3><p>在一个Kotlin类中定义一个变量（属性）的时候是必须初始化的，否则就会编辑器就会报错。可是有的时候，并不想声明一个类型可空的对象，而且也没办法在对象一声明的时候就为它初始化，那么这时就需要用到Kotlin提供的延迟初始化。Kotlin中有两种延迟初始化的方式。一种是<code>lateinit var</code>，一种是<code>by lazy</code>。</p>
+<h5 id="1-lateinit-var后期初始化"><a href="#1-lateinit-var后期初始化" class="headerlink" title="(1.) lateinit var后期初始化"></a>(1.) lateinit var后期初始化</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">private lateinit var txtView: TextView</span><br><span class="line">  override fun onCreate(savedInstanceState: Bundle?) &#123;</span><br><span class="line">      super.onCreate(savedInstanceState)</span><br><span class="line">      setContentView(R.layout.activity_main)</span><br><span class="line">      txtView = findViewById(R.id.txt_main)</span><br><span class="line">      setText()</span><br><span class="line">  &#125;</span><br><span class="line">  fun setText() &#123;</span><br><span class="line">      txtView.text = &quot;这是一段测试代码&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong></p>
+<ul>
+<li>lateinit var只能用来修饰类属性，不能用来修饰局部变量。</li>
+<li>必须是可读且可写的变量，即用val声明的变量，不能声明于可空变量。</li>
+<li>属性不能拥有自定义的setter与getter方法。</li>
+<li>不能声明于基本数据类型变量(因为基本类型的属性在类加载后的准备阶段都会被初始化为默认值)。例：Int、Float、Double等，注意：String类型是可以的。</li>
+<li>lateinit的作用就是让编译期在检查时不要因为属性变量未被初始化而报错，所以声明后，在使用该变量前必须赋值，不然会抛出UninitializedPropertyAccessException异常。</li>
+</ul>
+<h5 id="2-by-lazy变量延迟初始化"><a href="#2-by-lazy变量延迟初始化" class="headerlink" title="(2.) by lazy变量延迟初始化"></a>(2.) by lazy变量延迟初始化</h5><p>所谓延迟初始化即：指当程序在<code>第一次使用到这个变量（属性）的时候再初始化</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//定义变量延迟初始化</span><br><span class="line"> private val aTextView by lazy &#123;</span><br><span class="line">        findViewById&lt;TextView&gt;(R.id.txt_main)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"> override fun onCreate(savedInstanceState: Bundle?) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState)</span><br><span class="line">        setContentView(R.layout.activity_main)</span><br><span class="line">        setText()</span><br><span class="line">    &#125;</span><br><span class="line"> fun setText() &#123;</span><br><span class="line">        aTextView.text = &quot;这是一段测试代码&quot;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用lazy{}高阶函数，不能用于类型推断。且该函数在变量的数据类型后面，用by链接。</li>
+<li>必须是只读变量，即用val声明的变量。</li>
+<li>by lazy可以使用于类属性或者局部变量。</li>
+</ul>
+<p>那么既然是懒加载，就必然涉及到线程安全的问题，我们看看lazy是怎么解决的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public actual fun &lt;T&gt; lazy(initializer: () -&gt; T): Lazy&lt;T&gt; = SynchronizedLazyImpl(initializer)</span><br><span class="line"></span><br><span class="line">public actual fun &lt;T&gt; lazy(mode: LazyThreadSafetyMode, initializer: () -&gt; T): Lazy&lt;T&gt; =</span><br><span class="line">    when (mode) &#123;</span><br><span class="line">        LazyThreadSafetyMode.SYNCHRONIZED -&gt; SynchronizedLazyImpl(initializer)</span><br><span class="line">        LazyThreadSafetyMode.PUBLICATION -&gt; SafePublicationLazyImpl(initializer)</span><br><span class="line">        LazyThreadSafetyMode.NONE -&gt; UnsafeLazyImpl(initializer)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">public actual fun &lt;T&gt; lazy(lock: Any?, initializer: () -&gt; T): Lazy&lt;T&gt; = SynchronizedLazyImpl(initializer, lock)    </span><br></pre></td></tr></table></figure>
+<p>可以看到这里是根据LazyThreadSafetyMode的字段来分别进行不同的操作。<br>LazyThreadSafetyMode是一个枚举类:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public enum class LazyThreadSafetyMode &#123;</span><br><span class="line"></span><br><span class="line">    SYNCHRONIZED,</span><br><span class="line"></span><br><span class="line">    PUBLICATION,</span><br><span class="line"></span><br><span class="line">    NONE,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>SYNCHRONIZED</strong> 通过加锁来确保只有一个线程可以初始化Lazy实例，是线程安全的。</li>
+<li><strong>PUBLICATION</strong> 表示不加锁，可以并发访问多次调用，但只将第一个返回值用作[Lazy]实例的值。这也是线程安全的。</li>
+<li><strong>NONE</strong> 不加锁，是线程不安全的， 如果从多个线程访问实例，可能会有多个实例。除非保证[Lazy]实例永远不会从多个线程初始化，否则不应使用此模式。<br>在使用by lazy进行初始化的时候的时候，如果不加mode参数的话，它会默认选择执行SynchronizedLazyImpl这个方法，也就是默认线程安全的。也可以通过添加mode参数来指定我们想要的懒加载效果。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private val aTextView by lazy( LazyThreadSafetyMode.SYNCHRONIZED) &#123;</span><br><span class="line">    findViewById&lt;TextView&gt;(R.id.txt.more)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>延迟加载有几个好处。首先由于加载时机推迟到了变量被访问时，因此它可以提高应用的启动速度。相比于使用 Kotlin 开发服务端应用，这一特性对开发 Android 应用而言特别有用。其次，这样的延迟加载也有更高的内存效率，因为我们只在它被调用时才将资源加载进内存。在 Android 这样的移动平台上，内存的使用是非常重要的，因为手机资源是共享的且有限的。</p>
+<h1 id="二-Kotlin中的常量"><a href="#二-Kotlin中的常量" class="headerlink" title="二.Kotlin中的常量"></a>二.Kotlin中的常量</h1><h3 id="1-val定义常量"><a href="#1-val定义常量" class="headerlink" title="1.val定义常量"></a>1.val定义常量</h3><p>在Kotlin中，一个var会默认对应生成两个方法，即getter和setter方法，比如:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var name: String? = null</span><br></pre></td></tr></table></figure>
+<p>打开Android studio 点击<code>Tools-&gt;Kotlin-&gt;Show Kotlin ByteCode</code>查看生成的字节码会包含如下的两个方法:<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Nullable</span><br><span class="line"> private String name;</span><br><span class="line"></span><br><span class="line"> @Nullable</span><br><span class="line"> public final String getName() &#123;</span><br><span class="line">    return this.name;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> public final void setName(@Nullable String var1) &#123;</span><br><span class="line">    this.name = var1;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure><br>而对于val来说只会生成一个对应的get方法，比如:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val name: Long = &quot;hello&quot;</span><br></pre></td></tr></table></figure>
+<p>生成的字节码会包含类似这样的方法:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@NotNull</span><br><span class="line">private static final String name = &quot;hello&quot;;</span><br><span class="line"></span><br><span class="line">@NotNull</span><br><span class="line">public static final String getName() &#123;</span><br><span class="line">   return name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>val定义常量的坑</strong><br>在Kotlin中通过val定义的变量，只有get方法，没有set方法，所以只能读不能写。但是其get方法可以复写，从而造成val定义的变量，有可能会发生值变化，例如下面的例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val A : Int </span><br><span class="line">   get()  &#123;</span><br><span class="line">       val rand = Random(System.currentTimeMillis())</span><br><span class="line">       return rand.nextInt()</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>val定义的常量A的get()方法被复写，每次调用常量A都会返回一个随机数，所以不能保证常量A的值不变。</p>
+<h3 id="2-Kotlin重如何才能生成真正的常量"><a href="#2-Kotlin重如何才能生成真正的常量" class="headerlink" title="2.Kotlin重如何才能生成真正的常量?"></a>2.Kotlin重如何才能生成真正的常量?</h3><p>Kotlin重定义真正的常量的方法有两种，一种是<code>const</code>，另一个使用<code>@JvmField</code>注解。</p>
+<h3 id="3-使用const定义常量"><a href="#3-使用const定义常量" class="headerlink" title="3.使用const定义常量"></a>3.使用const定义常量</h3><p>在Kotlin中除了val关键字定义一个常量外，还提供了一个const关键字标识一个常量。const修饰的val变量相当于java中 static final是真正意义上的java常量，不过仅限于在top-level和object中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//top-level中使用</span><br><span class="line">const val THOUSAND = 1000 </span><br><span class="line"></span><br><span class="line">//object中使用</span><br><span class="line">object myObject &#123;</span><br><span class="line">    const val constNameObject: String = &quot;constNameObject&quot;</span><br><span class="line">&#125;</span><br><span class="line">class MyClass &#123;</span><br><span class="line">    //object中</span><br><span class="line">    companion object Factory &#123;</span><br><span class="line">        const val constNameCompanionObject: String = &quot;constNameCompanionObject&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>const 必须修饰val。</li>
+<li>const 只允许在top-level级别和object中声明。</li>
+<li>const val 可见性为public final static，可以直接访问。</li>
+</ul>
+<h3 id="3-使用-JvmField定义常量"><a href="#3-使用-JvmField定义常量" class="headerlink" title="3.使用@JvmField定义常量"></a>3.使用@JvmField定义常量</h3><p>在val常量前面增加一个@JvmField就可以将它变成常量。其内部作用是抑制编译器生成相应的getter方法。使用该注解修饰后则无法重写val的get方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@JvmField val NAME = &quot;张三&quot;</span><br></pre></td></tr></table></figure>
+<h1 id="三-Kotlin中的数据类型"><a href="#三-Kotlin中的数据类型" class="headerlink" title="三.Kotlin中的数据类型"></a>三.Kotlin中的数据类型</h1><table>
+<thead>
+<tr>
+<th>Kotlin数据类型</th>
+<th>Java基本数据类型</th>
+<th>Java包装类</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Int</td>
+<td>int</td>
+<td>java.lang.Integer</td>
+</tr>
+<tr>
+<td>Long</td>
+<td>long</td>
+<td>java.lang.Long</td>
+</tr>
+<tr>
+<td>Float</td>
+<td>float</td>
+<td>java.lang.Float</td>
+</tr>
+<tr>
+<td>Double</td>
+<td>double</td>
+<td>java.lang.Double</td>
+</tr>
+<tr>
+<td>Short</td>
+<td>short</td>
+<td>java.lang.Short</td>
+</tr>
+<tr>
+<td>Char</td>
+<td>char</td>
+<td>java.lang.Character</td>
+</tr>
+<tr>
+<td>Byte</td>
+<td>byte</td>
+<td>java.lang.Byte</td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td>boolean</td>
+<td>java.lang.Boolean</td>
+</tr>
+</tbody></table>
+<h3 id="1-数字类型Number"><a href="#1-数字类型Number" class="headerlink" title="1.数字类型Number"></a>1.数字类型Number</h3><ul>
+<li>Float（32位）</li>
+<li>Double（64）</li>
+<li>Int（32）</li>
+<li>Byte（8）</li>
+<li>Short（16）</li>
+<li>Long(64，类型用大写L，如12L)<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var b: Byte = 1</span><br><span class="line">var s: Short = 1</span><br><span class="line">var i: Int = 5</span><br><span class="line">var l: Long = 1L</span><br><span class="line">var f: Float = 1.555F</span><br><span class="line">var d: Double = 1.555</span><br></pre></td></tr></table></figure>
+<em><strong>kotlin支持二进制、十进制、十六进制；注意: 不支持八进制(而java以0开头表示八进制 07)</strong></em></li>
+</ul>
+<p>自 Kotlin 1.1 起，可以用下划线使数字更易读：   </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val oneMillion = 1_000_000</span><br><span class="line">val creditCardNumber = 1234_5678_9012_3456L</span><br><span class="line">val socialSecurityNumber = 999_99_9999L</span><br><span class="line">val hexBytes = 0xFF_EC_DE_5E</span><br><span class="line">val bytes = 0b11010010_01101001_10010100_10010010</span><br></pre></td></tr></table></figure>
+<p><strong>装箱问题</strong><br><code>在kotlin中的基本数据类型的看起来就是java的装箱类型，在这里我们需要注意，kotlin中已经没有装箱类型，区分装箱还是基本类型，kotlin已经交给了编译器去处理。</code></p>
+<p><strong>类型转换问题</strong><br><code>java中可以将声明的int类型赋值给Long类型(java会自动拆箱装箱)即常说的隐式转换，但是kotlin并不可以，必须进行类型转换(显式转换)</code><br>如(隐式转换):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val anInt: Int = 5</span><br><span class="line">val aLong: Long = anInt</span><br></pre></td></tr></table></figure>
+<p>则无法编译通过，需改成(显示转换):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val anInt: Int = 5</span><br><span class="line">val aLong: Long = anInt.toLong()</span><br></pre></td></tr></table></figure>
+<p>每个数字类型支持如下类型转换:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">toByte(): Byte</span><br><span class="line">toShort(): Short</span><br><span class="line">toInt(): Int</span><br><span class="line">toLong(): Long</span><br><span class="line">toFloat(): Float</span><br><span class="line">toDouble(): Double</span><br><span class="line">toChar(): Char</span><br></pre></td></tr></table></figure>
+<p><strong>&#x3D;&#x3D; 与 &#x3D;&#x3D;&#x3D;</strong><br>kotlin中并没有单纯的数值，在我们定义每一个数值的时候，kotlin编译器都在默默的为我们将定义的数值封装成一个对象，以最大限度的解决空指针异常的问题。因此kotlin中数值的比较除了我们常见的 &#x3D;&#x3D; 号之外还多了 &#x3D;&#x3D;&#x3D; 。</p>
+<table>
+<thead>
+<tr>
+<th>java</th>
+<th>kotlin</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>equal</td>
+<td>&#x3D;&#x3D;</td>
+<td>[结构相等]比较两个具体的[数值的大小]是否相同</td>
+</tr>
+<tr>
+<td>&#x3D;&#x3D;</td>
+<td>&#x3D;&#x3D;&#x3D;</td>
+<td>[引用相等]比较两个对象[在内存的存储地址]是否相同</td>
+</tr>
+<tr>
+<td>例如:</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val a : Int = 10    //Kotlin并不会自动装箱</span><br><span class="line">println(a === a)    //此处返回的值为true</span><br><span class="line">val b : Int = a</span><br><span class="line">println(a === b)    //此处返回的值为true</span><br><span class="line">println(a == b)     //此处返回的值为true</span><br></pre></td></tr></table></figure>
+<h3 id="2-布尔类型（Boolean）"><a href="#2-布尔类型（Boolean）" class="headerlink" title="2.布尔类型（Boolean）"></a>2.布尔类型（Boolean）</h3><p>** Boolean关键字表示布尔类型，并且其值有true和false**</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var isNum: Boolean</span><br><span class="line">isNum = false</span><br><span class="line">println(&quot;isNum =&gt; $isNum&quot;)//输出结果为false</span><br></pre></td></tr></table></figure>
+<p><strong>逻辑操作符（与Java相同）</strong></p>
+<ul>
+<li>‘ || ‘ &#x3D;&gt; 逻辑或（或者）</li>
+<li>‘ &amp;&amp; ‘ &#x3D;&gt; 逻辑与（并且）</li>
+<li>‘ ! ‘ &#x3D;&gt; 逻辑非（取反）</li>
+</ul>
+<h3 id="3-字符型（Char）"><a href="#3-字符型（Char）" class="headerlink" title="3.字符型（Char）"></a>3.字符型（Char）</h3><p>与java不同，kotlin中Char类型仅仅表示字符，不能再被直接当做数字。 因此，Char类型的变量必须在单引号之间表示：’变量’。<br>java代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">char a = &#x27;c&#x27;;</span><br><span class="line">System.out.println(a+1);</span><br></pre></td></tr></table></figure>
+<p>此时打印的结果为[数字]100。<br>在kotlin中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val a : Char = &#x27;c&#x27;</span><br><span class="line">println(a+1)</span><br></pre></td></tr></table></figure>
+<p>上述代码的打印结果为[字符]d</p>
+<blockquote>
+<p>因此我们要明确：Kotlin中 Char类型由于不是直接当数值用，所以最后返回依旧是Char型。</p>
+</blockquote>
+<h3 id="4-字符串"><a href="#4-字符串" class="headerlink" title="4.字符串"></a>4.字符串</h3><p>与java类似，kotlin中的String同样是由final修饰的，即不可被继承。<br><strong>字符串模版</strong><br>字符串可以包含字符串模板用来表示前面用的到的一段代码。kotlin中规定，所有的字符串模板必须以美元符号”$”开头。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val a = &quot;temp&quot;</span><br><span class="line">val q = &quot;$a.length():&quot;</span><br><span class="line">println(q+a.length)     //输出结果为temp.length():4</span><br></pre></td></tr></table></figure>
+<p><strong>用for循环迭代字符串.</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for (s in &quot;12345&quot;)&#123;println(s)&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="四-Kotlin中的判断结构"><a href="#四-Kotlin中的判断结构" class="headerlink" title="四.Kotlin中的判断结构"></a>四.Kotlin中的判断结构</h1><h3 id="1-if语句"><a href="#1-if语句" class="headerlink" title="1.if语句"></a>1.if语句</h3><ol>
+<li>传统写法（同Java写法一样）<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> var a: Int = 1</span><br><span class="line"> var b: Int = 2</span><br><span class="line"> var max: Int = 0</span><br><span class="line">//基本用法</span><br><span class="line"> if (a &gt; b) &#123;</span><br><span class="line">   max = a</span><br><span class="line"> &#125; else &#123;</span><br><span class="line">   max = b</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br></pre></td></tr></table></figure></li>
+<li>作为表达式使用。也就是说，整个 if 表达式(包括 else 部分)最终 会返回一个值，因此 if 可以代替 Java 中的三目运算符。（<code>Kotlin中没有java中的三元表达式</code>）<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var age = 20</span><br><span class="line">// 将 if 表达式赋值给 str 变量</span><br><span class="line">var str = if (age &gt; 20) &quot;age大于20&quot; </span><br><span class="line">    else if (age &lt; 20) &quot;age小于20&quot; else &quot;age等于20&quot;</span><br><span class="line">println(str)</span><br></pre></td></tr></table></figure>
+<code>注意：Kotlin中没有java的中的2&gt;1?2:1这样的三元表达式。</code></li>
+</ol>
+<h1 id="五-Kotlin中的选择结构"><a href="#五-Kotlin中的选择结构" class="headerlink" title="五.Kotlin中的选择结构"></a>五.Kotlin中的选择结构</h1><h3 id="1-when表达式"><a href="#1-when表达式" class="headerlink" title="1.when表达式"></a>1.when表达式</h3><p>when 类似其他语言的 switch 操作符。 在 when 中，else 如同 switch 的 default。如果其他分支都不满足条件将会走else 分支，<code>如果很多分支需要用相同的方式处理，则可以把多个分支条件放在一起，用逗号分隔</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">when (a) &#123;</span><br><span class="line">   1 -&gt; print(&quot;x == 1&quot;)</span><br><span class="line">   2 -&gt; print(&quot;x == 2&quot;)</span><br><span class="line">   3, 4 -&gt; print(&quot;x == 3 or x == 4&quot;)</span><br><span class="line">   in 5..9 -&gt; print(&quot;x in [5..9]&quot;)</span><br><span class="line">   !in 10..20 -&gt; print(&quot;x is outside the range&quot;)</span><br><span class="line">   else -&gt; &#123;</span><br><span class="line">       print(&quot;x is else&quot;)</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>when也可以用来取代if-else-if链，如果不提供参数，所有的分支条件都是简单的布尔表达式，而当一个分支的条件为真时则执行该分支：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">when &#123;</span><br><span class="line">    x.isOdd() -&gt; print(&quot;x is odd&quot;)</span><br><span class="line">    x.isEven() -&gt; print(&quot;x is even&quot;)</span><br><span class="line">    else -&gt; print(&quot;x is funny&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="六-Kotlin中的循环结构"><a href="#六-Kotlin中的循环结构" class="headerlink" title="六.Kotlin中的循环结构"></a>六.Kotlin中的循环结构</h1><h3 id="1-for循环"><a href="#1-for循环" class="headerlink" title="1.for循环"></a>1.for循环</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">val stringArrays : Array&lt;String&gt; = arrayOf(&quot;hello&quot;,&quot;kotlin&quot;,&quot;hello&quot;,&quot;android&quot;) //定义一个数组</span><br><span class="line">for (item in stringArrays)&#123;</span><br><span class="line">    println(item)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-while-与-do…while-循环"><a href="#2-while-与-do…while-循环" class="headerlink" title="2.while 与 do…while 循环"></a>2.while 与 do…while 循环</h3><p>while是最基本的循环:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">while( 布尔表达式 ) &#123;</span><br><span class="line">  //循环内容</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>do…while 循环 对于 while 语句而言，如果不满足条件，则不能进入循环。但有时候我们需要即使不满足条件，也至少执行一次。<br>do…while 循环和 while 循环相似，不同的是，do…while 循环至少会执行一次。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">do &#123;</span><br><span class="line">//代码语句</span><br><span class="line">&#125;while(布尔表达式);</span><br></pre></td></tr></table></figure>
+<h1 id="七-Kotlin流程控制"><a href="#七-Kotlin流程控制" class="headerlink" title="七.Kotlin流程控制"></a>七.Kotlin流程控制</h1><ul>
+<li>break:终止最直接包围它的循环，和java没啥区别。</li>
+<li>continue:继续下一次最直接包围它的循环，和java没啥区别。</li>
+<li>return:默认从最直接包围它的函数或者匿名函数返回。</li>
+</ul>
+<h3 id="1-使用break结束循环"><a href="#1-使用break结束循环" class="headerlink" title="1.使用break结束循环"></a>1.使用break结束循环</h3><p>需要在某种条件出现时强行中止循环，而不是等到循环条件为false时才退出循环，可以使用break来完成此功能。break用于完全结束一个循环，跳出循环体。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for (i in 0..10) &#123;</span><br><span class="line">    println(&quot;i的值是：$&#123;i&#125;&quot;)</span><br><span class="line">    if (i == 2) &#123;</span><br><span class="line">        //结束循环</span><br><span class="line">        break</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">i的值是：0</span><br><span class="line">i的值是：1</span><br><span class="line">i的值是：2</span><br></pre></td></tr></table></figure>
+<p>使用break语句不仅可以结束其所在的循环，还可以直接结束其外层循环。需要在break后紧跟一个标签，用于标识一个外层循环。Kotlin中的标签就是一个紧跟着@的标识符。Kotlin中的标签只有放在循环语句或switch语句之前才起作用:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//外层循环</span><br><span class="line">outer@ for (i in 0..10) &#123;</span><br><span class="line">    for (j in 0 until 3) &#123;</span><br><span class="line">        println(&quot;i的值为：$&#123;i&#125;,j的值为：$&#123;j&#125;&quot;)</span><br><span class="line">        if (j == 1) &#123;</span><br><span class="line">            //跳出outer标签所标识的循环</span><br><span class="line">            break@outer</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">i的值为：0,j的值为：0</span><br><span class="line">i的值为：0,j的值为：1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>break后的标签必须是一个有效的标签，即这个标签必须在break语句所在的循环之前定义，或在其所在循环的外层循环之前定义。</p>
+</blockquote>
+<h3 id="2-continue关键字"><a href="#2-continue关键字" class="headerlink" title="2.continue关键字"></a>2.continue关键字</h3><p>continue和break有点类似，区别是：</p>
+<ul>
+<li>continue只是忽略本次循环的剩下语句，接着开始下一次循环，并不会中止循环；</li>
+<li>break则是完全中止循环本身。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">for (i in 0 until 3) &#123;</span><br><span class="line">    println(&quot;i的值是$&#123;i&#125;&quot;)</span><br><span class="line">    if (i == 1) &#123;</span><br><span class="line">        //忽略本次循环的剩下语句</span><br><span class="line">        continue</span><br><span class="line">    &#125;</span><br><span class="line">    println(&quot;continue后的输出语句&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+输出结果：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">i的值是0</span><br><span class="line">continue后的输出语句</span><br><span class="line">i的值是1</span><br><span class="line">i的值是2</span><br><span class="line">continue后的输出语句</span><br></pre></td></tr></table></figure>
+continue也可以紧跟一个标签，用于直接跳过标签所标识循环的档次循环剩下语句，重新开始下一次循环。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//外层循环</span><br><span class="line">outer@ for (i in 0 until 5) &#123;</span><br><span class="line">    //内层循环</span><br><span class="line">    for (j in 0 until 3) &#123;</span><br><span class="line">        println(&quot;i的值为：$&#123;i&#125;,j的值为：$&#123;j&#125;&quot;)</span><br><span class="line">        if (j == 1) &#123;</span><br><span class="line">            //忽略outer标签所指定的循环中档次循环剩下的语句</span><br><span class="line">            continue@outer</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+输出结果：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">i的值为：0,j的值为：0</span><br><span class="line">i的值为：0,j的值为：1</span><br><span class="line">i的值为：1,j的值为：0</span><br><span class="line">i的值为：1,j的值为：1</span><br><span class="line">i的值为：2,j的值为：0</span><br><span class="line">i的值为：2,j的值为：1</span><br><span class="line">i的值为：3,j的值为：0</span><br><span class="line">i的值为：3,j的值为：1</span><br><span class="line">i的值为：4,j的值为：0</span><br><span class="line">i的值为：4,j的值为：1</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="3-使用return结束方法"><a href="#3-使用return结束方法" class="headerlink" title="3.使用return结束方法"></a>3.使用return结束方法</h3><p>return用于从最直接包围它的方法、函数或者匿名函数返回。 当函数或方法执行到一条return语句时，这个函数或方法将被结束。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">fun main(args: Array&lt;String&gt;) &#123;</span><br><span class="line">    test()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun test()&#123;</span><br><span class="line">   for (i in 0 until 10) &#123;</span><br><span class="line">       println(&quot;i的值是：$&#123;i&#125;&quot;)</span><br><span class="line">       if (i == 1) &#123;</span><br><span class="line">           return</span><br><span class="line">       &#125;</span><br><span class="line">       println(&quot;return后的输出语句&quot;)</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">i的值是：0</span><br><span class="line">return后的输出语句</span><br><span class="line">i的值是：1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>return并不是专门用于控制循环结构的关键字，但通过return语句确实可以结束一个循环。 与continue和break不同的是，return直接结束整个函数或方法，而不管return处于多少层循环之内。</p>
+</blockquote>
+<p>参考自：<br><a target="_blank" rel="noopener" href="https://www.kotlincn.net/docs/reference/constructing-collections.html">kotlin官方文档</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2019/06/20/Kotlin%E6%80%BB%E7%BB%93%E4%B9%8B%E4%B8%80%E5%8F%98%E9%87%8F%E5%B8%B8%E9%87%8F%E5%8F%8A%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/">https://lxlfpeng.github.io/2019/06/20/Kotlin%E6%80%BB%E7%BB%93%E4%B9%8B%E4%B8%80%E5%8F%98%E9%87%8F%E5%B8%B8%E9%87%8F%E5%8F%8A%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2019/06/21/Flutter%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8A%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE/" title="Flutter环境搭建及项目配置"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Flutter环境搭建及项目配置</div></div><div class="info-2"><div class="info-item-1">一. 下载安装Flutter。1.1 下载安装包Flutter SDK 1.2 下载完成后进行解压: 1.3 配置环境变量。控制面板-&gt;系统和安全-&gt;系统-&gt;高级系统设置-&gt;环境变量-&gt;path-&gt;编辑-&gt;新建 1.4 安装flutter依赖并检查。cmd命令: 1flutter doctor  1.5 查看flutter版本。1flutter doctor -v 二. Android Studio安装配置。2.1 Android studio安装dart和flutter插件。  2.2 重启Android studio创建flutter工程。 三. VsCode配置。1. vscode添加flutter支持。 2. 创建一个flutter的项目。 3.使用模拟器调试。 四. 创建或者运行项目卡住问题创建项目一直卡在Creating Flutter Project没反应。运行项目一直卡在: 1Running Gradle task &#x27;assembleDebug&#x27;...  ...</div></div></div></a><a class="pagination-related" href="/2019/06/18/Android%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93%E4%B9%8B%E4%B8%89%E7%BD%91%E7%BB%9C%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF/" title="Android音视频开发总结之三网络直播技术"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Android音视频开发总结之三网络直播技术</div></div><div class="info-2"><div class="info-item-1">一. 直播流程总览目前主流的直播架构中主要有两种方案，即流媒体转发、P2P。流媒体转发，是一种在视频直播中以流的方式将连续的音、视频数据经编码压缩后传输到流媒体服务器，用户实时从服务器获取流媒体资源，而不必要等待整个文件下载文件完毕的C&#x2F;S架构视频直播方案；P2P直播，是一种建立在P2P技术基础上的视频直播方案，它规定客户端之间使用一定协议来交换和共享直播数据，通过减少对服务器的数据请求，以降低服务端的I&#x2F;O带宽等方面压力，从而削减服务器带宽成本，降低客户端卡播率。 一个直播功能通用的基础架构涉及三个部分，即音视频采集端、云服务端和音视频播放端。可以看到直播的流程可以分为如下几步： 音视频采集 —&gt;音视频处理—&gt;音视频编码和封装—&gt;推流到服务器—&gt;服务器流分发—&gt;播放器流播放如下图，是一个APP直播功能的架构：  从上图中我们可以看到，每一个部分都有各自要处理的一些工作。 总体来说，视频直播类功能的整体流程包括以下内容：  音视频采集 音视频处理 音视频编码和封装 推流 流媒体服务器处理 拉流 音视频解码 音视频播放   二....</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-Kotlin%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F"><span class="toc-number">1.</span> <span class="toc-text">一.Kotlin中的变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-var-%E4%B8%8E-val"><span class="toc-number">1.0.1.</span> <span class="toc-text">1.var 与 val</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%8F%AF%E7%A9%BA%E5%8F%98%E9%87%8F%E5%92%8C%E4%B8%8D%E5%8F%AF%E7%A9%BA%E5%8F%98%E9%87%8F"><span class="toc-number">1.0.2.</span> <span class="toc-text">2.可空变量和不可空变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%8F%98%E9%87%8F%E5%90%8E%E6%9C%9F%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E5%BB%B6%E8%BF%9F%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">1.0.3.</span> <span class="toc-text">3.变量后期初始化与延迟初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-lateinit-var%E5%90%8E%E6%9C%9F%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">1.0.3.0.1.</span> <span class="toc-text">(1.) lateinit var后期初始化</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-by-lazy%E5%8F%98%E9%87%8F%E5%BB%B6%E8%BF%9F%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">1.0.3.0.2.</span> <span class="toc-text">(2.) by lazy变量延迟初始化</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-Kotlin%E4%B8%AD%E7%9A%84%E5%B8%B8%E9%87%8F"><span class="toc-number">2.</span> <span class="toc-text">二.Kotlin中的常量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-val%E5%AE%9A%E4%B9%89%E5%B8%B8%E9%87%8F"><span class="toc-number">2.0.1.</span> <span class="toc-text">1.val定义常量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Kotlin%E9%87%8D%E5%A6%82%E4%BD%95%E6%89%8D%E8%83%BD%E7%94%9F%E6%88%90%E7%9C%9F%E6%AD%A3%E7%9A%84%E5%B8%B8%E9%87%8F"><span class="toc-number">2.0.2.</span> <span class="toc-text">2.Kotlin重如何才能生成真正的常量?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BD%BF%E7%94%A8const%E5%AE%9A%E4%B9%89%E5%B8%B8%E9%87%8F"><span class="toc-number">2.0.3.</span> <span class="toc-text">3.使用const定义常量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BD%BF%E7%94%A8-JvmField%E5%AE%9A%E4%B9%89%E5%B8%B8%E9%87%8F"><span class="toc-number">2.0.4.</span> <span class="toc-text">3.使用@JvmField定义常量</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-Kotlin%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.</span> <span class="toc-text">三.Kotlin中的数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%95%B0%E5%AD%97%E7%B1%BB%E5%9E%8BNumber"><span class="toc-number">3.0.1.</span> <span class="toc-text">1.数字类型Number</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%B8%83%E5%B0%94%E7%B1%BB%E5%9E%8B%EF%BC%88Boolean%EF%BC%89"><span class="toc-number">3.0.2.</span> <span class="toc-text">2.布尔类型（Boolean）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AD%97%E7%AC%A6%E5%9E%8B%EF%BC%88Char%EF%BC%89"><span class="toc-number">3.0.3.</span> <span class="toc-text">3.字符型（Char）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">3.0.4.</span> <span class="toc-text">4.字符串</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-Kotlin%E4%B8%AD%E7%9A%84%E5%88%A4%E6%96%AD%E7%BB%93%E6%9E%84"><span class="toc-number">4.</span> <span class="toc-text">四.Kotlin中的判断结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-if%E8%AF%AD%E5%8F%A5"><span class="toc-number">4.0.1.</span> <span class="toc-text">1.if语句</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94-Kotlin%E4%B8%AD%E7%9A%84%E9%80%89%E6%8B%A9%E7%BB%93%E6%9E%84"><span class="toc-number">5.</span> <span class="toc-text">五.Kotlin中的选择结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-when%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">5.0.1.</span> <span class="toc-text">1.when表达式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD-Kotlin%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF%E7%BB%93%E6%9E%84"><span class="toc-number">6.</span> <span class="toc-text">六.Kotlin中的循环结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-for%E5%BE%AA%E7%8E%AF"><span class="toc-number">6.0.1.</span> <span class="toc-text">1.for循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-while-%E4%B8%8E-do%E2%80%A6while-%E5%BE%AA%E7%8E%AF"><span class="toc-number">6.0.2.</span> <span class="toc-text">2.while 与 do…while 循环</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83-Kotlin%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6"><span class="toc-number">7.</span> <span class="toc-text">七.Kotlin流程控制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%BD%BF%E7%94%A8break%E7%BB%93%E6%9D%9F%E5%BE%AA%E7%8E%AF"><span class="toc-number">7.0.1.</span> <span class="toc-text">1.使用break结束循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-continue%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">7.0.2.</span> <span class="toc-text">2.continue关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BD%BF%E7%94%A8return%E7%BB%93%E6%9D%9F%E6%96%B9%E6%B3%95"><span class="toc-number">7.0.3.</span> <span class="toc-text">3.使用return结束方法</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Java常见的设计模式(下) | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一. 常见的软件设计模式接上一篇，我们说到面向对象设计模式总体来说23种设计模式分为三大类： 创建型模式（5种）单例模式、建造者模式、工厂方法模式、抽象工厂模式、原型模式。 结构型模式（7种）适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。 行为型模式（11种）策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java常见的设计模式(下)">
+<meta property="og:url" content="https://lxlfpeng.github.io/2020/03/11/Java%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F(%E4%B8%8B)/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一. 常见的软件设计模式接上一篇，我们说到面向对象设计模式总体来说23种设计模式分为三大类： 创建型模式（5种）单例模式、建造者模式、工厂方法模式、抽象工厂模式、原型模式。 结构型模式（7种）适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。 行为型模式（11种）策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2020-03-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.844Z">
+<meta property="article:author" content="peng">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2020/03/11/Java%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F(%E4%B8%8B)/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Java常见的设计模式(下)',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Java常见的设计模式(下)</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Java常见的设计模式(下)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2020-03-10T16:00:00.000Z" title="发表于 2020-03-11 00:00:00">2020-03-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">编程基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">5.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>19分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-常见的软件设计模式"><a href="#一-常见的软件设计模式" class="headerlink" title="一. 常见的软件设计模式"></a>一. 常见的软件设计模式</h1><p>接上一篇，我们说到面向对象设计模式总体来说23种设计模式分为三大类：</p>
+<h3 id="创建型模式（5种）"><a href="#创建型模式（5种）" class="headerlink" title="创建型模式（5种）"></a>创建型模式（5种）</h3><p>单例模式、建造者模式、工厂方法模式、抽象工厂模式、原型模式。</p>
+<h3 id="结构型模式（7种）"><a href="#结构型模式（7种）" class="headerlink" title="结构型模式（7种）"></a>结构型模式（7种）</h3><p>适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。</p>
+<h3 id="行为型模式（11种）"><a href="#行为型模式（11种）" class="headerlink" title="行为型模式（11种）"></a>行为型模式（11种）</h3><p>策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。</p>
+<h1 id="二-适配器模式"><a href="#二-适配器模式" class="headerlink" title="二. 适配器模式"></a>二. 适配器模式</h1><h4 id="1-概念"><a href="#1-概念" class="headerlink" title="1. 概念"></a>1. 概念</h4><p>将一个类的接口转换成客户希望的另外一个接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作。<br>例子：笔记本电脑电源一般用的都是5V电压，但是我们的家用电是220V，我们要让笔记本充上电，最好的办法应该是通过一个工具把220V的电压转换成5V，这个工具就是适配器。<br><img src="/images/724553622152891467bd6260bad90552.webp"></p>
+<h4 id="2-适配器模式涉及3个角色"><a href="#2-适配器模式涉及3个角色" class="headerlink" title="2. 适配器模式涉及3个角色"></a>2. 适配器模式涉及3个角色</h4><ul>
+<li><strong>目标 Target（目标抽象类）：</strong>目标抽象类定义客户所需接口，可以是一个抽象类或接口，也可以是具体类，相当于插座。</li>
+<li><strong>适配器 Adapter（适配器类）：</strong>适配器可以调用另一个接口，作为一个转换器，对Adaptee和Target进行适配，适配器类是适配器模式的核心，在对象适配器中，它通过继承Target并关联一个Adaptee对象使二者产生联系，相当于插头转换器。</li>
+<li><strong>源 Adaptee（适配者类）：</strong>适配者即被适配的角色，它定义了一个已经存在的接口，这个接口需要适配，适配者类一般是一个具体类，包含了客户希望使用的业务方法，在某些情况下可能没有适配者类的源代码，相当于插头。</li>
+</ul>
+<h4 id="3-适配器模式分类"><a href="#3-适配器模式分类" class="headerlink" title="3. 适配器模式分类"></a>3. 适配器模式分类</h4><p>适配器模式主要分为三类：<code>类的适配器模式、对象的适配器模式、接口的适配器模式。</code></p>
+<h4 id="4-类适配器模式"><a href="#4-类适配器模式" class="headerlink" title="4. 类适配器模式"></a>4. 类适配器模式</h4><p>一般手机充电器输出的直流电压为5V，我们把交流电220V称为源，希望得到的直流电5V称为目标，而充电器即为适配器。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">//源，交流电 已存在的、具有特殊功能、但不符合我们既有的标准接口的类</span><br><span class="line">public class AC &#123;</span><br><span class="line">    public int outputAC()&#123;</span><br><span class="line">        return 220;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//目标接口，或称为标准接口，直流电</span><br><span class="line">public interface IDC &#123;</span><br><span class="line">    int outputDC();</span><br><span class="line">&#125;</span><br><span class="line">//适配器</span><br><span class="line">public class ClsAdapter extends AC implements IDC&#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int outputDC() &#123;</span><br><span class="line">        return outputAC()/44;  //直流电为交流电的电压值除以44</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        ClsAdapter adapter = new ClsAdapter();</span><br><span class="line">        System.out.println(&quot;交流电电压:&quot; + adapter.outputAC());</span><br><span class="line">        System.out.println(&quot;直流电电压:&quot; + adapter.outputDC());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/** </span><br><span class="line">输出结果为：</span><br><span class="line">交流电电压:220</span><br><span class="line">直流电电压:5</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<p>可以看到，类适配器是通过继承源类，实现目标接口的方式实现适配的。但是，由于Java单继承的机制，这就要求目标必须是接口，有一定的局限性。</p>
+<h4 id="5-对象适配器模式"><a href="#5-对象适配器模式" class="headerlink" title="5. 对象适配器模式"></a>5. 对象适配器模式</h4><p>对象适配器，不是继承源类，而是依据关联关系，持有源类的对象，这也隐藏了源类的方法。在这里，适配器和源类的关系不是继承关系，而是组合关系。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">public class ObjAdapter implements IDC &#123;</span><br><span class="line">    //持有源类的对象</span><br><span class="line">    private AC ac;</span><br><span class="line"></span><br><span class="line">    public ObjAdapter(AC ac)&#123;</span><br><span class="line">        this.ac = ac;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int outputAC()&#123;</span><br><span class="line">        return ac.outputAC();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int outputDC() &#123;</span><br><span class="line">        return ac.outputAC()/44;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        ObjAdapter adapter = new ObjAdapter(new AC());</span><br><span class="line">        System.out.println(&quot;交流电电压:&quot; + adapter.outputAC());</span><br><span class="line">        System.out.println(&quot;直流电电压:&quot; + adapter.outputDC());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//输出结果同上</span><br></pre></td></tr></table></figure>
+<h4 id="6-适配器模式优点"><a href="#6-适配器模式优点" class="headerlink" title="6.适配器模式优点"></a>6.适配器模式优点</h4><ul>
+<li>客户端通过适配器可以透明的调用目标接口。</li>
+<li>复用了现存的类，程序员不需要修改原有代码而重用现有的适配者类。</li>
+<li>将目标类和适配类解耦，解决了目标类和适配类接口不一致的问题。</li>
+</ul>
+<h4 id="7-适配器模式缺点"><a href="#7-适配器模式缺点" class="headerlink" title="7.适配器模式缺点"></a>7.适配器模式缺点</h4><ul>
+<li>对类适配器来说，更换适配器的过程比较复杂。<blockquote>
+<p>需要注意的是，在设计阶段，不要想着用适配器模式，这根本就是用于修改不合理的设置才产生的.并且过多地使用适配器，会让系统非常零乱，不易整体进行把握。比如，明明看到调用的是 A 接口，其实内部被适配成了 B 接口的实现，一个系统如果太多出现这种情况，无异于一场灾难。因此如果不是很有必要，可以不使用适配器，而是直接对系统进行重构。</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="三-装饰器模式"><a href="#三-装饰器模式" class="headerlink" title="三. 装饰器模式"></a>三. 装饰器模式</h1><h3 id="1-概念-1"><a href="#1-概念-1" class="headerlink" title="1. 概念"></a>1. 概念</h3><p>装饰器模式( Decorator Pattern ) ，也称为包装模式( Wrapper Pattern )。装饰器模式是一种结构型的设计模式。在不改变原有对象的基础之上，将功能附加到对象上，扩展原有对象的功能。<br>使用该模式的目的是为了较为灵活的对类进行扩展，而且不影响原来类的结构。</p>
+<h3 id="2-在装饰器模式中的角色有："><a href="#2-在装饰器模式中的角色有：" class="headerlink" title="2. 在装饰器模式中的角色有："></a>2. 在装饰器模式中的角色有：</h3><p><strong>抽象构件(Component)角色：</strong>给出一个抽象接口，已规范准备接收附加责任的对象。<br><strong>具体构件(ConcreteComponent)角色：</strong>定义一个将要接收附加责任的类<br><strong>装饰(Decorator)角色：</strong>持有一个构件(Component)对象的实例，并定义一个与抽象构件接口一致的接口。<br><strong>具体装饰(ConcreteDecorator)角色：</strong>负责给构件对象“贴上”附加的责任。</p>
+<h3 id="3-代码实现"><a href="#3-代码实现" class="headerlink" title="3. 代码实现"></a>3. 代码实现</h3><ol>
+<li><p>以绘制形状为例，平时绘制的形状五花八门，可能有圆形、矩形、三角形…等等，我们抽取出一个抽象的形状接口：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 形状接口</span><br><span class="line"> */</span><br><span class="line">public interface Shape &#123;</span><br><span class="line">    //定义公用的形状绘制方法</span><br><span class="line">    void draw();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>接下来，假如我们要绘制一个圆形，会实现Shape接口，定义具体绘制圆形的方法：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> /**</span><br><span class="line"> * 圆形类</span><br><span class="line"> */</span><br><span class="line">public class Cicle implements Shape &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void draw() &#123;</span><br><span class="line">        System.out.println(&quot;绘制一个圆形&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>如果某一天，有一个特殊的需求，需要绘制一个红色的圆形，但又不允许更改Circle类，如果是按继承写法会是如下：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 红色的圆形</span><br><span class="line"> */</span><br><span class="line">public class RedCircle extends Circle&#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void onDraw() &#123;</span><br><span class="line">        super.onDraw();</span><br><span class="line">        System.out.println(&quot;给圆形填充上红色&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>效果是实现了，等到某一天，又来了个需求，要绘制一个带边框的红色圆，且依然不能修改原来的类，那就继续继承RedCircle实现就行了…如此反复循环，继承的具体形状类会越来越多，且可能会嵌套了很多层，不利于代码的维护。<br>将以上改为装饰器模式来实现的话，可以先定义一个抽象装饰者来装饰Shape：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 抽象装饰者类，对Shape接口进行包装 </span><br><span class="line"> */</span><br><span class="line">public  class ShapeDecorator implements Shape &#123;</span><br><span class="line">    protected Shape shape;</span><br><span class="line"></span><br><span class="line">    public ShapeDecorator(Shape shape) &#123;</span><br><span class="line">        this.shape = shape;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void draw() &#123;</span><br><span class="line">        shape.draw();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>假如是实现一个带边框的红色圆形.使用装饰器来实现如下:</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 创建一个继承了抽象装饰器类实体装饰器类</span><br><span class="line"> *</span><br><span class="line"> * 具体的装饰器类，实现具体要向被装饰对象添加的功能。用来装饰具体的组件对象或者另外一个具体的装饰器对象</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line">public class RedOutlineCircleDecorator extends ShapeDecorator &#123;</span><br><span class="line">    public RedOutlineCircleDecorator(Shape shape) &#123;</span><br><span class="line">        //调用父类的构造方法，将参数传给父类</span><br><span class="line">        super(shape);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void draw() &#123;</span><br><span class="line">        //这里可以选择性的调用父类的方法，如果不调用则相当于完全改写了方法，</span><br><span class="line">        super.draw();</span><br><span class="line">        System.out.println(&quot;给圆形填充上红色&quot;);</span><br><span class="line">        System.out.println(&quot;给圆形画上边框&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第五步测试</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String agrs[])&#123;</span><br><span class="line">   Shape circle = new Circle();</span><br><span class="line">   //绘制一个带边框的红色圆形</span><br><span class="line">   RedOutlineCircleDecorator redOutlineCircleDecorator = new RedOutlineCircleDecorator(circle);</span><br><span class="line">   redOutlineCircleDecorator.onDraw();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/62ee37b9179c9f886f0d3a834c95a0ab.webp"></p>
+</li>
+</ol>
+<p><strong>优点：</strong></p>
+<ul>
+<li>相比与静态的继承，装饰器模式正如它定义的，那样可以动态的给一个对象添加额外的职责， 显得更加灵活。静态继承的情况下，如果要添加其他的功能就需要添加新的子类实现功能，然后相互之间继承，以达到一个组合的功能，对于每一个要添加的功能都要，新建类，显得特别麻烦，也使得系统越来越复杂，而对于装饰器来说，为一个特定的Component提供多种不同的Decorator，对于一些要达成的功能，相互组合就可以达成目的。</li>
+<li>装饰类和被装饰类可以独立发展，而不会相互耦合。</li>
+<li>装饰模式是继承关系的一个替代方案。我们看装饰类Decorator，不管装饰多少层，返回的对象还是Component，实现的还是is-a的关系。</li>
+</ul>
+<p><strong>缺点：</strong><br>对于装饰模式记住一点就足够了：多层的装饰是比较复杂的。为什么会复杂呢？你想想看，就像剥洋葱一样，你剥到了最后才发现是最里层的装饰出现了问题，想象一下工作量吧，因此，尽量减少装饰类的数量，以便降低系统的复杂度。</p>
+<blockquote>
+<p>装饰模式和前面的代理模式有点类似，容易把装饰模式看成代理模式。装饰模式是继承的一种替代方案，主要为所装饰的对象增强功能，动态的增加方法。而代理模式主要是为了控制对原有对象的访问权限，不对原有对象进行功能增强。</p>
+</blockquote>
+<h1 id="四-代理模式"><a href="#四-代理模式" class="headerlink" title="四. 代理模式"></a>四. 代理模式</h1><h3 id="1-概念-2"><a href="#1-概念-2" class="headerlink" title="1. 概念"></a>1. 概念</h3><p>代理(Proxy)是一种设计模式，提供了对目标对象另外的访问方式；即通过代理对象访问目标对象。这样做的好处是：可以在目标对象实现的基础上，增强额外的功能操作，即扩展目标对象的功能。这里使用到编程中的一个思想：不要随意去修改别人已经写好的代码或者方法，如果需改修改，可以通过代理的方式来扩展该方法。</p>
+<ul>
+<li>中介隔离作用：在某些情况下，一个客户类不想或者不能直接引用一个委托对象，而代理对象可以在客户类和委托对象之间起到中介的作用(代理类和委托类实现相同的接口)。</li>
+<li>开放封闭原则：可以通过给代理类增加额外的功能来扩展委托类的功能，这样只需要修改代理类而不需要再修改委托类，符合开闭原则。代理类本身并不真正实现服务，而是同过调用委托类的相关方法，来提供特定的服务。使用代理模式，可以在调用委托类业务功能的前后加入一些公共的服务(例如鉴权、计时、缓存、日志、事务处理等)，甚至修改委托类的业务功能。</li>
+</ul>
+<h3 id="2-代理模式主要角色"><a href="#2-代理模式主要角色" class="headerlink" title="2. 代理模式主要角色"></a>2. 代理模式主要角色</h3><ul>
+<li>Subject（抽象主题角色）：定义代理类和真实主题的公共对外方法，也是代理类代理真实主题的方法。比如：广告、出售等。</li>
+<li>RealSubject（真实主题角色）：真正实现业务逻辑的类。比如实现了广告、出售等方法的厂家（Vendor）。</li>
+<li>Proxy（代理主题角色）：用来代理和封装真实主题。比如，同样实现了广告、出售等方法的超时（Shop）。</li>
+</ul>
+<h3 id="3-代理模式的分类"><a href="#3-代理模式的分类" class="headerlink" title="3. 代理模式的分类"></a>3. 代理模式的分类</h3><p>代理可以分为静态代理和动态代理。</p>
+<ul>
+<li>静态代理是由程序员编写代理类的源码，再编译代理类。所谓静态也就是在程序运行前就已经存在代理类的字节码文件，代理类和委托类的关系在运行前就已确定。</li>
+<li>动态代理是代理类的源码是在程序运行期间由编译器动态的生成(如JVM根据反射等机制生成代理类)。代理类和委托类的关系在程序运行时确定。</li>
+</ul>
+<h3 id="4-静态代理"><a href="#4-静态代理" class="headerlink" title="4.静态代理"></a>4.静态代理</h3><ol>
+<li>创建服务类接口 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 定义接口</span><br><span class="line">public interface ShoesStore &#123;</span><br><span class="line">    void sell();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>实现服务接口 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 真正的鞋子类</span><br><span class="line">public class NikeShoesStore implements ShoesStore &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void sell() &#123;</span><br><span class="line">        System.out.println(&quot;卖出了一双Nike鞋子&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>创建代理类 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">//微商 代理</span><br><span class="line">public class MicroSell implements ShoesStore &#123;</span><br><span class="line">    NikeShoesStore nikeShoesStore;</span><br><span class="line"></span><br><span class="line">    public MicroSell(NikeShoesStore nikeShoesStore) &#123;</span><br><span class="line">        this.nikeShoesStore = nikeShoesStore;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void sell() &#123;</span><br><span class="line">        beforeSell();</span><br><span class="line">        nikeShoesStore.sell();</span><br><span class="line">        afterSell();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void beforeSell() &#123;</span><br><span class="line">        System.out.println(&quot;买之前宣传：我们的鞋子质量杠杠的，快来买一双吧。&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void afterSell() &#123;</span><br><span class="line">        System.out.println(&quot;买之后推销：欢迎下次光临&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>编写测试类 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    NikeShoesStore nikeShoes = new NikeShoesStore();</span><br><span class="line">    MicroSell microSell = new MicroSell(nikeShoes);</span><br><span class="line">    microSell.sell();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/images/38455377871e51dc78c2b2c792dc39a9.webp"></li>
+</ol>
+<p><strong>优点：</strong><br>可以做到在符合开闭原则的情况下对目标对象进行功能扩展。</p>
+<p><strong>缺点：</strong><br>我们得为每一个服务都得创建代理类，工作量太大，不易管理。同时接口一旦发生改变，代理类也得相应修改。 </p>
+<h3 id="4-JDK动态代理"><a href="#4-JDK动态代理" class="headerlink" title="4.JDK动态代理"></a>4.JDK动态代理</h3><p>在JDK动态代理中我们不再需要再手动的创建代理类，我们只需要编写一个动态处理器就可以了。真正的代理对象由JDK再运行时为我们动态的来创建。</p>
+<ol>
+<li>改造静态代理的代码为： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class DynamicMicroSell implements InvocationHandler &#123;</span><br><span class="line">    Object shoes;</span><br><span class="line"></span><br><span class="line">    public DynamicMicroSell(Object shoes) &#123;</span><br><span class="line">        this.shoes = shoes;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;</span><br><span class="line">        beforeSell();</span><br><span class="line">        method.invoke(shoes);</span><br><span class="line">        afterSell();</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void beforeSell() &#123;</span><br><span class="line">        System.out.println(&quot;买之前宣传：我们的鞋子质量杠杠的，快来买一双吧。&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void afterSell() &#123;</span><br><span class="line">        System.out.println(&quot;买之后推销：欢迎下次光临&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>测试类: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    NikeShoesStore realShoes = new NikeShoesStore();</span><br><span class="line">    DynamicMicroSell dynamicMicroSell = new DynamicMicroSell(realShoes);</span><br><span class="line">    ShoesStore nikeProxy = (ShoesStore) Proxy.newProxyInstance(NikeShoesStore.class.getClassLoader(), NikeShoesStore.class.getInterfaces(), dynamicMicroSell);</span><br><span class="line">    nikeProxy.sell();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/images/53941910570c5c4a9f04e4bc5aca4408.webp"></li>
+</ol>
+<p>可以看到并没有像静态代理那样重新实现一个代理类，而是实现了 InvocationHandler 接口的invoke方法实现的代理。通过Proxy.newProxyInstance()创建了一个代理类来执行sell方法。<br>此时如果想要拓展一个阿迪鞋子的接口，很简单：</p>
+<ol>
+<li>新建一个AdidasShoes还是实现ShoesStore接口 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class AdidasShoes implements ShoesStore &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void sell() &#123;</span><br><span class="line">        System.out.println(&quot;卖出去一双阿迪~&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>测试类: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    AdidasShoes adidasShoes = new AdidasShoes();</span><br><span class="line">    DynamicMicroSell dynamicMicroSell1 = new DynamicMicroSell(adidasShoes);</span><br><span class="line">    Shoes shoes = (Shoes) Proxy.newProxyInstance(AdidasShoes.class.getClassLoader(), AdidasShoes.class.getInterfaces(), dynamicMicroSell1);</span><br><span class="line">    shoes.sell();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><strong>缺点：</strong><br>虽然相对于静态代理，动态代理大大减少了我们的开发任务，同时减少了对业务接口的依赖，降低了耦合度。但是还是有一点点小小的遗憾之处，那就是它始终无法摆脱仅支持interface代理，因为它的设计注定了这个遗憾。</p>
+<h3 id="3-CGLIB代理"><a href="#3-CGLIB代理" class="headerlink" title="3.CGLIB代理"></a>3.CGLIB代理</h3><h5 id="CGLIB代理的作用"><a href="#CGLIB代理的作用" class="headerlink" title="CGLIB代理的作用"></a>CGLIB代理的作用</h5><p>JDK实现动态代理需要实现类通过接口定义业务方法，对于没有接口的类，如何实现动态代理呢，这就需要CGLib了。<br><a target="_blank" rel="noopener" href="https://github.com/cglib/cglib">Cglib(Code Generation Library)</a>是个功能强大、高性能、开源的代码生成包，它可以为没有实现接口的类提供代理。运行时在内存中动态生成一个子类对象从而实现对目标对象功能的扩展。<br>CGLib采用了非常底层的字节码技术，其原理是通过字节码技术为一个类创建子类，并在子类中采用方法拦截的技术拦截所有父类方法的调用，顺势织入横切逻辑。<br>但因为采用的是继承，所以不能对final修饰的类进行代理。JDK动态代理与CGLib动态代理均是实现Spring AOP的基础。<br>Cglib动态代理的特点如下：</p>
+<ul>
+<li>需要引入Cglib的jar文件。</li>
+<li>CGLIB是一个强大的高性能的代码生成包，它可以在运行期扩展Java类与实现Java接口。<br>它广泛的被许多AOP的框架使用，例如Spring AOP和dynaop，为他们提供方法的interception（拦截）。</li>
+<li>CGLIB包的底层是通过使用一个小而快的字节码处理框架ASM，来转换字节码并生成新的类。<br>不鼓励直接使用ASM，因为它需要你对JVM内部结构包括class文件的格式和指令集都很熟悉。</li>
+<li>委托类不能为final，否则报错java.lang.IllegalArgumentException: Cannot subclass final class xxx。</li>
+<li>不会拦截委托类中无法重载的final&#x2F;static方法，而是跳过此类方法只代理其他方法。</li>
+</ul>
+<h5 id="cglib与JDK动态代理的区别"><a href="#cglib与JDK动态代理的区别" class="headerlink" title="cglib与JDK动态代理的区别"></a>cglib与JDK动态代理的区别</h5><ul>
+<li>使用动态代理的对象必须实现一个或多个接口</li>
+<li>使用cglib代理的对象则无需实现接口，达到代理类无侵入。</li>
+</ul>
+<h3 id="4-动态代理在AOP中的应用"><a href="#4-动态代理在AOP中的应用" class="headerlink" title="4. 动态代理在AOP中的应用"></a>4. 动态代理在AOP中的应用</h3><p>AOP（Aspect Orient Programming），我们一般称为面向方面（切面）编程，作为面向对象的一种补充，用于处理系统中分布于各个模块的横切关注点，比如事务管理、日志、缓存等等。<br>AOP可以两种动态代理来实现拦截切入功能：jdk动态代理和cglib动态代理。两种方法同时存在，各有优劣。 jdk动态代理是由java内部的反射机制来实现的，cglib动态代理底层则是借助asm来实现的。<br>总的来说，反射机制在生成类的过程中比较高效，执行时候通过反射调用委托类接口方法比较慢；而asm在生成类之后的相关代理类执行过程中比较高效（可以通过将asm生成的类进行缓存，这样解决asm生成类过程低效问题）。<br>还有一点必须注意：jdk动态代理的应用前提，必须是委托类基于统一的接口。如果没有上述前提，jdk动态代理不能应用。 由此可以看出，jdk动态代理有一定的局限性，cglib这种第三方类库实现的动态代理应用更加广泛，且在效率上更有优势。</p>
+<p>AOP实现主要分为 静态代理 和 动态代理 。</p>
+<ul>
+<li>静态代理 主要是 AspectJ</li>
+<li>动态代理 主要是 Spring AOP</li>
+</ul>
+<h1 id="五-观察者模式"><a href="#五-观察者模式" class="headerlink" title="五. 观察者模式"></a>五. 观察者模式</h1><h3 id="1-概念-3"><a href="#1-概念-3" class="headerlink" title="1. 概念"></a>1. 概念</h3><p>观察者模式（Observer），又叫发布-订阅模式（Publish&#x2F;Subscribe），定义对象间一种一对多的依赖关系，使得每当一个对象改变状态，则所有依赖于它的对象都会得到通知并自动更新。<br>被观察者和观察者一般是一对多的关系，一个被观察者对应多个观察者，当一个被观察者的状态发生改变时，被观察者通知观察者， 然后可以在观察者内部 进行业务逻辑的处理。</p>
+<h4 id="2-观察者模式的主要角色"><a href="#2-观察者模式的主要角色" class="headerlink" title="2. 观察者模式的主要角色"></a>2. 观察者模式的主要角色</h4><p><strong>Subject（抽象的被观察者）</strong><br>是一个接口（实际上也有人使用抽象类），主要包含了3个方法：</p>
+<ol>
+<li>addObserver方法可以添加观察者对象，可以理解为观察者把自己注册到了被观察者这里，只有注册了的观察者，才能接到被观察者的通知。</li>
+<li>deleteObserver方法是将观察者移除，被移除的观察者自然就不能再接到通知了。</li>
+<li>notifyObserves方法可以把通知发送给所有的已注册的观察者，至于观察者们后续做什么事情，被观察者是完全不关心的。</li>
+</ol>
+<p><strong>Observer（抽象的观察者）</strong><br>也是一个接口，必须实现的只有一个通知方法，被观察者通过调用这个方法，让观察者了解到事件的发生。</p>
+<p><strong>ConcreteSubject（被观察者的具体实现）</strong><br>实现抽象被观察者接口，是被观察者的具体业务逻辑，另外还需要一个存储观察者的集合。当主题的内部状态改变时，向所有集合中的观察者发出通知。</p>
+<p><strong>ConcreteObserver（观察者的具体实现）</strong><br>实现抽象观察者接口，处理不同具体观察者的不同业务逻辑。</p>
+<h4 id="3-代码实现-1"><a href="#3-代码实现-1" class="headerlink" title="3. 代码实现:"></a>3. 代码实现:</h4><ol>
+<li>抽象的被观察者: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 被观察者观察者抽象接口（发布者、被观察者）</span><br><span class="line"> */</span><br><span class="line">public interface Observerable &#123;</span><br><span class="line">    /**</span><br><span class="line">     * 注册观察者</span><br><span class="line">     */</span><br><span class="line">    void addObserver(Observer observer);</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 移除观察者</span><br><span class="line">     */</span><br><span class="line">    void deleObserver(Observer observer);</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 通知观察者</span><br><span class="line">     */</span><br><span class="line">    void notifyObserver();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>抽象的观察者: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 观察者抽象接口</span><br><span class="line"> */</span><br><span class="line">public interface Observer &#123;</span><br><span class="line">    /**</span><br><span class="line">     * 接收变动通知</span><br><span class="line">     */</span><br><span class="line">    void upData(String message);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>被观察者的具体实现: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public class NewServer implements Observerable &#123;</span><br><span class="line">    private List&lt;Observer&gt; mObservers = new ArrayList&lt;&gt;();</span><br><span class="line">    private String news;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void addObserver(Observer observer) &#123;</span><br><span class="line">        mObservers.add(observer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void deleObserver(Observer observer) &#123;</span><br><span class="line">        mObservers.remove(observer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void notifyObserver() &#123;</span><br><span class="line">        for (Observer mObserver : mObservers) &#123;</span><br><span class="line">            mObserver.upData(news);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setNews(String news) &#123;</span><br><span class="line">        this.news = news;</span><br><span class="line">        notifyObserver();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>观察者的具体实现: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class User implements Observer &#123;</span><br><span class="line">    private String name;</span><br><span class="line"></span><br><span class="line">    public User(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void upData(String news) &#123;</span><br><span class="line">        System.out.println(&quot;我是观察者&quot; + name + &quot;我收到的消息是:&quot; + news);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>测试类: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    NewServer wechatServer = new NewServer();</span><br><span class="line">    User user = new User(&quot;张三&quot;);</span><br><span class="line">    User user1 = new User(&quot;李四&quot;);</span><br><span class="line">    User user2 = new User(&quot;王五&quot;);</span><br><span class="line">    wechatServer.addObserver(user);</span><br><span class="line">    wechatServer.addObserver(user1);</span><br><span class="line">    wechatServer.addObserver(user2);</span><br><span class="line">    wechatServer.setNews(&quot;国乒勇夺冠军!&quot;);</span><br><span class="line">    wechatServer.deleObserver(user1);</span><br><span class="line">    wechatServer.setNews(&quot;国足惨遭淘汰!&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+结果:<br><img src="/images/79addbe1cf33317966bc0226d24fb3a8.webp"></li>
+</ol>
+<h4 id="4-优点"><a href="#4-优点" class="headerlink" title="4. 优点"></a>4. 优点</h4><ul>
+<li>观察者和被观察者之间建立一个抽象的耦合，降低了目标与观察者之间的耦合关系。</li>
+<li>观察者模式支持广播通讯的触发机制。</li>
+</ul>
+<h4 id="5-缺点"><a href="#5-缺点" class="headerlink" title="5. 缺点"></a>5. 缺点</h4><ul>
+<li>如果一个被观察者对象有很多的直接和间接的观察者的话，将所有的观察者都通知到会花费很多时间。</li>
+<li>如果观察者和观察目标间有循环依赖，可能导致系统崩溃。</li>
+<li>没有相应的机制让观察者知道所观察的目标对象是怎么发生变化的。</li>
+</ul>
+<h4 id="6-使用场景"><a href="#6-使用场景" class="headerlink" title="6. 使用场景"></a>6. 使用场景</h4><ul>
+<li>关联行为场景。</li>
+<li>事件多级触发场景。</li>
+<li>跨系统的消息变换场景，如消息队列的处理机制。</li>
+</ul>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/yun382657988/article/details/82991964">Android开发之设计模式-适配器模式</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/fb558642823e">Android 适配器模式(ListView与Adapter)</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/CSDN_xiaoxiaocainiao/article/details/90256847">android设计模式二十三式（七）——装饰器模式（Decorator）</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903638503161870#heading-110">谈谈 23 种设计模式在 Android 项目中的应用</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2020/03/11/Java%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F(%E4%B8%8B)/">https://lxlfpeng.github.io/2020/03/11/Java%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F(%E4%B8%8B)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></div><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/03/22/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" title="Java多线程模型及线程安全问题总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Java多线程模型及线程安全问题总结</div></div><div class="info-2"><div class="info-item-1">一.线程和进程1.什么是进程进程是系统中正在运行的一个程序，程序一旦运行就是进程。进程可以看成程序执行的一个实例。进程是系统资源分配的独立实体，每个进程都拥有独立的地址空间。一个进程无法访问另一个进程的变量和数据结构，如果想让一个进程访问另一个进程的资源，需要使用进程间通信，比如管道，文件，套接字等。 2.什么是线程线程从属于进程，是程序的实际执行者。一个进程至少包含一个主线程，也可以有更多的子线程。 3.进程和线程的区别与联系 线程是进程的一部分，一个线程只能属于一个进程，而一个进程可以有多个线程，但至少有一个线程。 资源分配给进程，同一进程的所有线程共享该进程的所有资源。 虚拟机分给线程，即真正在虚拟机上运行的是线程。 线程在执行过程中，需要协作同步。不同进程的线程间要利用消息通信的办法实现同步。  二.Java线程的创建Java中线程的创建常见有如下三种基本形式: 1.继承Thread类，重写该类的run()方法1234567891011121314public class MyThread extends Thread &#123;    @Override   ...</div></div></div></a><a class="pagination-related" href="/2020/02/18/Dockerfile%E4%B9%8BENTRYPOINT%E5%92%8CCMD%E7%9A%84%E5%BC%82%E5%90%8C/" title="Dockerfile之ENTRYPOINT和CMD的异同"><img class="cover" src="/images/075436a543601219ed7b207a2164f00d.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Dockerfile之ENTRYPOINT和CMD的异同</div></div><div class="info-2"><div class="info-item-1">Dockerfile中CMD和ENTRYPOINT的区别在我们查阅Dockerfile的官方文档时, 有可能发现一些命令的功能重复(至少看起来干的事情差不多), 我已经在上文分析过ADD和COPY命令的区别(他们功能类似), 现在我们分析另外2个命令, 他们的功能也非常类似, 是CMD和ENTRYPOINT. 尽管ENTRYPOINT和CMD都是在docker image里执行一条命令, 但是他们有一些微妙的区别. 在绝大多数情况下, 你只要在这2者之间选择一个调用就可以. 但他们有更高级的应用, CMD和ENTRYPOINT组合起来使用, 完成更加丰富的功能. ENTRYPOINT还是CMD?从根本上说, ENTRYPOINT和CMD都是让用户指定一个可执行程序, 这个可执行程序在container启动后自动启动. 实际上, 如果你想让自己制作的镜像自动运行程序(不需要在docker run后面添加命令行指定运行的命令), 你必须在Dockerfile里面, 使用ENTRYPOINT或者CMD命令 比如执行运行一个没有调用ENTRYPOINT或者CMD的docker镜像,...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/02/10/Java%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F(%E4%B8%8A)/" title="Java常见的设计模式(上)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-10</div><div class="info-item-2">Java常见的设计模式(上)</div></div><div class="info-2"><div class="info-item-1">一. 常见的软件设计模式总体来说23种设计模式分为三大类： 创建型模式（5种）单例模式、建造者模式、工厂方法模式、抽象工厂模式、原型模式。 结构型模式（7种）适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。 行为型模式（11种）策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。 二. 单例模式1. 单例模式的特点?确保一个类最多只有一个实例对象，并向整个系统提供这个实例。优点：由于单例模式只生成了一个实例，所以能够节约系统资源，减少性能开销，提高系统效率，同时也能够严格控制客户对它的访问。缺点：也正是因为系统中只有一个实例，这样就导致了单例类的职责过重，违背了“单一职责原则”，同时也没有抽象类，这样扩展起来有一定的困难。 2.单例模式的使用场景 整个程序的运行中只允许有一个类的实例。 需要频繁实例化然后销毁的对象。 创建对象时耗时过多或者耗资源过多，但又经常用到的对象。 方便资源相互通信的环境。  3....</div></div></div></a><a class="pagination-related" href="/2017/05/19/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%90%86%E8%AE%BA%E6%80%BB%E7%BB%93-Java%E7%89%88/" title="面向对象设计模式理论总结-Java版"><img class="cover" src="/images/311e68177cc2ec89577840663136ab3e.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2017-05-19</div><div class="info-item-2">面向对象设计模式理论总结-Java版</div></div><div class="info-2"><div class="info-item-1">一. 什么是UML类图?UML类图是一种结构图，用于描述一个系统的静态结构。类图以反映类结构和类之间关系为目的，用以描述软件系统的结构，是一种静态建模方法。类图中的类，与面向对象语言中的类的概念是对应的，因此又称统一建模语言，类图是使用频率最高的UML图之一。 二. 类图中的表示方式1.类在类图中的表示方式在UML类图中，类使用包含类名、属性(field) 和方法(method) 且带有分割线的矩形来表示，比如下图表示一个Employee类，它包含name、age和email这3个属性，以及modifyInfo()方法。对应代码： 123456789public class Employee &#123;    private String name;    private int age;    private String email;        public void modifyInfo() &#123;        ...   ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-%E5%B8%B8%E8%A7%81%E7%9A%84%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">一. 常见的软件设计模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%EF%BC%885%E7%A7%8D%EF%BC%89"><span class="toc-number">1.0.1.</span> <span class="toc-text">创建型模式（5种）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F%EF%BC%887%E7%A7%8D%EF%BC%89"><span class="toc-number">1.0.2.</span> <span class="toc-text">结构型模式（7种）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F%EF%BC%8811%E7%A7%8D%EF%BC%89"><span class="toc-number">1.0.3.</span> <span class="toc-text">行为型模式（11种）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">二. 适配器模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%A6%82%E5%BF%B5"><span class="toc-number">2.0.0.1.</span> <span class="toc-text">1. 概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%E6%B6%89%E5%8F%8A3%E4%B8%AA%E8%A7%92%E8%89%B2"><span class="toc-number">2.0.0.2.</span> <span class="toc-text">2. 适配器模式涉及3个角色</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%E5%88%86%E7%B1%BB"><span class="toc-number">2.0.0.3.</span> <span class="toc-text">3. 适配器模式分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E7%B1%BB%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.0.0.4.</span> <span class="toc-text">4. 类适配器模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E5%AF%B9%E8%B1%A1%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.0.0.5.</span> <span class="toc-text">5. 对象适配器模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%E4%BC%98%E7%82%B9"><span class="toc-number">2.0.0.6.</span> <span class="toc-text">6.适配器模式优点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%E7%BC%BA%E7%82%B9"><span class="toc-number">2.0.0.7.</span> <span class="toc-text">7.适配器模式缺点</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">三. 装饰器模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A6%82%E5%BF%B5-1"><span class="toc-number">3.0.1.</span> <span class="toc-text">1. 概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%9C%A8%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84%E8%A7%92%E8%89%B2%E6%9C%89%EF%BC%9A"><span class="toc-number">3.0.2.</span> <span class="toc-text">2. 在装饰器模式中的角色有：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.0.3.</span> <span class="toc-text">3. 代码实现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">四. 代理模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A6%82%E5%BF%B5-2"><span class="toc-number">4.0.1.</span> <span class="toc-text">1. 概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%E4%B8%BB%E8%A6%81%E8%A7%92%E8%89%B2"><span class="toc-number">4.0.2.</span> <span class="toc-text">2. 代理模式主要角色</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">4.0.3.</span> <span class="toc-text">3. 代理模式的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86"><span class="toc-number">4.0.4.</span> <span class="toc-text">4.静态代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-JDK%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86"><span class="toc-number">4.0.5.</span> <span class="toc-text">4.JDK动态代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-CGLIB%E4%BB%A3%E7%90%86"><span class="toc-number">4.0.6.</span> <span class="toc-text">3.CGLIB代理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#CGLIB%E4%BB%A3%E7%90%86%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">4.0.6.0.1.</span> <span class="toc-text">CGLIB代理的作用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#cglib%E4%B8%8EJDK%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">4.0.6.0.2.</span> <span class="toc-text">cglib与JDK动态代理的区别</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E5%9C%A8AOP%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">4.0.7.</span> <span class="toc-text">4. 动态代理在AOP中的应用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="toc-number">5.</span> <span class="toc-text">五. 观察者模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A6%82%E5%BF%B5-3"><span class="toc-number">5.0.1.</span> <span class="toc-text">1. 概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%B8%BB%E8%A6%81%E8%A7%92%E8%89%B2"><span class="toc-number">5.0.1.1.</span> <span class="toc-text">2. 观察者模式的主要角色</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-1"><span class="toc-number">5.0.1.2.</span> <span class="toc-text">3. 代码实现:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E4%BC%98%E7%82%B9"><span class="toc-number">5.0.1.3.</span> <span class="toc-text">4. 优点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E7%BC%BA%E7%82%B9"><span class="toc-number">5.0.1.4.</span> <span class="toc-text">5. 缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">5.0.1.5.</span> <span class="toc-text">6. 使用场景</span></a></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

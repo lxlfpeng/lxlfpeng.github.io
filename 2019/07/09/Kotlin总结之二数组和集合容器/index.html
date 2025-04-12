@@ -1,0 +1,391 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Kotlin总结之二数组和集合容器 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一 Kotlin中的数组1.数组的类型   kotlin java    IntArray int[]   ShortArray short[]   LongArray long[]   FloatArray float[]   DoubleArray double[]   CharArray char[]   2.数组的创建java创建数组的两种方式： 12int[] intArray &#x3D; ne">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kotlin总结之二数组和集合容器">
+<meta property="og:url" content="https://lxlfpeng.github.io/2019/07/09/Kotlin%E6%80%BB%E7%BB%93%E4%B9%8B%E4%BA%8C%E6%95%B0%E7%BB%84%E5%92%8C%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一 Kotlin中的数组1.数组的类型   kotlin java    IntArray int[]   ShortArray short[]   LongArray long[]   FloatArray float[]   DoubleArray double[]   CharArray char[]   2.数组的创建java创建数组的两种方式： 12int[] intArray &#x3D; ne">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2019-07-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.844Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2019/07/09/Kotlin%E6%80%BB%E7%BB%93%E4%B9%8B%E4%BA%8C%E6%95%B0%E7%BB%84%E5%92%8C%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Kotlin总结之二数组和集合容器',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Kotlin总结之二数组和集合容器</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Kotlin总结之二数组和集合容器</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2019-07-08T16:00:00.000Z" title="发表于 2019-07-09 00:00:00">2019-07-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Kotlin%E8%AF%AD%E8%A8%80/">Kotlin语言</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-Kotlin中的数组"><a href="#一-Kotlin中的数组" class="headerlink" title="一 Kotlin中的数组"></a>一 Kotlin中的数组</h1><h3 id="1-数组的类型"><a href="#1-数组的类型" class="headerlink" title="1.数组的类型"></a>1.数组的类型</h3><table>
+<thead>
+<tr>
+<th>kotlin</th>
+<th>java</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IntArray</td>
+<td>int[]</td>
+</tr>
+<tr>
+<td>ShortArray</td>
+<td>short[]</td>
+</tr>
+<tr>
+<td>LongArray</td>
+<td>long[]</td>
+</tr>
+<tr>
+<td>FloatArray</td>
+<td>float[]</td>
+</tr>
+<tr>
+<td>DoubleArray</td>
+<td>double[]</td>
+</tr>
+<tr>
+<td>CharArray</td>
+<td>char[]</td>
+</tr>
+</tbody></table>
+<h3 id="2-数组的创建"><a href="#2-数组的创建" class="headerlink" title="2.数组的创建"></a>2.数组的创建</h3><p>java创建数组的两种方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int[] intArray = new int[6]                //表达式：数据类型[]   标识  =   new  数据类型[长度];</span><br><span class="line">String[] strArray = &#123;&quot;value0&quot;,&quot;value1&quot;&#125;    //表达式： 数据类型[]  标识  = &#123;value0,value1,...&#125;</span><br></pre></td></tr></table></figure>
+<p>在kotlin中有两种创建数组的方式:</p>
+<ul>
+<li>使用arrayOf()、arrayOfNulls()、emptyArray()等工具函数；</li>
+<li>使用Array(size:Int,init:(Int)-&gt;T)构造器；<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//创建包含指定元素的数组（相当于Java数组的静态初始化）</span><br><span class="line">var stringArr = arrayOf(&quot;kotlin&quot;, &quot;php&quot;, &quot;python&quot;, &quot;c&quot;)</span><br><span class="line">var intArr = arrayOf(1, 24, 20, -3)</span><br><span class="line"></span><br><span class="line">//创建指定长度、元素为null的数组（相当于Java数组的动态初始化）</span><br><span class="line">var arr2 = arrayOfNulls&lt;Double&gt;(9)</span><br><span class="line">var intArr2 = arrayOfNulls&lt;Int&gt;(3)</span><br><span class="line"></span><br><span class="line">//创建长度为0的空数组</span><br><span class="line">var arr3 = emptyArray&lt;String&gt;()</span><br><span class="line">var intArr3 = emptyArray&lt;Int&gt;()</span><br><span class="line"></span><br><span class="line">//创建指定长度、使用Lambda表达式初始化数组元素的数组</span><br><span class="line">var strArr4=Array(6,&#123;&quot;kotlin&quot;&#125;)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="3-访问数组的元素"><a href="#3-访问数组的元素" class="headerlink" title="3.访问数组的元素"></a>3.访问数组的元素</h3><p>[] 可以用于访问数组的元素，实际上 [] 被进行了操作符的重载，调用的是 Array 类的 setter 和 getter 方法:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">val arr = arrayOf(1, 2, 3)</span><br><span class="line">arr[1]           //结果:1</span><br><span class="line">arr.get(1)       //结果:1</span><br><span class="line">// arr[10]       //报错ArrayIndexOutOfBoundsException</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>[] 虽然调用的是 setter 和 getter 方法，但是编译成字节码时会被进行优化，变成直接访问数组的内存地址，所以不会造成性能损失。</p>
+</blockquote>
+<h3 id="4-修改数组元素"><a href="#4-修改数组元素" class="headerlink" title="4.修改数组元素"></a>4.修改数组元素</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val intArr = intArrayOf(1,2,3)</span><br><span class="line">intArr[1] = 0           //与java一样，可以这样修改数据</span><br><span class="line">intArr.set(2,1)         //kotlin可以通过set函数进行修改数据</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-遍历数组元素"><a href="#5-遍历数组元素" class="headerlink" title="5.遍历数组元素"></a>5.遍历数组元素</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">val intArr = intArrayOf(1,2,3)</span><br><span class="line">for(item in intArr)&#123;</span><br><span class="line">    println(item)                   //遍历intArr里面的元素，item就是元素本身</span><br><span class="line">&#125;</span><br><span class="line">for (index in intArr.indices)&#123;</span><br><span class="line">    println(intArr[index])          //遍历initArr索引的元素，从0开始</span><br><span class="line">    println(intArr.get(index))      //可以通过get(索引)来获取元素</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="二-集合"><a href="#二-集合" class="headerlink" title="二.集合"></a>二.集合</h1><h3 id="1-只读集合和可变集合"><a href="#1-只读集合和可变集合" class="headerlink" title="1.只读集合和可变集合"></a>1.只读集合和可变集合</h3><p>Kotlin将集合分为<code>只读集合</code>和<code>可变集合</code>。<br><img src="/images/2ab9b95b7bfb5df651b3ead4a7785dec.webp"></p>
+<ul>
+<li>**只读集合:**源自最基础的集合接口：kotlin.collections.Collection。该接口可以对集合进行一些基本操作，但无任何添加和移除元素的方法。</li>
+<li>**可变集合:**实现 kotlin.collections.MutableCollection 接口才可以修改集合的数据。MutableCollection 接口继承自 Collection，并提供添加、移除和清空集合元素的方法。<blockquote>
+<p>可变集合一般都带有 “Mutable” 前缀修饰，意味着能对集合中的元素进行修改。</p>
+</blockquote>
+</li>
+</ul>
+<p>Kotlin 标准库提供了基本集合类型的实现：<code> set、list 以及 map</code>。</p>
+<h3 id="2-集合的创建"><a href="#2-集合的创建" class="headerlink" title="2.集合的创建"></a>2.集合的创建</h3><table>
+<thead>
+<tr>
+<th>集合类型</th>
+<th>只读集合</th>
+<th>可变集合</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>List</td>
+<td>listOf</td>
+<td>mutableList、arrayListOf</td>
+</tr>
+<tr>
+<td>Set</td>
+<td>setOf</td>
+<td>mutableSetOf、hashSetOf、linkedSetOf、sortedSetOf</td>
+</tr>
+<tr>
+<td>Map</td>
+<td>mapOf</td>
+<td>mutableMapOf、hashMapOf、linkeMapOf、sortedMapOf</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>集合类存放的都是对象的引用，而非对象本身，通常说的集合中的对象指的是集合中对象的引用。</p>
+</blockquote>
+<h5 id="1-只读集合的创建"><a href="#1-只读集合的创建" class="headerlink" title="(1.)只读集合的创建"></a>(1.)只读集合的创建</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">val emptyList = listOf&lt;Int&gt;()       //创建空的list集合</span><br><span class="line">val emptySet = setOf&lt;Int&gt;()         //创建空的set集合 </span><br><span class="line">val emptyMap = mapOf&lt;Int,Int&gt;()     //创建空的map集合</span><br><span class="line"></span><br><span class="line">val list1 = listOf(&quot;kotlin&quot;,&quot;java&quot;) //该函数返回不可变的List集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</span><br><span class="line">val set2 = setOf(&quot;kotlin&quot;,&quot;java&quot;)   //该函数返回不可变的Set集合。该函数可以接受0个或多个参数，这些参数将作为集合的元素。</span><br><span class="line">val map2 = mapOf(&quot;key&quot; to &quot;value&quot;)  //该函数返回不可变的Map集合。该函数可接受0个或多个key-value对，这些key-value对将作为Map的元素。</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+<h5 id="2-可变集合的创建"><a href="#2-可变集合的创建" class="headerlink" title="(2.)可变集合的创建"></a>(2.)可变集合的创建</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">val emptyMutableList = mutableListOf&lt;Int&gt;()     //创建空的list集合</span><br><span class="line">val emptyMutableSet = mutableSetOf&lt;Int&gt;()       //创建空的set集合</span><br><span class="line">val emptyMutableMap = mutableMapOf&lt;Int,Int&gt;()   //创建空的map集合</span><br><span class="line"></span><br><span class="line">val initMutableList = mutableListOf(1)          //该函数返回可变的MutableList集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</span><br><span class="line">val initMutableSet = mutableSetOf(2)            //该函数返回可变的MutableSet集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</span><br><span class="line">val initMutableMap = mutableMapOf(1 to 1)       //该函数返回可变的MutableMap集合。该函数可接受0个或多个key-value对，这些key-value对将作为Map的元素。</span><br></pre></td></tr></table></figure>
+<h3 id="3-Set集合"><a href="#3-Set集合" class="headerlink" title="3.Set集合"></a>3.Set集合</h3><h5 id="1-Set集合的创建"><a href="#1-Set集合的创建" class="headerlink" title="(1.)Set集合的创建"></a>(1.)Set集合的创建</h5><ul>
+<li>setOf()：该函数返回不可变的Set集合。该函数可以接受0个或多个参数，这些参数将作为集合的元素。</li>
+<li>mutableSetOf()：该函数返回可变的MutableSet集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</li>
+<li>hashSetOf()：该函数返回可变的HashSet集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</li>
+<li>linkedSetOf()：该函数返回可变的LinkedHashSet集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</li>
+<li>sortedSetOf()：该函数返回可变的TreeSet集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</li>
+</ul>
+<h5 id="2-Set集合的操作"><a href="#2-Set集合的操作" class="headerlink" title="(2.)Set集合的操作"></a>(2.)Set集合的操作</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">//创建不可变集合，返回值是Set</span><br><span class="line">var set = setOf(&quot;Java&quot;, &quot;Kotlin&quot;, &quot;Go&quot;)</span><br><span class="line">//判断是否所有元素的长度都大于4</span><br><span class="line">println(set.all &#123; it.length &gt; 4 &#125;)</span><br><span class="line">//判断是否任一元素的长豆都大于4</span><br><span class="line">println(set.any &#123; it.length &gt; 4 &#125;)</span><br><span class="line">//以Lambda表达式的值为key，集合元素为value，组成Map集合</span><br><span class="line">val map = set.associateBy &#123; &quot;学习&quot; + it + &quot;语言&quot; &#125;</span><br><span class="line">println(map)</span><br><span class="line"></span><br><span class="line">println(&quot;Java&quot; in set)</span><br><span class="line">println(&quot;Go&quot; !in set)</span><br><span class="line"></span><br><span class="line">//返回删除Set集合前面两个元素后的集合</span><br><span class="line">val dropedList = set.drop(2)</span><br><span class="line">println(dropedList)</span><br><span class="line"></span><br><span class="line">//对Set集合元素进行过滤：要求集合元素包含li</span><br><span class="line">val fliteredList = set.filter &#123; &quot;li&quot; in it &#125;</span><br><span class="line">println(fliteredList)</span><br><span class="line"></span><br><span class="line">//查找Set集合中包含li的元素，如果找到就返回该元素，否则就返回null</span><br><span class="line">val foundStr1 = set.find &#123; &quot;li&quot; in it &#125;</span><br><span class="line">println(foundStr1)</span><br><span class="line"></span><br><span class="line">//查找Set集合中的所有字符串拼接在一起</span><br><span class="line">val foldedList = set.fold(&quot;&quot;, &#123; acc, e -&gt; acc + e &#125;)</span><br><span class="line">println(foldedList)</span><br><span class="line"></span><br><span class="line">//查找某个元素的出现位置</span><br><span class="line">println(set.indexOf(&quot;Go&quot;))</span><br><span class="line"></span><br><span class="line">//将每个集合元素映射成新值，返回所有新值组成的Set集合</span><br><span class="line">val mappedList = set.map &#123; &quot;学习&quot; + it + &quot;编程&quot; &#125;</span><br><span class="line">println(mappedList)</span><br><span class="line"></span><br><span class="line">//获取最大值</span><br><span class="line">println(set.max())</span><br><span class="line"></span><br><span class="line">//获取最小值</span><br><span class="line">println(set.min())</span><br><span class="line"></span><br><span class="line">//反转集合顺序</span><br><span class="line">val reversedList = set.reversed()</span><br><span class="line">println(reversedList)</span><br><span class="line"></span><br><span class="line">val bSet = setOf(&quot;Lua&quot;, &quot;Erlang&quot;, &quot;Kotlin&quot;)</span><br><span class="line">//计算两个集合的交集</span><br><span class="line">println(set intersect bSet)</span><br><span class="line">//计算两个集合的并集</span><br><span class="line">println(set union bSet)</span><br><span class="line">//集合相加，相当于并集</span><br><span class="line">println(set + bSet)</span><br><span class="line">//集合相减，减去公共的元素</span><br><span class="line">println(set - bSet)</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">false</span><br><span class="line">true</span><br><span class="line">&#123;学习Java语言=Java, 学习Kotlin语言=Kotlin, 学习Go语言=Go&#125;</span><br><span class="line">true</span><br><span class="line">false</span><br><span class="line">[Go]</span><br><span class="line">[Kotlin]</span><br><span class="line">Kotlin</span><br><span class="line">JavaKotlinGo</span><br><span class="line">2</span><br><span class="line">[学习Java编程, 学习Kotlin编程, 学习Go编程]</span><br><span class="line">Kotlin</span><br><span class="line">Go</span><br><span class="line">[Go, Kotlin, Java]</span><br><span class="line">[Kotlin]</span><br><span class="line">[Java, Kotlin, Go, Lua, Erlang]</span><br><span class="line">[Java, Kotlin, Go, Lua, Erlang]</span><br><span class="line">[Java, Go]</span><br><span class="line">Kotlin规定以infix修饰的方法，能以运算符的方式进行调用。</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-遍历Set集合"><a href="#3-遍历Set集合" class="headerlink" title="(3.)遍历Set集合"></a>(3.)遍历Set集合</h5><p>Kotlin也支持使用for-in循环遍历Set，与遍历数组的方式基本相同:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var languages = setOf(&quot;Java&quot;, &quot;Kotlin&quot;, &quot;Python&quot;)</span><br><span class="line">for (language in languages) &#123;</span><br><span class="line">    println(language)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Java</span><br><span class="line">Kotlin</span><br><span class="line">Python</span><br></pre></td></tr></table></figure>
+<p>Set集合可使用接口中定义的forEach()方法来遍历集合:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var languages = setOf(&quot;Java&quot;, &quot;Kotlin&quot;, &quot;Python&quot;)</span><br><span class="line">languages.forEach &#123; println(it) &#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Java</span><br><span class="line">Kotlin</span><br><span class="line">Python</span><br></pre></td></tr></table></figure>
+<p>由于setOf()方法返回的Set集合是有序的，所以可以通过索引来遍历Set集合，Set集合提供了indices方法返回其索引的区间:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var languages = setOf(&quot;Java&quot;, &quot;Kotlin&quot;, &quot;Python&quot;)</span><br><span class="line">for (i in languages.indices) &#123;</span><br><span class="line">    println(languages.elementAt(i))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Java</span><br><span class="line">Kotlin</span><br><span class="line">Python</span><br></pre></td></tr></table></figure>
+
+<h5 id="4-可变Set集合"><a href="#4-可变Set集合" class="headerlink" title="(4.)可变Set集合"></a>(4.)可变Set集合</h5><p>setOf()函数返回的额集合是不可变集合；使用mutableSetof()、hashSetOf()、linkedSetOf()、sortedSetOf()函数返回的集合都是可变的。可变Set集合除了set集合常见的操作还支持其他的操作；<br><strong>集合添加元素</strong><br>Set提供了add(element:E)方法来添加元素，每调用该方法一次，就会向Set中添加一个元素，Set的长度也会自动加1。也提供了addAll(elements:Collection<E>)方法来批量添加多个元素。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//定义一个可变的Set</span><br><span class="line">var languages = mutableSetOf(&quot;Java&quot;)</span><br><span class="line">//添加一个元素</span><br><span class="line">languages.add(&quot;Go&quot;)</span><br><span class="line">languages.add(&quot;Lua&quot;)</span><br><span class="line">println(languages)</span><br><span class="line">println(languages.count())</span><br><span class="line">languages.addAll(setOf(&quot;Swift&quot;, &quot;Kotlin&quot;))</span><br><span class="line">println(languages)</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[Java, Go, Lua]</span><br><span class="line">3</span><br><span class="line">[Java, Go, Lua, Swift, Kotlin]</span><br></pre></td></tr></table></figure>
+<p><strong>集合删除元素</strong><br>Set提供了如下方法来删除元素：</p>
+<ul>
+<li>remove(element:E)：删除指定元素，删除成功则返回true。</li>
+<li>removeAll(elements:Collection<E>)：批量删除Set集合中的多个元素。</li>
+<li>retainAll(elements:Collection<E>)：只保留Set集合中与elements集合共有的元素。</li>
+<li>clear()：清空集合。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var languages = mutableSetOf(&quot;Java&quot;, &quot;OC&quot;, &quot;PHP&quot;, &quot;Perl&quot;, &quot;Ruby&quot;, &quot;Go&quot;) //定义一个可变的Set</span><br><span class="line">languages.remove(&quot;PHP&quot;)                                                 //删除&quot;PHP&quot;</span><br><span class="line">languages.remove(&quot;Perl&quot;)                                                //再次删除&quot;Perl&quot;</span><br><span class="line">println(languages)</span><br><span class="line">languages.removeAll(setOf(&quot;Ruby&quot;, &quot;Go&quot;))                                //批量删除多个元素</span><br><span class="line">println(languages)</span><br><span class="line">languages.clear()                                                       //清空Set集合</span><br><span class="line">println(languages.count())</span><br></pre></td></tr></table></figure>
+输出结果：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[Java, OC, Ruby, Go]</span><br><span class="line">[Java, OC]</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Kotlin的MutableIterator才相当于Java的Iterator。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="5-List集合"><a href="#5-List集合" class="headerlink" title="5.List集合"></a>5.List集合</h3><h5 id="1-List集合的创建"><a href="#1-List集合的创建" class="headerlink" title="(1.)List集合的创建"></a>(1.)List集合的创建</h5><ul>
+<li>listOf()：该函数返回不可变的List集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</li>
+<li>listOfNotNull()：该函数返回不可变的List集合。该函数与前一个函数的唯一区别是,该函数会自动去掉传入的一系列参数中的null值。</li>
+<li>mutableListOf()：该函数返回可变的MutableList集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</li>
+<li>arrayListOf()：该函数返回可变的ArrayList集合。该函数可接受0个或多个参数，这些参数将作为集合的元素。</li>
+</ul>
+<h5 id="2-List集合的方法"><a href="#2-List集合的方法" class="headerlink" title="(2.)List集合的方法"></a>(2.)List集合的方法</h5><p>List除了支持Set所支持的操作外，还增加了通过索引操作集合元素的方法。</p>
+<ul>
+<li>get：带operator修饰的方法，因此可用”[]”运算符访问集合元素。</li>
+<li>indexOf：返回集合元素在List中的索引。</li>
+<li>lastIndexOf：返回集合元素在List中最后一次的出现位置。</li>
+<li>subList：返回List集合的子集合。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var list1 = listOf(&quot;Java&quot;, &quot;Kotlin&quot;, null, &quot;Go&quot;)  //创建不可变集合，返回值是List</span><br><span class="line">for (i in list1.indices) &#123;</span><br><span class="line">    println(list1[i])</span><br><span class="line">&#125;</span><br><span class="line">println(list1.indexOf(&quot;Kotlin&quot;))                 //获取指定元素的出现位置</span><br><span class="line">println(list1.subList(1, 3))                     //获取List的子集合</span><br></pre></td></tr></table></figure>
+输出结果：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Java</span><br><span class="line">Kotlin</span><br><span class="line">null</span><br><span class="line">Go</span><br><span class="line">1</span><br><span class="line">[Kotlin, null]</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="3-可变List集合的方法"><a href="#3-可变List集合的方法" class="headerlink" title="(3.)可变List集合的方法"></a>(3.)可变List集合的方法</h5><p>可变的List除了支持可变的Set所支持的方法外，还增加了根据索引执行插入、删除、替换的方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var list1 = mutableListOf(&quot;Java&quot;, &quot;Kotlin&quot;, null, &quot;Go&quot;) //创建不可变集合，返回值是List</span><br><span class="line">list1.add(2, &quot;Java&quot;)                                    //在索引2处插入一个新元素</span><br><span class="line">println(list1)</span><br><span class="line">list1.removeAt(1)                                       //删除索引1处的元素</span><br><span class="line">println(list1)</span><br><span class="line">list1[1] = &quot;Python&quot;                                     //将索引1处的元素替换为&quot;Python&quot;</span><br><span class="line">println(list1)</span><br><span class="line">list1.clear()                                           //清空List集合的所有元素</span><br><span class="line">println(list1.count())</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[Java, Kotlin, Java, null, Go]</span><br><span class="line">[Java, Java, null, Go]</span><br><span class="line">[Java, Python, null, Go]</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+<h3 id="6-Map集合"><a href="#6-Map集合" class="headerlink" title="6.Map集合"></a>6.Map集合</h3><h5 id="1-Map集合的创建"><a href="#1-Map集合的创建" class="headerlink" title="(1.)Map集合的创建"></a>(1.)Map集合的创建</h5><ul>
+<li>mapOf()：该函数返回不可变的Map集合。该函数可接受0个或多个key-value对，这些key-value对将作为Map的元素。</li>
+<li>mutableMapOf()：该函数返回可变的MutableMap集合。该函数可接受0个或多个key-value对，这些key-value对将作为Map的元素。</li>
+<li>hashMapOf()：该函数返回可变的HashMap集合。该函数可接受0个或多个key-value对，这些key-value对将作为Map的元素。</li>
+<li>linkedMapOf()：该函数返回可变的LinkedHashMap集合。该函数可接受0个或多个key-value对，这些key-value对将作为Map的元素。</li>
+<li>sortedMapOf()：该函数返回可变的TreeMap集合。该函数可接受0个或多个key-value对，这些key-value对将作为Map的元素。</li>
+</ul>
+<h5 id="2-Map集合的操作"><a href="#2-Map集合的操作" class="headerlink" title="(2.)Map集合的操作"></a>(2.)Map集合的操作</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">var map = mapOf(&quot;Java&quot; to 86, &quot;Kotlin&quot; to 92, &quot;Go&quot; to 78)//创建不可变集合，返回值是Map</span><br><span class="line">println(map.all &#123; it.key.length &gt; 4 &amp;&amp; it.value &gt; 80 &#125;)//判断是否所有key-value对的key的长度都大于4，value都大于80</span><br><span class="line">println(map.any &#123; it.key.length &gt; 4 &amp;&amp; it.value &gt; 80 &#125;)//判断是否任一key-value对的key的长豆都大于4、value都大于80</span><br><span class="line">println(&quot;Java&quot; in map)</span><br><span class="line">println(&quot;Go&quot; !in map)</span><br><span class="line">val filteredMap = map.filter &#123; &quot;li&quot; in it.key &#125;//对Map集合元素进行过滤：要求key包含li</span><br><span class="line">println(filteredMap)</span><br><span class="line">val mappedList = map.map &#123; &quot;$&#123;it.key&#125;有$&#123;it.value&#125;节课&quot; &#125;//将每个key-value对映射成新值，返回所有新值组成的Map集合</span><br><span class="line">println(mappedList)</span><br><span class="line">println(map.maxBy &#123; it.key &#125;)//根据key获取最大值</span><br><span class="line">println(map.minBy &#123; it.value &#125;)//根据value获取最小值</span><br><span class="line">var bMap= mapOf(&quot;Lua&quot; to 67,&quot;Erlang&quot; to 73,&quot;Kotlin&quot; to 92)</span><br><span class="line">println(map+bMap)//求并集</span><br><span class="line">println(map-bMap)//集合相减</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">false</span><br><span class="line">true</span><br><span class="line">true</span><br><span class="line">false</span><br><span class="line">&#123;Kotlin=92&#125;</span><br><span class="line">[Java有86节课, Kotlin有92节课, Go有78节课]</span><br><span class="line">Kotlin=92</span><br><span class="line">Go=78</span><br><span class="line">&#123;Java=86, Kotlin=92, Go=78, Lua=67, Erlang=73&#125;</span><br><span class="line">&#123;Java=86, Kotlin=92, Go=78&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-Map集合的遍历"><a href="#3-Map集合的遍历" class="headerlink" title="(3.)Map集合的遍历"></a>(3.)Map集合的遍历</h5><p>Map集合由多个key-value对组成，因此遍历Map集合时既可以通过对key-value对进行遍历，也可先遍历key，再通过key来获取对应的value进行遍历。<br>下面是对Map集合遍历的几种方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">var map = mapOf(&quot;Java&quot; to 86, &quot;Kotlin&quot; to 92, &quot;Go&quot; to 76)//创建不可变集合，返回值是Map</span><br><span class="line">//遍历Map的key-value对，entris元素返回key-value对组成的Set</span><br><span class="line">for (en in map.entries) &#123;</span><br><span class="line">    println(&quot;$&#123;en.key&#125;-&gt;$&#123;en.value&#125;&quot;)</span><br><span class="line">&#125;</span><br><span class="line">//先遍历Map的key，再通过key获取value</span><br><span class="line">for (key in map.keys) &#123;</span><br><span class="line">    println(&quot;$&#123;key&#125;-&gt;$&#123;map[key]&#125;&quot;)</span><br><span class="line">&#125;</span><br><span class="line">//直接用for-in循环遍历Map</span><br><span class="line">for ((key, value) in map) &#123;</span><br><span class="line">    println(&quot;$&#123;key&#125;-&gt;$&#123;value&#125;&quot;)</span><br><span class="line">&#125;</span><br><span class="line">map.forEach(&#123; println(&quot;$&#123;it.key&#125;-&gt;$&#123;it.value&#125;&quot;) &#125;)//用Lambda表达式遍历Map</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Java-&gt;86</span><br><span class="line">Kotlin-&gt;92</span><br><span class="line">Go-&gt;76</span><br><span class="line"></span><br><span class="line">Java-&gt;86</span><br><span class="line">Kotlin-&gt;92</span><br><span class="line">Go-&gt;76</span><br><span class="line"></span><br><span class="line">Java-&gt;86</span><br><span class="line">Kotlin-&gt;92</span><br><span class="line">Go-&gt;76</span><br><span class="line"></span><br><span class="line">Java-&gt;86</span><br><span class="line">Kotlin-&gt;92</span><br><span class="line">Go-&gt;76</span><br></pre></td></tr></table></figure>
+
+<h5 id="4-可变的Map集合操作"><a href="#4-可变的Map集合操作" class="headerlink" title="(4.)可变的Map集合操作"></a>(4.)可变的Map集合操作</h5><p>可变的Map为操作key-value对提供了如下方法：</p>
+<ul>
+<li>clear()：清空所有的key-value对。</li>
+<li>put(key:K,value:V)：放入key-value对。如果原来已有key，value将被覆盖。</li>
+<li>putAll(form:Map&lt;out K,V&gt;)：批量放入多个key-value对。</li>
+<li>remove(key:K)：删除key-value对。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var mutableMap = mutableMapOf(&quot;OC&quot; to 96, &quot;PHP&quot; to 3400, &quot;Perl&quot; to 4300, &quot;Ruby&quot; to 5600, &quot;Go&quot; to 5600)</span><br><span class="line">mutableMap[&quot;Swift&quot;] = 9000//以方括号语法放入key-value对</span><br><span class="line">println(mutableMap)</span><br><span class="line">mutableMap.put(&quot;OC&quot;, 8600)//以put方法放入key-value对</span><br><span class="line">println(mutableMap)</span><br><span class="line">mutableMap.remove(&quot;PHP&quot;)//删除key为&quot;PHP&quot;的key-value对</span><br><span class="line">println(mutableMap)</span><br><span class="line">println(mutableMap.size)</span><br><span class="line">mutableMap.clear()//删除所有元素</span><br><span class="line">println(mutableMap)</span><br><span class="line">println(mutableMap.size)</span><br></pre></td></tr></table></figure>
+输出结果：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;OC=96, PHP=3400, Perl=4300, Ruby=5600, Go=5600, Swift=9000&#125;</span><br><span class="line">&#123;OC=8600, PHP=3400, Perl=4300, Ruby=5600, Go=5600, Swift=9000&#125;</span><br><span class="line">&#123;OC=8600, Perl=4300, Ruby=5600, Go=5600, Swift=9000&#125;</span><br><span class="line">5</span><br><span class="line">&#123;&#125;</span><br><span class="line">0</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>参考自：<br><a target="_blank" rel="noopener" href="https://www.kotlincn.net/docs/reference/constructing-collections.html">kotlin官方文档</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2019/07/09/Kotlin%E6%80%BB%E7%BB%93%E4%B9%8B%E4%BA%8C%E6%95%B0%E7%BB%84%E5%92%8C%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8/">https://lxlfpeng.github.io/2019/07/09/Kotlin%E6%80%BB%E7%BB%93%E4%B9%8B%E4%BA%8C%E6%95%B0%E7%BB%84%E5%92%8C%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2019/07/10/CI-CD%E5%B7%A5%E5%85%B7%E4%B9%8BJenkins/" title="CI-CD工具之Jenkins"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">CI-CD工具之Jenkins</div></div><div class="info-2"><div class="info-item-1">一.CI&#x2F;CD(持续集成&#x2F;持续部署)软件开发周期中需要一些可以帮助开发者提升速度的自动化工具。其中工具最重要的目的是促进软件项目的持续集成与交付。通过CI&#x2F;CD工具，开发团队可以保持软件更新并将其迅速的投入实践中。CI&#x2F;CD也被认为是敏捷开发的最重要实践之一。具体而言，CI&#x2F;CD 可让持续自动化和持续监控贯穿于应用的整个生命周期（从集成和测试阶段，到交付和部署）。这些关联的事务通常被统称为”CI&#x2F;CD 管道”，由开发和运维团队以敏捷方式协同支持。 1.持续集成Continuous Integration：持续集成，简称CI，是软件开发周期的一种实践，把代码仓库（Gitlab或者Github）、构建工具（如Jenkins）和测试工具（SonarQube）集成在一起，频繁的将代码合并到主干然后自动进行构建和测试。 2.持续交付Continuous...</div></div></div></a><a class="pagination-related" href="/2019/07/04/Linux%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/" title="Linux系统基础总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Linux系统基础总结</div></div><div class="info-2"><div class="info-item-1">一.Linux系统Linux 是一套自由和开放源码的类 Unix 操作系统，是基于 POSIX 和 UNIX 的多用户、多任务、支持多线程和多 CPU 的操作系统。Linux 的设计与 UNIX 类似，但经过不断变革，它已可以在各种硬件上运行(从手机到超级计算机)。每个基于 Linux 的操作系统都包含 Linux 内核（管理着硬件资源）和一组软件包（构成了操作系统的其余部分）。 1.Linux内核linux内核kernel是操作系统的关键组件。它借助进程间通信和系统调用，在硬件级别上充当应用程序和数据处理之间的桥梁。每当将操作系统加载到内存中时，首先，将加载内核并将其保留在那里，直到操作系统关闭。 内核负责处理低级任务，例如任务管理，内存管理，风险管理等。Linux内核版本有两种：稳定版和开发版...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-Kotlin%E4%B8%AD%E7%9A%84%E6%95%B0%E7%BB%84"><span class="toc-number">1.</span> <span class="toc-text">一 Kotlin中的数组</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%95%B0%E7%BB%84%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.0.1.</span> <span class="toc-text">1.数组的类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">1.0.2.</span> <span class="toc-text">2.数组的创建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%AE%BF%E9%97%AE%E6%95%B0%E7%BB%84%E7%9A%84%E5%85%83%E7%B4%A0"><span class="toc-number">1.0.3.</span> <span class="toc-text">3.访问数组的元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E4%BF%AE%E6%94%B9%E6%95%B0%E7%BB%84%E5%85%83%E7%B4%A0"><span class="toc-number">1.0.4.</span> <span class="toc-text">4.修改数组元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E9%81%8D%E5%8E%86%E6%95%B0%E7%BB%84%E5%85%83%E7%B4%A0"><span class="toc-number">1.0.5.</span> <span class="toc-text">5.遍历数组元素</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-%E9%9B%86%E5%90%88"><span class="toc-number">2.</span> <span class="toc-text">二.集合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8F%AA%E8%AF%BB%E9%9B%86%E5%90%88%E5%92%8C%E5%8F%AF%E5%8F%98%E9%9B%86%E5%90%88"><span class="toc-number">2.0.1.</span> <span class="toc-text">1.只读集合和可变集合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%9B%86%E5%90%88%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">2.0.2.</span> <span class="toc-text">2.集合的创建</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E5%8F%AA%E8%AF%BB%E9%9B%86%E5%90%88%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">2.0.2.0.1.</span> <span class="toc-text">(1.)只读集合的创建</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E5%8F%AF%E5%8F%98%E9%9B%86%E5%90%88%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">2.0.2.0.2.</span> <span class="toc-text">(2.)可变集合的创建</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Set%E9%9B%86%E5%90%88"><span class="toc-number">2.0.3.</span> <span class="toc-text">3.Set集合</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-Set%E9%9B%86%E5%90%88%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">2.0.3.0.1.</span> <span class="toc-text">(1.)Set集合的创建</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-Set%E9%9B%86%E5%90%88%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-number">2.0.3.0.2.</span> <span class="toc-text">(2.)Set集合的操作</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E9%81%8D%E5%8E%86Set%E9%9B%86%E5%90%88"><span class="toc-number">2.0.3.0.3.</span> <span class="toc-text">(3.)遍历Set集合</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-%E5%8F%AF%E5%8F%98Set%E9%9B%86%E5%90%88"><span class="toc-number">2.0.3.0.4.</span> <span class="toc-text">(4.)可变Set集合</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-List%E9%9B%86%E5%90%88"><span class="toc-number">2.0.4.</span> <span class="toc-text">5.List集合</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-List%E9%9B%86%E5%90%88%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">2.0.4.0.1.</span> <span class="toc-text">(1.)List集合的创建</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-List%E9%9B%86%E5%90%88%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">2.0.4.0.2.</span> <span class="toc-text">(2.)List集合的方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E5%8F%AF%E5%8F%98List%E9%9B%86%E5%90%88%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">2.0.4.0.3.</span> <span class="toc-text">(3.)可变List集合的方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-Map%E9%9B%86%E5%90%88"><span class="toc-number">2.0.5.</span> <span class="toc-text">6.Map集合</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-Map%E9%9B%86%E5%90%88%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">2.0.5.0.1.</span> <span class="toc-text">(1.)Map集合的创建</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-Map%E9%9B%86%E5%90%88%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-number">2.0.5.0.2.</span> <span class="toc-text">(2.)Map集合的操作</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-Map%E9%9B%86%E5%90%88%E7%9A%84%E9%81%8D%E5%8E%86"><span class="toc-number">2.0.5.0.3.</span> <span class="toc-text">(3.)Map集合的遍历</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-%E5%8F%AF%E5%8F%98%E7%9A%84Map%E9%9B%86%E5%90%88%E6%93%8D%E4%BD%9C"><span class="toc-number">2.0.5.0.4.</span> <span class="toc-text">(4.)可变的Map集合操作</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

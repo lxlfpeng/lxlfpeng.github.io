@@ -1,0 +1,307 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Android-ORM框架-GreenDao | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.GreenDao简介GreenDAO是一个基于sqlite的对象关系映射(ORM)的数据库框架，ORM（Object Relation Mapping对象关系映射），其表现形式就是通过GreenDao将数据库和Bean对象关联起来。使用greendao可以节省自己编写SQL语句进行CRUD的时间。GreenDao官网GitHub地址 二.项目工程引入GreenDao1.引入GreenDaoIn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android-ORM框架-GreenDao">
+<meta property="og:url" content="https://lxlfpeng.github.io/2018/07/05/Android-ORM%E6%A1%86%E6%9E%B6-GreenDao/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.GreenDao简介GreenDAO是一个基于sqlite的对象关系映射(ORM)的数据库框架，ORM（Object Relation Mapping对象关系映射），其表现形式就是通过GreenDao将数据库和Bean对象关联起来。使用greendao可以节省自己编写SQL语句进行CRUD的时间。GreenDao官网GitHub地址 二.项目工程引入GreenDao1.引入GreenDaoIn">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2018-07-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.828Z">
+<meta property="article:author" content="peng">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="sqlite">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2018/07/05/Android-ORM%E6%A1%86%E6%9E%B6-GreenDao/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Android-ORM框架-GreenDao',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Android-ORM框架-GreenDao</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Android-ORM框架-GreenDao</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2018-07-04T16:00:00.000Z" title="发表于 2018-07-05 00:00:00">2018-07-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-GreenDao简介"><a href="#一-GreenDao简介" class="headerlink" title="一.GreenDao简介"></a>一.GreenDao简介</h1><p>GreenDAO是一个基于<strong>sqlite</strong>的对象关系映射(ORM)的数据库框架，<strong>ORM（Object Relation Mapping对象关系映射）</strong>，其表现形式就是通过GreenDao将数据库和Bean对象关联起来。使用greendao可以节省自己编写SQL语句进行CRUD的时间。<br><a target="_blank" rel="noopener" href="http://greenrobot.org/greendao/">GreenDao官网</a><br><a target="_blank" rel="noopener" href="https://github.com/greenrobot/greenDAO">GitHub地址</a><br><img src="/images/31e0493a22955d3dc02b9c6ebacc9b1b.webp" alt="greendao原理"></p>
+<h1 id="二-项目工程引入GreenDao"><a href="#二-项目工程引入GreenDao" class="headerlink" title="二.项目工程引入GreenDao"></a>二.项目工程引入GreenDao</h1><h3 id="1-引入GreenDao"><a href="#1-引入GreenDao" class="headerlink" title="1.引入GreenDao"></a>1.引入GreenDao</h3><p>In root build.gradle file</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">buildscript &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        google()</span><br><span class="line">        jcenter()</span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">         ...</span><br><span class="line">        classpath &#x27;org.greenrobot:greendao-gradle-plugin:lastVersion&#x27; // add plugin</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>In app modules app&#x2F;build.gradle file:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">apply plugin: &#x27;org.greenrobot.greendao&#x27; // apply plugin</span><br><span class="line"> </span><br><span class="line">dependencies &#123;</span><br><span class="line">    implementation &#x27;org.greenrobot:greendao:lastVersion&#x27; // add library</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-配置GreenDao"><a href="#2-配置GreenDao" class="headerlink" title="2.配置GreenDao"></a>2.配置GreenDao</h3><p>项目中使用kotlin时引入greendao最好配置一下targetGenDir  否则可能编译报错。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">android&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">greendao&#123;</span><br><span class="line">    schemaVersion 2 // 数据库版本号</span><br><span class="line">  //  daoPackage  &#x27;com.doris.sample.greendao&#x27;//greenDao 自动生成的代码保存的包名</span><br><span class="line">    targetGenDir   &#x27;src/main/java&#x27; //自动生成的代码存储的路径，默认是 build/generated/source/greendao.</span><br><span class="line">   // generateTests false //true的时候自动生成测试单元</span><br><span class="line">  //  targetGenDirTests: 测试单元的生成目录默认是 src/androidTest/java</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="三-GreenDao关键类"><a href="#三-GreenDao关键类" class="headerlink" title="三.GreenDao关键类"></a>三.GreenDao关键类</h1><p><strong>DaoMaster:</strong> 保存数据库对象（SQLiteDatabase）并管理特定模式的Dao类。它具有静态方法来创建表或将他们删除。其内部类OpenHelper和DevOpenHelper是在SQLite数据库中创建模式的SQLiteOpenHelper实现。<br>**DaoSession:**管理特定模式的所有可用Dao对象，您可以使用其中一个getter方法获取。DaoSession还为实体提供了一些通用的持久性方法，如插入，加载，更新，刷新和删除。最后，DaoSession对象也跟踪一个身份范围。<br>**XXDAO:**数据访问对象(Dao)持续存在并查询实体。对于每个实体，GreenDao生成一个Dao,它比DaoSession有更多的持久化方法。<br>**Entities(实体对象):**持久对象，通常实体是使用标准Java属性(如POJO或JavaBean)来表示数据库的对象。</p>
+<h1 id="四-GreenDao使用"><a href="#四-GreenDao使用" class="headerlink" title="四.GreenDao使用"></a>四.GreenDao使用</h1><h3 id="1-初始化GreenDao"><a href="#1-初始化GreenDao" class="headerlink" title="1.初始化GreenDao"></a>1.初始化GreenDao</h3><p>一般我们在Application里面进行初始化.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public class BaseApplication extends SuperApplication &#123;</span><br><span class="line">    private DaoMaster.DevOpenHelper mHelper;</span><br><span class="line">    private SQLiteDatabase db;</span><br><span class="line">    private DaoMaster mDaoMaster;</span><br><span class="line">    public  DaoSession mDaoSession;</span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate() &#123;</span><br><span class="line">        super.onCreate();</span><br><span class="line">        ...</span><br><span class="line">      // 通过 DaoMaster 的内部类 DevOpenHelper，你可以得到一个便利的 SQLiteOpenHelper 对      象。</span><br><span class="line">     // 可能你已经注意到了，你并不需要去编写「CREATE TABLE」这样的 SQL 语句，因为 GreenDAO 已经帮你做了。</span><br><span class="line">     // 注意：默认的 DaoMaster.DevOpenHelper 会在数据库升级时，删除所有的表，意味着这将导致数据的丢失。</span><br><span class="line">     // 所以，在正式的项目中，你还应该做一层封装，来实现数据库的安全升级。</span><br><span class="line">    // 此处green-db表示数据库名称 可以任意填写</span><br><span class="line">       mHelper = new DaoMaster.DevOpenHelper(this, &quot;green-db&quot;, null);</span><br><span class="line">       db = mHelper.getWritableDatabase();</span><br><span class="line">     // 注意：该数据库连接属于 DaoMaster，所以多个 Session 指的是相同的数据库连接。</span><br><span class="line">       mDaoMaster = new DaoMaster(db);</span><br><span class="line">       mDaoSession = mDaoMaster.newSession();</span><br><span class="line">      &#125;</span><br><span class="line">    public  DaoSession getDaoSession() &#123;</span><br><span class="line">        return mDaoSession;</span><br><span class="line">    &#125;</span><br><span class="line">    public SQLiteDatabase getDb() &#123;</span><br><span class="line">        return db;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-创建实体类"><a href="#2-创建实体类" class="headerlink" title="2.创建实体类"></a>2.创建实体类</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">@Entity(</span><br><span class="line">        nameInDb = &quot;USERS&quot;,// 指定该表在数据库中的名称，默认是基于实体类名</span><br><span class="line">        indexes = &#123;@Index(value = &quot;text, date DESC&quot;, unique = true)&#125;,// 定义跨多个列的索引</span><br><span class="line">        createInDb = true,// 高级标志，是否创建该表。默认为true。如果有多个实体映射一个表，或者该表已在外部创建，则可置为false</span><br><span class="line">        //schema = &quot;bqt_schema&quot;,// 告知GreenDao当前实体属于哪个schema。属于不同模式的实体应不具有关系。</span><br><span class="line">        active = true,// 标记一个实体处于活动状态，活动实体(设置为true)有更新、删除和刷新方法。默认为false</span><br><span class="line">        generateConstructors = true,//是否生成所有属性的构造器。注意：无参构造器总是会生成。默认为true</span><br><span class="line">        generateGettersSetters = true//是否应该生成属性的getter和setter。默认为true</span><br><span class="line">)</span><br><span class="line">public class User&#123;</span><br><span class="line">    @Id(autoincrement = true) //主键自增,类型为包装类型Long,如果使用long就会报错。插入数据时第一个参数是ID，如果插入值为null，字段会自动增长。</span><br><span class="line">    private Long id;</span><br><span class="line"></span><br><span class="line">    @NotNull//在保存到数据库中之前需要保证此值不为null，否则会报 IllegalArgumentException ，并直接崩溃</span><br><span class="line">    private String name;</span><br><span class="line"></span><br><span class="line">    @Transient //表明此字段不存储到数据库中，用于不需要持久化的字段，比如临时状态</span><br><span class="line">    private String nickName;</span><br><span class="line"></span><br><span class="line">    @Property(nameInDb = &quot;TIME&quot;) //为该属性在数据库中映射的字段名设置一个非默认的名称,，默认是的使用字段名</span><br><span class="line">    private Date brithday;</span><br><span class="line"></span><br><span class="line">    @Convert(converter = UserTypeConverter.class, columnType = String.class) //类型转换类，自定义的类型在数据库中存储的类型</span><br><span class="line">    private UserType type; //在保存到数据库时会将自定义的类型 NoteType 通过 UserType TypeConverter 转换为 String 类型。反之亦然</span><br><span class="line"> </span><br><span class="line">    private long createTime = System.currentTimeMillis();//设置默认值</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>greendao支持的数据类型</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">boolean, Boolean</span><br><span class="line">int, Integer</span><br><span class="line">short, Short</span><br><span class="line">long, Long</span><br><span class="line">float, Float</span><br><span class="line">double, Double</span><br><span class="line">byte, Byte</span><br><span class="line">byte[]</span><br><span class="line">String</span><br><span class="line">Date</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-生成类文件"><a href="#3-生成类文件" class="headerlink" title="3.生成类文件"></a>3.生成类文件</h3><p>编写好实体类并添加自己需要的注解之后，点击build –&gt; Make Project，就会自动生成相应的 setter 和 getter 方法。并且在项目的build目录下(或者自己设定的目录:src&#x2F;main&#x2F;java)下看到生成的三个类文件。DaoMaster、DaoSession、XXXDao</p>
+<h1 id="五-GreenDao增删改查"><a href="#五-GreenDao增删改查" class="headerlink" title="五.GreenDao增删改查"></a>五.GreenDao增删改查</h1><h3 id="1-插入数据"><a href="#1-插入数据" class="headerlink" title="1.插入数据"></a>1.插入数据</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//获取dao</span><br><span class="line">DaoSession daoSession = ((App) getApplication()).getDaoSession();</span><br><span class="line">UserDao userDao = daoSession.getUserDao();</span><br><span class="line"></span><br><span class="line">//准备数据</span><br><span class="line">User user=new User(null,&quot;张三&quot;...)</span><br><span class="line"></span><br><span class="line">//插入数据</span><br><span class="line">int id=userDao.insert(user); </span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>insert 插入一条数据</p>
+</li>
+<li><p>insertInTx 批量插入数据</p>
+</li>
+<li><p>insertOrReplace 插入数据，传入的对象主键如果存在于数据库中，有则更新，否则插入</p>
+</li>
+<li><p>insertOrReplaceInTx 批量插入数据 同上</p>
+</li>
+<li><p>save 插入数据，判断对象是否有Key值，有则更新，否则插入</p>
+</li>
+</ul>
+<h3 id="2-删除数据"><a href="#2-删除数据" class="headerlink" title="2.删除数据"></a>2.删除数据</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//获取dao</span><br><span class="line">DaoSession daoSession = ((App) getApplication()).getDaoSession();</span><br><span class="line">UserDao userDao = daoSession.getUserDao();</span><br><span class="line">//删除数据</span><br><span class="line">userDao.deleteByKey(id);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>delete 删除单个数据</p>
+</li>
+<li><p>deleteInTx 批量删除数据</p>
+</li>
+<li><p>deleteByKey 通过主键删除数据</p>
+</li>
+<li><p>deleteByKeyInTx 通过主键批量删除数据</p>
+</li>
+<li><p>deleteAll 删除全部数据</p>
+</li>
+</ul>
+<h3 id="3-修改数据"><a href="#3-修改数据" class="headerlink" title="3.修改数据"></a>3.修改数据</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//获取dao</span><br><span class="line">DaoSession daoSession = ((App) getApplication()).getDaoSession();</span><br><span class="line">UserDao userDao = daoSession.getUserDao();</span><br><span class="line"></span><br><span class="line">//准备数据</span><br><span class="line">User user=new User(1,&quot;李四&quot;...)</span><br><span class="line"></span><br><span class="line">//修改数据</span><br><span class="line">userDao.update(user); </span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>update 单个修改数据</p>
+</li>
+<li><p>updateInTx 批量修改数据</p>
+</li>
+</ul>
+<h3 id="4-查询数据"><a href="#4-查询数据" class="headerlink" title="4.查询数据"></a>4.查询数据</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//获取dao</span><br><span class="line">DaoSession daoSession = ((App) getApplication()).getDaoSession();</span><br><span class="line">UserDao userDao = daoSession.getUserDao();</span><br><span class="line">//查询所有的数据</span><br><span class="line">List&lt;User&gt; list=userDao.loadAll(); </span><br><span class="line"></span><br><span class="line">//按条件查询</span><br><span class="line">User unique = userDao.queryBuilder().where(UserDao .Properties.Name.eq(&quot;张三&quot;)).unique();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ol>
+<li>or(WhereCondition cond1, WhereCondition cond2, WhereCondition… condMore): 嵌套条件或者，用法同or。</li>
+<li>and(WhereCondition cond1, WhereCondition cond2, WhereCondition… condMore): 嵌套条件且，用法同and。</li>
+</ol>
+<ul>
+<li><p>load 根据主键查询</p>
+</li>
+<li><p>loadAll 查询所有数据</p>
+</li>
+<li><p>where 条件查询</p>
+</li>
+<li><p>like 模糊查询</p>
+</li>
+<li><p>list 以ArrayList返回</p>
+</li>
+<li><p>unique 返回唯一或null</p>
+</li>
+<li><p>eq 查询该字段的数据</p>
+</li>
+<li><p>notEq 查询不是该字段的数据</p>
+</li>
+</ul>
+<h3 id="5-排序、条件限制"><a href="#5-排序、条件限制" class="headerlink" title="5.排序、条件限制"></a>5.排序、条件限制</h3><ul>
+<li>order 排序，我们可以对查询的结果进行排序。orderAsc:（依据的属性名称，可以有多个属性），正序 orderDesc: 倒序</li>
+<li>limit 限制,当你根据条件查询，返回N条数据的时候，但是你只想要里面的前十个的时候.需要做分页的时候offset(start).limit(10)</li>
+</ul>
+<h3 id="6-Debug查询"><a href="#6-Debug查询" class="headerlink" title="6.Debug查询"></a>6.Debug查询</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">QueryBuilder.LOG_SQL = true;</span><br><span class="line">QueryBuilder.LOG_VALUES = true;</span><br></pre></td></tr></table></figure>
+<p>设置这两个属性就可以看到log</p>
+<h1 id="六-GreenDao数据库版本迁移"><a href="#六-GreenDao数据库版本迁移" class="headerlink" title="六.GreenDao数据库版本迁移"></a>六.GreenDao数据库版本迁移</h1><p>在版本迭代时，我们经常需要对数据库进行升级，而GreenDAO默认的DaoMaster.DevOpenHelper在进行数据升级时，会把旧表删除，然后创建新表，并没有迁移旧数据到新表中，从而造成数据丢失。<br>查看DaoMaster源码可知:<br><img src="/images/2efcace7338d84d771015bab0cd9214d.webp"><br><a target="_blank" rel="noopener" href="https://github.com/yuweiguocn/GreenDaoUpgradeHelper">解决方式</a></p>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="http://greenrobot.org/greendao/">GreenDao官网</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/53083f782ea2">一篇技术好文之Android数据库 GreenDao的使用完全解析</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2018/07/05/Android-ORM%E6%A1%86%E6%9E%B6-GreenDao/">https://lxlfpeng.github.io/2018/07/05/Android-ORM%E6%A1%86%E6%9E%B6-GreenDao/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><a class="post-meta__tags" href="/tags/sqlite/">sqlite</a></div><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2018/07/11/Android%E5%9B%BD%E9%99%85%E5%8C%96%E5%A4%9A%E8%AF%AD%E8%A8%80/" title="Android国际化多语言"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Android国际化多语言</div></div><div class="info-2"><div class="info-item-1">一、静态配置Android系统通过判断当前系统的Local配置，来使用对应的strings.xml文件。建立不同语言的strings.xml文件，新建Resource File，选择Local，点击&gt;&gt;，选择需要的语言values–&gt;strings.xml默认语言(简体中文) 1234&lt;resources&gt;    &lt;string name=&quot;app_name&quot;&gt;多语言演示&lt;/string&gt;    &lt;string name=&quot;multi_language_setting&quot;&gt;多语言设置&lt;/string&gt;&lt;/resources&gt; values-zh-rHK–&gt;strings.xml繁体中文 12345&lt;resources&gt;    &lt;string name=&quot;app_name&quot;&gt;多語言演示&lt;/string&gt;    &lt;string...</div></div></div></a><a class="pagination-related" href="/2018/07/02/Android%E5%A4%9C%E9%97%B4%E6%A8%A1%E5%BC%8F(%E6%8D%A2%E8%82%A4)%E6%80%BB%E7%BB%93/" title="Android夜间模式(换肤)总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Android夜间模式(换肤)总结</div></div><div class="info-2"><div class="info-item-1">一.Android 平台常见的换肤方案Android 平台常见的额换肤方式总结起来有如下三种： 1.设置setTheme 主题来切换 原理：通过在values文件夹下的attrs.xml和style.xml文件中配置不同的风格的主题，在Activity中的onCreate()方法中，调用setContentView()方法前调用setTheme()方法来设置主题。 优点：利用系统自带的机制实现，根据标志位setTheme()即可。 缺点：在主题切换界面不重启的情况下，不能自动完成界面主题的刷新。笨重，灵活性较低，不易于扩展。 例如：android...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/01/12/%E4%B8%87%E5%AD%97%E9%95%BF%E6%96%87%E6%80%BB%E7%BB%93MySQL%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" title="万字长文总结MySQL关系型数据库"><img class="cover" src="/images/6d9745d8ee86584dd4929e520fb298d8.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-01-12</div><div class="info-item-2">万字长文总结MySQL关系型数据库</div></div><div class="info-2"><div class="info-item-1">数据库介绍什么是数据库？数据库的英文单词：data base，简称DB。数据库本质就是一个文件系统，它可以按照特定的格式把数据存储起来，可以方便对存储的数据进行增删改查操作。 数据库的分类目前数据库总共分为两个大类:  关系型数据库：是建立在关系模型基础上的数据库。（MySQL、Oracle、DB2、SQL Server等等）。 非关系型数据库（NO SQL）：通常指数据之间无关系的数据库。（monggodb、redis等等）。  数据库服务器、数据库和数据表的关系数据库服务器是一台安装了一个数据库管理系统（比如： MySQL）的主机，通常会开放一个远程连接的端口(例如MySQL的3306端口)来对外提供数据服务，通过数据库管理系统(MySQL)可以创建并管理管理多个数据库，一般开发人员会针对每一个应用创建一个数据库。在一个数据库中可以创建多张数据表，这些数据表是真正存储数据的载体。表的每一行称为一条记录（Record）。 SQL语言简介SQL(Structured Query...</div></div></div></a><a class="pagination-related" href="/2021/05/25/%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93Mongodb%E7%AE%80%E4%BB%8B/" title="非关系型数据库Mongodb简介"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-25</div><div class="info-item-2">非关系型数据库Mongodb简介</div></div><div class="info-2"><div class="info-item-1">一.MongoDB简介什么是NoSQLNoSQL：Not Only SQL ，本质也是一种数据库的技术，相对于传统数据库技术，它不会遵循一些约束，比如：sql标准、ACID属性，表结构等。优点:  满足对数据库的高并发读写； 对海量数据的高效存储和访问； 对数据库高扩展性和高可用性； 灵活的数据结构，满足数据结构不固定的场景；  缺点:  一般不支持事务； 运维人员数据维护相对复杂；  什么是MongoDBMongoDB 是一个基于分布式文件存储的数据库。由C++语言编写，旨在为WEB应用提供可扩展的高性能数据存储解决方案。MongoDB 将数据存储为一个文档，数据结构由键值(key&#x3D;&gt;value)对组成，MongoDB文档类似于json对象，字段值可以包含其他文档，数组及文档数组。 MongoDB是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。 MongoDB的特点MongoDB...</div></div></div></a><a class="pagination-related" href="/2021/06/10/%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93Redis%E7%AE%80%E4%BB%8B/" title="非关系型数据库Redis简介"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="info-item-2">非关系型数据库Redis简介</div></div><div class="info-2"><div class="info-item-1">一.Redis简介Redis简介Redis 全称 Remote Dictionary Server（即远程字典服务），它是一个基于内存实现的键值型非关系（NoSQL）数据库， 使用 ANSI C 语言编写、遵守 BSD 协议、支持网络、可基于内存、分布式、可选持久性的键值对(Key-Value)存储数据库。 Redis的特点 Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。 Redis不仅仅支持简单的key-value类型的数据，同时还提供list，set，zset，hash等数据结构的存储。 Redis支持数据的备份，即master-slave模式的数据备份。  Redis应用场景数据库的存储方式大体可分为两大类，基于磁盘存储和基于内存存储。磁盘存储的数据库，因为磁头机械运动以及系统调用等因素导致读写效率较低。Redis 基于内存来实现数据存取，相对于磁盘来说，其读写速度要高出好几个数量级。因此Redis一般用来缓存一些经常被访问的热点数据、或者需要耗费大量资源的内容，通过把这些内容放到 Redis...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-GreenDao%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">一.GreenDao简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-%E9%A1%B9%E7%9B%AE%E5%B7%A5%E7%A8%8B%E5%BC%95%E5%85%A5GreenDao"><span class="toc-number">2.</span> <span class="toc-text">二.项目工程引入GreenDao</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%BC%95%E5%85%A5GreenDao"><span class="toc-number">2.0.1.</span> <span class="toc-text">1.引入GreenDao</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AEGreenDao"><span class="toc-number">2.0.2.</span> <span class="toc-text">2.配置GreenDao</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-GreenDao%E5%85%B3%E9%94%AE%E7%B1%BB"><span class="toc-number">3.</span> <span class="toc-text">三.GreenDao关键类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-GreenDao%E4%BD%BF%E7%94%A8"><span class="toc-number">4.</span> <span class="toc-text">四.GreenDao使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%9D%E5%A7%8B%E5%8C%96GreenDao"><span class="toc-number">4.0.1.</span> <span class="toc-text">1.初始化GreenDao</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E5%AE%9E%E4%BD%93%E7%B1%BB"><span class="toc-number">4.0.2.</span> <span class="toc-text">2.创建实体类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E7%94%9F%E6%88%90%E7%B1%BB%E6%96%87%E4%BB%B6"><span class="toc-number">4.0.3.</span> <span class="toc-text">3.生成类文件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94-GreenDao%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5"><span class="toc-number">5.</span> <span class="toc-text">五.GreenDao增删改查</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="toc-number">5.0.1.</span> <span class="toc-text">1.插入数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="toc-number">5.0.2.</span> <span class="toc-text">2.删除数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE"><span class="toc-number">5.0.3.</span> <span class="toc-text">3.修改数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE"><span class="toc-number">5.0.4.</span> <span class="toc-text">4.查询数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%8E%92%E5%BA%8F%E3%80%81%E6%9D%A1%E4%BB%B6%E9%99%90%E5%88%B6"><span class="toc-number">5.0.5.</span> <span class="toc-text">5.排序、条件限制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-Debug%E6%9F%A5%E8%AF%A2"><span class="toc-number">5.0.6.</span> <span class="toc-text">6.Debug查询</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD-GreenDao%E6%95%B0%E6%8D%AE%E5%BA%93%E7%89%88%E6%9C%AC%E8%BF%81%E7%A7%BB"><span class="toc-number">6.</span> <span class="toc-text">六.GreenDao数据库版本迁移</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

@@ -1,0 +1,475 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>使用Python制作爬虫程序总结 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.引言1.什么是网络爬虫?网络爬虫（又称为网页蜘蛛，网络机器人)，是一种按照一定的规则，自动地抓取万维网信息的程序或者脚本。如果把互联网就比作一张大网，而爬虫便是在这张网上爬来爬去的蜘蛛，如果它遇到自己需要的食物（所需要的资源），那么它就会将其抓取下来。例如百度、google等搜索引擎本质上就是超级爬虫。搜索引擎爬虫每时每刻都会在海量的互联网信息中进行爬取，爬取优质信息并收录，当用户在搜索引擎上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Python制作爬虫程序总结">
+<meta property="og:url" content="https://lxlfpeng.github.io/2019/08/15/%E4%BD%BF%E7%94%A8Python%E5%88%B6%E4%BD%9C%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.引言1.什么是网络爬虫?网络爬虫（又称为网页蜘蛛，网络机器人)，是一种按照一定的规则，自动地抓取万维网信息的程序或者脚本。如果把互联网就比作一张大网，而爬虫便是在这张网上爬来爬去的蜘蛛，如果它遇到自己需要的食物（所需要的资源），那么它就会将其抓取下来。例如百度、google等搜索引擎本质上就是超级爬虫。搜索引擎爬虫每时每刻都会在海量的互联网信息中进行爬取，爬取优质信息并收录，当用户在搜索引擎上">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2019-08-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.855Z">
+<meta property="article:author" content="peng">
+<meta property="article:tag" content="爬虫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2019/08/15/%E4%BD%BF%E7%94%A8Python%E5%88%B6%E4%BD%9C%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '使用Python制作爬虫程序总结',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">使用Python制作爬虫程序总结</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">使用Python制作爬虫程序总结</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2019-08-14T16:00:00.000Z" title="发表于 2019-08-15 00:00:00">2019-08-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Python%E5%BC%80%E5%8F%91/">Python开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">6.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>21分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-引言"><a href="#一-引言" class="headerlink" title="一.引言"></a>一.引言</h1><h3 id="1-什么是网络爬虫"><a href="#1-什么是网络爬虫" class="headerlink" title="1.什么是网络爬虫?"></a>1.什么是网络爬虫?</h3><p>网络爬虫（又称为网页蜘蛛，网络机器人)，是一种按照一定的规则，自动地抓取万维网信息的程序或者脚本。如果把互联网就比作一张大网，而爬虫便是在这张网上爬来爬去的蜘蛛，如果它遇到自己需要的食物（所需要的资源），那么它就会将其抓取下来。例如百度、google等搜索引擎本质上就是超级爬虫。搜索引擎爬虫每时每刻都会在海量的互联网信息中进行爬取，爬取优质信息并收录，当用户在搜索引擎上检索对应关键词时，搜索引擎将对关键词进行分析处理，从收录的网页中找出相关网页，按照一定的排名规则进行排序并将结果展现给用户。</p>
+<h3 id="2-网络爬虫的作用"><a href="#2-网络爬虫的作用" class="headerlink" title="2.网络爬虫的作用?"></a>2.网络爬虫的作用?</h3><p>爬虫主要作用是抓取某个网站或者某个应用的内容，批量提取有用的价值，比如把某一个壁纸网页的所有壁纸图片抓取到本地并保存，或者搜集众多机票网站的航班价格信息做价格对比，对各种论坛、股吧、微博、公众号的舆情收集等。将爬到的数据也可以用来做数据分析，先通过对爬取的数据的清洗，抽取，转换，将数据做成标准化的数据，然后进行数据分析和挖掘，得到数据的商业价值。</p>
+<h3 id="3-网络爬虫的合法性"><a href="#3-网络爬虫的合法性" class="headerlink" title="3.网络爬虫的合法性"></a>3.网络爬虫的合法性</h3><p>据说互联网上50%以上的流量都是爬虫创造的，也就是很多热门数据内容都是爬虫所创造的，所以可以说没有爬虫就没有互联网的繁荣。综合国内目前的法律法规来说爬虫这种技术是不违法的，因为技术本身确实是没有对错的.但使用技术的人是有对错的，如果违反法律法规制作和使用相关的爬虫肯定是会受到法律的惩处。<br>制作和使用爬虫的时候也需要按照一定的规则来避免风险.</p>
+<ol>
+<li>严格遵守网站设置的robots协议，Robots 协议就是告诉爬虫，哪些信息是可以爬取，哪些信息不能被爬取，严格按照 Robots 协议 爬取网站相关信息一般不会出现问题。例如<a target="_blank" rel="noopener" href="https://www.taobao.com/robots.txt">淘宝的Robots 协议</a></li>
+<li>在使用爬虫时，不能大规模使用爬虫导致对方服务器瘫痪，这等于网络攻击，避免干扰到网站的正常运营。</li>
+<li>在使用爬虫时，应审查抓取到的信息内容，如有发现隐私或者商业秘密的或者是受国家法律保护的数据，应及时及时停止爬取。</li>
+</ol>
+<h3 id="4-为何选择Python来制作网络爬虫"><a href="#4-为何选择Python来制作网络爬虫" class="headerlink" title="4.为何选择Python来制作网络爬虫"></a>4.为何选择Python来制作网络爬虫</h3><p>爬虫程序通过编程语言编写程序请求网络地址，根据响应的内容进行解析采集数据，需要注意的是并不是只有Python能制作爬虫程序，例如JAVA，PHP等通用语言都可以制作Python程序。之所以python爬虫程序比较常见，是因为Python的语法比较简单，而且有很多第三方库为Python爬虫提供支持，可以用比较少的代码实现爬虫。</p>
+<h1 id="二-模拟请求获得网页数据"><a href="#二-模拟请求获得网页数据" class="headerlink" title="二.模拟请求获得网页数据"></a>二.模拟请求获得网页数据</h1><p>Python中的两个内置模块(urllib2和urllib)，来实现HTTP请求功能，不过功能比较简单，除了不用额外添加依赖包以外的优点以外，并没有其他的优势。目前在Python中使用比较多的还是<a target="_blank" rel="noopener" href="https://github.com/psf/requests">Requests</a>实现HTTP请求的方式，也是在Python爬虫开发中最为常用的方式。Requests实现HTTP请求非常简单，操作更加人性化。</p>
+<h3 id="1-Requests安装"><a href="#1-Requests安装" class="headerlink" title="1.Requests安装"></a>1.Requests安装</h3><p>Requests是用Python语言编写的，基于urllib3来改写的，采用Apache2 Licensed 来源协议的HTTP库。由于Python没有自带该库所以我们在使用之前需要先进行安装。<br>通过pip安装:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install requests</span><br></pre></td></tr></table></figure>
+<p>也可以通过下载源码安装。</p>
+<h3 id="2-Requests发送请求"><a href="#2-Requests发送请求" class="headerlink" title="2.Requests发送请求"></a>2.Requests发送请求</h3><p>常见的请求方法都支持 get、post、put、delete。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import requests </span><br><span class="line">response = requests.get(&#x27;http://www.baidu.com&#x27;)     # 使用get 请求</span><br><span class="line">response = requests.post(&#x27;http://www.baidu.com&#x27;)    # 使用post 请求</span><br><span class="line">response = requests.put(&#x27;http://www.baidu.com&#x27;)     # 使用put 请求</span><br><span class="line">response = requests.delete(&#x27;http://www.baidu.com&#x27;)  # 使用delete 请求</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-Requests使用get请求传递参数"><a href="#3-Requests使用get请求传递参数" class="headerlink" title="3.Requests使用get请求传递参数"></a>3.Requests使用get请求传递参数</h3><ol>
+<li>使用?和&amp;拼接。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">response = requests.get(&quot;http://www.baidu.com?key1=value1&amp;key2=value2&quot;)</span><br></pre></td></tr></table></figure></li>
+<li>requests提供了params关键字参数来传递参数。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">parameter = &#123;</span><br><span class="line">            &quot;key1&quot;:&quot;value1&quot;，</span><br><span class="line">            &quot;key2&quot;:&quot;value2&quot;</span><br><span class="line">            &#125;</span><br><span class="line">response = requests.get(&quot;http://www.baidu.com&quot;，params = parameter)</span><br></pre></td></tr></table></figure></li>
+<li>可以将一个列表作为值传入。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">parameter = &#123;</span><br><span class="line">            &quot;key1&quot;:&quot;value1&quot;，</span><br><span class="line">            &quot;key2&quot;:[&quot;value2-1&quot;，&quot;value2-1&quot;]</span><br><span class="line">&#125;</span><br><span class="line">response3 = requests.get(&quot;http://www.baidu.com&quot;，params = parameter)</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="4-Requests使用Post请求传递参数"><a href="#4-Requests使用Post请求传递参数" class="headerlink" title="4.Requests使用Post请求传递参数"></a>4.Requests使用Post请求传递参数</h3><ol>
+<li>如果服务器要求发送的数据是表单数据，则可以指定关键字参数 data。这个data参数可以通过字典构造成，这样对于发送post请求就非常方便。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">payload = &#123;</span><br><span class="line">    &quot;key1&quot;:&quot;value1&quot;，</span><br><span class="line">    &quot;key2&quot;:&quot;value2&quot;</span><br><span class="line">&#125;</span><br><span class="line">response = requests.post(&quot;http://www.baidu.com&quot;，data = payload)</span><br></pre></td></tr></table></figure>
+还可以为 data 参数传入一个元组列表:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">payload = ((&quot;key1&quot;，&quot;value1&quot;)，(&quot;key1&quot;，&quot;value2&quot;))</span><br><span class="line">response = requests.post(&quot;http://www.baidu.com&quot;，data = payload)</span><br></pre></td></tr></table></figure></li>
+<li>如果要求传递 json 格式字符串参数，则可以使用 json 关键字参数，参数的值都可以字典的形式传过去。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">payload = &#123;</span><br><span class="line">       &quot;key1&quot;: &quot;key1&quot;</span><br><span class="line">          &#125;</span><br><span class="line">response = requests.post(&#x27;http://www.baidu.com&#x27;， json=payload)</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="5-Requests使用定制请求头"><a href="#5-Requests使用定制请求头" class="headerlink" title="5.Requests使用定制请求头"></a>5.Requests使用定制请求头</h3><p>请求添加 HTTP 头部 Headers，只要传递一个 字典 给 headers 关键字参数就可以了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">new_headers = &#123;</span><br><span class="line">    &quot;User-Agent&quot;:&quot;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML， like Gecko) Chrome/65.0.3325.146 Safari/537.36&quot;</span><br><span class="line">&#125;</span><br><span class="line">response = requests.get(&quot;http://www.baidu.com&quot;，headers = new_headers)</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-Requests使用添加代理"><a href="#6-Requests使用添加代理" class="headerlink" title="6.Requests使用添加代理"></a>6.Requests使用添加代理</h3><p>如果同一个ip在短时间频繁访问一个网站，很容易被服务器发现将其拉入黑名单，因此需要添加代理。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mport requests</span><br><span class="line">proxies = &#123;</span><br><span class="line">  &quot;http&quot;: &quot;http://10.10.1.10:3128&quot;，</span><br><span class="line">  &quot;https&quot;: &quot;http://10.10.1.10:1080&quot;，</span><br><span class="line">&#125;</span><br><span class="line">requests.get(&quot;http://www.baidu.com&quot;， proxies=proxies)</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-Requests使用获取响应数据"><a href="#7-Requests使用获取响应数据" class="headerlink" title="7.Requests使用获取响应数据"></a>7.Requests使用获取响应数据</h3><p>Requests请求以后会返回 Response 对象，Response 对象是对服务端返回给浏览器的响应数据的封装，响应数据中主要元素包括：状态码、原因短语、响应首部、响应 URL、响应 encoding、响应体等等。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">response = requests.get(&#x27;http://www.baidu.com&#x27;)</span><br><span class="line">print(response.status_code)  # 打印状态码</span><br><span class="line">print(response.url)          # 打印请求url</span><br><span class="line">print(response.headers)      # 打印头信息</span><br><span class="line">print(response.cookies)      # 打印cookie信息</span><br><span class="line">print(response.text)         # 以文本形式打印网页源码</span><br><span class="line">print(response.content)      # 以字节流形式打印</span><br></pre></td></tr></table></figure>
+
+<h1 id="三-通过抓包分析网页结构"><a href="#三-通过抓包分析网页结构" class="headerlink" title="三.通过抓包分析网页结构"></a>三.通过抓包分析网页结构</h1><p>通过上文我们了解到通过Requests可以模拟网络请求拿到网页数据。接下来我们就需要对网页数据进行分析它的结构和规律以便对网页数据进行解析。我们可以这么理解浏览器打开网页的过程就是爬虫获取数据的过程，对于静态网页而言两者获取到的结果是一样的。对于动态网页而言，由于很多动态网页都采取了 异步加载技术 (Ajax)，会导致很多时候抓取到的源代码和网站显示的源代码不一致(这个下文会说到)。通过浏览器自带元素审查可以帮助分析页面，浏览器可以通过F12调出抓包功能。<br><img src="/images/e246e432d5251c9ea6de2016e1656d92.webp"></p>
+<ul>
+<li>左上角箭头 用来点击查看网页的元素如果打开我们将鼠标移动到网页元素上面就会自动展开对应的html元素代码。</li>
+<li>第二个手机、平板图标是用来模拟移动端显示网页</li>
+<li>Elements 查看渲染后的网页标签元素（包括异步加载的图片、数据等）的完整网页的html，不一定是最初获得的html文件。</li>
+<li>Console 查看JavaScript的console log信息</li>
+<li>Sources 显示网页源码、CSS、JavaScript代码</li>
+<li>Network 查看所有加载的请求</li>
+</ul>
+<blockquote>
+<p>当然除了浏览器自带的抓包功能我们还可以使用如Fidder(Windows建议) 和 Charles(Mac建议)等第三方抓包工具。</p>
+</blockquote>
+<h1 id="四-解析网页数据"><a href="#四-解析网页数据" class="headerlink" title="四.解析网页数据"></a>四.解析网页数据</h1><p>上说说到我们通过抓包工具分析了我们请求到的网页。下面就需要对网页进行解析，对于 HTML 类型的页面来说，常用的解析方法其实无非那么几种，正则、XPath、CSS Selector，BeautifulSoup库，对于某些接口返回的数据，常见的可能就是 JSON、XML 类型，使用对应的库进行处理即可。</p>
+<table>
+<thead>
+<tr>
+<th>\</th>
+<th>正则regex</th>
+<th>xpath</th>
+<th>beautifulsoup</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>学习难度</td>
+<td>难</td>
+<td>中</td>
+<td>简单</td>
+</tr>
+<tr>
+<td>代码量</td>
+<td>小</td>
+<td>较少</td>
+<td>较多</td>
+</tr>
+<tr>
+<td>解析速度</td>
+<td>快</td>
+<td>较快</td>
+<td>较快</td>
+</tr>
+<tr>
+<td>场景</td>
+<td>广泛</td>
+<td>专一</td>
+<td>专一</td>
+</tr>
+</tbody></table>
+<h3 id="1-使用Re-正则表达式-解析网页"><a href="#1-使用Re-正则表达式-解析网页" class="headerlink" title="1. 使用Re(正则表达式)解析网页"></a>1. 使用Re(正则表达式)解析网页</h3><p>正则表达式又称规则表达式是对字符串操作的一种逻辑公式，就是用事先定义好的一些特定字符、及这些特定字符的组合，组成一个“规则字符串”，这个“规则字符串”用来表达对字符串的一种过滤逻辑。在 Python 中，我们可以使用内置的 re 模块来使用正则表达式。</p>
+<h3 id="2-使用Xpath方式解析网页"><a href="#2-使用Xpath方式解析网页" class="headerlink" title="2. 使用Xpath方式解析网页"></a>2. 使用Xpath方式解析网页</h3><p>XPath全称为XML Path Language 一种小型的查询语言 最初是用来搜寻 XML 文档的，但同样适用于 HTML 文档的搜索。完全可以使用 XPath 做相应的信息抽取。<br>它所具备的优点： </p>
+<ul>
+<li>可在XML中查找信息 </li>
+<li>支持HTML的查找 </li>
+<li>通过元素和属性进行导航<br>python自带的Xpath方式-&gt;lxml库，它底层由C语言实现，支持XML和HTML的解析，使用 XPath表达式 定位结点，解析效率非常高。</li>
+</ul>
+<h6 id="1-Xpath简单使用"><a href="#1-Xpath简单使用" class="headerlink" title="(1)Xpath简单使用"></a>(1)Xpath简单使用</h6><ul>
+<li>实例化一个etree对象，把将要解析的页面源码加载到该对象中</li>
+<li>使用该对象中的xpath方法结合xpath表达式进行标签的定位和数据提取<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from lxml import etree</span><br><span class="line"></span><br><span class="line">selector=etree.HTML(源码) #将源码转化为能被XPath匹配的格式</span><br><span class="line"></span><br><span class="line">selector.xpath(表达式) #返回为一列表</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h6 id="2-Xpath的语法"><a href="#2-Xpath的语法" class="headerlink" title="(2)Xpath的语法"></a>(2)Xpath的语法</h6><ol start="2">
+<li>选取节点<br>XPath 使用路径表达式在 XML 文档中选取节点。节点是通过沿着路径或者 step 来选取的。 下面列出了最有用的路径表达式：<table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>nodename</td>
+<td>选取此节点的所有子节点。</td>
+</tr>
+<tr>
+<td>&#x2F;</td>
+<td>从根节点选取（取子节点）。</td>
+</tr>
+<tr>
+<td>&#x2F;&#x2F;</td>
+<td>从匹配选择的当前节点选择文档中的节点，而不考虑它们的位置（取子孙节点）。</td>
+</tr>
+<tr>
+<td>.</td>
+<td>选取当前节点。</td>
+</tr>
+<tr>
+<td>..</td>
+<td>选取当前节点的父节点。</td>
+</tr>
+<tr>
+<td>@</td>
+<td>选取属性。</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.runoob.com/xpath/xpath-syntax.html">菜鸟学院XPath 教程</a></td>
+<td></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>当然我们也可以借助Chorme的F12控制调试台或者Chorme插件来方便的获取到元素的Xpath路径，将其复制到我们的爬虫脚本中。</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="3-使用BeautifulSoup库解析网页"><a href="#3-使用BeautifulSoup库解析网页" class="headerlink" title="3. 使用BeautifulSoup库解析网页"></a>3. 使用BeautifulSoup库解析网页</h3><p>BeautifulSoup就是Python的一个HTML或XML的解析库，可以用它来方便地从网页中提取数据。</p>
+<h5 id="1-BeautifulSoup使用步骤"><a href="#1-BeautifulSoup使用步骤" class="headerlink" title="(1)BeautifulSoup使用步骤"></a>(1)BeautifulSoup使用步骤</h5><ul>
+<li>实例化一个BeautifulSoup对象，必须把即将被解析的页面源码加载到该对象中</li>
+<li>调用该对象中相关的属性或方法进行标签的定位和内容的提取</li>
+</ul>
+<h5 id="2-BeautifulSoup配置解析器"><a href="#2-BeautifulSoup配置解析器" class="headerlink" title="(2)BeautifulSoup配置解析器"></a>(2)BeautifulSoup配置解析器</h5><p>Beautiful Soup在解析时实际上依赖解析器，它除了支持Python标准库中的HTML解析器外，还支持一些第三方解析器（比如lxml）。</p>
+<table>
+<thead>
+<tr>
+<th>解析器</th>
+<th>使用方法</th>
+<th>优势</th>
+<th>劣势</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Python标准库</td>
+<td>BeautifulSoup(markup， “html.parser”)</td>
+<td>Python的内置标准库、执行速度适中、文档容错能力强</td>
+<td>Python 2.7.3及Python 3.2.2之前的版本文档容错能力差</td>
+</tr>
+<tr>
+<td>xml HTML解析器</td>
+<td>BeautifulSoup(markup， “lxml”)</td>
+<td>速度快、文档容错能力强</td>
+<td>需要安装C语言库</td>
+</tr>
+<tr>
+<td>lxml XML解析器</td>
+<td>BeautifulSoup(markup， “xml”)</td>
+<td>速度快、唯一支持XML的解析器</td>
+<td>需要安装C语言库</td>
+</tr>
+<tr>
+<td>html5lib</td>
+<td>BeautifulSoup(markup， “html5lib”)</td>
+<td>最好的容错性、以浏览器的方式解析文档、生成HTML5格式的文档</td>
+<td>速度慢、不依赖外部扩展</td>
+</tr>
+</tbody></table>
+<p><a target="_blank" rel="noopener" href="https://www.osgeo.cn/beautifulsoup/">BeautifulSoup官方文档</a></p>
+<h1 id="五-储存爬虫爬取到的数据"><a href="#五-储存爬虫爬取到的数据" class="headerlink" title="五.储存爬虫爬取到的数据"></a>五.储存爬虫爬取到的数据</h1><p>在使用工具解析到网页上的数据后，要想办法把数据存储起来，这也是网络爬虫的最后一步。存储，即选用合适的存储媒介来存储爬取到的结果。</p>
+<ul>
+<li>文件，如 JSON、CSV、TXT、图⽚、视频、⾳频等，常用的一些库有 csv、xlwt、json、pandas、pickle、python-docx 等。</li>
+<li>数据库，分为关系型数据库、非关系型数据库，如 MySQL、MongoDB、HBase 等，常用的库有 pymysql、pymssql、redis-py、pymongo、py2neo、thrift。</li>
+<li>云存储，某些媒体文件可以存到如七⽜牛云、又拍云、阿里云、腾讯云、Amazon S3 等，常用的库有 qiniu、upyun、boto、azure-storage、google-cloud-storage 等。</li>
+</ul>
+<h1 id="六-爬取前端渲染的网页数据"><a href="#六-爬取前端渲染的网页数据" class="headerlink" title="六.爬取前端渲染的网页数据"></a>六.爬取前端渲染的网页数据</h1><p>有时通过爬虫获取的网页源码不能在html代码里面找到想要的数据，但是通过浏览器打开的网页上面却有这些数据。这是因为浏览器通过ajax技术异步加载了这些数据。要了解这其中的原理我们首先要知道html的渲染方式。网页常见的有两种渲染页面的方式:一种是服务端渲染，一种是前端渲染。</p>
+<h3 id="1-服务器端渲染网页"><a href="#1-服务器端渲染网页" class="headerlink" title="1.服务器端渲染网页"></a>1.服务器端渲染网页</h3><p>在互联网早期，用户使用浏览器浏览的都是一些没有复杂逻辑的、简单的页面，这些页面都是在后端将html拼接好的，然后返回给前端完整的html文件，浏览器拿到这个html文件之后就可以直接解析展示了，这就是服务器渲染网页了。</p>
+<h3 id="2-前端渲染网页"><a href="#2-前端渲染网页" class="headerlink" title="2.前端渲染网页"></a>2.前端渲染网页</h3><p>随着前端页面的复杂性提高，前端就不仅仅是普通的页面展示了，也可能添加了更多功能性的组件，复杂性更大，另外，随着ajax的兴起，使得业界开始推崇前后端分离的开发模式，即后端不提供完成的html页面，而是提供一些api使前端可以获取到json等数据，然后前端拿到json等数据之后再在前端进行html页面的拼接，然后展示在浏览器上，这就是前端渲染。<br>这样做的好处是前后端代码分离，可以让前端更专注于UI的开发，后端专注于逻辑的开发。也就是说页面的主要内容由 JavaScript 渲染而成，真实的数据是通过 Ajax 接口等形式获取的，比如淘宝、微博手机版等等站点就是这种方式实现的。<br>ajax全称叫Asynchronous JavaScript and XML，意思是异步的 JavaScript 和 XML。ajax是现有标准的一种新方法，不是编程语言，可以在不刷新网页的情况下，和服务器交换数据并且更新部分页面内容，不需要任何插件，只需要游览器允许运行JavaScript就可以。<br>而传统的网页（不使用ajax的）如果需要更新页面内容，就需要重新请求服务器，返回网页内容，重新渲染刷新页面。当访问很多列表网页时，鼠标不断向下滑，数据不断的更新而http网址没有变化，那么这个网页就利用了ajax异步加载技术.</p>
+<h3 id="3-判断网页是前端渲染还是服务端渲染"><a href="#3-判断网页是前端渲染还是服务端渲染" class="headerlink" title="3.判断网页是前端渲染还是服务端渲染"></a>3.判断网页是前端渲染还是服务端渲染</h3><p>审查浏览器源代码，如果能看到页面上展示的数据，则说明是服务器端渲染，看不到则就是前端渲染。</p>
+<h3 id="4-爬取前端渲染网页数据"><a href="#4-爬取前端渲染网页数据" class="headerlink" title="4.爬取前端渲染网页数据"></a>4.爬取前端渲染网页数据</h3><h4 id="1-爬取服务器端渲染的网页的方法"><a href="#1-爬取服务器端渲染的网页的方法" class="headerlink" title="(1.)爬取服务器端渲染的网页的方法"></a>(1.)爬取服务器端渲染的网页的方法</h4><p>上文重要讲的就是服务器端渲染的网页的爬取方式，可以用一些基本的 HTTP 请求库就可以实现爬取，如 urllib、urllib3、pycurl、hyper、requests、grab 等框架，其中应用最多的可能就是 requests 了。</p>
+<h4 id="2-爬取前端端渲染的网页的方法"><a href="#2-爬取前端端渲染的网页的方法" class="headerlink" title="(2.)爬取前端端渲染的网页的方法"></a>(2.)爬取前端端渲染的网页的方法</h4><p>上文说到随着AJAX技术不断的普及，以及现在Vue、AngularJS这种Single-page application框架的出现，现在js渲染出的页面越来越多。对于爬虫来说，这种页面仅仅提取HTML内容，往往无法拿到有效的信息。<br>那么如何处理这种页面，总的来说有两种做法：</p>
+<ol>
+<li>通过分析AJAX请求，因为js渲染页面的数据也是通过接口从后端拿到的，而且基本上都是AJAX获取，所以分析AJAX请求，找到对应数据的请求，我们就可以通过请求模拟拿到数据进行分析。</li>
+<li>在抓取阶段，在爬虫中内置一个浏览器内核，执行js渲染页面后，再抓取网页内容。对应的工具有Selenium、HtmlUnit或者PhantomJs。(Selenium是一个 自动化测试工具，利用它可以驱动浏览器执行特定的动作，如点击、下拉等操作， 同时还可以获取浏览器当前呈现的页面的源代码，做到可见即可爬。)<blockquote>
+<p>对于一些网页，甚至还有一些js混淆的技术，这个时候，使用浏览器模拟抓取的的方式基本是万能的，但是这些工具都存在一定的效率问题，因为要依赖于浏览器进行操作.</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="5-Selenium简介"><a href="#5-Selenium简介" class="headerlink" title="5.Selenium简介"></a>5.Selenium简介</h3><p><a target="_blank" rel="noopener" href="https://www.selenium.dev/">Selenium</a> 是一个用于web应用程序自动化测试的工具，直接运行在浏览器当中，支持chrome、firefox等主流浏览器。可以通过代码控制与页面上元素进行交互（点击、输入等），也可以获取指定元素的内容。<br>例如:<br>通过Selenium运行Chorme访问百度并且通过代码将关键字输入到搜索框进行搜索</p>
+<ol>
+<li>通过pip安装selenium<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install selenium </span><br></pre></td></tr></table></figure></li>
+<li>编写python脚本<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># 导包</span><br><span class="line">from selenium import webdriver</span><br><span class="line"></span><br><span class="line">#定义url</span><br><span class="line">url = &quot;https://www.baidu.com/&quot;</span><br><span class="line"></span><br><span class="line">#实例化驱动</span><br><span class="line">chrom = webdriver.Chrome()</span><br><span class="line"></span><br><span class="line">#发起get请求</span><br><span class="line">chrom.get(url)</span><br><span class="line"></span><br><span class="line">#使用选这起完成元素的捕获</span><br><span class="line">search = chrom.find_element_by_id(&quot;kw&quot;)</span><br><span class="line"></span><br><span class="line">#发送数据请求</span><br><span class="line">search.send_keys(&quot;python&quot;)</span><br><span class="line"></span><br><span class="line">#使用选择器完成元素的捕获</span><br><span class="line">submit = chrom.find_element_by_id(&quot;su&quot;)</span><br><span class="line"></span><br><span class="line">#点击触发</span><br><span class="line">submit.click()</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="6-PhantomJS简介"><a href="#6-PhantomJS简介" class="headerlink" title="6.PhantomJS简介"></a>6.PhantomJS简介</h3><p>上文中使用Selenium爬取网页还必须依赖一个外部的浏览器，那么能不能内置一个浏览器来完成这个功能能？<a target="_blank" rel="noopener" href="https://phantomjs.org/">PhantomJS</a> 是一个无界面的，可脚本编程的 WebKit 浏览器引擎。它原生支持多种 web 标准：DOM 操作，CSS 选择器，JSON，Canvas 以及 SVG。可以理解为无界面的浏览器。配合selenium使用，就可以无需依赖额外的浏览器，来实现可视化爬虫的功能.</p>
+<blockquote>
+<p>注意，目前Selenium 貌似已经放弃对PhantomJS的支持了。</p>
+</blockquote>
+<h1 id="七-爬虫的攻防"><a href="#七-爬虫的攻防" class="headerlink" title="七.爬虫的攻防"></a>七.爬虫的攻防</h1><h3 id="1-通过限制仅浏览器能访问"><a href="#1-通过限制仅浏览器能访问" class="headerlink" title="1.通过限制仅浏览器能访问"></a>1.通过限制仅浏览器能访问</h3><p>通过浏览器进行网站访问时，都会携带user-agent信息。很多网站都会建立 user-agent白名单，只有属于正常范围的user-agent才能够正常访问。而在通过请求时，携带user-agent信息并不是浏览器的user-agent信息，因此就会被拒绝访问。<br><strong>爬虫解决方案:</strong><br>可以在浏览器的请求内复制完整的请求头。伪装成浏览器来进行爬取.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">herder=&#123;</span><br><span class="line">    &quot;User-Agent&quot;: &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML， like Gecko) Chrome/62.0.3202.94 Safari/537.36&quot;，</span><br><span class="line">    &#x27;Accept-Encoding&#x27;:&#x27;gzip， deflate&#x27;，</span><br><span class="line">    &#x27;Accept-Language&#x27;:&#x27;zh-CN，zh;q=0.9&#x27;，</span><br><span class="line">    &#x27;Accept&#x27;:&#x27;text/html，application/xhtml+xml，application/xml;q=0.9，image/webp，image/apng，*/*;q=0.8&#x27;，</span><br><span class="line">    &#x27;Upgrade-Insecure-Requests&#x27;:&#x27;1&#x27;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">url=&#x27;https://www.baidu.com&#x27;</span><br><span class="line">request=requests.get(url，headers=herder)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-通过限制IP访问"><a href="#2-通过限制IP访问" class="headerlink" title="2.通过限制IP访问"></a>2.通过限制IP访问</h3><p>IP 限制是很常见的一种反爬虫的方式。服务端在一定时间内统计 IP 地址的访问 次数，当次数、频率达到一定阈值时返回错误码或者拒绝服务。<br><strong>爬虫解决方案:</strong></p>
+<ul>
+<li>通过添加定时器:随机几秒延迟，不超过服务器的阈值，简单模拟人的访问频率。</li>
+<li>使用代理服务器:大部分语言的请求，都提供了proxy的api。使用代理后，就可避开ip的限制了。所以我们反爬虫时尽力用非ip方式判断是不是用了proxy在爬取服务器。<br>例如:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">url=&#x27;https://www.baidu.com&#x27;</span><br><span class="line">#ip代理池，放在本地获取通过网络获取.</span><br><span class="line">proxies = [&quot;192.168.0.1&quot;，&quot;192.168.0.2&quot;，&quot;192.168.0.3&quot;，&quot;192.168.0.4&quot;]</span><br><span class="line">#随机取出一个Ip</span><br><span class="line">proxie=rondom.randint(0，len(proxies))</span><br><span class="line">#请求添加代理</span><br><span class="line">request=requests.get(url，headers=herder，proxies=proxies)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="3-通过登录限制"><a href="#3-通过登录限制" class="headerlink" title="3.通过登录限制"></a>3.通过登录限制</h3><p>登录限制是一种更加有效的保护数据的方式。网站或者 APP 可以展示一些基础的数据，当需要访问比较重要或者更多的数据时则要求用户必须登录。同时浏览器会保持一个session会话，而一般的request模块中，并不能携带session。<br><strong>爬虫解决方案:</strong></p>
+<ul>
+<li>如果是session保存登录状态的，使用带session的模块。比如python的requests或者使用headless。</li>
+<li>如果使用令牌的方式验证登录情况则模拟登录拿到登录的令牌进行操作.</li>
+</ul>
+<h3 id="4-通过验证码限制"><a href="#4-通过验证码限制" class="headerlink" title="4.通过验证码限制"></a>4.通过验证码限制</h3><p>验证码是一种非常常见的反爬虫方式。服务提供方在 IP 地址访问次数达到一定 数量后，可以返回验证码让用户进行验证。<br><strong>爬虫解决方案:</strong></p>
+<ul>
+<li>使用第三方平台接入，手工在线破解验证码。</li>
+<li>使用机器学习框架，破解验证码。</li>
+</ul>
+<h3 id="5-页面使用Ajax异步加载"><a href="#5-页面使用Ajax异步加载" class="headerlink" title="5.页面使用Ajax异步加载"></a>5.页面使用Ajax异步加载</h3><p>前文分析过使用Selenium+PhantomJS或者是抓包分析AJAX请求，然后再进行爬取。</p>
+<h1 id="八-加速爬虫"><a href="#八-加速爬虫" class="headerlink" title="八.加速爬虫"></a>八.加速爬虫</h1><h3 id="1-通过多线程加速爬虫"><a href="#1-通过多线程加速爬虫" class="headerlink" title="1.通过多线程加速爬虫"></a>1.通过多线程加速爬虫</h3><p>通过多线程提升爬虫效率。(有兴趣的可以找相关资料查阅，这里不做详细讲解)</p>
+<h3 id="2-通过分布式爬虫提升效率"><a href="#2-通过分布式爬虫提升效率" class="headerlink" title="2.通过分布式爬虫提升效率"></a>2.通过分布式爬虫提升效率</h3><p>通过将爬虫部署到不同的主机上组成集群，提升爬虫的效率。(有兴趣的可以找相关资料查阅，这里不做详细讲解)</p>
+<h1 id="九-爬虫框架"><a href="#九-爬虫框架" class="headerlink" title="九.爬虫框架"></a>九.爬虫框架</h1><p>如果是比较小型的爬虫需求，直接使用requests库 + bs4就解决了，再麻烦点就使用selenium解决js的异步加载等问题。相对比较大型的需求才使用框架，主要是便于管理以及扩展等。</p>
+<h3 id="1-Scrapy爬虫框架"><a href="#1-Scrapy爬虫框架" class="headerlink" title="1.Scrapy爬虫框架"></a>1.Scrapy爬虫框架</h3><p><a target="_blank" rel="noopener" href="https://github.com/scrapy/scrapy">Scrapy</a>是一个为了爬取网站数据，提取结构性数据而编写的应用框架。可以应用在包括数据挖掘，信息处理或存储历史数据等一系列的程序中。</p>
+<h3 id="2-PySpider爬虫框架"><a href="#2-PySpider爬虫框架" class="headerlink" title="2.PySpider爬虫框架"></a>2.PySpider爬虫框架</h3><p><a target="_blank" rel="noopener" href="https://github.com/binux/pyspider">Pyspider</a><br>是一个用python实现的功能强大的网络爬虫系统，分布式架构，支持多种数据库后端，强大的WebUI支持脚本编辑器，任务监视器，项目管理器以及结果查看器，<br>能在浏览器界面上进行脚本的编写，功能的调度和爬取结果的实时查看，后端使用常用的数据库进行爬取结果的存储，还能定时设置任务与任务优先级等。</p>
+<h1 id="十-App内容爬取"><a href="#十-App内容爬取" class="headerlink" title="十.App内容爬取"></a>十.App内容爬取</h1><h3 id="1-通过网络抓包获取接口再爬取数据"><a href="#1-通过网络抓包获取接口再爬取数据" class="headerlink" title="1.通过网络抓包获取接口再爬取数据"></a>1.通过网络抓包获取接口再爬取数据</h3><p>App几乎都是请求后端接口进行本地渲染的，因此我们通过抓包工具就可以抓取到需要的内容。例如<br><a target="_blank" rel="noopener" href="https://www.telerik.com/fiddler">fiddler</a><br><a target="_blank" rel="noopener" href="https://www.charlesproxy.com/">charles</a></p>
+<h3 id="2-利用appium自动控制移动设备并抓取数据"><a href="#2-利用appium自动控制移动设备并抓取数据" class="headerlink" title="2.利用appium自动控制移动设备并抓取数据"></a>2.利用appium自动控制移动设备并抓取数据</h3><h5 id="1-安装JDK环境和Android环境"><a href="#1-安装JDK环境和Android环境" class="headerlink" title="1.安装JDK环境和Android环境"></a>1.安装JDK环境和Android环境</h5><p>安装配置appuim首先需要配置好JDK环境和Android Sdk环境。这两点不必多说，网上面大把的相关教程。</p>
+<h5 id="2-安装appium环境"><a href="#2-安装appium环境" class="headerlink" title="2.安装appium环境"></a>2.安装appium环境</h5><p>下载<a target="_blank" rel="noopener" href="https://github.com/appium/appium-desktop/releases">appium-desktop</a>文件，点击进行安装。</p>
+<h5 id="3-配置appium"><a href="#3-配置appium" class="headerlink" title="3.配置appium"></a>3.配置appium</h5><ol>
+<li>安装好appium，打开程序，需要进行配置，host与port默认即可。<br><img src="/images/d0f712c364c8a3d054af062e1f9c262f.webp"></li>
+<li>配置JDK环境和Android Sdk环境。<br><img src="/images/e95578bc216a6335f08f5dda715b6435.webp" alt="image.png"><br>填写Android_home及Java_home后，Save and Restart，</li>
+<li>重启以后回到主界面，点击Start Server vX.X.X按钮。进入控制台日志界面，看到Appium REST http interface listener started on 0.0.0.0:4723就表示启动成功了。<br>接着点击“start inspector session”进行配置。<br><img src="/images/101a9e35ee5fce59554f46bb943f6d53.webp" alt="image.png"></li>
+<li>配置inspector<br><img src="/images/b23373ccfeaf2f1fac77515f8b42b36e.webp" alt="image.png"><br>重点是要配置相关参数可以通过键值对进行配置也可以通过右侧的Json文件进行配置:</li>
+</ol>
+<ul>
+<li>platformName:声明是ios还是android系统。</li>
+<li>platformVersion:Android内核版本号，可通过命令adb shell getprop ro.build.version.release查看。</li>
+<li>deviceName：连接的设备名称，通过命令adb devices -l中model查看。</li>
+<li>appPackage：apk的包名。</li>
+<li>appActivity：apk的launcherActivity，通过命令adb shell dumpsys activity | findstr “mResume”查看（需先打开手机应用）。</li>
+</ul>
+<p>Json配置文件示例:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">“platformName”: “Android”，</span><br><span class="line">“platformVersion”: “8.0.0”，</span><br><span class="line">“appPackage”: “com.example.myapplication”，</span><br><span class="line">“appActivity”: “.MainActivity”</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>配置完成以后点击start session按钮，进入到操作面板功能中。<br><img src="/images/3a1f5f85e1d8e8b27e46f136eee00a14.webp" alt="image.png"></li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://github.com/wistbean/learn_python3_spider">小帅比爬虫教程</a><br><a target="_blank" rel="noopener" href="http://c.biancheng.net/view/2011.html">Python爬虫入门教程：超级简单的Python爬虫教程</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903697047257101">这可能是你见过的最全的网络爬虫干货总结！</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/fengzheng/p/8440806.html">网页抓取工具Web Scraper</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Jack-Cherish/PythonPark">学习 Python 的乐园</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6985093530473463816">《Python爬虫从入门到入狱》学习札记 | Python 主题月</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2019/08/15/%E4%BD%BF%E7%94%A8Python%E5%88%B6%E4%BD%9C%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/">https://lxlfpeng.github.io/2019/08/15/%E4%BD%BF%E7%94%A8Python%E5%88%B6%E4%BD%9C%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%88%AC%E8%99%AB/">爬虫</a></div><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2019/09/28/AOSP%E6%BA%90%E7%A0%81%E4%B9%8B%E7%BC%96%E8%AF%91%E3%80%81%E8%B0%83%E8%AF%95%E3%80%81%E5%88%B7%E6%9C%BA/" title="AOSP源码之编译、调试、刷机"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">AOSP源码之编译、调试、刷机</div></div><div class="info-2"><div class="info-item-1">一.准备工作 系统最好是Linux或者mac OS(本文基于Ubuntu)。 Ubuntu设置永不休眠，在setting中搜索power.blank-screen选择never。 一块大一点儿的硬盘，至少得有200G剩余空间。  二.下载Aosp源码1.安装GIT首先需要安装Git，因为源码是用Git管理的。1sudo apt-get install git 接下来创建一个bin文件夹，并加入到PATH中，有点像Windows的环境变量。12mkdir ~/binPATH=~/bin:$PATH 然后初始化Git，邮箱和姓名。12git config --global user.email &quot;xxx@gmail.com&quot;git config --global user.name &quot;xxx&quot;  2.安装Python环境1sudo apt-get install python  3.安装repo及配置repo 是一个python 脚本(所以我们上面要配置Python环境)，因为Android源码包含数百个git库，简化帮助管理git...</div></div></div></a><a class="pagination-related" href="/2019/08/12/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93/" title="微信小程序开发总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">微信小程序开发总结</div></div><div class="info-2"><div class="info-item-1">一.开发前准备1.注册账号如果还没有微信公众平台的账号，先进入微信公众平台首页，点击 “立即注册” 按钮进行注册。注册的账号类型选择 “小程序” 即可。接着填写账号信息，需要注意的是，填写的邮箱必须是未被微信公众平台注册、未被个人微信号绑定的邮箱，而且每个邮箱仅能申请一个小程序。激活邮箱之后，选择主体类型为 “个人类型”，并按要求登记主体信息。主体信息提交后不可修改，该主体将成为你使用微信公众平台各项服务和功能的唯一法律主体与缔约主体，在后续开通其他业务功能时不得变更或修改。 2.获取id登录微信公众平台 —&gt; 开发 —&gt;...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-%E5%BC%95%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">一.引言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB"><span class="toc-number">1.0.1.</span> <span class="toc-text">1.什么是网络爬虫?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.0.2.</span> <span class="toc-text">2.网络爬虫的作用?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E7%9A%84%E5%90%88%E6%B3%95%E6%80%A7"><span class="toc-number">1.0.3.</span> <span class="toc-text">3.网络爬虫的合法性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E4%B8%BA%E4%BD%95%E9%80%89%E6%8B%A9Python%E6%9D%A5%E5%88%B6%E4%BD%9C%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB"><span class="toc-number">1.0.4.</span> <span class="toc-text">4.为何选择Python来制作网络爬虫</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-%E6%A8%A1%E6%8B%9F%E8%AF%B7%E6%B1%82%E8%8E%B7%E5%BE%97%E7%BD%91%E9%A1%B5%E6%95%B0%E6%8D%AE"><span class="toc-number">2.</span> <span class="toc-text">二.模拟请求获得网页数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Requests%E5%AE%89%E8%A3%85"><span class="toc-number">2.0.1.</span> <span class="toc-text">1.Requests安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Requests%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82"><span class="toc-number">2.0.2.</span> <span class="toc-text">2.Requests发送请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Requests%E4%BD%BF%E7%94%A8get%E8%AF%B7%E6%B1%82%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0"><span class="toc-number">2.0.3.</span> <span class="toc-text">3.Requests使用get请求传递参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Requests%E4%BD%BF%E7%94%A8Post%E8%AF%B7%E6%B1%82%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0"><span class="toc-number">2.0.4.</span> <span class="toc-text">4.Requests使用Post请求传递参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-Requests%E4%BD%BF%E7%94%A8%E5%AE%9A%E5%88%B6%E8%AF%B7%E6%B1%82%E5%A4%B4"><span class="toc-number">2.0.5.</span> <span class="toc-text">5.Requests使用定制请求头</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-Requests%E4%BD%BF%E7%94%A8%E6%B7%BB%E5%8A%A0%E4%BB%A3%E7%90%86"><span class="toc-number">2.0.6.</span> <span class="toc-text">6.Requests使用添加代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-Requests%E4%BD%BF%E7%94%A8%E8%8E%B7%E5%8F%96%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE"><span class="toc-number">2.0.7.</span> <span class="toc-text">7.Requests使用获取响应数据</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-%E9%80%9A%E8%BF%87%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90%E7%BD%91%E9%A1%B5%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">三.通过抓包分析网页结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-%E8%A7%A3%E6%9E%90%E7%BD%91%E9%A1%B5%E6%95%B0%E6%8D%AE"><span class="toc-number">4.</span> <span class="toc-text">四.解析网页数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%BD%BF%E7%94%A8Re-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-%E8%A7%A3%E6%9E%90%E7%BD%91%E9%A1%B5"><span class="toc-number">4.0.1.</span> <span class="toc-text">1. 使用Re(正则表达式)解析网页</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%BD%BF%E7%94%A8Xpath%E6%96%B9%E5%BC%8F%E8%A7%A3%E6%9E%90%E7%BD%91%E9%A1%B5"><span class="toc-number">4.0.2.</span> <span class="toc-text">2. 使用Xpath方式解析网页</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-Xpath%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8"><span class="toc-number">4.0.2.0.0.1.</span> <span class="toc-text">(1)Xpath简单使用</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-Xpath%E7%9A%84%E8%AF%AD%E6%B3%95"><span class="toc-number">4.0.2.0.0.2.</span> <span class="toc-text">(2)Xpath的语法</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BD%BF%E7%94%A8BeautifulSoup%E5%BA%93%E8%A7%A3%E6%9E%90%E7%BD%91%E9%A1%B5"><span class="toc-number">4.0.3.</span> <span class="toc-text">3. 使用BeautifulSoup库解析网页</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-BeautifulSoup%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-number">4.0.3.0.1.</span> <span class="toc-text">(1)BeautifulSoup使用步骤</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-BeautifulSoup%E9%85%8D%E7%BD%AE%E8%A7%A3%E6%9E%90%E5%99%A8"><span class="toc-number">4.0.3.0.2.</span> <span class="toc-text">(2)BeautifulSoup配置解析器</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94-%E5%82%A8%E5%AD%98%E7%88%AC%E8%99%AB%E7%88%AC%E5%8F%96%E5%88%B0%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="toc-number">5.</span> <span class="toc-text">五.储存爬虫爬取到的数据</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD-%E7%88%AC%E5%8F%96%E5%89%8D%E7%AB%AF%E6%B8%B2%E6%9F%93%E7%9A%84%E7%BD%91%E9%A1%B5%E6%95%B0%E6%8D%AE"><span class="toc-number">6.</span> <span class="toc-text">六.爬取前端渲染的网页数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E6%B8%B2%E6%9F%93%E7%BD%91%E9%A1%B5"><span class="toc-number">6.0.1.</span> <span class="toc-text">1.服务器端渲染网页</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%89%8D%E7%AB%AF%E6%B8%B2%E6%9F%93%E7%BD%91%E9%A1%B5"><span class="toc-number">6.0.2.</span> <span class="toc-text">2.前端渲染网页</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%A4%E6%96%AD%E7%BD%91%E9%A1%B5%E6%98%AF%E5%89%8D%E7%AB%AF%E6%B8%B2%E6%9F%93%E8%BF%98%E6%98%AF%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93"><span class="toc-number">6.0.3.</span> <span class="toc-text">3.判断网页是前端渲染还是服务端渲染</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%88%AC%E5%8F%96%E5%89%8D%E7%AB%AF%E6%B8%B2%E6%9F%93%E7%BD%91%E9%A1%B5%E6%95%B0%E6%8D%AE"><span class="toc-number">6.0.4.</span> <span class="toc-text">4.爬取前端渲染网页数据</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E7%88%AC%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E6%B8%B2%E6%9F%93%E7%9A%84%E7%BD%91%E9%A1%B5%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">6.0.4.1.</span> <span class="toc-text">(1.)爬取服务器端渲染的网页的方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E7%88%AC%E5%8F%96%E5%89%8D%E7%AB%AF%E7%AB%AF%E6%B8%B2%E6%9F%93%E7%9A%84%E7%BD%91%E9%A1%B5%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">6.0.4.2.</span> <span class="toc-text">(2.)爬取前端端渲染的网页的方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-Selenium%E7%AE%80%E4%BB%8B"><span class="toc-number">6.0.5.</span> <span class="toc-text">5.Selenium简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-PhantomJS%E7%AE%80%E4%BB%8B"><span class="toc-number">6.0.6.</span> <span class="toc-text">6.PhantomJS简介</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83-%E7%88%AC%E8%99%AB%E7%9A%84%E6%94%BB%E9%98%B2"><span class="toc-number">7.</span> <span class="toc-text">七.爬虫的攻防</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%80%9A%E8%BF%87%E9%99%90%E5%88%B6%E4%BB%85%E6%B5%8F%E8%A7%88%E5%99%A8%E8%83%BD%E8%AE%BF%E9%97%AE"><span class="toc-number">7.0.1.</span> <span class="toc-text">1.通过限制仅浏览器能访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%80%9A%E8%BF%87%E9%99%90%E5%88%B6IP%E8%AE%BF%E9%97%AE"><span class="toc-number">7.0.2.</span> <span class="toc-text">2.通过限制IP访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%80%9A%E8%BF%87%E7%99%BB%E5%BD%95%E9%99%90%E5%88%B6"><span class="toc-number">7.0.3.</span> <span class="toc-text">3.通过登录限制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%80%9A%E8%BF%87%E9%AA%8C%E8%AF%81%E7%A0%81%E9%99%90%E5%88%B6"><span class="toc-number">7.0.4.</span> <span class="toc-text">4.通过验证码限制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E9%A1%B5%E9%9D%A2%E4%BD%BF%E7%94%A8Ajax%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD"><span class="toc-number">7.0.5.</span> <span class="toc-text">5.页面使用Ajax异步加载</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AB-%E5%8A%A0%E9%80%9F%E7%88%AC%E8%99%AB"><span class="toc-number">8.</span> <span class="toc-text">八.加速爬虫</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%80%9A%E8%BF%87%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%8A%A0%E9%80%9F%E7%88%AC%E8%99%AB"><span class="toc-number">8.0.1.</span> <span class="toc-text">1.通过多线程加速爬虫</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%80%9A%E8%BF%87%E5%88%86%E5%B8%83%E5%BC%8F%E7%88%AC%E8%99%AB%E6%8F%90%E5%8D%87%E6%95%88%E7%8E%87"><span class="toc-number">8.0.2.</span> <span class="toc-text">2.通过分布式爬虫提升效率</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B9%9D-%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6"><span class="toc-number">9.</span> <span class="toc-text">九.爬虫框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Scrapy%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6"><span class="toc-number">9.0.1.</span> <span class="toc-text">1.Scrapy爬虫框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-PySpider%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6"><span class="toc-number">9.0.2.</span> <span class="toc-text">2.PySpider爬虫框架</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%81-App%E5%86%85%E5%AE%B9%E7%88%AC%E5%8F%96"><span class="toc-number">10.</span> <span class="toc-text">十.App内容爬取</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%80%9A%E8%BF%87%E7%BD%91%E7%BB%9C%E6%8A%93%E5%8C%85%E8%8E%B7%E5%8F%96%E6%8E%A5%E5%8F%A3%E5%86%8D%E7%88%AC%E5%8F%96%E6%95%B0%E6%8D%AE"><span class="toc-number">10.0.1.</span> <span class="toc-text">1.通过网络抓包获取接口再爬取数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%A9%E7%94%A8appium%E8%87%AA%E5%8A%A8%E6%8E%A7%E5%88%B6%E7%A7%BB%E5%8A%A8%E8%AE%BE%E5%A4%87%E5%B9%B6%E6%8A%93%E5%8F%96%E6%95%B0%E6%8D%AE"><span class="toc-number">10.0.2.</span> <span class="toc-text">2.利用appium自动控制移动设备并抓取数据</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85JDK%E7%8E%AF%E5%A2%83%E5%92%8CAndroid%E7%8E%AF%E5%A2%83"><span class="toc-number">10.0.2.0.1.</span> <span class="toc-text">1.安装JDK环境和Android环境</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85appium%E7%8E%AF%E5%A2%83"><span class="toc-number">10.0.2.0.2.</span> <span class="toc-text">2.安装appium环境</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AEappium"><span class="toc-number">10.0.2.0.3.</span> <span class="toc-text">3.配置appium</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

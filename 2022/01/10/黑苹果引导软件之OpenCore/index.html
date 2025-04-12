@@ -1,0 +1,501 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>黑苹果引导软件之OpenCore | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.OpenCore简介笔者在17年写过一篇黑苹果安装教程：黑苹果系统安装通用教程(Clover引导)，不过该文章用的是基于Clover引导的MacOs系统。目前随着黑苹果的另一款引导工具OpenCore不断成熟，使用OC是大势所趋。众多黑苹果驱动的作者已经停止对Clover的兼容支持，改向Opencore的兼容。OpenCore是类似于Clover的UEFI的引导器，OpenCore提供了详细的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="黑苹果引导软件之OpenCore">
+<meta property="og:url" content="https://lxlfpeng.github.io/2022/01/10/%E9%BB%91%E8%8B%B9%E6%9E%9C%E5%BC%95%E5%AF%BC%E8%BD%AF%E4%BB%B6%E4%B9%8BOpenCore/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.OpenCore简介笔者在17年写过一篇黑苹果安装教程：黑苹果系统安装通用教程(Clover引导)，不过该文章用的是基于Clover引导的MacOs系统。目前随着黑苹果的另一款引导工具OpenCore不断成熟，使用OC是大势所趋。众多黑苹果驱动的作者已经停止对Clover的兼容支持，改向Opencore的兼容。OpenCore是类似于Clover的UEFI的引导器，OpenCore提供了详细的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2022-01-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.855Z">
+<meta property="article:author" content="peng">
+<meta property="article:tag" content="MacOs">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2022/01/10/%E9%BB%91%E8%8B%B9%E6%9E%9C%E5%BC%95%E5%AF%BC%E8%BD%AF%E4%BB%B6%E4%B9%8BOpenCore/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '黑苹果引导软件之OpenCore',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">黑苹果引导软件之OpenCore</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">黑苹果引导软件之OpenCore</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2022-01-09T16:00:00.000Z" title="发表于 2022-01-10 00:00:00">2022-01-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%BB%91%E8%8B%B9%E6%9E%9C/">黑苹果</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">5.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>17分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-OpenCore简介"><a href="#一-OpenCore简介" class="headerlink" title="一.OpenCore简介"></a>一.OpenCore简介</h1><p>笔者在17年写过一篇黑苹果安装教程：<a target="_blank" rel="noopener" href="https://blog.csdn.net/unreliable_narrator/article/details/64438619">黑苹果系统安装通用教程(Clover引导)</a>，不过该文章用的是基于Clover引导的MacOs系统。目前随着黑苹果的另一款引导工具OpenCore不断成熟，使用OC是大势所趋。众多黑苹果驱动的作者已经停止对Clover的兼容支持，改向Opencore的兼容。OpenCore是类似于Clover的UEFI的引导器，OpenCore提供了详细的日志系统，帮助黑<a target="_blank" rel="noopener" href="https://pinpai.smzdm.com/1687/">苹果</a>排错；其次OpenCore以更先进的方法注入第三方Kext，不破坏系统的SIP；再次，OpenCore支持读取NVRAM等一系列特性，可以让黑苹果变得更“原生”，诸如选择启动器、Command Ctrl互换，原生开启Option键特性都可以实现。</p>
+<h1 id="二-OpenCore引导MacOS"><a href="#二-OpenCore引导MacOS" class="headerlink" title="二.OpenCore引导MacOS"></a>二.OpenCore引导MacOS</h1><h3 id="🦮第一步-准备工作"><a href="#🦮第一步-准备工作" class="headerlink" title="🦮第一步 准备工作"></a>🦮第一步 准备工作</h3><ul>
+<li>一个8G以上的U盘。</li>
+<li>MacOS系统镜像包、Etcher（刻录工具）、DiskGenius（分区工具）、适合自己电脑的EFI驱动文件。</li>
+</ul>
+<h3 id="🐕‍第二步-确认硬盘分区表格式"><a href="#🐕‍第二步-确认硬盘分区表格式" class="headerlink" title="🐕‍第二步 确认硬盘分区表格式"></a>🐕‍第二步 确认硬盘分区表格式</h3><p>黑苹果的安装和使用需要EFI分区进行引导，因此安装黑苹果的硬盘<strong>必须使用GPT分区表</strong>，如果您的磁盘使用的是MBR分区表，那么需要先将硬盘数据进行备份，然后使用分区工具将硬盘重新使用GPT分区表分区。可以通过下文提供的两种方法或者通过<a target="_blank" rel="noopener" href="http://www.diskgenius.cn/">DiskGenius</a> 看看分区表是否为GPT分区表。</p>
+<h5 id="方法一：使用磁盘管理查看MBR和GPT分区类型"><a href="#方法一：使用磁盘管理查看MBR和GPT分区类型" class="headerlink" title="方法一：使用磁盘管理查看MBR和GPT分区类型"></a>方法一：使用磁盘管理查看MBR和GPT分区类型</h5><ol>
+<li><p>鼠标右击<strong>此电脑</strong>，点击<strong>“管理”</strong>。<br><img src="/images/0dd3d9ffbec0e85784c21cb49fc8a630.webp"></p>
+</li>
+<li><p>在计算机管理中点击<strong>“磁盘管理”</strong>。<br><img src="/images/f339191dff4b7223adccb6fbed1687f7.webp"></p>
+</li>
+<li><p>进入<strong>磁盘管理</strong>可以看到磁盘分区情况，右键点击<strong>“磁盘0”</strong>选择查看<strong>“属性”</strong>。<br><img src="/images/9c4377933e42476b9f3ce2f7f10fd7b8.webp"></p>
+</li>
+<li><p>在<strong>属性</strong>界面，点击<strong>“卷”</strong>就可以看到此磁盘的基本信息了，我们可以在<strong>“磁盘分区形式”</strong>看到磁盘0为<strong>GPT</strong>磁盘分区类型，如何查看硬盘分区是MBR还是GPT问题轻松解决。<br><img src="/images/c7e1a4977f42ec3d6c1037069e44ec01.webp"></p>
+</li>
+</ol>
+<h5 id="方法二：使用命令提示符查看MBR和GPT分区类型"><a href="#方法二：使用命令提示符查看MBR和GPT分区类型" class="headerlink" title="方法二：使用命令提示符查看MBR和GPT分区类型"></a>方法二：使用命令提示符查看MBR和GPT分区类型</h5><ol>
+<li>按<strong>“Windows + R”</strong>键，在弹出的运行对话框中输入<strong>“diskpart”</strong>，并按<strong>回车</strong>键启动diskpart实用程序。<br><img src="/images/3e5e147436fee2e15fdc767ffccc5d6a.webp"></li>
+<li>输入<strong>“list disk”</strong>命令，然后按<strong>回车</strong>，查看磁盘信息。<br><img src="/images/3d61a372ddb93eb41873389b8fbe73e0.webp"></li>
+<li>在命令行中的<strong>“Gpt”</strong>列下方，带有一个星号（<em>）为GPT磁盘类型。没有星号（</em>）为MBR磁盘类型。所以上图中，磁盘0为GPT磁盘类型，磁盘1为MBR磁盘类型，如何查看硬盘分区是MBR还是GPT问题轻松解决。</li>
+</ol>
+<h3 id="🐆第三步-MBR分区表转换成GPT分区表"><a href="#🐆第三步-MBR分区表转换成GPT分区表" class="headerlink" title="🐆第三步 MBR分区表转换成GPT分区表"></a>🐆第三步 MBR分区表转换成GPT分区表</h3><p>如果硬盘分区是GPT分区表可以略过这一步操作。如果硬盘分区不是GPT分区表。那么你需要将硬盘数据进行备份，然后使用分区工具对硬盘重新分区。微软官方有<a href="https://link.zhihu.com/?target=https://docs.microsoft.com/zh-cn/windows-server/storage/disk-management/change-an-mbr-disk-into-a-gpt-disk">MBR转GPT的教程</a>。也可以进入到PE下打开DiskGenius分区工具，选定硬盘然后将硬盘分区表转换成类型为GUID-也就是GPT分区表。</p>
+<h3 id="🦌第四步-硬盘划分安装MacOS分区"><a href="#🦌第四步-硬盘划分安装MacOS分区" class="headerlink" title="🦌第四步 硬盘划分安装MacOS分区"></a>🦌第四步 硬盘划分安装MacOS分区</h3><p>通常我们在安装黑苹果系统的场景有如下两种：</p>
+<ul>
+<li><p>整盘安装：在电脑中存在多块硬盘的条件下，选择某块硬盘单独作为Mac系统的安装盘。并且将苹果系统的引导文件放到该硬盘下，这样可以和其他的系统独立起来使用，此时你需要在该硬盘上新建EFI分区存放黑苹果引导文件。你可以使用分区工具自行创建，需要注意的是，EFI分区需要大于200M。</p>
+</li>
+<li><p>分区安装：在一块已经装有 Windows（或其它操作系统）的硬盘上安装 MacOS 系统的磁盘为基础，通过压缩磁盘空间划出的一个新的分区用来安装Mac系统。此时你可以直接使用已有的EFI分区，并将MacOS引导文件复制于此。</p>
+</li>
+</ul>
+<h4 id="整盘安装-多硬盘多系统"><a href="#整盘安装-多硬盘多系统" class="headerlink" title="整盘安装(多硬盘多系统)"></a>整盘安装(多硬盘多系统)</h4><p>黑苹果的安装和使用需要EFI分区进行引导，因此在对硬盘进行GPT分区的同时，需要创建新的空白分区并格式化为EFI分区格式。可以使用 DiskGenius，在你要安装 MacOS 的空闲硬盘分出两个区，其中一个区需要为 FAT16&#x2F;FAT32 格式，且大小大于 200MB即可用来放置EFI引导文件，另一个分区用来安装黑苹果系统。</p>
+<h4 id="分区安装-单硬盘多系统"><a href="#分区安装-单硬盘多系统" class="headerlink" title="分区安装(单硬盘多系统)"></a>分区安装(单硬盘多系统)</h4><p>如果你的电脑已经安装了 Windows 系统且预留的 ESP 分区大于200MB，那么无需任何操作，直接划分一个黑苹果的安装分区进行安装系统既可，如果ESP 分区小于 200MB，那么你需要扩大 ESP 分区，或重建 ESP 分区。这一步需要在 Windows PE 环境下操作，请首先刻录好Windows PE U盘。</p>
+<ol>
+<li><p>需要将已有的 ESP 分区删除，然后再磁盘末尾空闲空间重建一个 200M 以上的 ESP 分区（你可以从你准备安装 MacOS 的那部分空间中划分出来一些），操作完成后你的分区结构会类似下图（Windows 在前，200m+ 的 ESP 分区和 MacOS安装分区在后）。然后按下文的指引重建引导。<br><img src="/images/4c6a4a0242eed59d7ae20d5391c205ec.webp"></p>
+</li>
+<li><p>由于上一步我们将ESP分区删除了，因此里面的系统引导文件也丢失了，此时是无法正确的引导进入操作系统的，因此需要重建 Windows UEFI 引导。 在 PE 下找到你的 Windows 安装分区和 ESP 分区的盘符，确保这两个分区在文件资源管理器中可见（如果不可见请为 DiskGenius工具为不可见的分区分配盘符）。 下面我们假设 Windows 安装分区盘符为 C:，ESP 分区盘符 V:<br><img src="/images/6c68a7cbc6a1a80c8d2f91238722d4d4.webp"></p>
+</li>
+<li><p>打开命令提示符（cmd），执行以下命令：<code>bcdboot 你的系统盘盘符:\Windows /s 你的ESP分区盘符 /f uefi /l zh-cn</code>，如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bcdboot c:\windows /s d: /f uefi /l zh-cn</span><br><span class="line">Copied!</span><br></pre></td></tr></table></figure>
+<p><img src="/images/4c09026458c93b8d0b1da4f88726f036.webp"><br>将 C: 和 V: 分别替换为你的盘符即可。</p>
+</li>
+<li><p>去掉ESP分区的盘符，重启即可。</p>
+</li>
+</ol>
+<p><strong>当然你也可以使用 PE 下的图形化工具修复引导。</strong></p>
+<blockquote>
+<p>几乎所有 2012 年后生产的计算机都支持引导 UEFI，而且不再执行以前的 “Legacy” 标准。这些计算机需要一个 ESP 分区来引导。ESP 代表 EFI 系统分区，使用 FAT32&#x2F;FAT16 文件系统。ESP 负责存储固件启动时使用的EFI 引导加载程序和其他实用程序。如果您不小心删除了这个分区，您的系统将无法再引导。为了安全起见，ESP 是默认隐藏的，因此它没有驱动器号。</p>
+</blockquote>
+<h3 id="🐃第五步-制作MacOs安装启动U盘"><a href="#🐃第五步-制作MacOs安装启动U盘" class="headerlink" title="🐃第五步 制作MacOs安装启动U盘"></a>🐃第五步 制作MacOs安装启动U盘</h3><ol>
+<li>将您的U盘插入电脑(备份好u盘数据)。</li>
+<li>打开Etcher软件(Windows10及以上需要以管理员权限运行)，点击“Select image”选择下载好的MacOS安装镜像；<br><img src="/images/93204a10980b136578bd66dbdd6b8ff3.webp" alt="image.png"></li>
+<li>然后点击“Select drive”选择你的U盘，如果你直插有一个U盘，软件会自动选择该u盘；<br><img src="/images/14d9fc5ac1bdbe5704d29586d81854c4.webp" alt="image.png"></li>
+<li>接着点击“Flsh！”开始刻录黑苹果安装镜像到U盘；</li>
+<li>等到提示“Flash Complete！”Successful device 就完成安装镜像的制作了。<br><img src="/images/67e571948cbd86d4e6754153bab0dfa4.webp" alt="image.png"></li>
+<li>替换自己的EFI文件。</li>
+<li>重启电脑到Bios设置中。</li>
+</ol>
+<blockquote>
+<p>黑果小兵的镜像包里面含有三个独立的EFI引导分区，同时支持 OpenCore &#x2F; CLOVER &#x2F; WEPE引导，这里建议先不要做替换EFI的操作，先用提供的EFI安装好一同以后再将EFI替换称自己的即可。</p>
+</blockquote>
+<h3 id="🦣第六步-调整主板Bios设置"><a href="#🦣第六步-调整主板Bios设置" class="headerlink" title="🦣第六步 调整主板Bios设置"></a>🦣第六步 调整主板Bios设置</h3><ol>
+<li><p>重启按F2进入BIOS（电脑不一样，按键也不一样，就看自己电脑型号）;</p>
+</li>
+<li><p>Bios设置禁用清单(根据自己的Bios调整)</p>
+<ul>
+<li><code>Fast Boot</code> - 快速启动</li>
+<li><code>VT-d</code> (can be enabled if you set DisableIoMapper to YES) - VT-d（如果DisableIOMapper Quicks设置为YES，则可以启用）</li>
+<li><code>CSM</code> - CSM 兼容性支持模块</li>
+<li><code>Thunderbolt</code> - 雷雳</li>
+<li><code>Intel SGX</code> - 英特尔SGX</li>
+<li><code>Intel Platform Trust</code>- 英特尔平台信任</li>
+<li><code>CFG Lock</code> (MSR 0xE2 write protection) - CFG锁（MSR 0xE2写保护）（必须关闭，如果找不到该选项，则在OpenCore的config-内核-&gt; Quirks下启用与CFG Lock相关选项）</li>
+<li><code>ecure Boot</code> - 安全启动</li>
+<li><code>Parallel Port</code> - 并口</li>
+<li><code>Serial/COM Port</code> - 串行&#x2F;COM端口</li>
+</ul>
+</li>
+<li><p>Bios设置启用清单(根据自己的Bios调整)</p>
+<ul>
+<li><code>VT-x</code> - VT-x</li>
+<li><code>UEFI Boot Mode</code> UEFI启动模式。请不要使用Legacy</li>
+<li>硬盘模式：改为<code>AHCI</code>。不能用IDE和RST RAID。</li>
+<li><code>Above 4G decoding</code> - 大于4G地址空间解码</li>
+<li><code>Hyper-Threading</code> - 超线程</li>
+<li><code>Execute Disable Bit</code> - 执行禁用位</li>
+<li><code>EHCI/XHCI Hand-off</code> - EHCI &#x2F; XHCI接手控制</li>
+<li><code>OS type</code>: <code>Windows 8.1/10 UEFI Mode</code> - 操作系统类型：Windows 8.1 &#x2F; 10 UEFI模式</li>
+<li><code>DVMT Pre-Allocated</code>(iGPU Memory): DVMT预分配（iGPU内存）：<code>64MB</code>（如果能设Max就设）</li>
+<li><code>Legacy RTC Device</code> - 传统RTC设备</li>
+</ul>
+</li>
+<li><p>设置USB接入的U盘为第一启动项:<br><img src="/images/5ee1fdd5a54ec8acdda7016c150d3e9e.webp" alt="image.png"></p>
+</li>
+<li><p>保存Bios设置，重启电脑。</p>
+</li>
+</ol>
+<h3 id="🐘第七步-建立MacOS磁盘文件系统"><a href="#🐘第七步-建立MacOS磁盘文件系统" class="headerlink" title="🐘第七步 建立MacOS磁盘文件系统"></a>🐘第七步 建立MacOS磁盘文件系统</h3><ol>
+<li><p>开始引导MacOS系统，这个过程需要1-2分钟，耐心等待进入安装程序，会出现语言选择界面:<br><img src="/images/85e9dc734fbe1e2000a1ddad981bb229.webp" alt="image.png"></p>
+</li>
+<li><p>语言选择选择简体中文即可:<br><img src="/images/aafc7d7f9072ba5cc6a49a5aa92564a2.webp"></p>
+</li>
+<li><p>MacOS实用工具界面，选择磁盘工具:<br><img src="/images/21608f286cc1803fa19690e8d96834da.webp"></p>
+</li>
+<li><p>选择<code>显示所有设备</code>:<br><img src="/images/f7eba96317032765d334c34bd74477ba.webp"></p>
+</li>
+<li><p>选择你需要安装MacOS的分区，点击<code>抹掉</code>按钮，选择默认的<code>APFS</code>或者是<code>Mac OS扩展(日志型)</code>名称随意，点击<code>抹掉</code>按钮:<br><img src="/images/e2d1e23968c82123aeed9eb833c85e05.webp" alt="image.png"></p>
+</li>
+<li><p>抹盘成功后，如果所有的硬盘都没有EFI分区那么它会自动生成一个200MB的EFI分区，这样做的好处是不会出现安装过程中的由于EFI分区尺寸小于200MB而引起的无法安装的错误:<br><img src="/images/e4ea28dfd69d482d1c0d192e4dd37ced.webp"></p>
+</li>
+<li><p>到这里，磁盘工具的动作就已经结束了，找到左上角，点击「磁盘工具」选择「退出磁盘工具」即可退出，进入安装界面，进行系统的安装了。<br><img src="/images/5f651944264f5926042ec4771b35da7f.webp"></p>
+</li>
+</ol>
+<h3 id="🦨第八步-安装MacOS系统"><a href="#🦨第八步-安装MacOS系统" class="headerlink" title="🦨第八步 安装MacOS系统"></a>🦨第八步 安装MacOS系统</h3><ol>
+<li><p>进入安装界面，进行安装，系统会多次重启，耐心等待即可。<br><img src="/images/a71f978c658e27b84bb4b384f70a0277.webp"></p>
+</li>
+<li><p>MacOS初始化设置，按照自己需求的情况进行配置即可(略过)。<br><img src="/images/1d804dd2a28f8ed9976215295c7116f4.webp"></p>
+</li>
+</ol>
+<h3 id="🐿️第九步-完善MacOS引导"><a href="#🐿️第九步-完善MacOS引导" class="headerlink" title="🐿️第九步 完善MacOS引导"></a>🐿️第九步 完善MacOS引导</h3><p>现在MacOS 系统已经安装好了，但是必须要通过我们的U盘进行引导，才能进入MacOS系统。我们现在要做的就是将我们已经配置好的EFI启动引导文件放在硬盘中就可以了，这一步在 MacOS 和 在 Windows 下操作都是可以的。如果你在 Windows 下操作，一般需要使用 DiskGenius这个工具来辅助操作。当然对于整盘安装(多硬盘多系统)和分区安装(单硬盘多系统)处理的方式也是不一样的。</p>
+<h4 id="整盘安装-多硬盘多系统-1"><a href="#整盘安装-多硬盘多系统-1" class="headerlink" title="整盘安装(多硬盘多系统)"></a>整盘安装(多硬盘多系统)</h4><p>整盘安装的情况处理起来就比较简单了，Windows引导放到Windows盘的引导ESP分区，Mac系统的OpenCore引导放到Mac盘的EFI引导分区，引导各自放各自的引导，完成后回到BISO，设置带OpenCore引导的硬盘为第一启动项即可。</p>
+<p>例如：</p>
+<ul>
+<li>磁盘 A：安装了 Windows</li>
+<li>磁盘 B：安装了 MacOS</li>
+</ul>
+<p>这种情况下无需手动使用工具添加引导项也可以，直接将 OC 的 EFI 引导文件拷贝到 <strong>磁盘B</strong> 的 EFI 引导分区下，然后在 BIOS 里面将 <strong>磁盘 B</strong>的引导设置第 1 启动即可。</p>
+<h4 id="分区安装-单硬盘多系统-1"><a href="#分区安装-单硬盘多系统-1" class="headerlink" title="分区安装(单硬盘多系统)"></a>分区安装(单硬盘多系统)</h4><p>在一块硬盘上面装了多个操作系统，例如windows，MacOs等系统的情况。</p>
+<p>例如：</p>
+<ul>
+<li>磁盘 A：安装了 Windows 和 MacOS两个系统</li>
+</ul>
+<p>这种情况下，首先直接将 OC 的 EFI 引导文件拷贝到 <strong>磁盘B</strong> 的 EFI 引导分区下以后还得使用下面的 DG 或者 EasyUEFI 手动添加引导。这里讲一下EasyIUEFI方法，DG方式同理。</p>
+<ol>
+<li><p>下载<a target="_blank" rel="noopener" href="https://sqlsec.lanzouw.com/i4amxzmj1cj">EasyUEFI 破解版下载地址</a></p>
+</li>
+<li><p>绿色版本点击即可使用， 打开后的主界面：<br><img src="/images/5d7120291d79a1419dc2306a87bfdfae.webp"></p>
+</li>
+<li><p>选择「管理 EFI 启动项」：<br><img src="/images/5c941f61e108e59a799b1eadba9ee8f2.webp"></p>
+</li>
+<li><p>首先点击「创建新项」：<br><img src="/images/f1d9656342b57d77652f33f579f1c3b5.webp"></p>
+</li>
+<li><p>操作系统类型选择「Linux 或者其他操作系统」，描述随便写一个，目标分区选择「硬盘的第一个 ESP 引导分区」，然后点击「浏览数据」，选择 EFI&#x2F;OC&#x2F; 目录下的 OpenCpre.efi后，点击确定：<br><img src="/images/eef7b53837d4a1a49dfb43e7adaff31f.webp"></p>
+</li>
+<li><p>接着将刚刚添加的启动项，「上移」到第一位：<br><img src="/images/4bd5065e6ea82faa0ec5aeb1bc07a218.webp"></p>
+</li>
+<li><p>最终的效果，拔掉 U 盘后，每次开机选择操作系统的界面如下：<br><img src="/images/bd3f0260224c5c1d2a8b536a663bfaef.webp"></p>
+</li>
+</ol>
+<blockquote>
+<p>如果使用了 DG 或者 EasyUEFI 手动添加引导但是依然没有 OC 为第 1 启动的话，很简单，直接 <strong>BIOS</strong> 里面将你手动添加的引导设置为第 1 启动即可。</p>
+</blockquote>
+<h1 id="三-配置OpenCore的EFI"><a href="#三-配置OpenCore的EFI" class="headerlink" title="三.配置OpenCore的EFI"></a>三.配置OpenCore的EFI</h1><h3 id="1-获取OpenCore的EFI"><a href="#1-获取OpenCore的EFI" class="headerlink" title="1. 获取OpenCore的EFI"></a>1. 获取OpenCore的EFI</h3><p>上文说到可以在网络上找到很多大佬制作的跟你机型相同的EFI，直接拿来使用就可以了，可以通过以下方式找到适合自己机型配置的的EFI文件:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.daliansky.net/Hackintosh-long-term-maintenance-model-checklist.html">Hackintosh黑苹果长期维护机型整理清单</a>黑果小兵提供的长期维护机型。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/search?utf8=%E2%9C%93&q=">GitHub</a>在GitHub上搜索自己的机型。</li>
+<li>通过论坛等形式找到合适自己的EFI。</li>
+</ul>
+<h3 id="2-下载OpenCore的EFI"><a href="#2-下载OpenCore的EFI" class="headerlink" title="2. 下载OpenCore的EFI"></a>2. 下载OpenCore的EFI</h3><p>如果通过上面的方法也没有找到自己型号的EFI亦或者是找到的EFI引导以后都会出现或多或少的一些问题，如果你追求完美那么可以下载原版的OpenCore进行配置即可:</p>
+<ol>
+<li><p>打开<a target="_blank" rel="noopener" href="https://dortania.github.io/OpenCore-Install-Guide/ktext.html#firmware-drivers">OpenCore</a>官网。</p>
+</li>
+<li><p>找到<a target="_blank" rel="noopener" href="https://github.com/acidanthera/OpenCorePkg/releases">OpenCore的下载链接</a> 下载<code>open core</code>:<br><img src="/images/a21049f32517e455671a0ddfc7e97e90.webp"></p>
+</li>
+<li><p>复制出EFI，解压以后X64\EFI是我们需要的文件。<br><img src="/images/1c0d998d4a64afb15528b408ac0107f9.webp"></p>
+</li>
+</ol>
+<h3 id="3-OpenCore的EFI文件结构"><a href="#3-OpenCore的EFI文件结构" class="headerlink" title="3. OpenCore的EFI文件结构"></a>3. OpenCore的EFI文件结构</h3><p>已经配置好的 OpenCore 的文件结构， 在 EFI 分区 (&#x2F;Volumes&#x2F;EFI&#x2F;) 下面， 有一个 EFI 文件夹， 内容如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">EFI</span><br><span class="line">│   ├── BOOT</span><br><span class="line">│   │   └── BOOTx64.efi</span><br><span class="line">│   └── OC</span><br><span class="line">│       ├── ACPI</span><br><span class="line">│       │   ├── SSDT-PLUG.aml</span><br><span class="line">│       ├── Drivers</span><br><span class="line">│       │   ├── ApfsDriverLoader.efi</span><br><span class="line">│       │   ├── FwRuntimeServices.efi</span><br><span class="line">│       │   ├── HFSPlus.efi</span><br><span class="line">│       ├── Kexts</span><br><span class="line">│       │   ├── AppleALC.kext</span><br><span class="line">│       │   ├── IntelMausi.kext</span><br><span class="line">│       │   ├── Lilu.kext</span><br><span class="line">│       │   ├── SMCProcessor.kext</span><br><span class="line">│       │   ├── SMCSuperIO.kext</span><br><span class="line">│       │   ├── VirtualSMC.kext</span><br><span class="line">│       │   └── WhateverGreen.kext</span><br><span class="line">│       ├── OpenCore.efi</span><br><span class="line">│       ├── Tools</span><br><span class="line">│       │   └── Shell.efi</span><br><span class="line">│       └── config.plist</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>EFI&#x2F;BOOT&#x2F;BOOTx64.efi：电脑启动的时候支持UEFI的主板会去读取这个文件。</li>
+<li>EFI&#x2F;OC OpenCore： 存放目录。</li>
+<li>ACPI： 存放自定义的ssdt aml文件， 比如 (aml为二进制文件， 是我们需要的最终文件. dsl为源文件， 需要用 MaciASL打开另存为aml.)。<ul>
+<li>SSDT-PLUG.dsl： 开启硬件变频功能， 作用于CPU， iGPU， dGPU. 需要自行编译为 aml。</li>
+<li>SSDT-AWAC.dsl： 300系列的主板用最近更新的 BIOS 后， RTC 失效， 这个 SSDT 作用是启用 RTC， 需要自行编译为 aml。</li>
+<li>SSDT-EC-USBX.dsl： Fake EC 和 USBX， 给 MacOS 提供一个虚假的EC设备， 同时提供 USB 大电流支持， 需要自行编译为 aml。</li>
+</ul>
+</li>
+<li>Drivers：存放文件系统驱动文件， 比如:<ul>
+<li>ApfsDriverLoader.efi：用于加载 MacOS 内置的 apfs.efi ， 读取APFS分区， 必要文件。</li>
+<li>FwRuntimeServices.efi：提供模拟 nvram 等其他功能， 必要文件。</li>
+<li>HFSPlus.efi： 提供HFS+文件系统的支持， 读取MacOS的安装U盘以及Recovery分区需要此efi， 必要文件。</li>
+</ul>
+</li>
+<li>Kexts： 存放各种设备和硬件的驱动或者补丁。<ul>
+<li>Lilu.kext：一个框架式的kext，自身单独使用没有作用， 是其他kext的依赖， 必须第一个被加载. 必要文件。</li>
+<li>AppleALC.kext： 让MacOS可以正确识别大部分主板上的集成声卡。</li>
+<li>VirtualSMC.kext： 模拟SMC， 必要文件。</li>
+<li>WhateverGreen.kext： 解决集成&#x2F;独立显卡的各种问题 必要文件 其他的几个kext， 根据需要使用， 比如:</li>
+<li>IntelMausi.kext： Intel 有线网卡驱动。</li>
+<li>RealtekR1000SL.kext： Realtek 有线网卡驱动。</li>
+<li>SMCProcessor.kext SMCSuperIO.kext： 让MacOS下的监控软件可以读取主板上的传感器信息温度，频率等。</li>
+</ul>
+</li>
+<li>Tools ：工具类efi， 这些工具在 OpenCore 启动界面可以看到， 目前只有下面2个工具， 不可以放入Drivers文件夹。<ul>
+<li>CleanNvram.efi ：作用为清空nvram， 新版本 OpenCore 已经用内置的选项 AllowNvramReset&#x3D;YES 取代这个 efi， 等效于启动到MacOS恢复模式之后， 运行 nvram -c。</li>
+<li>Shell.efi ：一个修改版的 UEFI SHELL， 可以做很多有趣的事情。</li>
+<li>VerifyMsrE2： 检查主板是否有 CFG LOCK。</li>
+</ul>
+</li>
+<li>OpenCore.efi ：OpenCore的主引导文件。</li>
+<li>config.plist ：OpenCore的主要配置文件， 可以使用 PlistEdit Pro 或者 ProperTree 可视化编辑. 所以， OC下面总共有4个文件夹， 1个主文件， 和一个配置文件， 是不是非常简洁。</li>
+</ul>
+<h3 id="4-OpenCore的EFI配置编辑工具"><a href="#4-OpenCore的EFI配置编辑工具" class="headerlink" title="4. OpenCore的EFI配置编辑工具"></a>4. OpenCore的EFI配置编辑工具</h3><p>因为 OpenCore 的核心配置文件是 .plist 结尾的，所以需要专门的编辑器来编辑，常见的 OC 编辑器有如下:</p>
+<h5 id="🐒MacOS平台可用EFI配置编辑工具"><a href="#🐒MacOS平台可用EFI配置编辑工具" class="headerlink" title="🐒MacOS平台可用EFI配置编辑工具"></a>🐒MacOS平台可用EFI配置编辑工具</h5><ul>
+<li><a target="_blank" rel="noopener" href="https://www.mfpud.com/opencore/occ/">OCC编辑器(注意需要和版本对应起来)</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/headkaze/Hackintool/releases">Hackintool</a></li>
+</ul>
+<h5 id="🐕全平台可用EFI配置编辑工具"><a href="#🐕全平台可用EFI配置编辑工具" class="headerlink" title="🐕全平台可用EFI配置编辑工具"></a>🐕全平台可用EFI配置编辑工具</h5><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/ic005k/QtOpenCoreConfig/releases">QtOpenCoreConfig(全平台可用)</a></li>
+<li><a target="_blank" rel="noopener" href="https://heipg.cn/tag/ocauxiliarytools">OCAuxiliaryTools</a></li>
+<li><a target="_blank" rel="noopener" href="https://galada.gitee.io/opencoreconfiguratoronline">opencoreconfiguratoronline(在线)</a></li>
+<li><a target="_blank" rel="noopener" href="https://gitee.com/galada/OpenCoreConfiguratorOnline">opencoreconfiguratoronline_gitee(在线)</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/corpnewt/ProperTree">ProperTree</a></li>
+</ul>
+<h3 id="5-查看OpenCore版本"><a href="#5-查看OpenCore版本" class="headerlink" title="5. 查看OpenCore版本"></a>5. 查看OpenCore版本</h3><ul>
+<li>方式一：Hackintool 黑苹果必备工具。</li>
+<li>方式二：命令查询 <code>nvram 4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102:opencore-version 1</code></li>
+</ul>
+<h1 id="四-黑苹果注入三码洗白"><a href="#四-黑苹果注入三码洗白" class="headerlink" title="四.黑苹果注入三码洗白"></a>四.黑苹果注入三码洗白</h1><h3 id="1-为什么黑苹果要注入三码洗白？"><a href="#1-为什么黑苹果要注入三码洗白？" class="headerlink" title="1. 为什么黑苹果要注入三码洗白？"></a>1. 为什么黑苹果要注入三码洗白？</h3><p>经常用苹果设备的应该知道苹果很多在线服务形成了一个生态圈，简单来说就是在手机上浏览的东西可以推送到苹果电脑上继续浏览，电话、短信都可以通过这些服务在苹果电脑上展示出来，当然了这里说的是白苹果即苹果出售并提供支持的电脑。 那黑苹果能不能享受这些服务呢?答案是可以的。MacOS黑苹果需要通过注入三码解决iMessage，FaceTime，iCloud等苹果在线服务。注入三码后，可以正常登陆App Store下载app，iCloud可以正常同步，可以正常使用隔空投送，接力，iMessage，随航等功能。 三码不对的话，有可能无法登陆App Store，甚至导致Apple ID被拉黑。目前，苹果三码编写规则已经被摸的较为透彻（尤其是机型序列号），可以使用 OCC编辑器、Hackintool等黑苹果工具自动生成。</p>
+<h3 id="2-使用OCC注入三码洗白"><a href="#2-使用OCC注入三码洗白" class="headerlink" title="2. 使用OCC注入三码洗白"></a>2. 使用OCC注入三码洗白</h3><ol>
+<li><p>在开始之前，先登录苹果 <a target="_blank" rel="noopener" href="https://heipg.cn/link/aHR0cHM6Ly93d3cuaWNsb3VkLmNvbS8=">iCloud.com</a>，进入“查找我的iPhone”，选择“所有设备”清除所有登录过的黑苹果，如果你没有打开过“查找我的Mac”，则这一步可以省略。</p>
+</li>
+<li><p>在<a target="_blank" rel="noopener" href="https://mackie100projects.altervista.org/opencore-configurator/">OpenCore-configurator官网</a> 下载对应版本的OpenCore-configurator进行安装。</p>
+</li>
+<li><p>安装<strong>OpenCore-configurator</strong>后，挂载efi 打开分区 使用<strong>OpenCore-configurator</strong>打开你的config，选择<code>Platformlnfo-机型平台设置</code>进入机型平台设置:<br><img src="/images/baf0c9a57a261d12782643eb159f5ca2.webp"></p>
+</li>
+<li><p>选择和你机型相像的配置，会自动生成id:<br><img src="/images/6c9a63ae89564c77b6e2526a4b9406c5.webp"></p>
+</li>
+<li><p>复制Serial Number前往<a target="_blank" rel="noopener" href="https://checkcoverage.apple.com/cn/zh/">Apple官网</a>查询序列号，如果显示有购买日期和机型等保修信息，说明这个序列号别人在用，不建议使用，点击Generate New生成新的Serial Number，然后继续进行查询，直到查询三码出现提示：很抱歉，这个序列号无效。请检查您的信息并再试一次，（一般都提示这个）即可:<br><img src="/images/75f05c789f8739ff33cb5e6d95453526.webp"><br>如果你运气特别好，有可能生成出来官方正版且未被激活的白苹果序列号<br><img src="/images/5a2ad6047af54e706b1916ec79eafcc0.webp"></p>
+</li>
+<li><p>使用OpenCore-configurator保存即可。</p>
+</li>
+</ol>
+<h1 id="五-Windows和MacOS系统时间不匹配的问题"><a href="#五-Windows和MacOS系统时间不匹配的问题" class="headerlink" title="五.Windows和MacOS系统时间不匹配的问题"></a>五.Windows和MacOS系统时间不匹配的问题</h1><p>装了Mac和Windows的双系统之后会发现进入MacOs系统以后，再重启进Windows就会出现时间不同步的问题，Windows下的时间比Mac下晚8小时，出现这个问题的主要原因是因为mac和win基准识别时间不同。</p>
+<ol>
+<li>打开C盘&gt;Windows&gt;System32，找到cmd.exe，右键以管理员的身份运行。 （或者使用WIN+R组合键后输入CMD）</li>
+<li>然后输入以下命令：</li>
+</ol>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Reg add HKLM\SYSTEM\CurrentControlSet\Control\TimeZoneInformation /v RealTimeIsUniversal /t REG_DWORD /d 1</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>回车搞定！重启试试！</li>
+</ol>
+<blockquote>
+<p>命令的原理其实就是通过修改注册表让windows识别硬件时间为UTC-0而不是现在的UTC+8 。也可以在注册表（WIN+R输入regedit）里直接操作<code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation\</code>中添加一项数据类型为REG_DWORD，名称为RealTimeIsUniversal，值设为1即可。</p>
+</blockquote>
+<p>参考资料:</p>
+<p><a target="_blank" rel="noopener" href="https://apple.sqlsec.com/5-%E5%AE%9E%E6%88%98%E6%BC%94%E7%A4%BA/5-6.html">完善引导</a></p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/a9gvx9p5/">EFI分区——折腾黑苹果必须弄懂的硬盘那点事</a></p>
+<p><a target="_blank" rel="noopener" href="http://imacos.top/2020/04/06/1559/">单双硬盘装Windows&#x2F;Mac双系统用OpenCore引导菜单添加Windows引导项，设定OC文件WINOS DISK 路径教学</a></p>
+<p><a target="_blank" rel="noopener" href="https://astrobear.top/2020/02/14/Introduction_to_hackintosh/">黑苹果入门完全指南</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv12696678/">黑苹果安装及新手指导</a></p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/a259rv2d/">open core安装教程</a></p>
+<p><a target="_blank" rel="noopener" href="https://macx.top/5673.html">原版黑苹果安装教程【OC 引导 + Big Sur】</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cattyhouse/oc-guide">OpenCore文档</a></p>
+<p><a target="_blank" rel="noopener" href="http://imacos.top/2020/04/06/1559/">单双硬盘装Windows&#x2F;Mac双系统用OpenCore引导菜单添加Windows引导项，设定OC文件WINOS DISK 路径教学</a></p>
+<p><a target="_blank" rel="noopener" href="https://heipg.cn/tutorial/patching-intel-igpu-opencore.html">驱动英特尔核显，让黑苹果流畅运行「OpenCore专门篇」</a></p>
+<p><a target="_blank" rel="noopener" href="http://imacos.top/2020/09/03/2216/">OpenCor_Clover通用Intel英特尔核显驱动完整教程（英特尔集成显卡与核显仿冒ID速查表显卡驱动）</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903848633434120">【黑苹果显卡驱动】通过Device&#x2F;properties 给Framebuffer打补丁一点经验</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_33998125/article/details/91463629">【黑苹果显卡驱动】通过Device&#x2F;properties 给Framebuffer打补丁一点经验</a></p>
+<p><a target="_blank" rel="noopener" href="http://k61.org/fix-edid-on-hackintosh.html">黑苹果注入显示器EDID解决部分核显独显黑屏花屏颜色不对等一系列问题</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.derrors.cn/index.php/hackintosh/solution.html">使用黑苹果过程中一些问题的解决方法</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_33882452/article/details/91447219">UHD630核显驱动方法及驱动后闪屏严重问题解决记录</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.xjn819.com/post/opencore-guide.html">使用 OpenCore 引导黑苹果</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.daliansky.net/OpenCore-BootLoader.html">精解OpenCore</a></p>
+<p><a target="_blank" rel="noopener" href="http://imacos.top/2020/09/03/2216/">【图文教程】使用Hackintool.app驱动核显-帧缓冲区补丁</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.cn.md#%E4%BD%BF%E7%94%A8-weg-%E8%87%AA%E5%AE%9A%E4%B9%89-fb-%E5%92%8C-%E7%AB%AF%E5%8F%A3-%E8%A1%A5%E4%B8%81">WhateverGreen</a></p>
+<p><a target="_blank" rel="noopener" href="https://heipg.cn/tutorial/inject-identifier-for-hackintosh.html">给黑苹果注入三码，避免封号，解锁iCloud&#x2F;FaceTime&#x2F;iMessage&#x2F;随航！</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.imacosx.cn/330.html">在你的硬盘上建立第二个 EFI 分区</a></p>
+<p><a target="_blank" rel="noopener" href="http://app.myzaker.com/news/article.php?pk=61ae34888e9f090dd15cf4dc">EFI分区——折腾黑苹果必须弄懂的硬盘那点事</a></p>
+<p><a target="_blank" rel="noopener" href="http://imacos.top/2020/09/03/2216/">OpenCor_Clover通用Intel英特尔核显驱动完整教程（英特尔集成显卡与核显仿冒ID速查表显卡驱动）</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/764ae0e46fc5">WhateverGreen核显驱动详解</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/corpnewt/ProperTree">ProperTree</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.songbingjia.com/jingpin/show-36793.html">黑苹果注入三码洗白教程</a></p>
+<p><a target="_blank" rel="noopener" href="https://imacosx.com/scb/5078.html">黑苹果自动获取与注入三码的方法，附相关工具，解锁iCloud变白果！</a></p>
+<p><a target="_blank" rel="noopener" href="https://sleele.com/2019/03/21/smbios/">为自己的黑苹果生成随机三码</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.mfpud.com/topics/977/">使用Hackintool工具生成全新的序列号及更改黑苹果SN三码序列号教程</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2022/01/10/%E9%BB%91%E8%8B%B9%E6%9E%9C%E5%BC%95%E5%AF%BC%E8%BD%AF%E4%BB%B6%E4%B9%8BOpenCore/">https://lxlfpeng.github.io/2022/01/10/%E9%BB%91%E8%8B%B9%E6%9E%9C%E5%BC%95%E5%AF%BC%E8%BD%AF%E4%BB%B6%E4%B9%8BOpenCore/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MacOs/">MacOs</a></div><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2022/01/13/Jetpack-Compose%E4%B9%8B%E4%B8%89%E9%99%84%E5%B8%A6%E6%95%88%E5%BA%94(%E5%89%AF%E4%BD%9C%E7%94%A8)/" title="Jetpack-Compose之三附带效应(副作用)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Jetpack-Compose之三附带效应(副作用)</div></div><div class="info-2"><div class="info-item-1">一.Compose组合函数的特点1.Compose组合函数执行顺序不定可组合函数并不是按顺序执行的，这些函数可以按任何顺序运行(Compose 可以选择识别出某些界面元素的优先级高于其他界面元素，因而首先绘制这些元素)。 123456@Composablefun Row() &#123;   StartScreen()   MiddleScreen()   EndScreen()&#125; 对 StartScreen、MiddleScreen 和 EndScreen 这三个组合函数的调用不是按顺序进行的。 所以不能在Row中设置一个全局变量，让 StartScreen()修改这个变量的值，并让 MiddleScreen() 利用这个全局变量的值进行更改，每个组合函数都应该保持独立。 2.Compose可组合函数可以并行运行Compose 可以通过并行运行可组合函数来优化重组。这样Compose 就可以利用多个核心，并以较低的优先级运行可组合函数（不在屏幕上）。 这种优化意味着，可组合函数可能会在后台线程池中执行。如果某个可组合函数对 ViewModel 调用一个函数，则...</div></div></div></a><a class="pagination-related" href="/2022/01/07/Jetpack-Compose%E4%B9%8B%E4%BA%8C%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/" title="Jetpack-Compose之二状态管理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Jetpack-Compose之二状态管理</div></div><div class="info-2"><div class="info-item-1">一.Compose状态管理绪论状态是什么?状态指的是Ui的形态，例如按钮控件的文字、颜色的状态等等，在软件编程中我们会用一个状态值去保存该状态。传统的Android视图层次结构中，界面是通过一个个的View， 例如:ImageView、TextView等搭建而成，然后通过findViewById找到对应的View的引用后，设置它的内部状态值，例如设置TextView的文本，当UI的状态值改变时，基于XML的UI框架会自动刷新UI来显示正确的状态。Compose 是声明式的 UI，在组合函数中这些状态值描述了这个UI组件的状态，所以想更改一个UI的状态，只能用新的状态值去重新调用该组件的可组合函数，状态值的更新就对应着重组(重绘)的发生(刷新该UI)。 也就是说Compose 主要是根据状态的改变进行重组的，实际上Compose的UI变化本质是：”状态(State) 驱动”，即控件UI的变化原因是控件UI的状态发生了变化，需要加入状态并对相关的状态进行管理。 对状态变化做出反应是 Compose 的核心。Compose 应用程序通过调用 Composable 函数将数据转换为...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-OpenCore%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">一.OpenCore简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-OpenCore%E5%BC%95%E5%AF%BCMacOS"><span class="toc-number">2.</span> <span class="toc-text">二.OpenCore引导MacOS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%AE%E7%AC%AC%E4%B8%80%E6%AD%A5-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">2.0.1.</span> <span class="toc-text">🦮第一步 准备工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%95%E2%80%8D%E7%AC%AC%E4%BA%8C%E6%AD%A5-%E7%A1%AE%E8%AE%A4%E7%A1%AC%E7%9B%98%E5%88%86%E5%8C%BA%E8%A1%A8%E6%A0%BC%E5%BC%8F"><span class="toc-number">2.0.2.</span> <span class="toc-text">🐕‍第二步 确认硬盘分区表格式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E4%BD%BF%E7%94%A8%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86%E6%9F%A5%E7%9C%8BMBR%E5%92%8CGPT%E5%88%86%E5%8C%BA%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.0.2.0.1.</span> <span class="toc-text">方法一：使用磁盘管理查看MBR和GPT分区类型</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%91%BD%E4%BB%A4%E6%8F%90%E7%A4%BA%E7%AC%A6%E6%9F%A5%E7%9C%8BMBR%E5%92%8CGPT%E5%88%86%E5%8C%BA%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.0.2.0.2.</span> <span class="toc-text">方法二：使用命令提示符查看MBR和GPT分区类型</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%86%E7%AC%AC%E4%B8%89%E6%AD%A5-MBR%E5%88%86%E5%8C%BA%E8%A1%A8%E8%BD%AC%E6%8D%A2%E6%88%90GPT%E5%88%86%E5%8C%BA%E8%A1%A8"><span class="toc-number">2.0.3.</span> <span class="toc-text">🐆第三步 MBR分区表转换成GPT分区表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%8C%E7%AC%AC%E5%9B%9B%E6%AD%A5-%E7%A1%AC%E7%9B%98%E5%88%92%E5%88%86%E5%AE%89%E8%A3%85MacOS%E5%88%86%E5%8C%BA"><span class="toc-number">2.0.4.</span> <span class="toc-text">🦌第四步 硬盘划分安装MacOS分区</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B4%E7%9B%98%E5%AE%89%E8%A3%85-%E5%A4%9A%E7%A1%AC%E7%9B%98%E5%A4%9A%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.0.4.1.</span> <span class="toc-text">整盘安装(多硬盘多系统)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E5%8C%BA%E5%AE%89%E8%A3%85-%E5%8D%95%E7%A1%AC%E7%9B%98%E5%A4%9A%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.0.4.2.</span> <span class="toc-text">分区安装(单硬盘多系统)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%83%E7%AC%AC%E4%BA%94%E6%AD%A5-%E5%88%B6%E4%BD%9CMacOs%E5%AE%89%E8%A3%85%E5%90%AF%E5%8A%A8U%E7%9B%98"><span class="toc-number">2.0.5.</span> <span class="toc-text">🐃第五步 制作MacOs安装启动U盘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%A3%E7%AC%AC%E5%85%AD%E6%AD%A5-%E8%B0%83%E6%95%B4%E4%B8%BB%E6%9D%BFBios%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.0.6.</span> <span class="toc-text">🦣第六步 调整主板Bios设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%98%E7%AC%AC%E4%B8%83%E6%AD%A5-%E5%BB%BA%E7%AB%8BMacOS%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.0.7.</span> <span class="toc-text">🐘第七步 建立MacOS磁盘文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%A8%E7%AC%AC%E5%85%AB%E6%AD%A5-%E5%AE%89%E8%A3%85MacOS%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.0.8.</span> <span class="toc-text">🦨第八步 安装MacOS系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%BF%EF%B8%8F%E7%AC%AC%E4%B9%9D%E6%AD%A5-%E5%AE%8C%E5%96%84MacOS%E5%BC%95%E5%AF%BC"><span class="toc-number">2.0.9.</span> <span class="toc-text">🐿️第九步 完善MacOS引导</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B4%E7%9B%98%E5%AE%89%E8%A3%85-%E5%A4%9A%E7%A1%AC%E7%9B%98%E5%A4%9A%E7%B3%BB%E7%BB%9F-1"><span class="toc-number">2.0.9.1.</span> <span class="toc-text">整盘安装(多硬盘多系统)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E5%8C%BA%E5%AE%89%E8%A3%85-%E5%8D%95%E7%A1%AC%E7%9B%98%E5%A4%9A%E7%B3%BB%E7%BB%9F-1"><span class="toc-number">2.0.9.2.</span> <span class="toc-text">分区安装(单硬盘多系统)</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-%E9%85%8D%E7%BD%AEOpenCore%E7%9A%84EFI"><span class="toc-number">3.</span> <span class="toc-text">三.配置OpenCore的EFI</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%8E%B7%E5%8F%96OpenCore%E7%9A%84EFI"><span class="toc-number">3.0.1.</span> <span class="toc-text">1. 获取OpenCore的EFI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%B8%8B%E8%BD%BDOpenCore%E7%9A%84EFI"><span class="toc-number">3.0.2.</span> <span class="toc-text">2. 下载OpenCore的EFI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-OpenCore%E7%9A%84EFI%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">3.0.3.</span> <span class="toc-text">3. OpenCore的EFI文件结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-OpenCore%E7%9A%84EFI%E9%85%8D%E7%BD%AE%E7%BC%96%E8%BE%91%E5%B7%A5%E5%85%B7"><span class="toc-number">3.0.4.</span> <span class="toc-text">4. OpenCore的EFI配置编辑工具</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%F0%9F%90%92MacOS%E5%B9%B3%E5%8F%B0%E5%8F%AF%E7%94%A8EFI%E9%85%8D%E7%BD%AE%E7%BC%96%E8%BE%91%E5%B7%A5%E5%85%B7"><span class="toc-number">3.0.4.0.1.</span> <span class="toc-text">🐒MacOS平台可用EFI配置编辑工具</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%F0%9F%90%95%E5%85%A8%E5%B9%B3%E5%8F%B0%E5%8F%AF%E7%94%A8EFI%E9%85%8D%E7%BD%AE%E7%BC%96%E8%BE%91%E5%B7%A5%E5%85%B7"><span class="toc-number">3.0.4.0.2.</span> <span class="toc-text">🐕全平台可用EFI配置编辑工具</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%9F%A5%E7%9C%8BOpenCore%E7%89%88%E6%9C%AC"><span class="toc-number">3.0.5.</span> <span class="toc-text">5. 查看OpenCore版本</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-%E9%BB%91%E8%8B%B9%E6%9E%9C%E6%B3%A8%E5%85%A5%E4%B8%89%E7%A0%81%E6%B4%97%E7%99%BD"><span class="toc-number">4.</span> <span class="toc-text">四.黑苹果注入三码洗白</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%BB%91%E8%8B%B9%E6%9E%9C%E8%A6%81%E6%B3%A8%E5%85%A5%E4%B8%89%E7%A0%81%E6%B4%97%E7%99%BD%EF%BC%9F"><span class="toc-number">4.0.1.</span> <span class="toc-text">1. 为什么黑苹果要注入三码洗白？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%BD%BF%E7%94%A8OCC%E6%B3%A8%E5%85%A5%E4%B8%89%E7%A0%81%E6%B4%97%E7%99%BD"><span class="toc-number">4.0.2.</span> <span class="toc-text">2. 使用OCC注入三码洗白</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94-Windows%E5%92%8CMacOS%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4%E4%B8%8D%E5%8C%B9%E9%85%8D%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">5.</span> <span class="toc-text">五.Windows和MacOS系统时间不匹配的问题</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

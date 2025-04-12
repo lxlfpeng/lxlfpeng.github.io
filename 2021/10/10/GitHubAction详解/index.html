@@ -1,0 +1,366 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>GitHubAction详解 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.GitHubAction简介🧅什么是Github Action ?GitHubActions是一个持续集成和持续交付的平台，它可以帮助你通过自动化的构建（包括编译、发布、自动化测试）来验证你的代码，从而尽快地发现集成错误。github于2019年11月后对该功能全面开放，现在所有的github用户可以直接使用该功能。GitHub 提供 Linux、Windows 和 macOS 虚拟机来运行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GitHubAction详解">
+<meta property="og:url" content="https://lxlfpeng.github.io/2021/10/10/GitHubAction%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.GitHubAction简介🧅什么是Github Action ?GitHubActions是一个持续集成和持续交付的平台，它可以帮助你通过自动化的构建（包括编译、发布、自动化测试）来验证你的代码，从而尽快地发现集成错误。github于2019年11月后对该功能全面开放，现在所有的github用户可以直接使用该功能。GitHub 提供 Linux、Windows 和 macOS 虚拟机来运行">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2021-10-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.844Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2021/10/10/GitHubAction%E8%AF%A6%E8%A7%A3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'GitHubAction详解',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">GitHubAction详解</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">GitHubAction详解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2021-10-09T16:00:00.000Z" title="发表于 2021-10-10 00:00:00">2021-10-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/GitHub/">GitHub</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-GitHubAction简介"><a href="#一-GitHubAction简介" class="headerlink" title="一.GitHubAction简介"></a>一.GitHubAction简介</h1><h3 id="🧅什么是Github-Action"><a href="#🧅什么是Github-Action" class="headerlink" title="🧅什么是Github Action ?"></a>🧅什么是Github Action ?</h3><p>GitHubActions是一个持续集成和持续交付的平台，它可以帮助你通过自动化的构建（包括编译、发布、自动化测试）来验证你的代码，从而尽快地发现集成错误。github于2019年11月后对该功能全面开放，现在所有的github用户可以直接使用该功能。GitHub 提供 Linux、Windows 和 macOS 虚拟机来运行您的工作流程，或者您可以在自己的数据中心或云基础架构中托管自己的自托管运行器。在使用Github Action之前首先需要了解以下前置知识:</p>
+<ul>
+<li>持续集成&#x2F;持续交付的概念。</li>
+<li>Git相关知识。</li>
+<li>Linux或Windows或macOS脚本相关知识。</li>
+<li>Yaml基础语法。</li>
+</ul>
+<h3 id="🍤什么是Yaml"><a href="#🍤什么是Yaml" class="headerlink" title="🍤什么是Yaml ?"></a>🍤什么是Yaml ?</h3><p>编写GithubAction的流程时，需要创建一个workflow工作流，workflow必须存储在你的项目库根路径下的<code>.github/workflows</code>目录中，每一个 workflow对应一个具体的.yml 文件（或者 .yaml）。<br>yml是YAML（YAML Ain’t Markup Language）语言的文件，以数据为中心，比properties、xml等更适合做配置文件，主要有以下几个特点:</p>
+<ul>
+<li>大小写敏感。</li>
+<li>使用缩进表示层级关系。</li>
+<li>缩进只能使用空格，不能用 TAB 字符。</li>
+<li>缩进的空格数量不重要，只要层级相同的元素左对齐即可。</li>
+<li>‘#’ 表示注释。</li>
+</ul>
+<h3 id="🍝Github-Action基本概念"><a href="#🍝Github-Action基本概念" class="headerlink" title="🍝Github Action基本概念"></a>🍝Github Action基本概念</h3><ul>
+<li>workflow: 一个 workflow 就是一个完整的工作流过程，每个workflow 包含一组 jobs任务。</li>
+<li>job : jobs任务包含一个或多个job ，每个 job包含一系列的 steps 步骤。</li>
+<li>step : 每个 step 步骤可以执行指令或者使用一个 action 动作。</li>
+<li>action : 每个 action 动作就是一个通用的基本单元。</li>
+</ul>
+<h3 id="🍓Github-Action-的使用限制"><a href="#🍓Github-Action-的使用限制" class="headerlink" title="🍓Github Action 的使用限制"></a>🍓Github Action 的使用限制</h3><p>在使用免费版本的Github Action是有如下限制的:</p>
+<ul>
+<li><p><strong>作业执行时间</strong> - 工作流中的每个作业最多可以运行 6 小时的执行时间。如果作业达到此限制，该作业将终止且无法完成。</p>
+</li>
+<li><p><strong>工作流运行时间</strong> - 每个工作流运行限制为 35 天。如果工作流运行达到此限制，则工作流运行将被取消。此时间段包括执行持续时间以及等待和批准所花费的时间。</p>
+</li>
+<li><p><strong>API 请求</strong> - 您可以在一小时内跨存储库中的所有操作执行多达 1000 个 API 请求。如果超出此限制，其他 API 调用将失败，这可能会导致作业失败。</p>
+</li>
+<li><p><strong>并发作业</strong> - 可以在帐户中运行的并发作业数取决于 GitHub 计划，如下表所示。如果超出，则任何其他作业都将排队。</p>
+<table>
+<thead>
+<tr>
+<th>GitHub 计划</th>
+<th>并发作业总数</th>
+<th>最大并发 macOS 作业数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>自由</td>
+<td>20</td>
+<td>5</td>
+</tr>
+<tr>
+<td>专业版</td>
+<td>40</td>
+<td>5</td>
+</tr>
+<tr>
+<td>团队</td>
+<td>60</td>
+<td>5</td>
+</tr>
+<tr>
+<td>企业</td>
+<td>180</td>
+<td>50</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>作业矩阵</strong> - 作业矩阵每次工作流运行最多可以生成 256 个作业。此限制适用于 GitHub 托管和自托管的运行程序。</p>
+</li>
+<li><p><strong>工作流运行队列</strong> - 每个存储库的排队时间间隔不超过 500 个工作流运行，间隔为 10 秒。如果工作流运行达到此限制，则工作流运行将终止且无法完成。</p>
+</li>
+</ul>
+<p>具体以最新版官方文档为主:<a target="_blank" rel="noopener" href="https://docs.github.com/en/actions/learn-github-actions/usage-limits-billing-and-administration">usage-limits-billing-and-administration</a></p>
+<h1 id="二-GitHubAction的使用"><a href="#二-GitHubAction的使用" class="headerlink" title="二.GitHubAction的使用"></a>二.GitHubAction的使用</h1><h2 id="😀workflow"><a href="#😀workflow" class="headerlink" title="😀workflow"></a>😀workflow</h2><p>在项目库根路径下的<code>.github/workflows</code>目录中创建一个.yml 文件（或者 .yaml）:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">name: hello-github-actions</span><br><span class="line"># 触发 workflow 的事件</span><br><span class="line">on:</span><br><span class="line">  push:</span><br><span class="line">    # 分支随意</span><br><span class="line">    branches:</span><br><span class="line">      - master</span><br><span class="line"># 一个workflow由执行的一项或多项job</span><br><span class="line">jobs:</span><br><span class="line">  # 一个job任务，任务名为build</span><br><span class="line">  build:</span><br><span class="line">    #运行在最新版ubuntu系统中</span><br><span class="line">    runs-on: ubuntu-latest</span><br><span class="line">    #步骤合集</span><br><span class="line">    steps:</span><br><span class="line">      #新建一个名为checkout_actions的步骤</span><br><span class="line">      - name: checkout_actions</span><br><span class="line">        #使用checkout@v2这个action获取源码</span><br><span class="line">        uses: actions/checkout@v2 </span><br><span class="line">      #使用建一个名为setup-node的步骤</span><br><span class="line">      - name: setup-node</span><br><span class="line">        #使用setup-node@v1这个action</span><br><span class="line">        uses: actions/setup-node@v1</span><br><span class="line">        #指定某个action 可能需要输入的参数</span><br><span class="line">        with:</span><br><span class="line">          node-version: &#x27;14&#x27;</span><br><span class="line">      - name: npm install and build</span><br><span class="line">        #执行执行某个shell命令或脚本</span><br><span class="line">        run: |</span><br><span class="line">          npm install</span><br><span class="line">          npm run build</span><br><span class="line">      - name: commit push</span><br><span class="line">        #执行执行某个shell命令或脚本</span><br><span class="line">        run: |</span><br><span class="line">          git config --global user.email xxx@163.com</span><br><span class="line">          git config --global user.name xxxx</span><br><span class="line">          git add .</span><br><span class="line">          git commit -m &quot;update&quot; -a</span><br><span class="line">          git push</span><br><span class="line">         # 环境变量</span><br><span class="line">        env:</span><br><span class="line">          email: xxx@163.com   </span><br></pre></td></tr></table></figure>
+
+<h2 id="😂name"><a href="#😂name" class="headerlink" title="😂name"></a>😂name</h2><p>Workflow的名字，随便可以设置，就是工作流的名字。如果省略该字段，默认为当前 workflow 的文件名。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name: hello-github-actions</span><br></pre></td></tr></table></figure>
+
+<h2 id="🤣on"><a href="#🤣on" class="headerlink" title="🤣on"></a>🤣on</h2><p>触发的事件，可以是一个事件数组。<br>在代码仓库Push时触发:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#push时触发</span><br><span class="line">on: push</span><br></pre></td></tr></table></figure>
+<p>可以用数组指定多个条件触发:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#push和merge时触发</span><br><span class="line">on: [push, merge]</span><br></pre></td></tr></table></figure>
+<p>还可以对条件进行限制触发:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#当master分支push时触发，可以限定分支或标签。</span><br><span class="line">on:</span><br><span class="line">  push:</span><br><span class="line">    branches:</span><br><span class="line">      - master</span><br></pre></td></tr></table></figure>
+<p>完整的事件列表，请查看<a target="_blank" rel="noopener" href="https://help.github.com/en/articles/events-that-trigger-workflows">官方文档</a>。除了代码库事件，GitHub Actions 也支持外部事件触发，或者定时运行。</p>
+<h2 id="😉jobs"><a href="#😉jobs" class="headerlink" title="😉jobs"></a>😉jobs</h2><h4 id="1-job"><a href="#1-job" class="headerlink" title="1.job"></a>1.job</h4><p>jobs表示要执行的一项或多项任务。jobs可以包含一个或多个job，一个job就是一个任务，这个任务可以包含多个步骤(steps):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">jobs:</span><br><span class="line">  job1:</span><br><span class="line">    ...</span><br><span class="line">  job2:</span><br><span class="line">    ...     </span><br></pre></td></tr></table></figure>
+<p>需要注意的是每一个Job都是并发执行的并不是按照申明的先后顺序执行的， 如果多个job 之间存在依赖关系，那么你可能需要使用 needs :</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">jobs:</span><br><span class="line">  job1:</span><br><span class="line">  </span><br><span class="line">  job2:</span><br><span class="line">    needs: job1</span><br><span class="line">  </span><br><span class="line">  job3:</span><br><span class="line">    needs: [job1, job2]</span><br></pre></td></tr></table></figure>
+
+<p>这里的needs声明了job2 必须等待 job1 成功完成，job3必须等待 job1 和 job2依次成功完成。因此，这个 workflow 的运行顺序依次为：job1、job2、job3。needs字段指定当前任务的依赖关系，即运行顺序。</p>
+<h4 id="2-job-runs-on"><a href="#2-job-runs-on" class="headerlink" title="2.job-&gt;runs-on"></a>2.job-&gt;runs-on</h4><p>runs-on字段指定运行所需要的<a target="_blank" rel="noopener" href="https://docs.github.com/cn/actions/using-github-hosted-runners/about-github-hosted-runners">虚拟机环境</a>。它是必填字段，目前可用的虚拟机如下:</p>
+<ul>
+<li>ubuntu-latest，ubuntu-18.04或ubuntu-16.04。</li>
+<li>windows-latest，windows-2019或windows-2016。</li>
+<li>macOS-latest或macOS-10.14。<br>指定job的运行环境:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">jobs:</span><br><span class="line">  job1:</span><br><span class="line">    runs-on: ubuntu-18.04</span><br><span class="line">  job2:</span><br><span class="line">    runs-on: macos-10.15</span><br><span class="line">  job3:</span><br><span class="line">    runs-on: windows-2019    </span><br></pre></td></tr></table></figure>
+github 会提供一个配置很不错的服务器做为 runner，Windows 和 Linux 虚拟机的硬件规格：</li>
+<li>2 核处理器。</li>
+<li>7 GB 内存。</li>
+<li>14 GB 固态硬盘空间。</li>
+</ul>
+<p>macOS 虚拟机的硬件规格：</p>
+<ul>
+<li>3 核处理器。</li>
+<li>14 GB 内存。</li>
+<li>14 GB 固态硬盘空间。</li>
+</ul>
+<blockquote>
+<p>如果你有网络时延的需求，（比如推送及拉取镜像时产生的网络时延），你也可以<a target="_blank" rel="noopener" href="https://docs.github.com/cn/actions/using-github-hosted-runners/customizing-github-hosted-runners">自建runner</a> 。</p>
+</blockquote>
+<h4 id="3-job-env"><a href="#3-job-env" class="headerlink" title="3.job-&gt;env"></a>3.job-&gt;env</h4><p>使用env可以给该任务或者是步骤配置环境变量:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">env:</span><br><span class="line">  name: &quot;zhangsan&quot;</span><br><span class="line">run: |</span><br><span class="line">  echo $name</span><br></pre></td></tr></table></figure>
+<p>环境变量可以配置在以下地方:</p>
+<ul>
+<li>jobs-&gt;job-&gt;env</li>
+<li>jobs-&gt;job-&gt;steps.env</li>
+</ul>
+<h4 id="4-job-steps"><a href="#4-job-steps" class="headerlink" title="4.job-&gt;steps"></a>4.job-&gt;steps</h4><p>steps字段指定每个 Job 的运行步骤，每个job由多个step构成，它会从上至下依次执行。steps可以包含一个或多个步骤，每个 step 步骤可以有:</p>
+<ul>
+<li>name：步骤名称，步骤的名称。</li>
+<li>env：该步骤所需的环境变量。</li>
+<li>id : 每个步骤的唯一标识符</li>
+<li>uses : 使用哪个action，这个表示使用别人预先设置好的Actions，比如因为我代码中要用到python，所以就用了actions&#x2F;setup-python@v1来设置python环境，不用我自己设置了。</li>
+<li>with: 指定某个action 可能需要输入的参数。</li>
+<li>run: 执行哪些指令，具体运行什么命令行代码。</li>
+<li>continue-on-error : 设置为 true 允许此步骤失败job 仍然通过。</li>
+<li>timeout-minutes : step 的超时时间。<br>例如:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">name: Sync To Gitee</span><br><span class="line">on: [ push ]</span><br><span class="line">jobs:</span><br><span class="line">  sync:</span><br><span class="line">    runs-on: ubuntu-latest</span><br><span class="line">    steps:</span><br><span class="line">    #创建一个打印环境变量的步骤</span><br><span class="line">    - name: PrintName</span><br><span class="line">      env:</span><br><span class="line">        name: &quot;zhangsan&quot;</span><br><span class="line">      run: |</span><br><span class="line">        echo $name</span><br><span class="line">    #创建一个安装Python环境的步骤    </span><br><span class="line">    - name: SetUpPython</span><br><span class="line">      uses: actions/setup-python@v1</span><br><span class="line">      with:</span><br><span class="line">        python-version: 3.7</span><br><span class="line">    #创建一个安装Python包的步骤 </span><br><span class="line">    - name: Install dependencies</span><br><span class="line">      run: |</span><br><span class="line">          python -m pip install --upgrade pip</span><br><span class="line">          pip install requests</span><br><span class="line">          pip install bs4</span><br><span class="line">          pip install lxml     </span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用uses指的是这一步骤需要先调用哪个 Action。 Action 是组成工作流最核心最基础的元素。 每个 Action 可以看作封装的独立脚本，有自己的操作逻辑，我们只需要 uses 并通过 with 传入参数即可。 比如 actions&#x2F;checkout@v2 就是官方社区贡献的用来拉取仓库分支的 Action， 你不需要考虑安装 git 命令工具，只需要把分支参数传入即可。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="5-Action"><a href="#5-Action" class="headerlink" title="5.Action"></a>5.Action</h4><p>Github Actions 是GitHub的持续集成服务。持续集成由很多操作组成，比如登录远程服务器，发布内容到第三方服务等等，这些相同的操作完全可以提取出来制作成脚本供所有人使用。GitHub允许开发者把每个操作写成独立的脚本文件，存放到代码仓库，使得其他开发者可以引用该脚本，这个脚本就是一个Action。如果你需要某种功能的Action可以从GitHub社区共享的<a target="_blank" rel="noopener" href="https://github.com/marketplace?type=actions">action官方市场</a>查找，也可以自己编程Action开源出来供大家使用。既然 actions 是代码仓库，当然就有版本的概念，用户可以引用某个具体版本的 action。 下面都是合法的 action 引用:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">actions/setup-node@74bc508 # 指向一个 commit</span><br><span class="line">actions/setup-node@v1.0    # 指向一个标签</span><br><span class="line">actions/setup-node@master  # 指向一个分支</span><br></pre></td></tr></table></figure>
+
+<h2 id="😊GitHub-Actions-中使用密文"><a href="#😊GitHub-Actions-中使用密文" class="headerlink" title="😊GitHub Actions 中使用密文"></a>😊GitHub Actions 中使用密文</h2><p>在持续集成的过程中，我们可能会使用到自己的敏感数据，这些数据不应该被开源并泄露。那么如何才能安全的使用这些敏感数据呢?GithubActions提供了Secrets变量来实现这一效果。我们可以在 github repo 上依次点击  Settings  -&gt;  Secrets-&gt; Actions-&gt;New repository secret创建一个敏感数据例如:OSS_KEY_ID，OSS_KEY_SECRET， 然后我们就可以在GithubAction脚本中使用这一变量了:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-  name:  setup  aliyun  oss</span><br><span class="line">    uses:  manyuanrong/setup-ossutil@master</span><br><span class="line">    with:</span><br><span class="line">        endpoint:  oss-cn-beijing.aliyuncs.com</span><br><span class="line">        access-key-id:  $&#123;&#123;  secrets.OSS_KEY_ID  &#125;&#125;</span><br><span class="line">        access-key-secret:  $&#123;&#123;  secrets.OSS_KEY_SECRET  &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的secret就是一种context，描述 CI&#x2F;CD 一个workflow 中的上下文信息，使用$语法表示。<a target="_blank" rel="noopener" href="https://docs.github.com/cn/actions/learn-github-actions/expressions">更多context信息可以参考官方文档</a></p>
+<h2 id="😎GitHubAction执行结果"><a href="#😎GitHubAction执行结果" class="headerlink" title="😎GitHubAction执行结果"></a>😎GitHubAction执行结果</h2><p>对于GitHubAction的执行流程我们可以通过repo 上依次点击Actions就可以看到Action的状态和执行结果等信息:<br><img src="/images/dbbd32eb93239b1fe5e7a0843074a56b.webp" alt="image.png"></p>
+<h1 id="三-示例"><a href="#三-示例" class="headerlink" title="三.示例"></a>三.示例</h1><p>使用GitHubAction实现Push代码发送邮件通知功能。 主要通过 GitHub Action 监听代码 push 事件，并发送邮件（前提是邮箱需要开通 SMTP 服务）。<br>在项目中 .&#x2F;github&#x2F;workflows&#x2F; 路径下添加 .yml 或者 .yaml文件，名字可以随便取。在这里我取名为 github-action-email.yml:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">name: github-action-email</span><br><span class="line">on: [push]</span><br><span class="line">jobs:</span><br><span class="line">  build:</span><br><span class="line">    runs-on: ubuntu-latest</span><br><span class="line">    steps:</span><br><span class="line">    # 检出代码</span><br><span class="line">    - name: CheckoutRepo</span><br><span class="line">      uses: actions/checkout@v2</span><br><span class="line">    # 获取master分支上最新一条提交的git log  </span><br><span class="line">    - name: GetLastLog</span><br><span class="line">      id: git_log</span><br><span class="line">      uses: Edisonboy/latest-git-log-action@main</span><br><span class="line">      with:</span><br><span class="line">        tag: origin/master</span><br><span class="line">    # 发送邮件    </span><br><span class="line">    - name: Send email</span><br><span class="line">      uses: dawidd6/action-send-mail@v3</span><br><span class="line">      with:</span><br><span class="line">        server_address: smtp.qq.com</span><br><span class="line">        server_port: 465</span><br><span class="line">        username: $&#123;&#123;secrets.MAIL_USERNAME&#125;&#125;</span><br><span class="line">        password: $&#123;&#123;secrets.MAIL_PASSWORD&#125;&#125;</span><br><span class="line">        subject: Github Actions job result</span><br><span class="line">        to: $&#123;&#123;secrets.MAIL_TOUSERNAME&#125;&#125;</span><br><span class="line">        from: $&#123;&#123;secrets.MAIL_USERNAME&#125;&#125;</span><br><span class="line">        body: $&#123;&#123;github.repository&#125;&#125; push log : $&#123;&#123;steps.git_log.outputs.log&#125;&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>secrets.XXX ： GitHub 允许仓库所有者创建和管理需要保密性的参数。例如邮件的账号和密码都是属于敏感参数。 可以通过项目<code>Settings -&gt; Secrets -&gt; Actions</code>配置密码，在这里我们添加 <code>MAIL_USERNAME、MAIL_PASSWORD、MAIL_TOUSERNAME </code>三个配置参数（注意：这里的密码是指 SMTP 服务的授权密码）。</li>
+<li>上下文：可以访问工作流程运行、运行器环境、作业及步骤相关信息的方式<code>$&#123;&#123;github.repository&#125;&#125;</code>：当前仓库的的所有者和仓库名称。<code>$&#123;&#123;steps.git_log_outputs.log&#125;&#125;</code> ：获取step id 为 git_log 的输出集。</li>
+</ul>
+<blockquote>
+<p>因为我们定义 push 为触发条件，所以当我们只有push 代码后，我们定义的 GitHub Action 才会被执行。然后在 GitHub 上的 Action 能够实时看到当前的执行状态。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2021/10/10/GitHubAction%E8%AF%A6%E8%A7%A3/">https://lxlfpeng.github.io/2021/10/10/GitHubAction%E8%AF%A6%E8%A7%A3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2021/10/18/Android%E5%AD%98%E5%82%A8%E4%B9%8B%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8%E9%80%82%E9%85%8D/" title="Android存储之分区存储适配"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Android存储之分区存储适配</div></div><div class="info-2"><div class="info-item-1">一.Android存储分区介绍1.简介Android 存储分为内部存储（Internal storage）和外部存储（External storage）。有许多用户认为外部存储意味着SD存储卡或外部硬盘，这是完全错误的认识。 2.内部存储内部存储是用于存储Android系统本身和应用程序的存储区域，Android设备中的Android系统和应用程序都是存在该内部存储区，例如手机的&#x2F;system&#x2F;目录、&#x2F;data&#x2F;等目录。...</div></div></div></a><a class="pagination-related" href="/2021/09/29/%E4%BD%BF%E7%94%A8Getx%E6%A1%86%E6%9E%B6%E7%AE%80%E5%8C%96Flutter%E5%BC%80%E5%8F%91/" title="使用Getx框架简化Flutter开发"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">使用Getx框架简化Flutter开发</div></div><div class="info-2"><div class="info-item-1">一. GetX的作用GetX 是 Flutter 上的一个轻量且强大的解决方案,包含了以下的功能.  页面状态管理(跨页面交互) 路由管理 国际化、主题的适配 全局BuildContext 无Context弹窗 依赖注入  二. GetX安装GetX 1. 引入GetX依赖在pubspec.yaml文件中添加Getx依赖: 1get: ^4.x.x 2. GetX入口配置各模块导包，均使用下面包即可 1import &#x27;package:get/get.dart&#x27;; 只需要将MaterialApp改成GetMaterialApp便可以使用GetX提供的相关功能. 123456789101112void main() &#123;  runApp(MyApp());&#125;class MyApp extends StatelessWidget &#123;  @override  Widget build(BuildContext context) &#123;    return GetMaterialApp(      home: HomePage(), ...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-GitHubAction%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">一.GitHubAction简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%85%E4%BB%80%E4%B9%88%E6%98%AFGithub-Action"><span class="toc-number">1.0.1.</span> <span class="toc-text">🧅什么是Github Action ?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8D%A4%E4%BB%80%E4%B9%88%E6%98%AFYaml"><span class="toc-number">1.0.2.</span> <span class="toc-text">🍤什么是Yaml ?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8D%9DGithub-Action%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.0.3.</span> <span class="toc-text">🍝Github Action基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8D%93Github-Action-%E7%9A%84%E4%BD%BF%E7%94%A8%E9%99%90%E5%88%B6"><span class="toc-number">1.0.4.</span> <span class="toc-text">🍓Github Action 的使用限制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-GitHubAction%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">二.GitHubAction的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%98%80workflow"><span class="toc-number">2.1.</span> <span class="toc-text">😀workflow</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%98%82name"><span class="toc-number">2.2.</span> <span class="toc-text">😂name</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%A4%A3on"><span class="toc-number">2.3.</span> <span class="toc-text">🤣on</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%98%89jobs"><span class="toc-number">2.4.</span> <span class="toc-text">😉jobs</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-job"><span class="toc-number">2.4.0.1.</span> <span class="toc-text">1.job</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-job-runs-on"><span class="toc-number">2.4.0.2.</span> <span class="toc-text">2.job-&gt;runs-on</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-job-env"><span class="toc-number">2.4.0.3.</span> <span class="toc-text">3.job-&gt;env</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-job-steps"><span class="toc-number">2.4.0.4.</span> <span class="toc-text">4.job-&gt;steps</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-Action"><span class="toc-number">2.4.0.5.</span> <span class="toc-text">5.Action</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%98%8AGitHub-Actions-%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%AF%86%E6%96%87"><span class="toc-number">2.5.</span> <span class="toc-text">😊GitHub Actions 中使用密文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%98%8EGitHubAction%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C"><span class="toc-number">2.6.</span> <span class="toc-text">😎GitHubAction执行结果</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-%E7%A4%BA%E4%BE%8B"><span class="toc-number">3.</span> <span class="toc-text">三.示例</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Okhttp3.0配置支持第三方签名Https证书 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.Https简介HTTPS全称为Hyper Text Transfer Protocol over Secure Socket Layer或是Hypertext Transfer Protocol Secure 中文含义为“超文本传输安全协议” 。是以安全为目标的HTTP通道，在HTTP的基础上通过传输加密和身份认证保证了传输过程的安全性 。HTTPS 在HTTP 的基础下加入SSL，HTTPS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Okhttp3.0配置支持第三方签名Https证书">
+<meta property="og:url" content="https://lxlfpeng.github.io/2017/06/11/Okhttp3.0%E9%85%8D%E7%BD%AE%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%AD%BE%E5%90%8DHttps%E8%AF%81%E4%B9%A6/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.Https简介HTTPS全称为Hyper Text Transfer Protocol over Secure Socket Layer或是Hypertext Transfer Protocol Secure 中文含义为“超文本传输安全协议” 。是以安全为目标的HTTP通道，在HTTP的基础上通过传输加密和身份认证保证了传输过程的安全性 。HTTPS 在HTTP 的基础下加入SSL，HTTPS">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2017-06-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.844Z">
+<meta property="article:author" content="peng">
+<meta property="article:tag" content="Okhttp">
+<meta property="article:tag" content="Https">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2017/06/11/Okhttp3.0%E9%85%8D%E7%BD%AE%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%AD%BE%E5%90%8DHttps%E8%AF%81%E4%B9%A6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Okhttp3.0配置支持第三方签名Https证书',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Okhttp3.0配置支持第三方签名Https证书</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Okhttp3.0配置支持第三方签名Https证书</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2017-06-10T16:00:00.000Z" title="发表于 2017-06-11 00:00:00">2017-06-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">741</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-Https简介"><a href="#一-Https简介" class="headerlink" title="一.Https简介"></a>一.Https简介</h1><p>HTTPS全称为Hyper Text Transfer Protocol over Secure Socket Layer或是Hypertext Transfer Protocol Secure 中文含义为“超文本传输安全协议” 。是以安全为目标的HTTP通道，<br>在HTTP的基础上通过传输加密和身份认证保证了传输过程的安全性 。HTTPS 在HTTP 的基础下加入SSL，HTTPS 的安全基础是 SSL，因此加密的详细内容就需要 SSL。 HTTPS 存在不同于 HTTP 的默认端口及一个加密&#x2F;身份验证层（在 HTTP与 TCP 之间）。<br>这个系统提供了身份验证与加密通讯方法。它被广泛用于万维网上安全敏感的通讯，例如交易支付等方面。</p>
+<h1 id="二-Okhttp支持Https"><a href="#二-Okhttp支持Https" class="headerlink" title="二.Okhttp支持Https"></a>二.Okhttp支持Https</h1><p>okhttp默认情况下是支持https协议的网站的，比如<a target="_blank" rel="noopener" href="https://www.baidu.com等,可以直接通过okhttp请求就可以获取对应的数据.需要注意的是okhttp支持的https的网站基本都是ca机构颁发的证书,/">https://www.baidu.com等，可以直接通过okhttp请求就可以获取对应的数据。需要注意的是Okhttp支持的https的网站基本都是CA机构颁发的证书，</a> 默认情况下是可以信任的。如果我们是自己签发的https证书就需要进行处理，才能正确的访问数据。</p>
+<h1 id="三-okhttp信任所有机构颁发的证书-不建议使用"><a href="#三-okhttp信任所有机构颁发的证书-不建议使用" class="headerlink" title="三.okhttp信任所有机构颁发的证书(不建议使用)"></a>三.okhttp信任所有机构颁发的证书(不建议使用)</h1><h3 id="1-实现X509TrustManager接口"><a href="#1-实现X509TrustManager接口" class="headerlink" title="1.实现X509TrustManager接口"></a>1.实现X509TrustManager接口</h3><p>1.新建TrustAllcert类实现X509TrustManager接口：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class TrustAllCerts implements X509TrustManager &#123;  </span><br><span class="line">    @Override    </span><br><span class="line">    public void checkClientTrusted(X509Certificate[] chain, String authType) &#123;&#125;  </span><br><span class="line">    </span><br><span class="line">    @Override    </span><br><span class="line">    public void checkServerTrusted(X509Certificate[] chain, String authType) &#123;&#125;  </span><br><span class="line">    </span><br><span class="line">    @Override    </span><br><span class="line">    public X509Certificate[] getAcceptedIssuers() &#123;return new X509Certificate[0];&#125;    </span><br><span class="line">&#125;    </span><br></pre></td></tr></table></figure>
+<h3 id="2-初始化OKHttpClient进行配置："><a href="#2-初始化OKHttpClient进行配置：" class="headerlink" title="2.初始化OKHttpClient进行配置："></a>2.初始化OKHttpClient进行配置：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">OkHttpClient.Builder builder = new OkHttpClient.Builder();  </span><br><span class="line">       builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);  </span><br><span class="line">       builder.sslSocketFactory(createSSLSocketFactory());  </span><br><span class="line">       builder.hostnameVerifier(new HostnameVerifier() &#123;  </span><br><span class="line">           @Override  </span><br><span class="line">           public boolean verify(String hostname, SSLSession session) &#123;  </span><br><span class="line">               return true;  </span><br><span class="line">           &#125;  </span><br><span class="line">       &#125;);  </span><br><span class="line"></span><br><span class="line">private static SSLSocketFactory createSSLSocketFactory() &#123;  </span><br><span class="line">        SSLSocketFactory ssfFactory = null;  </span><br><span class="line">  </span><br><span class="line">        try &#123;  </span><br><span class="line">            SSLContext sc = SSLContext.getInstance(&quot;TLS&quot;);  </span><br><span class="line">            sc.init(null, new TrustManager[]&#123;new TrustAllCerts()&#125;, new SecureRandom());  </span><br><span class="line">  </span><br><span class="line">            ssfFactory = sc.getSocketFactory();  </span><br><span class="line">        &#125; catch (Exception e) &#123;  </span><br><span class="line">        &#125;  </span><br><span class="line">  </span><br><span class="line">        return ssfFactory;  </span><br><span class="line">    &#125;  </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="四-okhttp配置支持自签证书-建议"><a href="#四-okhttp配置支持自签证书-建议" class="headerlink" title="四.okhttp配置支持自签证书(建议)"></a>四.okhttp配置支持自签证书(建议)</h2><h3 id="1-放置证书"><a href="#1-放置证书" class="headerlink" title="1.放置证书"></a>1.放置证书</h3><p>将证书(一般是cer结尾的文件)放到工程的assets里面。</p>
+<h3 id="2-将证书的流数据传入生成SSLSocketFactory。"><a href="#2-将证书的流数据传入生成SSLSocketFactory。" class="headerlink" title="2.将证书的流数据传入生成SSLSocketFactory。"></a>2.将证书的流数据传入生成SSLSocketFactory。</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"> public SSLSocketFactory getSslSocketFactory(InputStream certificates) &#123;</span><br><span class="line">        SSLContext sslContext = null;</span><br><span class="line">        try &#123;</span><br><span class="line">            CertificateFactory certificateFactory = CertificateFactory.getInstance(&quot;X.509&quot;);</span><br><span class="line"></span><br><span class="line">            Certificate ca;</span><br><span class="line">            try &#123;</span><br><span class="line">                ca = certificateFactory.generateCertificate(certificates);</span><br><span class="line"></span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                certificates.close();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // Create a KeyStore containing our trusted CAs</span><br><span class="line">            String keyStoreType = KeyStore.getDefaultType();</span><br><span class="line">            KeyStore keyStore = KeyStore.getInstance(keyStoreType);</span><br><span class="line">            keyStore.load(null, null);</span><br><span class="line">            keyStore.setCertificateEntry(&quot;ca&quot;, ca);</span><br><span class="line"></span><br><span class="line">            // Create a TrustManager that trusts the CAs in our KeyStore</span><br><span class="line">            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();</span><br><span class="line">            TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);</span><br><span class="line">            tmf.init(keyStore);</span><br><span class="line"></span><br><span class="line">            // Create an SSLContext that uses our TrustManager</span><br><span class="line">            sslContext = SSLContext.getInstance(&quot;TLS&quot;);</span><br><span class="line">            sslContext.init(null, tmf.getTrustManagers(), null);</span><br><span class="line"></span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return sslContext != null ? sslContext.getSocketFactory() : null;</span><br><span class="line">    &#125;</span><br><span class="line">```   </span><br><span class="line">注意:这里可以将证书放到assets文件夹里面然后获取:</span><br></pre></td></tr></table></figure>
+<p>InputStream inputStream &#x3D; null;<br>        try {<br>            inputStream &#x3D; BaseApplication.getmAppContext().getAssets().open(“s12306.cer”);<br>        } catch (IOException e) {<br>            e.printStackTrace();<br>        }</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">也可以将证书copy出来定义成字符串常量进行设置(这样就不用将证书打包到apk里面了):</span><br></pre></td></tr></table></figure>
+<p> private String BOOK12306 &#x3D; “这里填写上证书”<br>InputStream inputStream1 &#x3D; null;<br>        try {<br>            inputStream1 &#x3D; new ByteArrayInputStream(BOOK12306.getBytes(“UTF-8”));<br>        } catch (UnsupportedEncodingException e) {<br>            e.printStackTrace();<br>        }</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">### 3.对okhttp进行设置就可以了</span><br></pre></td></tr></table></figure>
+<p> OkHttpClient okHttpClient &#x3D; new OkHttpClient.Builder()<br>                .sslSocketFactory(getSslSocketFactory(inputStream))<br>                .readTimeout(7676, TimeUnit.MILLISECONDS)<br>                .connectTimeout(7676, TimeUnit.MILLISECONDS)<br>                .addInterceptor(logInterceptor)<br>                .addInterceptor(interceptor)<br>                .build();<br>&#96;&#96;&#96;</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2017/06/11/Okhttp3.0%E9%85%8D%E7%BD%AE%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%AD%BE%E5%90%8DHttps%E8%AF%81%E4%B9%A6/">https://lxlfpeng.github.io/2017/06/11/Okhttp3.0%E9%85%8D%E7%BD%AE%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%AD%BE%E5%90%8DHttps%E8%AF%81%E4%B9%A6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Okhttp/">Okhttp</a><a class="post-meta__tags" href="/tags/Https/">Https</a></div><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2017/08/01/Android%E4%B8%8A%E4%BC%A0aar%E5%88%B0Jcenter%E5%92%8CJitpack/" title="Android上传aar到Jcenter和Jitpack"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Android上传aar到Jcenter和Jitpack</div></div><div class="info-2"><div class="info-item-1">一.上传项目到Jcenter1.注册jcenter账号进入注册地址选择右边sign up here 进行注册,建议直接使用github账号授权登录。(qq，网易等邮箱很多时候收不到验证码，所以要想成功完成注册最好用google邮箱) 2.创建Repository（仓库）注册成功之后创建Repository，作为存放开源库的仓库，最好选择为公共仓库（public），仓库名称和仓库类型为maven，仓库名称在后面上传时需要用到。 3.获取 API Key登录bintray， Edit profile -&gt; API Key 可以获取上传的秘钥key，后面上传项目的时候需要使用。 4.配置引入 bintray-release插件项目根目录build.gradle配置，加入bintray-release插件 1234567891011121314151617181920buildscript &#123;       ...    repositories &#123;       ...    &#125;    dependencies &#123;       ...    ...</div></div></div></a><a class="pagination-related" href="/2017/05/19/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%90%86%E8%AE%BA%E6%80%BB%E7%BB%93-Java%E7%89%88/" title="面向对象设计模式理论总结-Java版"><img class="cover" src="/images/311e68177cc2ec89577840663136ab3e.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">面向对象设计模式理论总结-Java版</div></div><div class="info-2"><div class="info-item-1">一. 什么是UML类图?UML类图是一种结构图，用于描述一个系统的静态结构。类图以反映类结构和类之间关系为目的，用以描述软件系统的结构，是一种静态建模方法。类图中的类，与面向对象语言中的类的概念是对应的，因此又称统一建模语言，类图是使用频率最高的UML图之一。 二. 类图中的表示方式1.类在类图中的表示方式在UML类图中，类使用包含类名、属性(field) 和方法(method) 且带有分割线的矩形来表示，比如下图表示一个Employee类，它包含name、age和email这3个属性，以及modifyInfo()方法。对应代码： 123456789public class Employee &#123;    private String name;    private int age;    private String email;        public void modifyInfo() &#123;        ...   ...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-Https%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">一.Https简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-Okhttp%E6%94%AF%E6%8C%81Https"><span class="toc-number">2.</span> <span class="toc-text">二.Okhttp支持Https</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-okhttp%E4%BF%A1%E4%BB%BB%E6%89%80%E6%9C%89%E6%9C%BA%E6%9E%84%E9%A2%81%E5%8F%91%E7%9A%84%E8%AF%81%E4%B9%A6-%E4%B8%8D%E5%BB%BA%E8%AE%AE%E4%BD%BF%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">三.okhttp信任所有机构颁发的证书(不建议使用)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%9E%E7%8E%B0X509TrustManager%E6%8E%A5%E5%8F%A3"><span class="toc-number">3.0.1.</span> <span class="toc-text">1.实现X509TrustManager接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%9D%E5%A7%8B%E5%8C%96OKHttpClient%E8%BF%9B%E8%A1%8C%E9%85%8D%E7%BD%AE%EF%BC%9A"><span class="toc-number">3.0.2.</span> <span class="toc-text">2.初始化OKHttpClient进行配置：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-okhttp%E9%85%8D%E7%BD%AE%E6%94%AF%E6%8C%81%E8%87%AA%E7%AD%BE%E8%AF%81%E4%B9%A6-%E5%BB%BA%E8%AE%AE"><span class="toc-number">3.1.</span> <span class="toc-text">四.okhttp配置支持自签证书(建议)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%94%BE%E7%BD%AE%E8%AF%81%E4%B9%A6"><span class="toc-number">3.1.1.</span> <span class="toc-text">1.放置证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%B0%86%E8%AF%81%E4%B9%A6%E7%9A%84%E6%B5%81%E6%95%B0%E6%8D%AE%E4%BC%A0%E5%85%A5%E7%94%9F%E6%88%90SSLSocketFactory%E3%80%82"><span class="toc-number">3.1.2.</span> <span class="toc-text">2.将证书的流数据传入生成SSLSocketFactory。</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

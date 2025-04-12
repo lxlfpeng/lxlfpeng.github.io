@@ -1,0 +1,527 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>非关系型数据库Mongodb简介 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.MongoDB简介什么是NoSQLNoSQL：Not Only SQL ，本质也是一种数据库的技术，相对于传统数据库技术，它不会遵循一些约束，比如：sql标准、ACID属性，表结构等。优点:  满足对数据库的高并发读写； 对海量数据的高效存储和访问； 对数据库高扩展性和高可用性； 灵活的数据结构，满足数据结构不固定的场景；  缺点:  一般不支持事务； 运维人员数据维护相对复杂；  什么是Mo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="非关系型数据库Mongodb简介">
+<meta property="og:url" content="https://lxlfpeng.github.io/2021/05/25/%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93Mongodb%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.MongoDB简介什么是NoSQLNoSQL：Not Only SQL ，本质也是一种数据库的技术，相对于传统数据库技术，它不会遵循一些约束，比如：sql标准、ACID属性，表结构等。优点:  满足对数据库的高并发读写； 对海量数据的高效存储和访问； 对数据库高扩展性和高可用性； 灵活的数据结构，满足数据结构不固定的场景；  缺点:  一般不支持事务； 运维人员数据维护相对复杂；  什么是Mo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2021-05-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.855Z">
+<meta property="article:author" content="peng">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="MongoDB">
+<meta property="article:tag" content="NoSQL">
+<meta property="article:tag" content="数据存储">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2021/05/25/%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93Mongodb%E7%AE%80%E4%BB%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '非关系型数据库Mongodb简介',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">非关系型数据库Mongodb简介</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">非关系型数据库Mongodb简介</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2021-05-24T16:00:00.000Z" title="发表于 2021-05-25 00:00:00">2021-05-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-MongoDB简介"><a href="#一-MongoDB简介" class="headerlink" title="一.MongoDB简介"></a>一.MongoDB简介</h1><h3 id="什么是NoSQL"><a href="#什么是NoSQL" class="headerlink" title="什么是NoSQL"></a>什么是NoSQL</h3><p>NoSQL：Not Only SQL ，本质也是一种数据库的技术，相对于传统数据库技术，它不会遵循一些约束，比如：sql标准、ACID属性，表结构等。<br><strong>优点:</strong></p>
+<ul>
+<li>满足对数据库的高并发读写；</li>
+<li>对海量数据的高效存储和访问；</li>
+<li>对数据库高扩展性和高可用性；</li>
+<li>灵活的数据结构，满足数据结构不固定的场景；</li>
+</ul>
+<p><strong>缺点:</strong></p>
+<ul>
+<li>一般不支持事务；</li>
+<li>运维人员数据维护相对复杂；</li>
+</ul>
+<h3 id="什么是MongoDB"><a href="#什么是MongoDB" class="headerlink" title="什么是MongoDB"></a>什么是MongoDB</h3><p><a target="_blank" rel="noopener" href="http://www.mongodb.org/">MongoDB</a> 是一个基于分布式文件存储的数据库。由C++语言编写，旨在为WEB应用提供可扩展的高性能数据存储解决方案。MongoDB 将数据存储为一个文档，数据结构由键值(key&#x3D;&gt;value)对组成，MongoDB文档类似于json对象，字段值可以包含其他文档，数组及文档数组。 MongoDB是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。</p>
+<h3 id="MongoDB的特点"><a href="#MongoDB的特点" class="headerlink" title="MongoDB的特点"></a>MongoDB的特点</h3><p>MongoDB 最大的特点是他支持的查询语言非常强大，其语法有点类似于面向对象的查询语言，几乎可以实现类似关系数据库单表查询的绝大部分功能，而且还支持对数据建立索引。它是一个面向集合的，模式自由的文档型数据库。</p>
+<ul>
+<li>面向集合存储，易于存储对象类型的数据；</li>
+<li>模式自由；</li>
+<li>支持动态查询；</li>
+<li>支持完全索引，包含内部对象；</li>
+<li>支持复制和故障恢复；</li>
+<li>使用高效的二进制数据存储，包括大型对象（如视频等）；</li>
+<li>自动处理碎片，以支持云计算层次的扩展性；</li>
+<li>支持Python，PHP，Ruby，Java，C，C#，Javascript，Perl 及 C++语言的驱动程序，社区中也提供了对Erlang 及.NET 等平台的驱动程序；</li>
+<li>文件存储格式为 BSON（ JSON 的扩展）；</li>
+</ul>
+<h3 id="MongoDB的结构"><a href="#MongoDB的结构" class="headerlink" title="MongoDB的结构"></a>MongoDB的结构</h3><p>MongoDB 的逻辑结构是一种层次结构。主要由：数据(database)、集合(collection) 、文档(document)这三部分组成的:</p>
+<ul>
+<li><p>数据库（database）:<br>数据库是一个仓库，在仓库中可以存放集合。</p>
+</li>
+<li><p>集合（collection）:<br>集合类似于数组，在集合中可以存放文档。</p>
+</li>
+<li><p>文档（document）:<br>文档是数据库中的最小单位，存储和操作的内容都是文档。</p>
+</li>
+</ul>
+<p><strong>MongoDB与MySQL数据库逻辑结构概念的对比:</strong></p>
+<table>
+<thead>
+<tr>
+<th>MongoDb</th>
+<th>关系型数据库Mysql</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据库(databases)</td>
+<td>数据库(databases)</td>
+</tr>
+<tr>
+<td>集合(collections)</td>
+<td>表(table)</td>
+</tr>
+<tr>
+<td>文档(document)</td>
+<td>行(row)</td>
+</tr>
+<tr>
+<td>域(field)</td>
+<td>数据字段(column)</td>
+</tr>
+</tbody></table>
+<h3 id="MongoDB支持的数据类型"><a href="#MongoDB支持的数据类型" class="headerlink" title="MongoDB支持的数据类型"></a>MongoDB支持的数据类型</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>null</td>
+<td>用于表示空值或者不存在的字段，<code>&#123;&quot;x&quot;:null&#125;</code></td>
+</tr>
+<tr>
+<td>布尔型</td>
+<td>布尔类型有两个值true和false，<code>&#123;&quot;x&quot;:true&#125;</code></td>
+</tr>
+<tr>
+<td>数值</td>
+<td>shell默认使用64为浮点型数值{“x”：3.14}或{“x”：3}，对于整型值可以使用NumberInt(4字节符号整数)或NumberLong(8字节符号整数)，<code>&#123;&quot;x”:NumberInt(“3&quot;)&#125;&#123;&quot;x&quot;:NumberLong(&quot;3&quot;)&#125;</code></td>
+</tr>
+<tr>
+<td>字符串</td>
+<td>UTF-8字符串都可以表示为字符串类型的数据，<code>&#123;&quot;x&quot;:&quot;呵呵&quot;&#125;</code></td>
+</tr>
+<tr>
+<td>日期</td>
+<td>日期被存储为自新纪元依赖经过的毫秒数，不存储时区，<code>&#123;&quot;x&quot;:new Date()&#125;</code></td>
+</tr>
+<tr>
+<td>正则表达式</td>
+<td>查询时，使用正则表达式作为限定条件，语法与JavaScript的正则表达式相同，<code>&#123;&quot;x&quot;:/[abc]/&#125;</code></td>
+</tr>
+<tr>
+<td>数组</td>
+<td>数据列表或数据集可以表示为数组，<code>&#123;&quot;x&quot;： [&quot;a&quot;，&quot;b&quot;，&quot;c&quot;]&#125;</code></td>
+</tr>
+<tr>
+<td>内嵌文档</td>
+<td>文档可以嵌套其他文档，被嵌套的文档作为值来处理，<code>&#123;&quot;x&quot;:&#123;&quot;y&quot;:3 &#125;&#125;</code></td>
+</tr>
+<tr>
+<td>对象Id</td>
+<td>对象id是一个12字节的字符串，是文档的唯一标识，相当于UUID<code>&#123;&quot;x&quot;:objectId()&#125;</code></td>
+</tr>
+<tr>
+<td>二进制数据</td>
+<td>二进制数据是一个任意字节的字符串。它不能直接在shell中使用。如果要将非utf-字符保存到数据库中，二进制数据是唯一的方式</td>
+</tr>
+<tr>
+<td>代码</td>
+<td>查询和文档中可以包括任何JavaScript代码，<code>&#123;&quot;x&quot;:function()&#123;/…/&#125;&#125;</code></td>
+</tr>
+</tbody></table>
+<h1 id="二-Docker安装MongoDB"><a href="#二-Docker安装MongoDB" class="headerlink" title="二.Docker安装MongoDB"></a>二.Docker安装MongoDB</h1><ol>
+<li>搜索镜像</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker search mongo</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>下载镜像</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull mongo</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>创建一个文件夹，用作mongodb的数据目录挂载</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p /usr/mongodb/datadb</span><br><span class="line">#mongodb下面所有子目录给予777权限</span><br><span class="line">sudo chmod 777 -R /usr/mongodb/</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>启动MongoDB容器</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name mongodb -p 27018:27017 -v /usr/mongodb/datadb:/data/db --privileged=true --restart always mongo</span><br></pre></td></tr></table></figure>
+<p>参数介绍:</p>
+<ul>
+<li>-d 后台运行容器</li>
+<li>–name mongodb 运行容器名</li>
+<li>-p 27018:27017 将容器的27017端口映射到主机的27018端口</li>
+<li>-v &#x2F;usr&#x2F;mongodb&#x2F;datadb:&#x2F;data&#x2F;db 文件挂载： 本机:容器</li>
+<li>–privileged&#x3D;true 使得容器内的root拥有真正的root权限</li>
+<li>–restart always 跟随docker一起启动，即docker启动时会自动运行容器</li>
+<li>mongo 运行的镜像名字</li>
+</ul>
+<ol start="5">
+<li>查看MongoDB容器是否启动成功</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>进入MongoDB容器</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it mongodb /bin/bash</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>查看MongoDB信息</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongo</span><br></pre></td></tr></table></figure>
+
+<p>会输出Mongo相关信息并进入命令工具:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MongoDB shell version v5.0.9</span><br><span class="line">connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&amp;gssapiServiceName=mongodb</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h1 id="三-MongoDB相关配置"><a href="#三-MongoDB相关配置" class="headerlink" title="三.MongoDB相关配置"></a>三.MongoDB相关配置</h1><h3 id="MongoDB账户权限配置"><a href="#MongoDB账户权限配置" class="headerlink" title="MongoDB账户权限配置"></a>MongoDB账户权限配置</h3><p>默认情况下，MongoDB实例启动运行时是没有启用用户访问权限控制的，也就是说，默认是”非授权模式”(也就是不需要任何权限验证、不需要验证账户，直接在命令窗口中输入 mongo 回车，就可以进行相关操作)，这是非常不安全的(尤其是在生产环境中)为了能保障mongodb的安全可以做以下几个步骤：</p>
+<ul>
+<li>配置数据库的用户访问权限</li>
+<li>使用新的端口，默认的27017端口如果一旦知道了ip就能连接上，不太安全。</li>
+<li>设置mongodb的网络环境，最好将mongodb部署到公司服务器内网，这样外网是访问不到的。公司内部访问使用vpn等。</li>
+<li>开启安全认证。认证要同时设置服务器之间的内部认证方式，同时要设置客户端连接到集群的账号密码认证方式。</li>
+</ul>
+<h5 id="创建数据库管理员账户"><a href="#创建数据库管理员账户" class="headerlink" title="创建数据库管理员账户"></a>创建数据库管理员账户</h5><p>要添加用户，MongoDB提供了<code>db.createUser()</code>方法。添加用户时，可以为用户分配角色，授予权限。在数据库中创建的第一个用户应该具有管理其他用户的权限。</p>
+<ol>
+<li>进入mongo语法环境<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongo</span><br></pre></td></tr></table></figure></li>
+<li>创建admin数据库<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use admin</span><br></pre></td></tr></table></figure></li>
+<li>添加管理员用户<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">db.createUser(&#123;</span><br><span class="line">        user: &quot;root&quot;,</span><br><span class="line">        pwd: &quot;123&quot;,</span><br><span class="line">        customData: &#123;description:&quot;superuser&quot;&#125;,</span><br><span class="line">        roles:[&#123;role: &quot;userAdminAnyDatabase&quot; , db:&quot;admin&quot;&#125;]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></li>
+</ol>
+<ul>
+<li>user字段，为新用户的名字；</li>
+<li>pwd字段，用户的密码；</li>
+<li>cusomData字段，为任意内容，例如可以为用户全名介绍；</li>
+<li>roles字段，指定用户的角色，可以用一个空数组给新用户设定空角色。在roles字段,可以指定内置角色和用户定义的角色。超级用户的role有两种，userAdmin或者userAdminAnyDatabase(比前一种多加了对所有数据库的访问,仅仅是访问而已)。</li>
+<li>db是指定数据库的名字，admin是管理数据库。 不能用admin数据库中的用户登录其他数据库。</li>
+</ul>
+<p>一旦经过认证的用户管理员，可以使用db.createUser()去创建额外的用户。</p>
+<blockquote>
+<p>注：用户管理员只能查看当前数据库中的用户，只能查看admin数据库中创建的用户。用户管理员应只有创建用户账户的权限，而不能管理数据库或执行其他管理任务。</p>
+</blockquote>
+<h5 id="创建一个业务数据库管理员用户"><a href="#创建一个业务数据库管理员用户" class="headerlink" title="创建一个业务数据库管理员用户"></a>创建一个业务数据库管理员用户</h5><p>业务数据库管理员用户只负责某一个或几个数据库的増查改删</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">db.createUser(&#123;</span><br><span class="line">    user:&quot;user1&quot;,</span><br><span class="line">    pwd:&quot;123456&quot;,</span><br><span class="line">    customData:&#123;</span><br><span class="line">        name:&#x27;zhangsan&#x27;,</span><br><span class="line">        email:&#x27;zhangsan@qq.com&#x27;,</span><br><span class="line">        age:18,</span><br><span class="line">    &#125;,</span><br><span class="line">    roles:[</span><br><span class="line">        &#123;role:&quot;readWrite&quot;,db:&quot;db001&quot;&#125;,</span><br><span class="line">        &#123;role:&quot;readWrite&quot;,db:&quot;db002&quot;&#125;,</span><br><span class="line">        &#x27;read&#x27;// 对其他数据库有只读权限，对db001、db002是读写权限</span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>数据库用户角色：read、readWrite；<ul>
+<li>Read：允许用户读取指定数据库</li>
+<li>readWrite：允许用户读写指定数据库</li>
+</ul>
+</li>
+<li>数据库管理角色：dbAdmin、dbOwner、userAdmin;<ul>
+<li>dbAdmin：允许用户在指定数据库中执行管理函数，如索引创建、删除，查看统计或访问system.profile</li>
+<li>userAdmin：允许用户向system.users集合写入，可以在指定数据库里创建、删除和管理用户</li>
+<li>clusterAdmin：只在admin数据库中可用，赋予用户所有分片和复制集相关函数的管理权限。</li>
+</ul>
+</li>
+<li>备份恢复角色：backup、restore；</li>
+<li>所有数据库角色：readAnyDatabase、readWriteAnyDatabase、userAdminAnyDatabase、dbAdminAnyDatabase<ul>
+<li>readAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的读权限</li>
+<li>readWriteAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的读写权限</li>
+<li>userAdminAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的userAdmin权限</li>
+<li>dbAdminAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的dbAdmin权限。</li>
+</ul>
+</li>
+<li>超级用户角色：root<ul>
+<li>root：只在admin数据库中可用。超级账号，超级权限</li>
+</ul>
+</li>
+</ul>
+<h5 id="账户配置常用命令"><a href="#账户配置常用命令" class="headerlink" title="账户配置常用命令"></a>账户配置常用命令</h5><ul>
+<li>查看当前数据库中的用户  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">show users</span><br><span class="line">或：</span><br><span class="line">db.getUsers()</span><br></pre></td></tr></table></figure></li>
+<li>登录认证  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.auth(&quot;admin&quot;, &quot;123456&quot;)</span><br></pre></td></tr></table></figure></li>
+<li>创建用户  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">db.createUser(&#123;</span><br><span class="line">    user：&quot;admin&quot;,    // 用户名</span><br><span class="line">    pwd：&quot;123456&quot;,    // 密码</span><br><span class="line">    roles：[&quot;root&quot;]   // 角色</span><br><span class="line">&#125;) </span><br></pre></td></tr></table></figure></li>
+<li>修改用户密码  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">db.updateUser( &quot;admin&quot;, &#123;</span><br><span class="line">    pwd: &quot;abc666&quot;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></li>
+<li>删除用户  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.dropUser(&quot;admin&quot;)  // admin 是要删除的用户名</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="四-MongoDB操作"><a href="#四-MongoDB操作" class="headerlink" title="四.MongoDB操作"></a>四.MongoDB操作</h1><h3 id="数据库操作"><a href="#数据库操作" class="headerlink" title="数据库操作"></a>数据库操作</h3><h5 id="查看数据库"><a href="#查看数据库" class="headerlink" title="查看数据库"></a>查看数据库</h5><p>使用show dbs来查看所有的数据库:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show dbs</span><br></pre></td></tr></table></figure>
+
+<h5 id="创建-切换数据库"><a href="#创建-切换数据库" class="headerlink" title="创建&#x2F;切换数据库"></a>创建&#x2F;切换数据库</h5><p>使用use命令来切换&#x2F;创建数据库，会发现创建的数据库并不在数据库的列表中， 要显示它，需要向数据库插入一些数据:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use db_name</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注：1.use命令具有打开、 切换、 创建数据库的功能: 如果打开的这个数据库存在就是打开这个数据库。如果打开的是一个不存在的数据库(没有这个数据库名字)，那么就会创建一个同名的数据库。<br>2.在MongoDB中创建一个新的数据库时，需要向数据库中创建一个集合(collections【就像关系数据库中的表】)，并且插入一条数据，这个数据库才能创建成功。</p>
+</blockquote>
+<h5 id="显示当前选中的数据库"><a href="#显示当前选中的数据库" class="headerlink" title="显示当前选中的数据库"></a>显示当前选中的数据库</h5><p>使用db命令来显示当前数据库</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注:使用MongoDB客户端进行操作，MongoDB 中默认的数据库为 test，如果没有创建新的数据库，集合将存放在 test 数据库中。</p>
+</blockquote>
+<h5 id="删除数据库"><a href="#删除数据库" class="headerlink" title="删除数据库"></a>删除数据库</h5><ol>
+<li>先切换到要删除的数据中</li>
+</ol>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; use db_name</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>删除数据库（需要先切换到要删除的数据库）</li>
+</ol>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.dropDatabase()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注：这个命令一定要慎用，一旦该命令一执行一下当前所在数据库中的所有数据都会被清空。</p>
+</blockquote>
+<h5 id="查看当前数据库相关信息"><a href="#查看当前数据库相关信息" class="headerlink" title="查看当前数据库相关信息"></a>查看当前数据库相关信息</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.stats()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>名称、文档个数、视图、索引、大小等</p>
+</blockquote>
+<h5 id="查看集合-表"><a href="#查看集合-表" class="headerlink" title="查看集合(表)"></a>查看集合(表)</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; show tables</span><br></pre></td></tr></table></figure>
+
+<h5 id="删除集合（表）"><a href="#删除集合（表）" class="headerlink" title="删除集合（表）"></a>删除集合（表）</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.user.drop()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注：如果成功删除选定集合，则 drop() 方法返回 true，否则返回 false。</p>
+</blockquote>
+<h3 id="集合-数据表-操作"><a href="#集合-数据表-操作" class="headerlink" title="集合(数据表)操作"></a>集合(数据表)操作</h3><h5 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h5><p>往集合中插入一条数据。可以不用先创建集合，直接往里添加数据即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.user.insert(&#123;&quot;name&quot;: &quot;zhangsan&quot;&#125;)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>user就是集合(表)名，当命令执行后，数据库系统发现user是一个数据集合不存的，就自动创建一个名为user的集合，并随着数据的插入，数据库和集合也就真正的创建成功了。</p>
+</blockquote>
+<h5 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h5><p>更新数据(更新不存在的数据，会新增字段))</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.user.update(&#123;id:1&#125;,&#123;$set:&#123;age:22&#125;&#125;,true)</span><br></pre></td></tr></table></figure>
+
+<p>参考说明：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">db.collection.update(</span><br><span class="line">   &lt;query&gt;,</span><br><span class="line">   &lt;update&gt;,</span><br><span class="line">   [</span><br><span class="line">	 upsert: &lt;boolean&gt;,</span><br><span class="line">	 multi: &lt;boolean&gt;,</span><br><span class="line">	 writeConcern: &lt;document&gt;</span><br><span class="line">   ]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>query : update的查询条件，类似sql update查询内where后面的。</li>
+<li>update : update的对象和一些更新的操作符（如$，$inc…）等，也可以理解为sql update查询内set后面的</li>
+<li>upsert : 可选，这个参数的意思是，如果不存在update的记录，是否插入objNew，true为插入，默认是false，不插入。</li>
+<li>multi : 可选，mongodb 默认是false，只更新找到的第一条记录，如果这个参数为true，就把按条件查出来多条记录全部更新。</li>
+<li>writeConcern :可选，抛出异常的级别。</li>
+</ul>
+<h5 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">db.user.find()  #查询全部数据</span><br><span class="line">db.user.find(&#123;&#125;,&#123;id:1,username:1&#125;)  #只查询id与username字段</span><br><span class="line">db.user.find().count()  #查询数据条数</span><br><span class="line">db.user.find(&#123;id:1&#125;) #查询id为1的数据</span><br><span class="line">db.user.find(&#123;age:&#123;$lte:21&#125;&#125;) #查询小于等于21的数据</span><br><span class="line">db.user.find(&#123;age:&#123;$lte:21&#125;, id:&#123;$gte:2&#125;&#125;) #and查询，age小于等于21并且id大于等于2</span><br><span class="line">db.user.find(&#123;$or:[&#123;id:1&#125;,&#123;id:2&#125;]&#125;) #查询id=1 or id=2</span><br><span class="line"></span><br><span class="line">#分页查询：Skip()跳过几条，limit()查询条数</span><br><span class="line">db.user.find().limit(2).skip(1)  #跳过1条数据，查询2条数据</span><br><span class="line"></span><br><span class="line">db.user.find().sort(&#123;id:-1&#125;) #按照age倒序排序，-1为倒序，1为正序</span><br></pre></td></tr></table></figure>
+
+<p>参考说明:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.user.find([query],[fields])</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>query ：可选，使用查询操作符指定查询条件</li>
+<li>fields ：可选，使用投影操作符指定返回的键。查询时返回文档中所有键值，只需省略该参数即可（默认省略）。</li>
+</ul>
+<h5 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">db.user.remove(&#123;age:25&#125;)		#删除所有符合条件的数据</span><br><span class="line">db.user.remove(&#123;age:22&#125;,true)	#删除1条数据</span><br><span class="line">db.user.remove					#删除所有数据</span><br><span class="line"></span><br><span class="line">#为了简化操作，官方推荐使用deleteOne()与deleteMany()进行删除数据操作。</span><br><span class="line">db.user.deleteOne(&#123;id:1&#125;)</span><br><span class="line">db.user.deleteMany(&#123;&#125;)  #删除所有数据</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>参考说明：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">db.collection.remove(</span><br><span class="line">   &lt;query&gt;,</span><br><span class="line">   &#123;</span><br><span class="line">	 justOne: &lt;boolean&gt;,</span><br><span class="line">	 writeConcern: &lt;document&gt;</span><br><span class="line">   &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>query :（可选）删除的文档的条件。</li>
+<li>justOne : （可选）如果设为 true 或 1，则只删除一个文档，如果不设置该参数，或使用默认值 false，则删除所有匹配条件的文档。</li>
+<li>writeConcern :（可选）抛出异常的级别。</li>
+</ul>
+<h1 id="五-MongoDB可视化工具"><a href="#五-MongoDB可视化工具" class="headerlink" title="五.MongoDB可视化工具"></a>五.MongoDB可视化工具</h1><p>在使用MongoDB过程中，如果单单依靠命令行操作MongoDB数据库，效率不高而且查看不方便。因此我们可以借助可视化管理工具来创建数据库、管理集合和文档、运行临时查询、评估和优化查询、性能图表、构建地理查询等操作，提升工作效率。</p>
+<h3 id="COMPASS（免费）"><a href="#COMPASS（免费）" class="headerlink" title="COMPASS（免费）"></a>COMPASS（免费）</h3><p>MongoDB 官方自己推出的 GUI 可视化管理工具，功能有限。免费简洁，不支持 SQL 查询，支持性能监控。适用于 Windows，macOS 和 Linux 系统。</p>
+<p><a target="_blank" rel="noopener" href="https://www.mongodb.com/zh-cn/products/compass">官网下载地址</a></p>
+<h3 id="Robo3T（免费）"><a href="#Robo3T（免费）" class="headerlink" title="Robo3T（免费）"></a>Robo3T（免费）</h3><p>Robo 3T 前身是 Robomongo，后被 3T 公司收购，是一款免费开源的 GUI 管理工具。支持 MongoDB 4.0+，轻量级 GUI，支持语法填充等等。适用于 Windows，macOS 和 Linux 系统。<br><a target="_blank" rel="noopener" href="https://robomongo.org/">官网下载地址</a></p>
+<h3 id="Studio3T"><a href="#Studio3T" class="headerlink" title="Studio3T"></a>Studio3T</h3><p>超过 100，000 的开发人员和数据库管理员使用 Studio 3T 作为 MongoDB GUI 的首选。Studio 3T 属于收费工具，30 天的免费试用期，Studio 3T 具有更多更强大的功能并提供企业支持服务，支持副本集、独立主机和分片集群连接，支持导入导出，SQL<br>查询，语法填充，支持 MongoDB 4.0+ 等等。适用于 Windows，macOS 和 Linux。<br><a target="_blank" rel="noopener" href="https://studio3t.com/download/">官网下载地址</a></p>
+<h3 id="Navicat-for-MongoDB"><a href="#Navicat-for-MongoDB" class="headerlink" title="Navicat for MongoDB"></a>Navicat for MongoDB</h3><p>数据库管理工具，支持多种数据库的集成，已集成 MongoDB 类型，属于付费型管理工具。好处是用会了一个 DB 版的 Navicat，所有 DB 版都会很顺手，维持一套操作习惯。<br><a target="_blank" rel="noopener" href="http://www.navicat.com.cn/download/navicat-for-mongodb">官网下载地址</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2021/05/25/%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93Mongodb%E7%AE%80%E4%BB%8B/">https://lxlfpeng.github.io/2021/05/25/%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93Mongodb%E7%AE%80%E4%BB%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><a class="post-meta__tags" href="/tags/MongoDB/">MongoDB</a><a class="post-meta__tags" href="/tags/NoSQL/">NoSQL</a><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/">数据存储</a></div><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2021/05/25/Nginx%E4%BB%A3%E7%90%86%E8%BD%AC%E5%8F%91%E5%AE%9E%E7%8E%B0%E5%9F%9F%E5%90%8D%E8%AE%BF%E9%97%AE%E5%B9%B6%E4%B8%94%E9%9A%90%E8%97%8F%E7%AB%AF%E5%8F%A3%E5%8F%B7/" title="Nginx代理转发实现域名访问并且隐藏端口号"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Nginx代理转发实现域名访问并且隐藏端口号</div></div><div class="info-2"><div class="info-item-1"> docker 新建nginx 容器用于代理转发,这里必须要映射到80端口,因为访问宿主机会直接访问80端口 1docker run -d --name nginx_agent -p 80:80 nginx:latest 编辑nginx配置文件&#x2F;etc&#x2F;nginx&#x2F;conf.d&#x2F;default.conf 123456789101112131415161718192021222324server &#123;      listen       80;         #监听的端口      server_name  qinglong.cn;    #监听的URL      location / &#123;         proxy_redirect off;          proxy_set_header Host $host;          proxy_set_header X-Real-IP $remote_addr;          proxy_set_header X-Forwarded-For...</div></div></div></a><a class="pagination-related" href="/2021/05/13/Flutter%E4%B9%8B%E5%B8%B8%E8%A7%81%E6%8E%A7%E4%BB%B6/" title="Flutter之常见控件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Flutter之常见控件</div></div><div class="info-2"><div class="info-item-1">Flutter列表控件在 Flutter 中，ListView 可以沿一个方向（垂直或水平方向）来排列其所有子 Widget，常被用于需要展示一组连续视图元素的场景。ListView 构造方法:  ListView：仅适用于列表中含有少量元素的场景 ListView.build：适用于子 Widget 比较多的场景 ListView.separated：适用于需要设置分割线的场景   构造方法名 特点 使用场景    ListView 一次性创建好所有子 Widget 适用于展示少量连续子 Widget 的场景。   ListView.build 提供了子 Widget 创建方法，仅在需要展示时才创建 适用于子 Widget 较多，且视觉效果呈现某种规律性的场景。   ListView.separated 提供了子 Widget 创建方法，仅在需要展示时才创建，且提供了自定义分割线的功能 适用于子 Widget 较多，且视觉效果呈现某种规律性、每个子 Widget 之间需要分割线的场景。     1.ListView可以通过设置 children 参数，将所有子 Widget...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2021/06/10/%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93Redis%E7%AE%80%E4%BB%8B/" title="非关系型数据库Redis简介"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-10</div><div class="info-item-2">非关系型数据库Redis简介</div></div><div class="info-2"><div class="info-item-1">一.Redis简介Redis简介Redis 全称 Remote Dictionary Server（即远程字典服务），它是一个基于内存实现的键值型非关系（NoSQL）数据库， 使用 ANSI C 语言编写、遵守 BSD 协议、支持网络、可基于内存、分布式、可选持久性的键值对(Key-Value)存储数据库。 Redis的特点 Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。 Redis不仅仅支持简单的key-value类型的数据，同时还提供list，set，zset，hash等数据结构的存储。 Redis支持数据的备份，即master-slave模式的数据备份。  Redis应用场景数据库的存储方式大体可分为两大类，基于磁盘存储和基于内存存储。磁盘存储的数据库，因为磁头机械运动以及系统调用等因素导致读写效率较低。Redis 基于内存来实现数据存取，相对于磁盘来说，其读写速度要高出好几个数量级。因此Redis一般用来缓存一些经常被访问的热点数据、或者需要耗费大量资源的内容，通过把这些内容放到 Redis...</div></div></div></a><a class="pagination-related" href="/2018/07/05/Android-ORM%E6%A1%86%E6%9E%B6-GreenDao/" title="Android-ORM框架-GreenDao"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2018-07-05</div><div class="info-item-2">Android-ORM框架-GreenDao</div></div><div class="info-2"><div class="info-item-1">一.GreenDao简介GreenDAO是一个基于sqlite的对象关系映射(ORM)的数据库框架，ORM（Object Relation Mapping对象关系映射），其表现形式就是通过GreenDao将数据库和Bean对象关联起来。使用greendao可以节省自己编写SQL语句进行CRUD的时间。GreenDao官网GitHub地址 二.项目工程引入GreenDao1.引入GreenDaoIn root build.gradle file 12345678910buildscript &#123;    repositories &#123;        google()        jcenter()    &#125;    dependencies &#123;         ...        classpath &#x27;org.greenrobot:greendao-gradle-plugin:lastVersion&#x27; // add plugin    &#125;&#125; In app modules...</div></div></div></a><a class="pagination-related" href="/2020/01/12/%E4%B8%87%E5%AD%97%E9%95%BF%E6%96%87%E6%80%BB%E7%BB%93MySQL%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" title="万字长文总结MySQL关系型数据库"><img class="cover" src="/images/6d9745d8ee86584dd4929e520fb298d8.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-01-12</div><div class="info-item-2">万字长文总结MySQL关系型数据库</div></div><div class="info-2"><div class="info-item-1">数据库介绍什么是数据库？数据库的英文单词：data base，简称DB。数据库本质就是一个文件系统，它可以按照特定的格式把数据存储起来，可以方便对存储的数据进行增删改查操作。 数据库的分类目前数据库总共分为两个大类:  关系型数据库：是建立在关系模型基础上的数据库。（MySQL、Oracle、DB2、SQL Server等等）。 非关系型数据库（NO SQL）：通常指数据之间无关系的数据库。（monggodb、redis等等）。  数据库服务器、数据库和数据表的关系数据库服务器是一台安装了一个数据库管理系统（比如： MySQL）的主机，通常会开放一个远程连接的端口(例如MySQL的3306端口)来对外提供数据服务，通过数据库管理系统(MySQL)可以创建并管理管理多个数据库，一般开发人员会针对每一个应用创建一个数据库。在一个数据库中可以创建多张数据表，这些数据表是真正存储数据的载体。表的每一行称为一条记录（Record）。 SQL语言简介SQL(Structured Query...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-MongoDB%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">一.MongoDB简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFNoSQL"><span class="toc-number">1.0.1.</span> <span class="toc-text">什么是NoSQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFMongoDB"><span class="toc-number">1.0.2.</span> <span class="toc-text">什么是MongoDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MongoDB%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-number">1.0.3.</span> <span class="toc-text">MongoDB的特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MongoDB%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-number">1.0.4.</span> <span class="toc-text">MongoDB的结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MongoDB%E6%94%AF%E6%8C%81%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.0.5.</span> <span class="toc-text">MongoDB支持的数据类型</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-Docker%E5%AE%89%E8%A3%85MongoDB"><span class="toc-number">2.</span> <span class="toc-text">二.Docker安装MongoDB</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-MongoDB%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE"><span class="toc-number">3.</span> <span class="toc-text">三.MongoDB相关配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MongoDB%E8%B4%A6%E6%88%B7%E6%9D%83%E9%99%90%E9%85%8D%E7%BD%AE"><span class="toc-number">3.0.1.</span> <span class="toc-text">MongoDB账户权限配置</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%E5%91%98%E8%B4%A6%E6%88%B7"><span class="toc-number">3.0.1.0.1.</span> <span class="toc-text">创建数据库管理员账户</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E4%B8%9A%E5%8A%A1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%E5%91%98%E7%94%A8%E6%88%B7"><span class="toc-number">3.0.1.0.2.</span> <span class="toc-text">创建一个业务数据库管理员用户</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%B4%A6%E6%88%B7%E9%85%8D%E7%BD%AE%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">3.0.1.0.3.</span> <span class="toc-text">账户配置常用命令</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-MongoDB%E6%93%8D%E4%BD%9C"><span class="toc-number">4.</span> <span class="toc-text">四.MongoDB操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C"><span class="toc-number">4.0.1.</span> <span class="toc-text">数据库操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">4.0.1.0.1.</span> <span class="toc-text">查看数据库</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA-%E5%88%87%E6%8D%A2%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">4.0.1.0.2.</span> <span class="toc-text">创建&#x2F;切换数据库</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%98%BE%E7%A4%BA%E5%BD%93%E5%89%8D%E9%80%89%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">4.0.1.0.3.</span> <span class="toc-text">显示当前选中的数据库</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">4.0.1.0.4.</span> <span class="toc-text">删除数据库</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3%E4%BF%A1%E6%81%AF"><span class="toc-number">4.0.1.0.5.</span> <span class="toc-text">查看当前数据库相关信息</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E9%9B%86%E5%90%88-%E8%A1%A8"><span class="toc-number">4.0.1.0.6.</span> <span class="toc-text">查看集合(表)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E9%9B%86%E5%90%88%EF%BC%88%E8%A1%A8%EF%BC%89"><span class="toc-number">4.0.1.0.7.</span> <span class="toc-text">删除集合（表）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E5%90%88-%E6%95%B0%E6%8D%AE%E8%A1%A8-%E6%93%8D%E4%BD%9C"><span class="toc-number">4.0.2.</span> <span class="toc-text">集合(数据表)操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="toc-number">4.0.2.0.1.</span> <span class="toc-text">插入数据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE"><span class="toc-number">4.0.2.0.2.</span> <span class="toc-text">修改数据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE"><span class="toc-number">4.0.2.0.3.</span> <span class="toc-text">查询数据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="toc-number">4.0.2.0.4.</span> <span class="toc-text">删除数据</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94-MongoDB%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7"><span class="toc-number">5.</span> <span class="toc-text">五.MongoDB可视化工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#COMPASS%EF%BC%88%E5%85%8D%E8%B4%B9%EF%BC%89"><span class="toc-number">5.0.1.</span> <span class="toc-text">COMPASS（免费）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Robo3T%EF%BC%88%E5%85%8D%E8%B4%B9%EF%BC%89"><span class="toc-number">5.0.2.</span> <span class="toc-text">Robo3T（免费）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Studio3T"><span class="toc-number">5.0.3.</span> <span class="toc-text">Studio3T</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Navicat-for-MongoDB"><span class="toc-number">5.0.4.</span> <span class="toc-text">Navicat for MongoDB</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

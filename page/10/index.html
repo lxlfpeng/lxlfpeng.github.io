@@ -1,0 +1,245 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta property="og:type" content="website">
+<meta property="og:title" content="鹏哥的Blog">
+<meta property="og:url" content="https://lxlfpeng.github.io/page/10/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/page/10/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '鹏哥的Blog',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/images/home_bg.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">鹏哥的Blog</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/24/Java%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B%E5%8F%8AJvm%E8%AF%A6%E8%A7%A3/" title="Java编译过程及Jvm详解">Java编译过程及Jvm详解</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-23T16:00:00.000Z" title="发表于 2019-07-24 00:00:00">2019-07-24</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Java%E8%AF%AD%E8%A8%80/">Java语言</a></span></div><div class="content">一.Jvm简介1.JVM是什么?JVM是Java Virtual Machine(Java虚拟机)的缩写，也就是指的JVM虚拟机，是一种用于计算设备的规范，它是一个虚构出来的计算机，是通过在实际的计算机上仿真模拟各种计算机功能来实现的。众所周知，java语言是跨平台的，而JVM是java跨平台的关键之所在，JVM上执行java字节码，执行时这些字节码可以解释成具体平台的机器码，因此java拥有“一次编译，处处运行”这一跨平台能力。 2.JRE、JDK和JVM的关系JRE(Java Runtime Environment， Java运行环境)是Java平台，所有的JAVA程序都要在JRE下才能够运行，包括JVM和Java核心类库和支持文件。JDK(Java Development Kit，Java开发工具包)是用来编译、调试Java程序的开发工具包，包括Java工具(javac&#x2F;java&#x2F;jdb等)和Java基础的类库(java API )。JVM(Java Virtual Machine，...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/11/%E4%BD%BF%E7%94%A8FFmpeg%E5%91%BD%E4%BB%A4%E5%AF%B9%E9%9F%B3%E8%A7%86%E9%A2%91%E8%BF%9B%E8%A1%8C%E5%9F%BA%E7%A1%80%E7%9A%84%E7%BC%96%E8%BE%91/" title="使用FFmpeg命令对音视频进行基础的编辑">使用FFmpeg命令对音视频进行基础的编辑</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-10T16:00:00.000Z" title="发表于 2019-07-11 00:00:00">2019-07-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BC%80%E5%8F%91/">音视频开发</a></span></div><div class="content"> 一.FFmpeg基础知识1.FFmpeg简介FFmpeg的名称来自MPEG视频编码标准，前面的“FF”代表“Fast Forward”，FFmpeg是一套可以用来记录、转换数字音频、视频，并能将其转化为视频流的开源计算机程序。可以轻易地实现多种视频格式之间的相互转换。它提供了录制、转换以及流化音视频的完整解决方案。 2.安装FFmpeg ffmpeg官网下载。 配置好环境变量，比如将c:\ffmpeg\bin路径配置到环境变量中去，这样bin下面的ffmpeg.exe就可以在命令行中使用了，可以用ffmpeg...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/10/CI-CD%E5%B7%A5%E5%85%B7%E4%B9%8BJenkins/" title="CI-CD工具之Jenkins">CI-CD工具之Jenkins</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-09T16:00:00.000Z" title="发表于 2019-07-10 00:00:00">2019-07-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CI-CD/">CI/CD</a></span></div><div class="content">一.CI&#x2F;CD(持续集成&#x2F;持续部署)软件开发周期中需要一些可以帮助开发者提升速度的自动化工具。其中工具最重要的目的是促进软件项目的持续集成与交付。通过CI&#x2F;CD工具，开发团队可以保持软件更新并将其迅速的投入实践中。CI&#x2F;CD也被认为是敏捷开发的最重要实践之一。具体而言，CI&#x2F;CD 可让持续自动化和持续监控贯穿于应用的整个生命周期（从集成和测试阶段，到交付和部署）。这些关联的事务通常被统称为”CI&#x2F;CD 管道”，由开发和运维团队以敏捷方式协同支持。 1.持续集成Continuous Integration：持续集成，简称CI，是软件开发周期的一种实践，把代码仓库（Gitlab或者Github）、构建工具（如Jenkins）和测试工具（SonarQube）集成在一起，频繁的将代码合并到主干然后自动进行构建和测试。 2.持续交付Continuous...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/09/Kotlin%E6%80%BB%E7%BB%93%E4%B9%8B%E4%BA%8C%E6%95%B0%E7%BB%84%E5%92%8C%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8/" title="Kotlin总结之二数组和集合容器">Kotlin总结之二数组和集合容器</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-08T16:00:00.000Z" title="发表于 2019-07-09 00:00:00">2019-07-09</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Kotlin%E8%AF%AD%E8%A8%80/">Kotlin语言</a></span></div><div class="content">一 Kotlin中的数组1.数组的类型   kotlin java    IntArray int[]   ShortArray short[]   LongArray long[]   FloatArray float[]   DoubleArray double[]   CharArray char[]   2.数组的创建java创建数组的两种方式： 12int[] intArray = new int[6]                //表达式：数据类型[]   标识  =   new  数据类型[长度];String[] strArray = &#123;&quot;value0&quot;,&quot;value1&quot;&#125;    //表达式： 数据类型[]  标识  =...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/01/Android%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9ADataBinding/" title="Android数据绑定DataBinding">Android数据绑定DataBinding</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-06-30T16:00:00.000Z" title="发表于 2019-07-01 00:00:00">2019-07-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="content">一.DataBinding简介MVVM架构的核心就是数据驱动，数据驱动的意思就是，数据更新的时候，自动刷新UI。采用MVVM架构会节省大量的更新UI的代码，并且数据更新后主动出发UI更新这种方式，更难出错，鲁棒性更强。且不需要关注数据变化的时机，是需要关注数据变化的结果即可。 1.开启DataBinding功能 使用最新版的AndroidStudio，至少AS3.0以上。 在项目module下的build.gradle的android闭包下，配置 databinding{enabled&#x3D;true}。 对于布局的xml文件，将原有的正常布局，外面用包裹作为跟节点。节点下存放用于xml布局的一些变量，工具类之类的。   打开布局文件，选中根布局的 ViewGroup，按住 Alt + 回车键，点击 “Convert to data binding layout”，就可以生成 DataBinding 需要的布局规则  2.DataBinding简单使用(1.)声明一个数据对象12package com.peng.databindingdemo.modeldata class...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/06/28/Dart%E8%AF%AD%E8%A8%80%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" title="Dart语言编程基础">Dart语言编程基础</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-06-27T16:00:00.000Z" title="发表于 2019-06-28 00:00:00">2019-06-28</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Flutter%E5%BC%80%E5%8F%91/">Flutter开发</a></span></div><div class="content">一.Dart 简述在Dart中，一切都是对象，每个对象都是一个类的实例，所有对象都继承自Object。 Dart是强类型的，也有自动推断类型的机制。 二.变量。1.变量的声明。Dart中定义变量有两种方式，一种是静态类型语言常用的方式，显式指定变量类型，另一种则是动态语言的常用方式，不指定类型，由vm自动推断。  变量的默认值:未初始化的变量的初始值为null。甚至具有数字类型的变量最初也是null，因为在Dart中没有基础的数据类型，所有的都是对象类型.数字——就像dart中的其他东西一样是对象。  2. 显式指定类型来定义变量123456void main() &#123;  // 通过显式指定类型来定义变量  String name = &quot;张三&quot;;  num age = 18;  name = 1; //报错，显示指定的变量的类型是无法改变的&#125; 3. 隐式推导变量.无需指定变量的数据类型，变量会根据值的类型进行推导.使用关键字var. 12345678void main()...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/06/21/Flutter%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8A%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE/" title="Flutter环境搭建及项目配置">Flutter环境搭建及项目配置</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-06-20T16:00:00.000Z" title="发表于 2019-06-21 00:00:00">2019-06-21</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Flutter%E5%BC%80%E5%8F%91/">Flutter开发</a></span></div><div class="content">一. 下载安装Flutter。1.1 下载安装包Flutter SDK 1.2 下载完成后进行解压: 1.3 配置环境变量。控制面板-&gt;系统和安全-&gt;系统-&gt;高级系统设置-&gt;环境变量-&gt;path-&gt;编辑-&gt;新建 1.4 安装flutter依赖并检查。cmd命令: 1flutter doctor  1.5 查看flutter版本。1flutter doctor -v 二. Android Studio安装配置。2.1 Android studio安装dart和flutter插件。  2.2 重启Android studio创建flutter工程。 三. VsCode配置。1. vscode添加flutter支持。 2. 创建一个flutter的项目。 3.使用模拟器调试。 四. 创建或者运行项目卡住问题创建项目一直卡在Creating Flutter Project没反应。运行项目一直卡在: 1Running Gradle task &#x27;assembleDebug&#x27;...  ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/06/20/Kotlin%E6%80%BB%E7%BB%93%E4%B9%8B%E4%B8%80%E5%8F%98%E9%87%8F%E5%B8%B8%E9%87%8F%E5%8F%8A%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" title="Kotlin总结之一变量常量及流程控制">Kotlin总结之一变量常量及流程控制</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-06-19T16:00:00.000Z" title="发表于 2019-06-20 00:00:00">2019-06-20</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Kotlin%E8%AF%AD%E8%A8%80/">Kotlin语言</a></span></div><div class="content">一.Kotlin中的变量1.var 与 val var 用此关键字声明的变量，可以多次重复赋值，可读且可写，相当于Java中普通变量。  val 用此关键字声明的变量表示只读变量，即可读但不可写。相当于Java中用final修饰的变量。123456var str: String = &quot;&quot;    //str是变量名，String表明该变量是String类型变量，后面就是赋值语句。var str2= &quot;&quot;            //省略了声明变量类型，它可以根据赋的值而自动推断出类型。str=&quot;1234&quot;              //var 声明的变量可以重新赋值。val str3= &quot; &quot;           //val申明的变量不能够再次赋值str3= &quot;123456 &quot;         //再次赋值会报错...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/06/18/Android%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93%E4%B9%8B%E4%B8%89%E7%BD%91%E7%BB%9C%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF/" title="Android音视频开发总结之三网络直播技术">Android音视频开发总结之三网络直播技术</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-06-17T16:00:00.000Z" title="发表于 2019-06-18 00:00:00">2019-06-18</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="content">一. 直播流程总览目前主流的直播架构中主要有两种方案，即流媒体转发、P2P。流媒体转发，是一种在视频直播中以流的方式将连续的音、视频数据经编码压缩后传输到流媒体服务器，用户实时从服务器获取流媒体资源，而不必要等待整个文件下载文件完毕的C&#x2F;S架构视频直播方案；P2P直播，是一种建立在P2P技术基础上的视频直播方案，它规定客户端之间使用一定协议来交换和共享直播数据，通过减少对服务器的数据请求，以降低服务端的I&#x2F;O带宽等方面压力，从而削减服务器带宽成本，降低客户端卡播率。 一个直播功能通用的基础架构涉及三个部分，即音视频采集端、云服务端和音视频播放端。可以看到直播的流程可以分为如下几步： 音视频采集 —&gt;音视频处理—&gt;音视频编码和封装—&gt;推流到服务器—&gt;服务器流分发—&gt;播放器流播放如下图，是一个APP直播功能的架构：  从上图中我们可以看到，每一个部分都有各自要处理的一些工作。 总体来说，视频直播类功能的整体流程包括以下内容：  音视频采集 音视频处理 音视频编码和封装 推流 流媒体服务器处理 拉流 音视频解码 音视频播放   二....</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/06/17/Android%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93%E4%B9%8B%E4%BA%8CAndroid%E5%B9%B3%E5%8F%B0%E9%87%87%E9%9B%86%E3%80%81%E7%BC%96%E7%A0%81%E3%80%81%E8%A7%A3%E7%A0%81/" title="Android音视频开发总结之二Android平台采集、编码、解码">Android音视频开发总结之二Android平台采集、编码、解码</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-06-16T16:00:00.000Z" title="发表于 2019-06-17 00:00:00">2019-06-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="content">一. 音视频采集流程串联整个音视频录制流程，完成音视频的采集、编码、封包成 mp4 输出。通过摄像头和麦克风获得实时的音视频数据；  播放流程: 获取流—&gt;解码—&gt;播放。 录制播放路程: 录制音频视频—&gt;视频处理—&gt;编码—&gt;上传服务器-&gt;别人播放。 直播过程 : 录制音视频—&gt;编码—&gt;流媒体传输—&gt;服务器—&gt;流媒体传输到其他客户端—&gt;解码—&gt;播放。  视频采样数据 : 一般都是 YUV 或 RGB 格式 音频采样数据 :一般都是PCM格式 二.音频采集1.Android如何采集音频Android SDK对于音频采集提供两套API：MediaRecorder和AudioRecorder。 AudioRecordAudioRecord输出是PCM语音数据，得到原始的一帧帧PCM音频数据。如果保存成音频文件，是不能够被播放器播放的，所以必须先写代码实现数据编码以及压缩。一般直播技术采用的就是 AudioRecorder 采集音频数据。PCM(Pulse Code...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/9/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/#content-inner">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/#content-inner">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/#content-inner">13</a><a class="extend next" rel="next" href="/page/11/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+      <i class="fas fa-angle-right"></i></a>
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Android%E5%BC%80%E5%8F%91/"><span class="card-category-list-name">Android开发</span><span class="card-category-list-count">45</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/CI-CD/"><span class="card-category-list-name">CI/CD</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Docker%E5%AE%B9%E5%99%A8/"><span class="card-category-list-name">Docker容器</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Flutter%E5%BC%80%E5%8F%91/"><span class="card-category-list-name">Flutter开发</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Git/"><span class="card-category-list-name">Git</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/GitHub/"><span class="card-category-list-name">GitHub</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Java%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/"><span class="card-category-list-name">Java后端开发</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Java%E8%AF%AD%E8%A8%80/"><span class="card-category-list-name">Java语言</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/JetpackCompose/"><span class="card-category-list-name">JetpackCompose</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Kotlin%E8%AF%AD%E8%A8%80/"><span class="card-category-list-name">Kotlin语言</span><span class="card-category-list-count">5</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/JetpackCompose/" style="font-size: 1.5em; color: #99a9bf">JetpackCompose</a> <a href="/tags/Android%E5%BC%B9%E7%AA%97/" style="font-size: 1.1em; color: #999">Android弹窗</a> <a href="/tags/Okhttp/" style="font-size: 1.1em; color: #999">Okhttp</a> <a href="/tags/Android%E8%87%AA%E5%8A%A8%E5%8C%96/" style="font-size: 1.1em; color: #999">Android自动化</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 1.1em; color: #999">Java基础</a> <a href="/tags/Shell/" style="font-size: 1.1em; color: #999">Shell</a> <a href="/tags/Gradle/" style="font-size: 1.42em; color: #99a6b7">Gradle</a> <a href="/tags/NodeJs/" style="font-size: 1.18em; color: #999ca1">NodeJs</a> <a href="/tags/Retrofit/" style="font-size: 1.1em; color: #999">Retrofit</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" style="font-size: 1.26em; color: #999fa8">依赖注入</a> <a href="/tags/linux/" style="font-size: 1.1em; color: #999">linux</a> <a href="/tags/Vue/" style="font-size: 1.1em; color: #999">Vue</a> <a href="/tags/Flutter%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/" style="font-size: 1.1em; color: #999">Flutter状态管理</a> <a href="/tags/Android%E8%87%AA%E5%8A%A8%E5%8C%96%E6%89%93%E5%8C%85/" style="font-size: 1.1em; color: #999">Android自动化打包</a> <a href="/tags/Https/" style="font-size: 1.1em; color: #999">Https</a> <a href="/tags/AOP/" style="font-size: 1.1em; color: #999">AOP</a> <a href="/tags/Redis/" style="font-size: 1.1em; color: #999">Redis</a> <a href="/tags/Feed43/" style="font-size: 1.1em; color: #999">Feed43</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" style="font-size: 1.1em; color: #999">编程基础</a> <a href="/tags/Android%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD/" style="font-size: 1.1em; color: #999">Android文件下载</a> <a href="/tags/MacOs/" style="font-size: 1.1em; color: #999">MacOs</a> <a href="/tags/Android%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" style="font-size: 1.18em; color: #999ca1">Android逆向工程</a> <a href="/tags/%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8/" style="font-size: 1.1em; color: #999">分区存储</a> <a href="/tags/Javascript/" style="font-size: 1.1em; color: #999">Javascript</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 1.34em; color: #99a3b0">数据库</a> <a href="/tags/Android%E7%8A%B6%E6%80%81%E6%A0%8F/" style="font-size: 1.1em; color: #999">Android状态栏</a> <a href="/tags/Mysql/" style="font-size: 1.1em; color: #999">Mysql</a> <a href="/tags/%E6%8A%93%E5%8C%85/" style="font-size: 1.1em; color: #999">抓包</a> <a href="/tags/Html/" style="font-size: 1.1em; color: #999">Html</a> <a href="/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/" style="font-size: 1.1em; color: #999">音视频</a> <a href="/tags/Fiddler/" style="font-size: 1.1em; color: #999">Fiddler</a> <a href="/tags/MongoDB/" style="font-size: 1.1em; color: #999">MongoDB</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E6%9F%A5/" style="font-size: 1.1em; color: #999">代码审查</a> <a href="/tags/%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/" style="font-size: 1.1em; color: #999">切面编程</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 1.1em; color: #999">数据结构</a> <a href="/tags/wsl/" style="font-size: 1.1em; color: #999">wsl</a> <a href="/tags/CSS/" style="font-size: 1.1em; color: #999">CSS</a> <a href="/tags/Android%E5%AD%98%E5%82%A8/" style="font-size: 1.1em; color: #999">Android存储</a> <a href="/tags/Koltin/" style="font-size: 1.1em; color: #999">Koltin</a> <a href="/tags/Nginx/" style="font-size: 1.18em; color: #999ca1">Nginx</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/" title="查看更多"><i class="fas fa-angle-right"></i></a>
+    </div>
+    <ul class="card-archive-list">
+  
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2023/02/">
+          <span class="card-archive-list-date">二月 2023</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/12/">
+          <span class="card-archive-list-date">十二月 2022</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/10/">
+          <span class="card-archive-list-date">十月 2022</span>
+          <span class="card-archive-list-count">2</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/09/">
+          <span class="card-archive-list-date">九月 2022</span>
+          <span class="card-archive-list-count">4</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/08/">
+          <span class="card-archive-list-date">八月 2022</span>
+          <span class="card-archive-list-count">4</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/07/">
+          <span class="card-archive-list-date">七月 2022</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/06/">
+          <span class="card-archive-list-date">六月 2022</span>
+          <span class="card-archive-list-count">3</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/05/">
+          <span class="card-archive-list-date">五月 2022</span>
+          <span class="card-archive-list-count">4</span>
+        </a>
+      </li>
+    </ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">127</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">565.5k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-04-12T15:17:05.800Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/images/home_bg.webp);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: subtitleType => {
+    if (true) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  }
+}
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
+</script><script>function subtitleType () {
+  if (true) {
+    typedJSFn.init(["学而不思则罔，思而不学则殆","今日事&#44;今日毕"])
+  } else {
+    document.getElementById("subtitle").textContent = "学而不思则罔，思而不学则殆"
+  }
+}
+typedJSFn.run(subtitleType)</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

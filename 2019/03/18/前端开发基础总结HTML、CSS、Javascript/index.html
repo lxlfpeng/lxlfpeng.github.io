@@ -1,0 +1,563 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>前端开发基础总结HTML、CSS、Javascript | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.Html网页1. HTML标签HTML 是用来描述网页的一种语言。HTML 标签是由尖括号包围的关键词，比如  HTML 标签通常是成对出现的，比如  和 。成对出现的标签中，第一个标签称为开始标签，第二个标签称为结束标签（闭合标签）。HTML 中的不同标签具有不同的含义，学习 HTML 其实就是学习各个标签的含义，根据实际场景的需要，选择合适的标签，从而制作出精美的网页。HTML中每个标签都">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端开发基础总结HTML、CSS、Javascript">
+<meta property="og:url" content="https://lxlfpeng.github.io/2019/03/18/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93HTML%E3%80%81CSS%E3%80%81Javascript/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.Html网页1. HTML标签HTML 是用来描述网页的一种语言。HTML 标签是由尖括号包围的关键词，比如  HTML 标签通常是成对出现的，比如  和 。成对出现的标签中，第一个标签称为开始标签，第二个标签称为结束标签（闭合标签）。HTML 中的不同标签具有不同的含义，学习 HTML 其实就是学习各个标签的含义，根据实际场景的需要，选择合适的标签，从而制作出精美的网页。HTML中每个标签都">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/2e7bc322990bbb0cf755e515faa9cb11.webp">
+<meta property="article:published_time" content="2019-03-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.855Z">
+<meta property="article:author" content="peng">
+<meta property="article:tag" content="CSS">
+<meta property="article:tag" content="Javascript">
+<meta property="article:tag" content="Html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/2e7bc322990bbb0cf755e515faa9cb11.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2019/03/18/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93HTML%E3%80%81CSS%E3%80%81Javascript/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '前端开发基础总结HTML、CSS、Javascript',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/2e7bc322990bbb0cf755e515faa9cb11.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">前端开发基础总结HTML、CSS、Javascript</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">前端开发基础总结HTML、CSS、Javascript</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2019-03-17T16:00:00.000Z" title="发表于 2019-03-18 00:00:00">2019-03-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Web%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/">Web前端开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">8.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>31分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-Html网页"><a href="#一-Html网页" class="headerlink" title="一.Html网页"></a>一.Html网页</h1><h3 id="1-HTML标签"><a href="#1-HTML标签" class="headerlink" title="1. HTML标签"></a>1. HTML标签</h3><p>HTML 是用来描述网页的一种语言。HTML 标签是由尖括号包围的关键词，比如 <html> HTML 标签通常是成对出现的，比如 <b> 和 </b>。成对出现的标签中，第一个标签称为开始标签，第二个标签称为结束标签（闭合标签）。HTML 中的不同标签具有不同的含义，学习 HTML 其实就是学习各个标签的含义，根据实际场景的需要，选择合适的标签，从而制作出精美的网页。<br>HTML中每个标签都有自己的语义（含义），例如<p>标签代表段落，<b>标签代表加粗。根据标签的不同，浏览器会使用不同的方式展示标签中的内容。一般情况下，一个 HTML 标签由开始标签、属性、内容和结束标签组成，<code>标签的名称不区分大小写，但大多数属性的值需要区分大小写</code>，如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">	  属性</span><br><span class="line">	   ↓</span><br><span class="line">&lt;div class=&quot;foo&quot;&gt;C语言中文网&lt;/div&gt;</span><br><span class="line"> ↑            ↑     ↑</span><br><span class="line">开始标签        内容   结束标签</span><br></pre></td></tr></table></figure>
+<p>除了 class 属性外，开始标签中还可以包含其它属性信息，比如 id、title 等属性，当使用浏览器打开我们编写的 HTML 文档时，浏览器会从上到下依次读取文档中的内容，并根据 HTML 标签和属性将标签中的内容呈现在浏览器中。</p>
+<h3 id="2-HTML标签的通用属性"><a href="#2-HTML标签的通用属性" class="headerlink" title="2.HTML标签的通用属性"></a>2.HTML标签的通用属性</h3><p>HTML 标签中有一些通用的属性，如 id、title、class、style 等，这些通用属性可以在大多数 HTML 标签中使用。</p>
+<h5 id="1-标签的id属性"><a href="#1-标签的id属性" class="headerlink" title="(1.)标签的id属性"></a>(1.)标签的id属性</h5><p>id 属性用来赋予某个标签唯一的名称（标识符），当我们使用 CSS 或者 JavaScript 来操作这个标签时，就可以通过 id 属性来找到这个标签</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&quot;content&quot;&gt;测试代码&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="2-标签的class属性"><a href="#2-标签的class属性" class="headerlink" title="(2.)标签的class属性"></a>(2.)标签的class属性</h5><p>与 id 属性类似，class 属性也可以为标签定义名称（标识符），不同的是 class 属性在整个 HTML 文档中不必是唯一的，我们可以为多个标签定义相同的 class 属性值。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;content&quot;&gt;测试代码&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="3-标签的style属性"><a href="#3-标签的style属性" class="headerlink" title="(3.)标签的style属性"></a>(3.)标签的style属性</h5><p>使用 style 属性我们可以在 HTML 标签内部为标签定义 CSS 样式，例如设置文本的颜色、字体等</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p style=&quot;color:red;&quot;&gt;测试代码&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-HTML文档流"><a href="#3-HTML文档流" class="headerlink" title="3.HTML文档流"></a>3.HTML文档流</h3><p>文档流，又称为普通流或者常规流。在HTML中任何一个元素其实就是一个对象，也是一个盒子。文档流就是HTML在没有对样式进行设计前，网页行元素、块元素等的默认排列顺序。比如div的上下排布，p的左右排布等。</p>
+<blockquote>
+<p>浮动(float)、绝对定位(absolute)、固定定位(fixed)三种方式定位会脱离文档流(下文会讲解)。</p>
+</blockquote>
+<h3 id="4-HTML块级元素"><a href="#4-HTML块级元素" class="headerlink" title="4.HTML块级元素"></a>4.HTML块级元素</h3><p><code>定义:</code><br>正常流时，每个块级元素默认占一行高度 ，一行内添加一个块级元素后一般无法添加其他元素，元素样式的display:block都是块级元素。<br><code> 特点：</code></p>
+<ul>
+<li>总是在新行上开始。</li>
+<li>高度，行高以及外边距和内边距都可控制。</li>
+<li>宽度缺省是它的容器的100%，除非设定一个宽度。</li>
+<li>它可以容纳内联元素和其他块元素。<br><code>示例</code></li>
+</ul>
+<p>div、h1（大标题） 、 p（段落）  、hr、table</p>
+<p><img src="/images/74710f62de94973a6be0a7845e0ee3f5.webp"></p>
+<h3 id="5-HTML行内元素"><a href="#5-HTML行内元素" class="headerlink" title="5.HTML行内元素"></a>5.HTML行内元素</h3><p><code>定义:</code><br>行内元素不会另起一行,只占据它对应的标签的边框所包含内容的空间,元素样式的display : inline的都是行内元素。<br><code>特点:</code></p>
+<ul>
+<li>和其他元素都在一行上；</li>
+<li>高，行高及外边距和内边距不可改变；</li>
+<li>宽度就是它的文字或图片的宽度，不可改变</li>
+<li>内联元素只能容纳文本或者其他内联元素<br><code>示例:</code><br>a、  span、iframe、br（换行）、em（强调）、img（图片）、input、label、select 、textarea（多行文本输入框）<br><img src="/images/a248db9f323fec8ca768b80eb9f904ef.webp"></li>
+</ul>
+<h1 id="二-CSS样式"><a href="#二-CSS样式" class="headerlink" title="二.CSS样式"></a>二.CSS样式</h1><p>CSS样式全称为Cascading Style Sheets，中文翻译为“层叠样式表”，简称样式表,CSS的作用就是定义如何显示html元素，设置他的背景、字体大小颜色、边框等等。</p>
+<h3 id="1-HTML中引入CSS"><a href="#1-HTML中引入CSS" class="headerlink" title="1.HTML中引入CSS"></a>1.HTML中引入CSS</h3><p>在HTML中引入CSS共有三种方式：行内样式就是把样式写在HTML元素里面，用style属性声明样式。</p>
+<h5 id="1-行内样式表-内联样式"><a href="#1-行内样式表-内联样式" class="headerlink" title="(1.)行内样式表(内联样式)"></a>(1.)行内样式表(内联样式)</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;text style=&quot;color:red;background-color:blue&quot;&gt;hello world&lt;/text&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="2-内部样式表"><a href="#2-内部样式表" class="headerlink" title="(2.)内部样式表"></a>(2.)内部样式表</h5><p>内部样式就是把CSS代码写在HTML文件里面，不同于行内样式，它是把CSS代码集中写在HTML文件的头部，就是<head></head>标签里面，用<style></style>标签注明。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;/&gt;</span><br><span class="line">    &lt;title&gt;&lt;/title&gt;</span><br><span class="line">    &lt;style type=&quot;text/css&quot;&gt;</span><br><span class="line">        #p1&#123;</span><br><span class="line">            font-family:黑体;/*字体类型为黑体*/</span><br><span class="line">            font-size:13px;/*文字大小为12像素*/</span><br><span class="line">            font-weight:bold;/*文字加粗*/</span><br><span class="line">            font-style:normal;/*文字正常，不设置斜体*/</span><br><span class="line">            color:red;/*文字颜色为红色*/</span><br><span class="line">        &#125;</span><br><span class="line">        #p2&#123;</span><br><span class="line">            font-family:微软雅黑;/*字体类型为微软雅黑*/</span><br><span class="line">            font-size:19px;/*文字大小为16像素*/</span><br><span class="line">            font-weight:normal;/*文字正常，不加粗*/</span><br><span class="line">            font-style:italic;/*文字设置为斜体*/</span><br><span class="line">            color:#1000FF;/*文字颜色取值用16进制RGB表示*/</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div&gt;&lt;!--CSS样式统一写在头部标签里面--&gt;</span><br><span class="line">        &lt;p id=&quot;p1&quot;&gt;hello&lt;/p&gt;</span><br><span class="line">        &lt;p id=&quot;p2&quot;&gt;hello&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="3-外部样式表-常用"><a href="#3-外部样式表-常用" class="headerlink" title="(3.)外部样式表(常用)"></a>(3.)外部样式表(常用)</h5><p>在实际开发当中，一般使用外部样式，就是把HTML和CSS分别写在不同的文件里，然后在HTML中用link标签来引用。这种方式能提高网站的性能，并且能方便网站的维护。<br>.wxml文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//写在head标签中引入css文件，href属性中的为绝对路径，当前在同一级目录下</span><br><span class="line">&lt;head&gt;</span><br><span class="line">      &lt;link href=&quot;style.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">      &lt;div class=&quot;outter&quot;&gt;</span><br><span class="line">          &lt;div class=&quot;inner&quot;&gt;&lt;/div &gt;</span><br><span class="line">      &lt;/div &gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p>.wxss文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">.outter&#123;</span><br><span class="line">  </span><br><span class="line">    padding: 20px;</span><br><span class="line">	background-color: #2980B9;/*深蓝色*/</span><br><span class="line">&#125;</span><br><span class="line">.inner&#123;</span><br><span class="line"></span><br><span class="line">    margin-top: 50px;</span><br><span class="line">    width: 50px;</span><br><span class="line">    margin: 50px;</span><br><span class="line">    height: 50px;</span><br><span class="line">    background-color: blueviolet</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-CSS基础语法"><a href="#2-CSS基础语法" class="headerlink" title="2.CSS基础语法"></a>2.CSS基础语法</h3><p>CSS 的核心功能是将 CSS 属性设定为特定的值。一个属性与值的键值对被称为声明（declaration）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">color: red;</span><br></pre></td></tr></table></figure>
+<p>而如果将一个或者多个声明用 {} 包裹起来后，那就组成了一个声明块（declaration block）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    color: red;</span><br><span class="line">    text-align: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>声明块如果需要作用到对应的 HTML 元素，那还需要加上选择器。选择器和声明块组成了CSS 规则集（CSS ruleset），常简称为 CSS 规则。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">text &#123;</span><br><span class="line">    color: red;</span><br><span class="line">    text-align: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-CSS中的注释"><a href="#3-CSS中的注释" class="headerlink" title="3.CSS中的注释"></a>3.CSS中的注释</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/* 单行注释 */</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">    多行</span><br><span class="line">    注释</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-CSS选择器"><a href="#4-CSS选择器" class="headerlink" title="4.CSS选择器"></a>4.CSS选择器</h3><p>在css中，通过模式匹配规则来决定给HTML的元素应用什么样的样式。这些模式规则就被称为选择器。CSS选择器是是CSS最重要的部分之一。它们使你能够在网页上针对你想要的HTML元素设置样式。</p>
+<h5 id="1-CSS-元素（标签）选择器"><a href="#1-CSS-元素（标签）选择器" class="headerlink" title="(1.)CSS 元素（标签）选择器"></a>(1.)CSS 元素（标签）选择器</h5><p>CSS元素选择器根据元素名来选择HTML元素。在HTML中，元素名就是类似于h1、 p的东西。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">h3 &#123;</span><br><span class="line"> text-align: center;</span><br><span class="line"> color: blue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/** 设置元素p为红色 **/</span><br><span class="line">p &#123;</span><br><span class="line">　　color: red;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h5 id="2-CSS-ID-选择器"><a href="#2-CSS-ID-选择器" class="headerlink" title="(2.)CSS ID 选择器"></a>(2.)CSS ID 选择器</h5><p>ID选择器选择具有匹配的ID属性的HTML元素。由于在一个HTML文档中不能有一个以上具有相同ID的元素，这个选择器允许你选择一个单独的元素。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/** 设置 id=&quot;myid&quot; 的元素为红色 **/</span><br><span class="line">#myid &#123;</span><br><span class="line">　　color: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="3-CSS-类选择器"><a href="#3-CSS-类选择器" class="headerlink" title="(3.)CSS 类选择器"></a>(3.)CSS 类选择器</h5><p>类选择器选择具有相同的class属性的HTML元素。类选择器对于定位多个元素很有用，比如你想要匹配样式的卡片或图像。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/** 设置 calss=&quot;myclass&quot; 的元素为红色 **/</span><br><span class="line">.myClass &#123;</span><br><span class="line">　　color: red</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>多类选择器</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/** 设置 calss=&quot;myclass myotherclass&quot; 的元素为红色 **/</span><br><span class="line">.myClass.myotherclass &#123;</span><br><span class="line">　　color: red</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="4-CSS-通用选择器"><a href="#4-CSS-通用选择器" class="headerlink" title="(4.)CSS 通用选择器"></a>(4.)CSS 通用选择器</h5><p>通用选择器用来选择所有的HTML元素，这意味者你页面上的每一个元素，从标题到页脚。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/** 设置所有元素为红色 **/</span><br><span class="line">* &#123;</span><br><span class="line">　　color: red;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-CSS盒子模型"><a href="#5-CSS盒子模型" class="headerlink" title="5.CSS盒子模型"></a>5.CSS盒子模型</h3><p>html文档中的每个元素都被描绘成矩形盒子，这些矩形盒子通过一个模型来描述其占用空间，这个模型称为盒模型。<br>盒模型通过四个边界来描述：margin（外边距），border（边框），padding（内边距），content（内容区域）<br><a target="_blank" rel="noopener" href="https://upload-images.jianshu.io/upload_images/3067896-8d11825c69cff7b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></a><br>一个盒子中主要的属性就5个：width、height、padding、border、margin。如下：</p>
+<ul>
+<li>width和height：内容的宽度、高度（不是盒子的宽度、高度）。</li>
+<li>padding：内边距。</li>
+<li>border：边框。</li>
+<li>margin：外边距。</li>
+</ul>
+<h3 id="6-CSS块级-行内元素转换。"><a href="#6-CSS块级-行内元素转换。" class="headerlink" title="6.CSS块级&#x2F;行内元素转换。"></a>6.CSS块级&#x2F;行内元素转换。</h3><p>display是CSS中最重要的用于控制布局的属性。每个元素都有一个默认的 display 值，这与元素的类型有关。对于大多数元素它们的默认值通常是 block或 inline。一个 block 元素通常被叫做块级元素。一个 inline 元素通常被叫做行内元素。</p>
+<table>
+<thead>
+<tr>
+<th>块级元素</th>
+<th>行内元素</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>独占一行,默认情况下，其宽度自动填满其父元素宽度</td>
+<td>相邻的行内元素会排列在同一行里，直到一行排不下，才会换行，其宽度随元素的内容而变化</td>
+</tr>
+<tr>
+<td>可以设置width，height属性</td>
+<td>行内元素设置width，height属性无效</td>
+</tr>
+<tr>
+<td>可以设置margin和padding属性</td>
+<td>行内元素起边距作用的只有margin-left、margin-right、padding-left、padding-right，其它属性不会起边距效果。</td>
+</tr>
+<tr>
+<td>对应于display:block</td>
+<td>对应于display:inline；</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">display:block; 转化为块状元素；一个块状元素独占一行；可设宽、高、行高、顶和底边距离；宽默认为父元素的100%；</span><br><span class="line"></span><br><span class="line">display:inline;转化为行内元素；和其他元素共处一行；不可设宽、高、行高、顶和底边距离；宽即所包含的文字图片之宽；</span><br><span class="line"></span><br><span class="line">display:inline-block:可用&#123;display:inline-block;&#125;转化为内联块状元素；和其他元素共处一行；可设宽、高、行高、顶和底边距离；</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-CSS定位"><a href="#7-CSS定位" class="headerlink" title="7.CSS定位"></a>7.CSS定位</h3><p>**文档普通流:**就是元素标签正常在HTML里的顺序，块级元素从上至下排列，行内元素从左到右排列。css中有三种手段可以使一个元素脱离标准文档流，分别为<code>浮动</code>和<code>绝对定位</code>,<code>固定定位</code>。</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>absolute</td>
+<td>生成绝对定位的元素，相对于最近一级定位不是static的父元素来进行定位。元素的位置通过 “left”, “top”, “right” 以及 “bottom” 属性进行规定。</td>
+</tr>
+<tr>
+<td>relative</td>
+<td>生成相对定位的元素，相对于其所在普通的文档流位置进行定位。因此，”left:20” 会向元素的 LEFT 位置添加 20 像素。</td>
+</tr>
+<tr>
+<td>static</td>
+<td>默认值，没有定位，元素出现在正常的文档流中;</td>
+</tr>
+<tr>
+<td>fixed</td>
+<td>老IE不支持，和absolute一致，相对于窗口进行定位，当出现滚动条时，不随着滚动而滚动。元素的位置通过 “left”, “top”, “right” 以及 “bottom” 属性进行规定；</td>
+</tr>
+<tr>
+<td>sticky</td>
+<td>(CSS3)有兼容性问题，它就像是relative和fixed的合体，当在屏幕中时按常规流排版，当卷动到屏幕外时则表现如fixed。该属性的表现是现实中你见到的吸附效果。</td>
+</tr>
+</tbody></table>
+<h5 id="1-相对定位"><a href="#1-相对定位" class="headerlink" title="(1.)相对定位"></a>(1.)相对定位</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">position: relative</span><br></pre></td></tr></table></figure>
+<p><strong>元素相对于它自己原来的位置进行移动。</strong></p>
+<p><code>注意，相对定位使元素仍然占据原来的位置。</code></p>
+<p>如果将div2设置为相对定位，它会相对自己原来的位置移动，且会发现它原来的位置仍然占据着,不会被别的标签占据。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Title&lt;/title&gt;</span><br><span class="line">    &lt;style type=&quot;text/css&quot;&gt;</span><br><span class="line">        div &#123;</span><br><span class="line">            width: 100px;</span><br><span class="line">            height: 100px;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line"></span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div style=&quot;background-color: chartreuse&quot;&gt;1&lt;/div&gt;</span><br><span class="line">&lt;div style=&quot;background-color: darkblue;position: relative;top: 20px;left: 20px&quot;&gt;2&lt;/div&gt;</span><br><span class="line">&lt;div style=&quot;background-color: red&quot;&gt;3&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/b6e758f3e20254bcb74d15522bd2e5e7.webp"></p>
+<h5 id="2-绝对定位"><a href="#2-绝对定位" class="headerlink" title="(2.).绝对定位"></a>(2.).绝对定位</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">position: absolute</span><br></pre></td></tr></table></figure>
+<p>设置为绝对定位的元素框从文档流完全删除，并相对于其包含块定位，包含块可能是文档中的另一个元素或者是初始包含块。元素原先在正常文档流中所占的空间会关闭，就好像该元素原来不存在一样。元素定位后生成一个块级框，而不论原来它在正常流中生成何种类型的框。</p>
+<p>如果将div2设置为绝对定位，会发现它会相对于HTML定位，因为没有已经定位的祖先元素，且原来的位置被div3补上了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Title&lt;/title&gt;</span><br><span class="line">    &lt;style type=&quot;text/css&quot;&gt;</span><br><span class="line">        div &#123;</span><br><span class="line">            width: 100px;</span><br><span class="line">            height: 100px;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line"></span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div style=&quot;background-color: chartreuse&quot;&gt;1&lt;/div&gt;</span><br><span class="line">&lt;div style=&quot;background-color: darkblue;position: absolute;top: 20px;left: 20px&quot;&gt;2&lt;/div&gt;</span><br><span class="line">&lt;div style=&quot;background-color: red&quot;&gt;3&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/0b180a83bafb57ea557e4b22d661fb9c.webp"></p>
+<h3 id="8-CSS浮动"><a href="#8-CSS浮动" class="headerlink" title="8.CSS浮动"></a>8.CSS浮动</h3><h5 id="1-CSS浮动基础"><a href="#1-CSS浮动基础" class="headerlink" title="(1.)CSS浮动基础"></a>(1.)CSS浮动基础</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">float: left;</span><br></pre></td></tr></table></figure>
+<p><code>定义:</code><br>浮动,float，浮动的元素可以向左或向右移动，直到它的外边缘碰到包含的元素边框或另一个浮动元素的边框为止。<br><code>注意:</code><br>浮动会脱离标准文档流，所以文档的普通流的其他元素表现得就像浮动元素不存在一样。<br><strong>例子1:</strong><br><img src="/images/12f96db3c626e41ac0dcbab77c992b11.webp"><br><code>解释:</code>当框1向右浮动的时候,他会脱离文档流向右移动,直到他的右边缘碰到包含框的右边缘。<br><strong>例子2:</strong><br><img src="/images/96e5a68132a516053f66db8ad59f7e4f.webp"><br><code>解释:</code>当框1向左浮动时,他脱离文档流并且向左移动,知道他的左边缘碰到包含框的左边缘。因为它不再处于文档流中,所以他不占据空间,框2就会替代框1的位置,而由于框1浮在上方就会将框2覆盖住,使框2从视图中消失。<br><strong>例子3</strong><br><img src="/images/9d1db7b73a82c140bd7a4cfa530395e8.webp"><br><code>解释:</code>如果包含框太窄,无法容纳水平排列的三个浮动元素,那么其他的浮动块向下移动,直到有足够的空间。如果浮动元素的高度不同,那么当它们向下移动时可能被其他元素”卡住”。</p>
+<h5 id="2-float实现文字环绕"><a href="#2-float实现文字环绕" class="headerlink" title="(2.)float实现文字环绕"></a>(2.)float实现文字环绕</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">    &lt;img style=&quot;background-color: chartreuse; width: 100px;height: 100px;float: left&quot;/&gt;</span><br><span class="line">    &lt;p&gt;时光的单车飞快驶去，岁月的倒影也将消失，白天与黑夜不停的交替，轮回的四季斑驳了谁的岁月，</span><br><span class="line">        蹉跎了谁的年华。一个人静静地与岁月交错，于平淡之中细细体会生活的深意，去注视，去聆听，</span><br><span class="line">        去感受那些带着希望的别离以及那些经受沧桑的相逢，不论时光如何飞转，那些落花一样的往事，</span><br><span class="line">        依然鲜活地存在于我的脑海之中。当岁月和美丽的回忆已成为风中的叹息，我们伤感的眼里也许依</span><br><span class="line">        然残存旧时的泪痕，模糊了视线，不敢轻易触碰。&lt;/p&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/559b98249e64806d4b68c34b5b914536.webp"></p>
+<h5 id="3-CSS清除浮动"><a href="#3-CSS清除浮动" class="headerlink" title="(3.)CSS清除浮动"></a>(3.)CSS清除浮动</h5><p><code>为何要清除浮动?</code><br>清除浮动主要是为了解决，父元素因为子级元素浮动引起的内部高度为0的问题。<br><code>例如:</code><br>创建给父容器设置边框和背景色。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;div style=&quot;border-style: outset;width: 400px;background-color: darkorange&quot; &gt;</span><br><span class="line">    &lt;div style=&quot;width: 200px;height: 200px;background-color: red&quot;&gt;big&lt;/div&gt;</span><br><span class="line">    &lt;div style=&quot;width: 100px;height: 100px;background-color: chartreuse&quot;&gt;small&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/06dc83494fd894afd37e72a8c65ba680.webp" alt="正常情况"><br>将子控件设置为浮动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;div style=&quot;border-style: outset;width: 400px;background-color: darkorange&quot; &gt;</span><br><span class="line">    &lt;div style=&quot;width: 200px;height: 200px;background-color: red;float: left&quot;&gt;big&lt;/div&gt;</span><br><span class="line">    &lt;div style=&quot;width: 100px;height: 100px;background-color: chartreuse;float: left&quot;&gt;small&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/435018e62db91c884fc3b1c72b028bfb.webp" alt="父控件高度塌陷"><br>当父元素不给高度的时候，内部元素不浮动时会撑开而浮动的时候，父元素变成一条线。<br>解决方式:<br><strong>方式一:给父级元素设置高度，但一般写页面高度都是不固定的。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#father &#123;</span><br><span class="line">         height: 300px;</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>方式二:给父级元素设置overflow:hidden或overflow:auto,zoom:1是为了浏览器的兼容性（IE大家都懂的），这种方法要注意溢出的元素。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#father&#123;</span><br><span class="line">    overflow:hidden;</span><br><span class="line">    zoom:1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>方式三:给父级设置浮动，这种方法适用于本来父级就需要浮动的，如果父级不需要浮动，影响布局，还是没解决根本问题。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#father&#123;</span><br><span class="line">    float:left;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>方式四:使用before和after双伪元素清除浮动（推荐）</strong><br>这种方法是推荐使用的，bootsrtap也在使用，应该掌握，不然太low了，他的原理就是通过伪元素选择器，在div后面添加了一个clear:both的属性，跟第三种方法是一样的道理。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">.clearfix:before, .clearfix:after &#123;</span><br><span class="line">           content: &quot;&quot;;</span><br><span class="line">           display: table;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       .clearfix:after &#123;</span><br><span class="line">           clear: both;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       .clearfix &#123; /*照顾ie6*/</span><br><span class="line">           zoom: 1;</span><br><span class="line">           border-style: outset;</span><br><span class="line">           width: 400px;</span><br><span class="line">           background-color: darkorange;</span><br><span class="line"></span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;clearfix&quot;&gt;</span><br><span class="line">    &lt;div style=&quot;width: 200px;height: 200px;background-color: red;float: left;&quot;&gt;big&lt;/div&gt;</span><br><span class="line">    &lt;div style=&quot;width: 100px;height: 100px;background-color: chartreuse;float: left;&quot;&gt;small&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<h1 id="三-弹性布局Flex"><a href="#三-弹性布局Flex" class="headerlink" title="三.弹性布局Flex"></a>三.弹性布局Flex</h1><h3 id="1-Flex基础使用"><a href="#1-Flex基础使用" class="headerlink" title="1.Flex基础使用"></a>1.Flex基础使用</h3><p>网页布局在flex出来之前，是由盒模型为底子，float，position，table，百分比来进行布局的，重绘的比较多，影响性能，复杂又不好维护。flex布局，可以简便、完整、响应式地实现各种页面布局。<br><code>概念</code><br>采用Flex布局的元素，称为Flex容器（flex container），简称”容器”。（任何一个容器都可以指定为Flex布局，块级元素，行内元素也可。）<br>它的所有子元素自动成为容器成员，称为Flex项目（flex item），简称”项目”。</p>
+<p><code>主轴和交叉轴</code><br>主轴和交叉轴取决于flex-direction的取值.如果flex-direction&#x3D;raw那么水平方向上面的轴是主轴,垂直方向上面的轴是交叉轴。如果flex-direction&#x3D;column那么垂直方向上面的轴是主轴,水平方向的轴是交叉轴。<br> justify-content:用于主轴上的子元素的对齐方式。<br>align-items:用于交叉轴上的子元素的对齐方式。<br><code>注意</code><br>设为Flex布局以后，子元素的float、clear和vertical-align属性将失效。</p>
+<p>display: flex; 将对象作为弹性伸缩盒展示，用于块级元素<br>display: inline-flex; 将对象作为弹性伸缩盒展示，用于行内元素</p>
+<p><strong>例子:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;box&quot;&gt; &lt;!--容器--&gt;</span><br><span class="line">  &lt;div class=&quot;item&quot;&gt;1&lt;/div&gt; &lt;!--子项--&gt;</span><br><span class="line">  &lt;div class=&quot;item&quot;&gt;2&lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;item&quot;&gt;3&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">  width: 200px;</span><br><span class="line">  height: 200px;</span><br><span class="line">  background-color: #58a;</span><br><span class="line">&#125;</span><br><span class="line">.item &#123;</span><br><span class="line">  width: 50px;</span><br><span class="line">  height: 50px;</span><br><span class="line">  margin: 2px;</span><br><span class="line">  background-color: #fb3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-Flex-作用于Box容器上的属性"><a href="#2-Flex-作用于Box容器上的属性" class="headerlink" title="2.Flex 作用于Box容器上的属性"></a>2.Flex 作用于Box容器上的属性</h3><h5 id="1-flex-direction"><a href="#1-flex-direction" class="headerlink" title="(1.) flex-direction"></a>(1.) flex-direction</h5><p><code>定义:</code><br>用于指定Flex主轴的方向，继而决定 Flex子项在Flex容器中的位置<br><code>取值:</code><br><strong>row , row-reverse , column , column-reverse</strong><br><code>代码:</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">box &#123;</span><br><span class="line">            width: 200px;</span><br><span class="line">            height: 200px;</span><br><span class="line">            background-color: chartreuse;</span><br><span class="line">            display: flex;</span><br><span class="line">            flex-direction: column-reverse;</span><br><span class="line">            border: 5px solid red;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>1. row：</strong><br>默认值，表示水平方向从左到右排列，此时水平方向轴线为主轴<br><img src="/images/10fdef92ae6819e59c1f93d83b7da6c0.webp"></p>
+<p><strong>2. row-reverse：</strong><br>与row相反,主轴为水平方向，起点在容器的右端。<br><img src="/images/173cbfebb2520eb6e7268fd324aa6291.webp"></p>
+<p><strong>3. column：</strong><br>表示垂直方向从上到下排列，此时垂直方向轴线为主轴<br><img src="/images/026d18a4bc1ac3355fb0b70b233682b1.webp"></p>
+<p><strong>4. column-reverse：</strong><br>与column相反,主轴为垂直方向，起点在容器的下沿。<br><img src="/images/dfc029b4ba1ef5ec03095c851c868cba.webp"></p>
+<h5 id="2-flex-wrap"><a href="#2-flex-wrap" class="headerlink" title="(2.) flex-wrap"></a>(2.) flex-wrap</h5><p><code>定义:</code><br>用于指定Flex子项是否换行。<br><code>取值:</code><br>nowrap , wrap , wrap-reverse<br><code>代码:</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">           width: 200px;</span><br><span class="line">           height: 200px;</span><br><span class="line">           background-color: chartreuse;</span><br><span class="line">           display: flex;</span><br><span class="line">           flex-wrap: wrap;</span><br><span class="line">           border: 5px solid red;</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>1. nowrap</strong><br>默认值，表示不换行，Flex子项平均分配。(不换行，在一行显示，即使子元素的宽度或者高度大于父元素的宽度或者高度，也在一行显示)<br><img src="/images/7483f20b66fe7aecb448d8a655a82ca1.webp"></p>
+<p><strong>2. wrap</strong><br>表示换行，溢出的Flex子项会被放到下一行。(解决间距的方式就是将Flex子项的父项目的高度设置为两行的高度)<br><img src="/images/d5d07ed0db354f050a23ba9ee4d68a1b.webp"></p>
+<p><strong>3. wrap-reverse</strong><br>表示反方向换行(换行后有两条轴线，reverse就是把轴线排列的顺序倒置过来)<br><img src="/images/9b89e840d154f89c6299df7ef11ea185.webp"></p>
+<h5 id="3-justify-content"><a href="#3-justify-content" class="headerlink" title="(3.) justify-content"></a>(3.) justify-content</h5><p><code>定义:</code><br>用于指定主轴(水平方向)上Flex子项的对齐方式<br><code>取值</code><br>flex-start , flex-end , center , space-between , space-around<br><code>代码:</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">           width: 200px;</span><br><span class="line">           height: 200px;</span><br><span class="line">           background-color: chartreuse;</span><br><span class="line">           display: flex;</span><br><span class="line">           justify-content:flex-start;</span><br><span class="line">           border: 5px solid red;</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>1. flex-start</strong><br>start侧对齐，左对齐<br><img src="/images/c8021353ce18fe74858f5e30c4fe29ce.webp"></p>
+<p><strong>2. flex-end</strong><br>end侧对齐，右对齐<br><img src="/images/7ed7606cc3c0a857e9d22f8509b95897.webp"></p>
+<p><strong>3. center</strong><br>中心对齐<br><img src="/images/d76841875c7e3a10473d25f5e5b8a3a7.webp"></p>
+<p><strong>4. space-between</strong><br>左边的靠左对齐,右边的靠右对齐,中间的等距排列。(两端对齐)<br><img src="/images/e46faa4e3a20d52483da4f512c38e7fd.webp"></p>
+<p><strong>5. space-around</strong><br>对于flex的子元素他们每侧的距离均相等(等距分布)<br>1和2之间的距离包含了1的下边距和2的上边距。<br><img src="/images/c8b571251e4f706b7c32d8362a12572d.webp"></p>
+<h5 id="4-align-items"><a href="#4-align-items" class="headerlink" title="(4.) align-items"></a>(4.) align-items</h5><p><code>定义</code><br>用于指定交叉轴(又叫侧轴指的是垂直方向)上Flex子项的对齐方式<br><code>取值</code><br>stretch , flex-start , flex-end , center , baseline<br><code>代码</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">            width: 200px;</span><br><span class="line">            height: 200px;</span><br><span class="line">            background-color: chartreuse;</span><br><span class="line">            display: flex;</span><br><span class="line">            align-items:flex-start;</span><br><span class="line">            border: 5px solid red;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>1. stretch</strong><br>默认值，当Flex子项未设置高度或者高度值为auto时，stretch起作用，将Flex子项高度设置为行高度。这里需要注意，在只有一行的情况下，行的高度为容器的高度，即Flex子项高度为容器的高度<br><img src="/images/140e7df5036346f3923a1ae9772ee34e.webp"></p>
+<p><strong>2. flex-start</strong><br>表示与侧轴开始位置对齐<br><img src="/images/44c0b4a2aed467d7f0346435c8d4954f.webp"><br><strong>3. flex-end</strong><br>表示与侧轴的结束位置对齐<br><img src="/images/bae260cb8467f068cfb2f007bdfa2cf1.webp"></p>
+<p><strong>4. center</strong><br>表示与侧轴中间对齐<br><img src="/images/1a8d1d4c5acee87f427d3471834dc7f5.webp"></p>
+<p><strong>5. baseline</strong><br>表示基线对齐，当行内轴与侧轴在同一线上，即所有Flex子项的基线在同一线上时，效果等同于flex-start。<br><img src="/images/f0b08fecebdf9a93a5e560e62d9d0f4a.webp"></p>
+<h5 id="5-align-content"><a href="#5-align-content" class="headerlink" title="(5.) align-content"></a>(5.) align-content</h5><p><code>定义:</code><br>该属性只作用于多行的情况下，用于多行的对齐方式<br><code>取值:</code><br>stretch , flex-start , flex-end , center , space-between , space-around</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">            width: 200px;</span><br><span class="line">            height: 200px;</span><br><span class="line">            background-color: chartreuse;</span><br><span class="line">            display: flex;</span><br><span class="line">            align-content:flex-start;</span><br><span class="line">            border: 5px solid red;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>1. stretch</strong><br>默认值，当Flex子项未设置高度或者高度值为auto时，stretch起作用，将Flex子项高度设置为行高度。<br><strong>2. flex-start</strong><br>表示各行与侧轴开始位置对齐，第一行紧靠侧轴开始边界，之后的每一行都紧靠前面一行<br>flex-end：表示各行与侧轴的结束位置对齐，最后一行紧靠侧轴结束边界，之后的每一行都紧靠前面一行<br><strong>3. flex-start</strong><br>表示各行与侧轴中间对其<br><strong>4. space-between</strong><br>表示两端对齐，中间间距相等。要注意特殊情况，当剩余空间为负数时，效果等同于flex-start<br>space-around：表示各行之间间距相等，中间间距是两端间距的2倍。要注意特殊情况，当剩余空间为负数时，效果等同于center<br>再次强调：该属性只作用于多行的情况，在只有一行的Flex容器上无效，另外该属性可以很好的处理，换行以后相邻行之间产生的间距。</p>
+<h3 id="3-Flex-作用于子项上的6个属性介绍"><a href="#3-Flex-作用于子项上的6个属性介绍" class="headerlink" title="3. Flex 作用于子项上的6个属性介绍"></a>3. Flex 作用于子项上的6个属性介绍</h3><h5 id="1-order"><a href="#1-order" class="headerlink" title="(1.)  order"></a>(1.)  order</h5><p>该属性用来指定Flex子项的排列顺序，数值越小，越靠前，可以为负数</p>
+<p>取值：数值，默认值为0</p>
+<h5 id="2-flex-grow"><a href="#2-flex-grow" class="headerlink" title="(2.)  flex-grow"></a>(2.)  flex-grow</h5><p>用来指定Flex子项的扩展比例，不可以为负数，Flex容器会根据Flex子项设置的扩展比例作为比率来分配剩余空间</p>
+<p>取值：数值，默认值为0，表示即使存在剩余空间，Flex子项也不会扩展</p>
+<h5 id="3-flex-shrink"><a href="#3-flex-shrink" class="headerlink" title="(3.)  flex-shrink"></a>(3.)  flex-shrink</h5><p>用来指定Flex子项的收缩比例，不可以为负数，Flex容器会根据Flex子项设置的收缩比例作为比率来收缩各个Flex子项</p>
+<p>取值：数值，默认值为1，表示所有子项在剩余空间为负数时，等比例收缩</p>
+<p>注意：flex-shrink只能在不换行的情况下使用</p>
+<h5 id="4-flex-basis"><a href="#4-flex-basis" class="headerlink" title="(4.)flex-basis"></a>(4.)flex-basis</h5><p>用来指定Flex子项的占据的空间，不可以为负数</p>
+<p>取值：auto | length | percentage | content</p>
+<p>auto：默认值，计算规则：检索Flex子项是否设置了width值（或者height值，取决于flex-direction），如果设置了非auto的值，则使用width值（或者height值），若没有则使用content<br>length：用长度值定义宽度，不可为负数<br>percentage：使用百分比定义宽度，不可为负数</p>
+<p>容器宽度为200px，Item1原始宽度为50px，设置 flex-basis: 50%;后宽度变成100px，扩展后宽度为110.5px；而Item2原始宽度为50px，扩展后为81.5px，比例正好是1:3</p>
+<h1 id="四-JavaScript简介"><a href="#四-JavaScript简介" class="headerlink" title="四.JavaScript简介"></a>四.JavaScript简介</h1><p>JavaScript一种直译式脚本语言，是一种<code>动态类型</code>、<code>弱类型</code>、基于原型的语言，内置支持类型。它的解释器被称为JavaScript引擎，为浏览器的一部分，广泛用于客户端的脚本语言，最早是在HTML（标准通用标记语言下的一个应用）网页上使用，用来给HTML网页增加动态功能。</p>
+<h3 id="1-JavaScript发展"><a href="#1-JavaScript发展" class="headerlink" title="1.JavaScript发展"></a>1.JavaScript发展</h3><h5 id="1-ECMAScript"><a href="#1-ECMAScript" class="headerlink" title="(1.)ECMAScript"></a>(1.)ECMAScript</h5><p>因为JavaScript兼容于ECMA标准，因此也称为ECMAScript。JavaScript 由 ECMA（欧洲电脑制造商协会）通过 ECMAScript 实现语言的标准化。<br><img src="/images/dd79e9f6bbb82f237ff46382663b8e56.webp"></p>
+<h5 id="2-TypeScript"><a href="#2-TypeScript" class="headerlink" title="(2.)TypeScript"></a>(2.)TypeScript</h5><p>TypeScript 是 JavaScript 的一个超集(TypeScript包含所有的JavaScript功能)，支持 ECMAScript 6 标准。TypeScript 由微软开发的自由和开源的编程语言。</p>
+<h5 id="3-JavaScript常见框架"><a href="#3-JavaScript常见框架" class="headerlink" title="(3.)JavaScript常见框架"></a>(3.)JavaScript常见框架</h5><p> <code>AngularJS、ReactJS、VueJS、NodeJS</code></p>
+<h3 id="2-HTML中引入JavaScript"><a href="#2-HTML中引入JavaScript" class="headerlink" title="2.HTML中引入JavaScript"></a>2.HTML中引入JavaScript</h3><h5 id="1-HTML引入内部的-JavaScript"><a href="#1-HTML引入内部的-JavaScript" class="headerlink" title="(1.)HTML引入内部的 JavaScript"></a>(1.)HTML引入内部的 JavaScript</h5><p>如需在 HTML 页面中插入 JavaScript，<script> 和 </script> 会告诉 JavaScript 在何处开始和结束。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">function myFunction()&#123;</span><br><span class="line">	alert(&quot;JavaScript运行了&quot;);</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;button type=&quot;button&quot; onclick=&quot;myFunction()&quot;&gt;点击这里&lt;/button&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-HTML引入外部的-JavaScript"><a href="#2-HTML引入外部的-JavaScript" class="headerlink" title="(2.)HTML引入外部的 JavaScript"></a>(2.)HTML引入外部的 JavaScript</h5><p>也可以把脚本保存到外部文件中。外部文件通常包含被多个网页使用的代码。<br>外部 JavaScript 文件的文件扩展名是 .js。<br>如需使用外部文件，请在 <script> 标签的 "src" 属性中设置该 .js 文件：<br>myJs.js:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function myFunction()&#123;</span><br><span class="line">	alert(&quot;JavaScript运行了&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>html:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;script src=&quot;myJs.js&quot;&gt;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;button type=&quot;button&quot; onclick=&quot;myFunction()&quot;&gt;点击这里&lt;/button&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<h1 id="五-JavaScript语法"><a href="#五-JavaScript语法" class="headerlink" title="五.JavaScript语法"></a>五.JavaScript语法</h1><h3 id="1-JavaScript变量"><a href="#1-JavaScript变量" class="headerlink" title="1.JavaScript变量"></a>1.JavaScript变量</h3><p>JavaScript的变量是松散类型的,不用给变量指定数据类型,它会根据变量的值推导出自己的数据类型。</p>
+<h4 id="1-变量的定义规则"><a href="#1-变量的定义规则" class="headerlink" title="(1.)变量的定义规则"></a>(1.)变量的定义规则</h4><ul>
+<li>变量必须以字母开头</li>
+<li>变量也能以 $ 和 _ 符号开头（不推荐）</li>
+<li>变量名称对大小写敏感（y 和 A 是不同的变量）<br><code>JavaScript 语句和 JavaScript 变量都对大小写敏感。 </code></li>
+</ul>
+<h4 id="2-变量作用域"><a href="#2-变量作用域" class="headerlink" title="(2.)变量作用域"></a>(2.)变量作用域</h4><h5 id="全局作用域-全局变量"><a href="#全局作用域-全局变量" class="headerlink" title="全局作用域(全局变量)"></a>全局作用域(全局变量)</h5><ol>
+<li>生命周期将存在于整个程序之内。</li>
+<li>在函数定义外声明的变量是全局变量。</li>
+<li>全局变量有 全局作用域，它的值可在整个程序中访问和修改。</li>
+<li>如果变量在函数内没有声明（没有使用 var 关键字），该变量为全局变量。<br><strong>显式声明：</strong><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    var testFile = 123456;</span><br><span class="line">    var testFunc = function () &#123;</span><br><span class="line">        console.log(&#x27;test&#x27;)</span><br><span class="line">    &#125;;</span><br><span class="line">    console.log(window.testFunc)        // ƒ () &#123; console.log(&#x27;test&#x27;) &#125;</span><br><span class="line">    console.log(window.testFile)		// 123456</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<strong>隐式声明：</strong><br>不带有声明关键字的变量,会被声明成全局变量。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    function test() &#123;</span><br><span class="line">        result = 123;	                // 没有var等修饰</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    test()                              //调用该方法</span><br><span class="line">    console.log(window.result);			// 123</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h5 id="函数作用域-局部变量"><a href="#函数作用域-局部变量" class="headerlink" title="函数作用域(局部变量)"></a>函数作用域(局部变量)</h5><ol>
+<li>在函数定义内声明的变量是局部变量。</li>
+<li>因为局部变量只作用于函数内，所以不同的函数可以使用相同名称的变量。</li>
+<li>每当执行函数时，都会创建和销毁该变量，且无法通过函数之外的任何代码访问该变量。</li>
+<li>函数外无法访问函数内的变量，函数内却可以访问函数外的变量。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function bar() &#123;</span><br><span class="line">      var testValue = &#x27;inner&#x27;;</span><br><span class="line">  &#125;</span><br><span class="line">  bar()</span><br><span class="line">  console.log(testValue);		// 报错：ReferenceError: testValue is not defined</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h5 id="块级作用域"><a href="#块级作用域" class="headerlink" title="块级作用域"></a>块级作用域</h5><p>块级作用域指在If语句，switch语句，循环语句等语句块中定义变量，这意味着变量不能在语句块之外被访问。如果想要实现 块级作用域 那么我们需要用 let 关键字声明。<br>var声明的变量不能实现块级作用域</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for(var i = 0; i &lt; 5; i++) &#123;</span><br><span class="line">  // ...</span><br><span class="line">&#125;</span><br><span class="line">console.log(i)				// 5</span><br></pre></td></tr></table></figure>
+<p>let声明的变量是可以实现块级作用域</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (true) &#123;</span><br><span class="line">  const a = &#x27;inner&#x27;;</span><br><span class="line">&#125;</span><br><span class="line">console.log(a);				// 报错：ReferenceError: a is not defined</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-JavaScript数据类型"><a href="#2-JavaScript数据类型" class="headerlink" title="2.JavaScript数据类型"></a>2.JavaScript数据类型</h3><h5 id="1-基本数据类型"><a href="#1-基本数据类型" class="headerlink" title="(1.)基本数据类型"></a>(1.)基本数据类型</h5><p>字符串（String）、数字(Number)、布尔(Boolean)、对空（Null）、未定义（Undefined）</p>
+<h5 id="2-引用数据类型"><a href="#2-引用数据类型" class="headerlink" title="(2.)引用数据类型"></a>(2.)引用数据类型</h5><p>对象(Object)、数组(Array)、函数(Function)。</p>
+<h5 id="3-类型判断"><a href="#3-类型判断" class="headerlink" title="(3.)类型判断"></a>(3.)类型判断</h5><p><strong>typeof</strong><br>typeof返回一个表示数据类型的字符串，返回结果包括：number、string、boolean、object、undefined、function。typeof可以对基本类型number、string  、boolean、undefined做出准确的判断,而对于引用类型，除了function之外返回的都是object。<br><strong>constructor</strong><br>constructor 属性返回所有 JavaScript 变量的构造函数。</p>
+<h5 id="4-类型转换"><a href="#4-类型转换" class="headerlink" title="(4.)类型转换"></a>(4.)类型转换</h5><p>全局方法 String() 可以将数字转换为字符串。<br>全局方法 Number() 可以将字符串转换为数字。</p>
+<h3 id="3-JavaScript数据容器"><a href="#3-JavaScript数据容器" class="headerlink" title="3.JavaScript数据容器"></a>3.JavaScript数据容器</h3><h4 id="1-创建数组"><a href="#1-创建数组" class="headerlink" title="(1.)创建数组"></a>(1.)创建数组</h4><p>一般有两种方式进行定义。<br><strong>方式一:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var array=new Array(); </span><br><span class="line">array[0]=&quot;1&quot;;       </span><br><span class="line">array[1]=&quot;2&quot;;</span><br><span class="line">array[2]=&quot;3&quot;;</span><br></pre></td></tr></table></figure>
+<p><strong>方式二:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var array=[&quot;1&quot;,&quot;2&quot;,&quot;3&quot;];</span><br></pre></td></tr></table></figure>
+<h4 id="2-数组元素访问"><a href="#2-数组元素访问" class="headerlink" title="(2.)数组元素访问"></a>(2.)数组元素访问</h4><p>使用array[角标] 取出元素。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var array=[&quot;1&quot;,&quot;2&quot;,&quot;3&quot;];</span><br><span class="line">var index=array[0];//取出数组的第一个元素</span><br></pre></td></tr></table></figure>
+<h4 id="3-数组常用方法"><a href="#3-数组常用方法" class="headerlink" title="(3.)数组常用方法"></a>(3.)数组常用方法</h4><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>arr.lenth</td>
+<td>返回数组的长度</td>
+</tr>
+<tr>
+<td>arr.push(value1, ..., valueN)</td>
+<td>在数组末尾增加一个或多个数组元素，并返回增加元素后的数组长度。</td>
+</tr>
+<tr>
+<td>arr.unshift(value1, ..., valueN)</td>
+<td>在数组头部增加一个或多个数组元素，并返回增加元素后的数组长度。</td>
+</tr>
+<tr>
+<td>arr.shift()</td>
+<td>删除数组的第一个元素，并返回该被删元素的值。</td>
+</tr>
+<tr>
+<td>arr.splice(start,delteCount)</td>
+<td>从start指定的位置开始，删除delteCount个数组元素。</td>
+</tr>
+<tr>
+<td>arr.cancat(array1,array2,...)</td>
+<td>将多个数组合并为一个新的数组。</td>
+</tr>
+<tr>
+<td>arr.join(separator)</td>
+<td>使用指定的分隔符（separator）将数组元素依次拼接起来，形成一个字符串返回。</td>
+</tr>
+<tr>
+<td>arr.reverse()</td>
+<td>颠倒数组中元素的顺序。</td>
+</tr>
+<tr>
+<td>arr.slice(start,end)</td>
+<td>从现有数组中提取指定个数的数据元素，形成一个新的数组。所提取元素的下标从start开始，到end结束，但不包括end。</td>
+</tr>
+<tr>
+<td>arr.sort(orderfunc)</td>
+<td>将数组元素排序。参数orderfunc可选。省略该参数时，按字母顺序或汉字的拼音方式排序。可以使用orderfunc来指定排序方式。orderfunc为排序函数的名称，该函数应该使用两个参数，并返回一个整数值。返回值的要求是：当第一个参数大于第二个参数时，返回值大于0；当第一个参数等于第二个参数时，返回值等于0；当第一个参数小于第二个参数时，返回值小于0。</td>
+</tr>
+<tr>
+<td>arr.toString()</td>
+<td>返回数组的字符串表示。</td>
+</tr>
+</tbody></table>
+<h4 id="4-清空数组"><a href="#4-清空数组" class="headerlink" title="(4.)清空数组"></a>(4.)清空数组</h4><p><strong>方式一:给数组的长度赋值为0</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var arr = [1,2,3];</span><br><span class="line">arr.lenth=1</span><br></pre></td></tr></table></figure>
+<p><strong>方式二:使用slice函数</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var arr = [1,2,3];</span><br><span class="line">arr .splice(0,arr .length);</span><br></pre></td></tr></table></figure>
+<p><strong>方式三:给数组赋值为[]</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var arr = [1,2,3];</span><br><span class="line">arr=[]</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-JavaScript运算符"><a href="#4-JavaScript运算符" class="headerlink" title="4.JavaScript运算符"></a>4.JavaScript运算符</h3><h4 id="1-JavaScript-算数运算符。"><a href="#1-JavaScript-算数运算符。" class="headerlink" title="(1.)JavaScript 算数运算符。"></a>(1.)JavaScript 算数运算符。</h4><p><code>+加法 - 减法 *乘法 /除法 %系数 ++递加 --递减</code></p>
+<h4 id="2-JavaScript-赋值运算符。"><a href="#2-JavaScript-赋值运算符。" class="headerlink" title="(2.)JavaScript 赋值运算符。"></a>(2.)JavaScript 赋值运算符。</h4><p><code>=	+=	-=	*=	/=	%=</code></p>
+<h4 id="3-JavaScript-比较运算符。"><a href="#3-JavaScript-比较运算符。" class="headerlink" title="(3.)JavaScript 比较运算符。"></a>(3.)JavaScript 比较运算符。</h4><p><img src="/images/a6229cd2d60cec037981867bba4ae714.webp"></p>
+<h4 id="4-JavaScript-逻辑运算符。"><a href="#4-JavaScript-逻辑运算符。" class="headerlink" title="(4.)JavaScript 逻辑运算符。"></a>(4.)JavaScript 逻辑运算符。</h4><p><img src="/images/ea2b695272c82c5ca944f47382940aa7.webp"></p>
+<h3 id="5-JavaScript流程控制"><a href="#5-JavaScript流程控制" class="headerlink" title="5.JavaScript流程控制"></a>5.JavaScript流程控制</h3><h4 id="1-判断语句"><a href="#1-判断语句" class="headerlink" title="(1.)判断语句"></a>(1.)判断语句</h4><p>if 语句 - 只有当指定条件为 true 时，使用该语句来执行代码<br>if...else 语句 - 当条件为 true 时执行代码，当条件为 false 时执行其他代码<br>if...else if....else 语句- 使用该语句来选择多个代码块之一来执行</p>
+<h4 id="2-选择语句"><a href="#2-选择语句" class="headerlink" title="(2.)选择语句"></a>(2.)选择语句</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">switch(n)</span><br><span class="line">&#123;</span><br><span class="line">    case 1:</span><br><span class="line">        执行代码块 1</span><br><span class="line">        break;</span><br><span class="line">    case 2:</span><br><span class="line">        执行代码块 2</span><br><span class="line">        break;</span><br><span class="line">    default:</span><br><span class="line">        与 case 1 和 case 2 不同时执行的代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-循环语句"><a href="#3-循环语句" class="headerlink" title="(3.)循环语句"></a>(3.)循环语句</h4><h5 id="for循环"><a href="#for循环" class="headerlink" title="for循环"></a>for循环</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for (var i=0; i&lt;5; i++)</span><br><span class="line">&#123;</span><br><span class="line">      x=x + &quot;该数字为 &quot; + i + &quot;&lt;br&gt;&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>For/In 循环</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var person=&#123;fname:&quot;John&quot;,lname:&quot;Doe&quot;,age:25&#125;; </span><br><span class="line"> </span><br><span class="line">for (x in person)  // x 为属性名</span><br><span class="line">&#123;</span><br><span class="line">    txt=txt + person[x];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="while-循环"><a href="#while-循环" class="headerlink" title="while 循环"></a>while 循环</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">while (条件)</span><br><span class="line">&#123;</span><br><span class="line">    需要执行的代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="4-Break-和-Continue-语句"><a href="#4-Break-和-Continue-语句" class="headerlink" title="(4.)Break 和 Continue 语句"></a>(4.)Break 和 Continue 语句</h4><ul>
+<li>break 语句用于跳出循环。</li>
+<li>continue 用于跳过循环中的一个迭代。</li>
+</ul>
+<h3 id="6-JavaScript函数"><a href="#6-JavaScript函数" class="headerlink" title="6.JavaScript函数"></a>6.JavaScript函数</h3><h4 id="1-JavaScript函数的分类"><a href="#1-JavaScript函数的分类" class="headerlink" title="(1.)JavaScript函数的分类"></a>(1.)JavaScript函数的分类</h4><ul>
+<li>自定义函数(我们自己编写的函数)，如：function funName(){}</li>
+<li>系统函数(JavaScript自带的函数)，如alert函数。</li>
+</ul>
+<h4 id="2-函数声明"><a href="#2-函数声明" class="headerlink" title="(2.)函数声明"></a>(2.)函数声明</h4><p>JavaScript 使用关键字 function 定义函数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function functionName(parameters) &#123;</span><br><span class="line">  执行的代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-JavaScript对象"><a href="#7-JavaScript对象" class="headerlink" title="7.JavaScript对象"></a>7.JavaScript对象</h3><h4 id="1-创建对象。"><a href="#1-创建对象。" class="headerlink" title="(1.)创建对象。"></a>(1.)创建对象。</h4><p><strong>方式一:通过object创建</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var person = new Object();</span><br><span class="line">person.name = &quot;peng&quot;;</span><br><span class="line">person.age = 27;</span><br></pre></td></tr></table></figure>
+<p><strong>方式一:通过”字面量“方式创建。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var person =&#123;</span><br><span class="line">  name: &quot;peng&quot;,</span><br><span class="line">  age: 27,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-对象属性访问。"><a href="#2-对象属性访问。" class="headerlink" title="(2.)对象属性访问。"></a>(2.)对象属性访问。</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var person =&#123;</span><br><span class="line">  name: &quot;peng&quot;,</span><br><span class="line">  age: 27,</span><br><span class="line">&#125;</span><br><span class="line">person.name//获取name元素</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-JavaScript类的导出与导入"><a href="#8-JavaScript类的导出与导入" class="headerlink" title="8.JavaScript类的导出与导入"></a>8.JavaScript类的导出与导入</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class Home&#123;</span><br><span class="line">    constructor()&#123;</span><br><span class="line">    &#125;</span><br><span class="line">//获取数据</span><br><span class="line">    getData()&#123;</span><br><span class="line">     </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">export &#123;Home&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import &#123;Home&#125; from &#x27;home-model.js&#x27;;</span><br><span class="line"></span><br><span class="line">var home = new Home(); </span><br><span class="line">Page(&#123;</span><br><span class="line">    data: &#123;</span><br><span class="line">    &#125;,</span><br><span class="line">    onLoad: function () &#123;</span><br><span class="line">       home.getBannerData(() =&gt; &#123;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/laixiangran/p/8735202.html">CSS选择器详解</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2019/03/18/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93HTML%E3%80%81CSS%E3%80%81Javascript/">https://lxlfpeng.github.io/2019/03/18/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93HTML%E3%80%81CSS%E3%80%81Javascript/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CSS/">CSS</a><a class="post-meta__tags" href="/tags/Javascript/">Javascript</a><a class="post-meta__tags" href="/tags/Html/">Html</a></div><div class="post-share"><div class="social-share" data-image="/images/2e7bc322990bbb0cf755e515faa9cb11.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2019/06/14/Android%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93%E4%B9%8B%E4%B8%80%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/" title="Android音视频开发总结之一理论基础"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Android音视频开发总结之一理论基础</div></div><div class="info-2"><div class="info-item-1">一. 音频技术基础概念1. 声音的物理性质众所周知，声音是由物体振动而产生的。声音是一种压力波，当演奏乐器或者说话时，它们的振动都会引起空气有节奏的振动， 使周围的空气产生疏密变化，由此就产生了声波，这种现象会一直延续到振动消失为止。 声波具有三要素：  音调：也叫音频，频率越高，波长就会越短，而低频声响的波长则较长。所以这样的声音更容易绕过障碍物。能量衰减就越小，声音就会传播的越远； 音量：就是振动的幅度。用不同的力度敲打桌面，声音的大小势必发生变换。在生活中，我们用分贝描述声音的响度； 音色：在同样的频率和响度下，不同的物体发出的声音不一样。波形的形状决定了声音的音色。因为不同的介质所产生的波形不同，就会产生不一样的音色。  2....</div></div></div></a><a class="pagination-related" href="/2018/08/11/Python%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/" title="Python使用技巧"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Python使用技巧</div></div><div class="info-2"><div class="info-item-1">Python拼接字符串的几种方式123456&quot;&quot;&quot;1. 使用加号“+”连接字符串    用加号“+”连接两个字符串，连接后这两个字符串将连接成一个字符串。但需注意的是，不能用“+”连接字符串和数字，需要把数字使用str()函数转换成字符串，或者直接在数字两侧加带引号，再进行连接、&quot;&quot;&quot;  1234str11 = &quot;hello&quot;str12 = &quot;world&quot;str13 = str11 + str12print(str13)         # helloworld   1&quot;&quot;&quot; 注： 但在python中，尽量少用加号“+”连接字符串，原因如下：在python中，String对象是定长对象，一旦创建，长度就不可变化，若是使用+号连接两个字符串，则会新开辟一段长度总和长度的内存，再将两个字符串memcpy进去。如果要连接N个String对象，则要进行N-1次内存申请和拷贝。...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-Html%E7%BD%91%E9%A1%B5"><span class="toc-number">1.</span> <span class="toc-text">一.Html网页</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-HTML%E6%A0%87%E7%AD%BE"><span class="toc-number">1.0.1.</span> <span class="toc-text">1. HTML标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-HTML%E6%A0%87%E7%AD%BE%E7%9A%84%E9%80%9A%E7%94%A8%E5%B1%9E%E6%80%A7"><span class="toc-number">1.0.2.</span> <span class="toc-text">2.HTML标签的通用属性</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E6%A0%87%E7%AD%BE%E7%9A%84id%E5%B1%9E%E6%80%A7"><span class="toc-number">1.0.2.0.1.</span> <span class="toc-text">(1.)标签的id属性</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E6%A0%87%E7%AD%BE%E7%9A%84class%E5%B1%9E%E6%80%A7"><span class="toc-number">1.0.2.0.2.</span> <span class="toc-text">(2.)标签的class属性</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E6%A0%87%E7%AD%BE%E7%9A%84style%E5%B1%9E%E6%80%A7"><span class="toc-number">1.0.2.0.3.</span> <span class="toc-text">(3.)标签的style属性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-HTML%E6%96%87%E6%A1%A3%E6%B5%81"><span class="toc-number">1.0.3.</span> <span class="toc-text">3.HTML文档流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-HTML%E5%9D%97%E7%BA%A7%E5%85%83%E7%B4%A0"><span class="toc-number">1.0.4.</span> <span class="toc-text">4.HTML块级元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-HTML%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0"><span class="toc-number">1.0.5.</span> <span class="toc-text">5.HTML行内元素</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-CSS%E6%A0%B7%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">二.CSS样式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-HTML%E4%B8%AD%E5%BC%95%E5%85%A5CSS"><span class="toc-number">2.0.1.</span> <span class="toc-text">1.HTML中引入CSS</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E8%A1%8C%E5%86%85%E6%A0%B7%E5%BC%8F%E8%A1%A8-%E5%86%85%E8%81%94%E6%A0%B7%E5%BC%8F"><span class="toc-number">2.0.1.0.1.</span> <span class="toc-text">(1.)行内样式表(内联样式)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E5%86%85%E9%83%A8%E6%A0%B7%E5%BC%8F%E8%A1%A8"><span class="toc-number">2.0.1.0.2.</span> <span class="toc-text">(2.)内部样式表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E5%A4%96%E9%83%A8%E6%A0%B7%E5%BC%8F%E8%A1%A8-%E5%B8%B8%E7%94%A8"><span class="toc-number">2.0.1.0.3.</span> <span class="toc-text">(3.)外部样式表(常用)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-CSS%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="toc-number">2.0.2.</span> <span class="toc-text">2.CSS基础语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-CSS%E4%B8%AD%E7%9A%84%E6%B3%A8%E9%87%8A"><span class="toc-number">2.0.3.</span> <span class="toc-text">3.CSS中的注释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-CSS%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-number">2.0.4.</span> <span class="toc-text">4.CSS选择器</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-CSS-%E5%85%83%E7%B4%A0%EF%BC%88%E6%A0%87%E7%AD%BE%EF%BC%89%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-number">2.0.4.0.1.</span> <span class="toc-text">(1.)CSS 元素（标签）选择器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-CSS-ID-%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-number">2.0.4.0.2.</span> <span class="toc-text">(2.)CSS ID 选择器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-CSS-%E7%B1%BB%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-number">2.0.4.0.3.</span> <span class="toc-text">(3.)CSS 类选择器</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-CSS-%E9%80%9A%E7%94%A8%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-number">2.0.4.0.4.</span> <span class="toc-text">(4.)CSS 通用选择器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-CSS%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.0.5.</span> <span class="toc-text">5.CSS盒子模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-CSS%E5%9D%97%E7%BA%A7-%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0%E8%BD%AC%E6%8D%A2%E3%80%82"><span class="toc-number">2.0.6.</span> <span class="toc-text">6.CSS块级&#x2F;行内元素转换。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-CSS%E5%AE%9A%E4%BD%8D"><span class="toc-number">2.0.7.</span> <span class="toc-text">7.CSS定位</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E7%9B%B8%E5%AF%B9%E5%AE%9A%E4%BD%8D"><span class="toc-number">2.0.7.0.1.</span> <span class="toc-text">(1.)相对定位</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E7%BB%9D%E5%AF%B9%E5%AE%9A%E4%BD%8D"><span class="toc-number">2.0.7.0.2.</span> <span class="toc-text">(2.).绝对定位</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-CSS%E6%B5%AE%E5%8A%A8"><span class="toc-number">2.0.8.</span> <span class="toc-text">8.CSS浮动</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-CSS%E6%B5%AE%E5%8A%A8%E5%9F%BA%E7%A1%80"><span class="toc-number">2.0.8.0.1.</span> <span class="toc-text">(1.)CSS浮动基础</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-float%E5%AE%9E%E7%8E%B0%E6%96%87%E5%AD%97%E7%8E%AF%E7%BB%95"><span class="toc-number">2.0.8.0.2.</span> <span class="toc-text">(2.)float实现文字环绕</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-CSS%E6%B8%85%E9%99%A4%E6%B5%AE%E5%8A%A8"><span class="toc-number">2.0.8.0.3.</span> <span class="toc-text">(3.)CSS清除浮动</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-%E5%BC%B9%E6%80%A7%E5%B8%83%E5%B1%80Flex"><span class="toc-number">3.</span> <span class="toc-text">三.弹性布局Flex</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Flex%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="toc-number">3.0.1.</span> <span class="toc-text">1.Flex基础使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Flex-%E4%BD%9C%E7%94%A8%E4%BA%8EBox%E5%AE%B9%E5%99%A8%E4%B8%8A%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="toc-number">3.0.2.</span> <span class="toc-text">2.Flex 作用于Box容器上的属性</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-flex-direction"><span class="toc-number">3.0.2.0.1.</span> <span class="toc-text">(1.) flex-direction</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-flex-wrap"><span class="toc-number">3.0.2.0.2.</span> <span class="toc-text">(2.) flex-wrap</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-justify-content"><span class="toc-number">3.0.2.0.3.</span> <span class="toc-text">(3.) justify-content</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-align-items"><span class="toc-number">3.0.2.0.4.</span> <span class="toc-text">(4.) align-items</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-align-content"><span class="toc-number">3.0.2.0.5.</span> <span class="toc-text">(5.) align-content</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Flex-%E4%BD%9C%E7%94%A8%E4%BA%8E%E5%AD%90%E9%A1%B9%E4%B8%8A%E7%9A%846%E4%B8%AA%E5%B1%9E%E6%80%A7%E4%BB%8B%E7%BB%8D"><span class="toc-number">3.0.3.</span> <span class="toc-text">3. Flex 作用于子项上的6个属性介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-order"><span class="toc-number">3.0.3.0.1.</span> <span class="toc-text">(1.)  order</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-flex-grow"><span class="toc-number">3.0.3.0.2.</span> <span class="toc-text">(2.)  flex-grow</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-flex-shrink"><span class="toc-number">3.0.3.0.3.</span> <span class="toc-text">(3.)  flex-shrink</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-flex-basis"><span class="toc-number">3.0.3.0.4.</span> <span class="toc-text">(4.)flex-basis</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-JavaScript%E7%AE%80%E4%BB%8B"><span class="toc-number">4.</span> <span class="toc-text">四.JavaScript简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-JavaScript%E5%8F%91%E5%B1%95"><span class="toc-number">4.0.1.</span> <span class="toc-text">1.JavaScript发展</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-ECMAScript"><span class="toc-number">4.0.1.0.1.</span> <span class="toc-text">(1.)ECMAScript</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-TypeScript"><span class="toc-number">4.0.1.0.2.</span> <span class="toc-text">(2.)TypeScript</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-JavaScript%E5%B8%B8%E8%A7%81%E6%A1%86%E6%9E%B6"><span class="toc-number">4.0.1.0.3.</span> <span class="toc-text">(3.)JavaScript常见框架</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-HTML%E4%B8%AD%E5%BC%95%E5%85%A5JavaScript"><span class="toc-number">4.0.2.</span> <span class="toc-text">2.HTML中引入JavaScript</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-HTML%E5%BC%95%E5%85%A5%E5%86%85%E9%83%A8%E7%9A%84-JavaScript"><span class="toc-number">4.0.2.0.1.</span> <span class="toc-text">(1.)HTML引入内部的 JavaScript</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-HTML%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E7%9A%84-JavaScript"><span class="toc-number">4.0.2.0.2.</span> <span class="toc-text">(2.)HTML引入外部的 JavaScript</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/images/2e7bc322990bbb0cf755e515faa9cb11.webp);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

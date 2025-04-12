@@ -1,0 +1,300 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Android后台任务Services和WorkManager总结 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Android后台服务限制Android O对应用在后台运行时可以执行的操作施加了限制，称为后台执行限制（Background Execution Limits），这可以大大减少应用的内存使用和耗电量，提高用户体验。后台执行限制分为两个部分： 后台服务限制（Background Service Limitations）、 广播限制（BroadcastLimitations）。除了下面情况外都是后台">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android后台任务Services和WorkManager总结">
+<meta property="og:url" content="https://lxlfpeng.github.io/2022/09/18/Android%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1Services%E5%92%8CWorkManager%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="Android后台服务限制Android O对应用在后台运行时可以执行的操作施加了限制，称为后台执行限制（Background Execution Limits），这可以大大减少应用的内存使用和耗电量，提高用户体验。后台执行限制分为两个部分： 后台服务限制（Background Service Limitations）、 广播限制（BroadcastLimitations）。除了下面情况外都是后台">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2022-09-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.828Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2022/09/18/Android%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1Services%E5%92%8CWorkManager%E6%80%BB%E7%BB%93/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Android后台任务Services和WorkManager总结',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Android后台任务Services和WorkManager总结</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Android后台任务Services和WorkManager总结</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2022-09-17T16:00:00.000Z" title="发表于 2022-09-18 00:00:00">2022-09-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Android后台服务限制"><a href="#Android后台服务限制" class="headerlink" title="Android后台服务限制"></a>Android后台服务限制</h1><p>Android O对应用在后台运行时可以执行的操作施加了限制，称为<code>后台执行限制（Background Execution Limits）</code>，这可以大大减少应用的内存使用和耗电量，提高用户体验。后台执行限制分为两个部分：<code> 后台服务限制（Background Service Limitations）、 广播限制（BroadcastLimitations）</code>。<br>除了下面情况外都是后台应用:</p>
+<ol>
+<li>具有可见的Activity</li>
+<li>具有前台服务</li>
+<li>另一个前台应用已关联到该应用（通过bindService或者使用该应用的ContentProvider）。</li>
+</ol>
+<p>应用在后台期间保留其后台服务的能力将受到限制。如果应用处于后台时调用了<code>startService()</code>将会抛出<code>IllegalStateException</code>，除非：</p>
+<ul>
+<li><strong>应用已经处于前台，则可以调用 <code>startService()</code>，不会抛出<code>IllegalStateException</code><strong>，但一旦进入后台，后台应用将被置于一个</strong>临时白名单</strong>中，位于白名单中时，在这段时间内，<code>应用可以无限制地启动服务，其后台服务也可以运行</code>。但这个时间期一过(Nexus 5X 8.0 系统上测试不到1分钟)，应用就会进入空闲状态，后台服务就会被销毁。</li>
+</ul>
+<p>因此，通过startservices启动的服务有如下特点:</p>
+<ol>
+<li>在后台运行的服务在几分钟内会被stop掉（模拟器测试在1分钟左右后被kill掉）。在这段时间内，应用仍可以创建和使用服务。</li>
+<li>在应用处于后台几分钟后（模拟器测试1分钟左右），应用将不能再通过startService创建后台服务，如果创建则抛出以下异常<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Caused by: java.lang.IllegalStateException: Not allowed to start service Intent &#123; cmp=com.example.xxxx.test/.TestService &#125;: app is in background</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>也就是说，当你的应用不在前台，时间窗结束后，会变成闲置状态，系统就杀死你的后台服务。网上一系列Service保活，创建永不停止Service，经过验证，都已失效。即你无法在使用后台服务在后台偷偷执行需要长时间的任务，例如监控GPS状态，记录步数等等。限制后台服务使用的原因是，当你的app使用服务在后台运行时，你的app消耗了宝贵的资源：- 内存 - 电池。最佳的做法是：操作完成后，服务应自行停止。许多应用程序具有长时间运行的后台服务，这些服务基本上运行无限时间以维持与服务器的Socket连接或监视某些任务或用户活动。这些服务会导致电池耗尽，并且还会不断消耗内存。鉴于以上原因：后台服务已经无法再在后台执行长时间任务。安卓推出了以下方案来解决此类问题:</p>
+</blockquote>
+</li>
+</ol>
+<ul>
+<li><strong>前台服务</strong>Android 8.0 引入了一种全新的方法，即Context.startForegroundService()，以在前台启动新服务。在系统创建服务后，应用有五秒的时间来调用该服务的startForeground() 方法以显示新服务的用户可见通知。如果应用在此时间限制内未调用<br>startForeground()，则系统将停止服务并声明此应用为 ANR。</li>
+<li><strong>WorkManager</strong>:WorkManager适用于那些即使应用程序退出，系统也能够保证这个任务正常运行的场景，比如将应用程序数据上传到服务器。它不适用于应用进程内的后台工作，如果应用进程消失，就可以安全地终止。</li>
+<li><strong>JobScheduler:</strong> JobScheduler 作业替换后台服务。 例如，CoolPhotoApp需要检查用户是否已经从朋友那里收到共享的照片，即使该应用未在前台运行。</li>
+</ul>
+<h1 id="前台服务"><a href="#前台服务" class="headerlink" title="前台服务"></a>前台服务</h1><p>对于需要立即运行并且必须执行完毕的由用户发起的工作，请使用<a target="_blank" rel="noopener" href="https://developer.android.com/guide/components/services">前台服务</a>。使用前台服务可告知系统应用正在执行重要任务，不应被终止。前台服务通过通知栏中的不可关闭通知向用户显示。</p>
+<ol>
+<li>修改启动方式<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Intent service = new Intent(this, MyBackgroundService.class);</span><br><span class="line">service.putExtra(&quot;startType&quot;, 1);</span><br><span class="line">if (Build.VERSION.SDK_INT &gt;= 26) &#123;</span><br><span class="line">    startForegroundService(service);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    startService(service);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>启动完前台service, 一定记得在5s以内要执行startForeground方法，不然就会出现ANR。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class MyBackgroundServiceextends Service &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate() &#123;</span><br><span class="line">        super.onCreate();</span><br><span class="line"></span><br><span class="line">        if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.O) &#123;</span><br><span class="line">            //适配安卓8.0</span><br><span class="line">            String channelId = getChannelId() + &quot;&quot;;</span><br><span class="line">            String channelName = getChannelName();</span><br><span class="line">            NotificationChannel channel = new NotificationChannel(channelId, channelName,</span><br><span class="line">                    NotificationManager.IMPORTANCE_MIN);</span><br><span class="line">            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);</span><br><span class="line">            manager.createNotificationChannel(channel);</span><br><span class="line">            startForeground(getChannelId(), getNotification());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+一样还是先判断系统版本, 如果高于26就调用startForeground方法好了, 使用startForegroundService 方法启动后台service这么使用即可。不过这样会在通知栏里面弹出弹出通知。</li>
+</ol>
+<h1 id="WorkManager"><a href="#WorkManager" class="headerlink" title="WorkManager"></a>WorkManager</h1><p>WorkManager适用于那些即使应用程序退出，系统也能够保证这个任务正常运行的场景，比如将应用程序数据上传到服务器。它不适用于应用进程内的后台工作，如果应用进程消失，就可以安全地终止<br>WorkManager 不适用于需要在特定时间触发的任务，也不适用立即任务。针对特定时间触发的任务使用 AlarmManager，立即执行的任务使用 ForegroundService。<br>WorkManager适用于那些在应用退出之后任务还需要继续执行的需求(比如应用数据上报服务器的情况)，对应那些在应用退出的之后任务也需要终止的情况就需要选择ThreadPool、AsyncTask来实现。<br>对于可延迟的工作以及预计即使您的设备或应用重启也会运行的工作，请使用<a target="_blank" rel="noopener" href="https://developer.android.com/topic/libraries/architecture/workmanager">WorkManager</a>。WorkManager 是一个 Android 库，可在满足工作的条件（例如网络可用性和电源）时妥善运行可延迟的后台工作。<br>WorkManager 提供向后兼容的 API（兼容 API 级别 14 及更高级别），利用<a target="_blank" rel="noopener" href="https://developer.android.com/reference/android/app/job/JobScheduler"><code>JobScheduler</code></a>API（API 级别 23 及更高级别）帮助优化更低级别设备上的电池续航时间、批量作业以及<a target="_blank" rel="noopener" href="https://developer.android.com/reference/android/app/AlarmManager"><code>AlarmManager</code></a>和<a target="_blank" rel="noopener" href="https://developer.android.com/reference/android/app/BroadcastReceiver"><code>BroadcastReceiver</code></a>的组合。<br>WorkManager是一个用于排队可延迟工作的库，保证在满足约束条件后的某个时间执行。 WorkManager允许观察工作状态和创建复杂工作链的能力。<br>WorkManager旨在通过为系统驱动的后台处理提供一流的API来简化开发人员体验。它适用于即使应用程序不再位于前台也应运行的后台作业。在可能的情况下，它使用JobScheduler或Firebase JobDispatcher来完成工作; 如果你的应用程序在前台，它甚至会尝试直接在你的过程中完成工作。<br>应用场景：每15分钟跟踪用户位置</p>
+<blockquote>
+<p>WorkManager 和AsyncTask, ThreadPool, RxJava的区别:这三个和WorkManager并不是替代的关系. 这三个工具, 能帮助你在应用中开后台线程干活, 但是应用一被杀或被关闭, 这些工具就干不了活了. 而WorkManager不是, 它在应用被杀, 甚至设备重启后仍能保证你安排给他的任务能得到执行.</p>
+</blockquote>
+<h3 id="定义-Worker"><a href="#定义-Worker" class="headerlink" title="定义 Worker"></a>定义 Worker</h3><p>咱们定义 MainWorker 继承 Worker，发现须要重写 doWork 方法，而且须要返回任务的状态 WorkerResult：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class MainWorker : Worker() &#123;</span><br><span class="line">    override fun doWork(): WorkerResult &#123;</span><br><span class="line">        // 要执行的任务</span><br><span class="line">        return WorkerResult.SUCCESS</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="定义-WorkRequest"><a href="#定义-WorkRequest" class="headerlink" title="定义 WorkRequest"></a>定义 WorkRequest</h3><p>在 MainActivity 中定义 WorkRequest：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val request = OneTimeWorkRequest.Builder(MainWorker::class.java).build()</span><br></pre></td></tr></table></figure>
+<p>OneTimeWorkRequest 意味着这个任务只需执行一遍。</p>
+<h3 id="加入任务队列"><a href="#加入任务队列" class="headerlink" title="加入任务队列"></a>加入任务队列</h3><p>要让任务执行，须要将 WorkRequest 加入任务队列：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WorkManager.getInstance().enqueue(request)</span><br></pre></td></tr></table></figure>
+
+<h1 id="AlarmManager"><a href="#AlarmManager" class="headerlink" title="AlarmManager"></a>AlarmManager</h1><p>如果您需要在确切的时间运行某项作业，请使用<a target="_blank" rel="noopener" href="https://developer.android.com/reference/android/app/AlarmManager"><code>AlarmManager</code></a>。<code>AlarmManager</code>会在您指定的时间启动应用（如有必要），以便运行该作业。但是，如果您的作业不需要在确切的时间运行，则<code>WorkManager</code>是更好的选择；<code>WorkManager</code>能更好地平衡系统资源。例如，如果您需要大约每小时运行一次某项作业，但不需要在特定时间运行该作业，则应使用<code>WorkManager</code>设置周期性作业。</p>
+<h1 id="DownloadManager"><a href="#DownloadManager" class="headerlink" title="DownloadManager"></a>DownloadManager</h1><p>如果您的应用执行长时间运行的 HTTP 下载，请考虑使用<a target="_blank" rel="noopener" href="https://developer.android.com/reference/android/app/DownloadManager">DownloadManager</a>。客户端可能会请求将 URI 下载到位于应用进程之外的特定目标文件中。内容下载管理器会在后台执行下载操作，它负责处理 HTTP 互动，在下载失败或连接发生更改以及系统重新启动后重新尝试下载。</p>
+<h1 id="后台任务选择"><a href="#后台任务选择" class="headerlink" title="后台任务选择"></a>后台任务选择</h1><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>需系统触发，不必完成</td>
+<td>ThreadPool + Broadcast</td>
+</tr>
+<tr>
+<td>需系统触发，必须完成，可推迟</td>
+<td>WorkManager</td>
+</tr>
+<tr>
+<td>需系统触发，必须完成，立即</td>
+<td>ForegroundService + Broadcast</td>
+</tr>
+<tr>
+<td>不需系统触发，不必完成</td>
+<td>ThreadPool</td>
+</tr>
+<tr>
+<td>不需系统触发，必须完成，可推迟</td>
+<td>WorkManager</td>
+</tr>
+<tr>
+<td>不需系统触发，必须完成，立即</td>
+<td>ForegroundService</td>
+</tr>
+</tbody></table>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/e495ee6e84de">Android Jetpack - 使用 WorkManager 管理后台任务</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/Sunxiaolin2016/article/details/97266490">Android后台Service已死 WorkManager崛起</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/Sunxiaolin2016/article/details/97128681">Android P后台服务被终止，创建永不终止的后台服务</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/liguo-wang/p/13140034.html">Android后台任务</a><br><a target="_blank" rel="noopener" href="https://juejin.im/post/5d2be05ff265da1bd605d49a">学习Android Jetpack? 实战和教程这里全都有！</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/a49220824/article/details/80869182">Android Jetpack - 使用 WorkManager 管理后台任务</a><br><a target="_blank" rel="noopener" href="https://sspai.com/post/56818">Android 手机运存越来越大，为什么后台应用还是会被「杀」？</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2022/09/18/Android%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1Services%E5%92%8CWorkManager%E6%80%BB%E7%BB%93/">https://lxlfpeng.github.io/2022/09/18/Android%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1Services%E5%92%8CWorkManager%E6%80%BB%E7%BB%93/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2022/09/23/Android%E5%8D%B3%E6%97%B6%E9%80%9A%E8%AE%AFIm%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93/" title="Android即时通讯Im开发总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Android即时通讯Im开发总结</div></div><div class="info-2"><div class="info-item-1">实现即时通讯IM的方式一. 使用第三方IM服务对于短平快的公司，完全可以采用第三方SDK来实现。国内IM的第三方服务商有很多，类似云信、环信、融云、LeanCloud，当然还有其它的很多，这里就不一一举例了，感兴趣的小伙伴可以自行查阅下。第三方服务商IM底层协议基本上都是TCP。他们的IM方案很成熟，有了它们，我们甚至不需要自己去搭建IM后台，什么都不需要去考虑。如果你甚至连UI都不需要自己做，这些第三方有各自一套IM的UI，拿来就可以直接用。但是缺点也很明显，定制化程度不太高，很多东西我们不可控。当然还有一个最最重要的一点，就是太贵了…作为真正社交为主打的APP，仅此一点，就足以让我们望而却步。 当然，如果IM对于APP只是一个辅助功能，那么用第三方服务也无可厚非。主流的第三方IM服务:  环信IM。 融云IM。 野火IM(半开源)。  二. 自己实现自己实现大约有三种方案:  客户端不断通过http轮询服务端获取消息(不建议)。 使用第三方推送服务将消息推送到客户端(不建议)。 自己使用长连接技术保持和服务端的连接获取到消息(建议)。  1....</div></div></div></a><a class="pagination-related" href="/2022/09/10/%E4%B8%8A%E4%BC%A0Aar%E5%88%B0maven%E5%BA%93/" title="上传Aar到maven库"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">上传Aar到maven库</div></div><div class="info-2"><div class="info-item-1">方式一:12345678910111213141516171819202122232425262728293031323334353637383940plugins &#123;    id &#x27;com.android.library&#x27;    id &#x27;org.jetbrains.kotlin.android&#x27;    id &#x27;maven-publish&#x27;&#125;task androidSourceJar(type: Jar) &#123;    from android.sourceSets.main.java.getSrcDirs()//源码路径 包括Java和Kotlin源码    archiveClassifier.set(&quot;sources&quot;)&#125;afterEvaluate &#123;    publishing &#123;        publications &#123;            plugin(MavenPublication) &#123;          ...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Android%E5%90%8E%E5%8F%B0%E6%9C%8D%E5%8A%A1%E9%99%90%E5%88%B6"><span class="toc-number">1.</span> <span class="toc-text">Android后台服务限制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E5%8F%B0%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.</span> <span class="toc-text">前台服务</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#WorkManager"><span class="toc-number">3.</span> <span class="toc-text">WorkManager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-Worker"><span class="toc-number">3.0.1.</span> <span class="toc-text">定义 Worker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-WorkRequest"><span class="toc-number">3.0.2.</span> <span class="toc-text">定义 WorkRequest</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E5%85%A5%E4%BB%BB%E5%8A%A1%E9%98%9F%E5%88%97"><span class="toc-number">3.0.3.</span> <span class="toc-text">加入任务队列</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#AlarmManager"><span class="toc-number">4.</span> <span class="toc-text">AlarmManager</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DownloadManager"><span class="toc-number">5.</span> <span class="toc-text">DownloadManager</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1%E9%80%89%E6%8B%A9"><span class="toc-number">6.</span> <span class="toc-text">后台任务选择</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

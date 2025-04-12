@@ -1,0 +1,340 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Python使用Pyinstaller将源代码打包成exe可执行文件 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Pyinstaller简介PyInstaller是Python的第三方打包库，它能够在Windows、Linux、 Mac OS X 等操作系统下将 Python 源文件进行打包，通过对源文件打包，实现将.py扩展名的任何Python的源代码转换成Windows、Linux、Mac OS X下的可执行文件，这样 Python 程序可以在没有安装 Python 的环境中运行。对于Windows来讲，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python使用Pyinstaller将源代码打包成exe可执行文件">
+<meta property="og:url" content="https://lxlfpeng.github.io/2020/11/06/Python%E4%BD%BF%E7%94%A8Pyinstaller%E5%B0%86%E6%BA%90%E4%BB%A3%E7%A0%81%E6%89%93%E5%8C%85%E6%88%90exe%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="Pyinstaller简介PyInstaller是Python的第三方打包库，它能够在Windows、Linux、 Mac OS X 等操作系统下将 Python 源文件进行打包，通过对源文件打包，实现将.py扩展名的任何Python的源代码转换成Windows、Linux、Mac OS X下的可执行文件，这样 Python 程序可以在没有安装 Python 的环境中运行。对于Windows来讲，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2020-11-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.844Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2020/11/06/Python%E4%BD%BF%E7%94%A8Pyinstaller%E5%B0%86%E6%BA%90%E4%BB%A3%E7%A0%81%E6%89%93%E5%8C%85%E6%88%90exe%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Python使用Pyinstaller将源代码打包成exe可执行文件',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Python使用Pyinstaller将源代码打包成exe可执行文件</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Python使用Pyinstaller将源代码打包成exe可执行文件</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2020-11-05T16:00:00.000Z" title="发表于 2020-11-06 00:00:00">2020-11-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Python%E5%BC%80%E5%8F%91/">Python开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Pyinstaller简介"><a href="#Pyinstaller简介" class="headerlink" title="Pyinstaller简介"></a>Pyinstaller简介</h1><p>PyInstaller是Python的第三方打包库，它能够在Windows、Linux、 Mac OS X 等操作系统下将 Python 源文件进行打包，通过对源文件打包，<br>实现将.py扩展名的任何Python的源代码转换成Windows、Linux、Mac OS X下的可执行文件，这样 Python 程序可以在没有安装 Python 的环境中运行。<br>对于Windows来讲，PyInstaller可以将Python源代码打包成.exe的可执行文件，样就可以直接运行程序，不需要安装Python解释器，也不需要对计算机进行相关的环境配置。<br>需要注意的一点是虽然PyInstaller可以在Windows、Mac OS X和Linux上使用，但是并不是跨平台的，如果希望将python源代码打包成.exe文件，<br>需要在Windows系统上运行PyInstaller进行打包工作；需要打包成mac app，则需要在Mac OS上使用PyInstaller进行打包。</p>
+<h1 id="使用Pyinstaller打包exe文件"><a href="#使用Pyinstaller打包exe文件" class="headerlink" title="使用Pyinstaller打包exe文件"></a>使用Pyinstaller打包exe文件</h1><h2 id="安装Pyinstaller模块"><a href="#安装Pyinstaller模块" class="headerlink" title="安装Pyinstaller模块"></a>安装Pyinstaller模块</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pyinstaller</span><br></pre></td></tr></table></figure>
+<p>如果比较慢可以用清华源下载:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pyinstaller</span><br></pre></td></tr></table></figure>
+
+<h2 id="Pyinstaller简单打包命令"><a href="#Pyinstaller简单打包命令" class="headerlink" title="Pyinstaller简单打包命令"></a>Pyinstaller简单打包命令</h2><p>如果工程里中只有.py文件，即Python代码文件，不包括视频、图片、文件等资源文件，那么使用pyinstaller打包是非常简单的，只需要下面一行命令即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller -F test.py</span><br></pre></td></tr></table></figure>
+<p>运行完上面的命令，pyinstaller会将python源码及第三方依赖进行打包，打包结束以后会在当前目录下生成一个<code>test.spec</code>文件和两个文件夹:<code>build</code>和<code>dist</code>，其中dist里面就是最终生成的exe文件，点击.exe文件就可以执行用python写好的程序。 如果点击执行exe文件时，<br>控制台界面一闪而过，那么很可能代码执行完成毕导致控制台退出了，此时可以在python源代码中使用<code>input(&#39;Press Enter to exit…&#39;)</code>将线程卡住再打包运行方便查看调试信息。<br>通过上面的命令打包出来exe文件并没有图标，可以在打包时给exe指定图标，首先将准备好的<code>text_icon.icon</code>图标放置到项目根目录中，然后执行如下打包命令:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#目前该命令只在windows下生效</span><br><span class="line">pyinstaller -F -i text_icon.ico test.py</span><br></pre></td></tr></table></figure>
+<p>每次执行打包好的exe文件都会出现一个控制台窗口，对于命令行程序调试这非常有用，但是如果是GUI程序中是不需要这个的，因此可以在打包时通过如下命令去掉控制台窗口:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller -F -w -i text_icon.ico test.py</span><br></pre></td></tr></table></figure>
+
+<p>在上文中通过将python打包成单个可执行的exe文件时，会将依赖的库包等集成在一起形成一个文件，如果项目使用的依赖比较多的时候往往打包出来exe会很大，这样会导致启动较慢。因此可以将源代码打包成多文件的方式:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller -D test.py</span><br></pre></td></tr></table></figure>
+<p>打包成功以后在dist目录会生成很多依赖文件，也就是把将exe和dll等分开了，找到对应的.exe启动文件则可以进行启动打包好的程序。打包多文件虽然可以增加启动速度，但也会导致其他信息被暴露出来。因此选择打包单个文件好还是多个文件需要视情况而定。</p>
+<h2 id="Pyinstaller打包常用参数"><a href="#Pyinstaller打包常用参数" class="headerlink" title="Pyinstaller打包常用参数"></a>Pyinstaller打包常用参数</h2><p>除了上文种使用到的比较简单的打包参数，使用pyinstaller的参数还有如下这些:</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>参数意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>-F <br> –onefile</strong></td>
+<td>打包单个文件，产生一个文件用于部署</td>
+</tr>
+<tr>
+<td><strong>-D<br> –onedir</strong></td>
+<td>打包多个文件，产生一个目录用于部署(默认)</td>
+</tr>
+<tr>
+<td><strong>–key&#x3D;keys</strong></td>
+<td>使用keys进行加密打包例：pyinstaller –key&#x3D;1234 -F xx.py</td>
+</tr>
+<tr>
+<td><strong>-K<br> –tk</strong></td>
+<td>在部署时包含 TCL&#x2F;TK</td>
+</tr>
+<tr>
+<td><strong>-a<br> –ascii</strong></td>
+<td>不包含编码.在支持Unicode的python版本上默认包含所有的编码</td>
+</tr>
+<tr>
+<td><strong>-d<br> –debug</strong></td>
+<td>产生debug版本的可执行文件</td>
+</tr>
+<tr>
+<td><strong>-n name <br> –name&#x3D;name</strong></td>
+<td>可选的项目(产生的spec的)名字name</td>
+</tr>
+<tr>
+<td><strong>-o dir <br> –out&#x3D;dir</strong></td>
+<td>指定spec文件的生成目录dir如果没有指定切当前目录不是PyInstaller的根目录，则会输出到当前的目录下</td>
+</tr>
+<tr>
+<td><strong>-p dir <br> –path&#x3D;dir</strong></td>
+<td>用来添加程序所用到的包的所在位置，让Pyintaller自己去找程序需要的资源</td>
+</tr>
+<tr>
+<td><strong>-w<br> –windowed<br> –noconsole</strong></td>
+<td>表示去掉控制台窗口，使用Windows子系统执行，当程序启动的时候不会打开命令行(只对Windows有效)</td>
+</tr>
+<tr>
+<td><strong>-c <br> –nowindowed <br> –console</strong></td>
+<td>表示打开控制台窗口，使用控制台子系统执行，当程序启动的时候会打开命令行(默认)(只对Windows有效)</td>
+</tr>
+<tr>
+<td><strong>-i<br> –icon&#x3D;&#x3D;&lt;file.ioc&gt;</strong></td>
+<td>将file.ico添加为可执行文件的资源，改变程序的图标(只对Windows系统有效)</td>
+</tr>
+<tr>
+<td><strong>–icon&#x3D;&#x3D;&lt;file.ioc&gt;</strong></td>
+<td>将file.exe的第n个图标添加为可执行文件的资源(只对Windows系统有效)</td>
+</tr>
+<tr>
+<td><strong>-v file<br> –version&#x3D;file</strong></td>
+<td>将verfile作为可执行文件的版本资源(只对Windows系统有效)</td>
+</tr>
+<tr>
+<td><strong>-s<br> –strip</strong></td>
+<td>可执行文件和共享库将run through strip.注意Cygwin的strip往往使普通的win32 Dll无法使用</td>
+</tr>
+<tr>
+<td><strong>-X<br> –upx</strong></td>
+<td>如果有UPX安装(执行Configure.py时检测)，会压缩执行文件(Windows系统中的DLL也会)(参见note)</td>
+</tr>
+</tbody></table>
+<h2 id="Pyinstaller使用spec文件进行打包"><a href="#Pyinstaller使用spec文件进行打包" class="headerlink" title="Pyinstaller使用spec文件进行打包"></a>Pyinstaller使用spec文件进行打包</h2><p>通过上文中已知pyinstaller打包时有很多控制选项，可以通过打包命令行加上对应的参数进行打包。这种方式用来打简单的包还是比较好用的，但是用来打比较复杂的工程的包就会比较麻烦。因此，Pyinstaller<br>还给我们提供了.spec 配置文件来对打包参数进行配置。通过Spec文件指定这些打包参数选项，这样不需要每次通过命令控制选项了，效果上二者是等效的。spec文件会告诉pyinstaller打包时，如何处理被打包脚本，<br>且spec文件实际上是可执行的python代码。使用spec文件打包步骤如下:</p>
+<h4 id="1-创建spec文件"><a href="#1-创建spec文件" class="headerlink" title="1.创建spec文件"></a>1.创建spec文件</h4><p>直接通过输入如下命令后回车:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyi-makespec -F -w -i favicon.ico test.py</span><br></pre></td></tr></table></figure>
+<p>其中<code>pyi-makespec</code>会生成一个test.spec文件（用于指定打包的配置）。<br>也可以通过打包命令:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller -F -w -i favicon.ico test.py</span><br></pre></td></tr></table></figure>
+<p>程序打包结束后，发现当前目录下生成两个文件夹（bulid、dist）和一个文件test.spec（用于指定打包的配置）。</p>
+<h4 id="2-根据自己的项目编辑spec文件"><a href="#2-根据自己的项目编辑spec文件" class="headerlink" title="2.根据自己的项目编辑spec文件"></a>2.根据自己的项目编辑spec文件</h4><p>根据上文中默认生成的spec文件，可以通过修改spec文件的配置参数来实现不同的打包配置，每个参数表示的含义:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"># -*- mode: python ; coding: utf-8 -*-</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">block_cipher = None  #设置 加密，需要安装tinyaes第三方库，最多16位字符，此处在使用--key= 会有变化</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a = Analysis(</span><br><span class="line">    [&#x27;test.py&#x27;],  # 运行的所有py文件，包括依赖的py文件 </span><br><span class="line">    pathex=[],  # 搜索导入的路径列表（此列表为项目绝对路径)，包括选项给出的路径--paths，项目需要从什么地方导入自定义库</span><br><span class="line">    binaries=[],  # 脚本需要的非python模块，包括--add-binary选项给出的名称，二进制数据</span><br><span class="line">    datas=[],  # 应用程序中包含的非二进制文件，包括--add-data选项给出的名称，项目需要用到什么数据，比如图片，视频等。里面格式为tuple，第一个参数是文件路径，第二个是打包后所在的路径，其为一个元组：(&#x27;image/*.png&#x27;,&#x27;data/image&#x27;)</span><br><span class="line">    hiddenimports=[],   # 假如打包后打开exe显示module not found，就要把该库添加到hiddenimports里面了</span><br><span class="line">    hookspath=[],  </span><br><span class="line">    hooksconfig=&#123;&#125;,  # 挂钩配置选项由一个字典组成</span><br><span class="line">    runtime_hooks=[],  </span><br><span class="line">    excludes=[],  # 假如你用的python有很多库，但是你不需要用到某个，那么就把它添加到里面去，可以压缩文件大小</span><br><span class="line">    win_no_prefer_redirects=False,</span><br><span class="line">    win_private_assemblies=False,</span><br><span class="line">    cipher=block_cipher,</span><br><span class="line">    noarchive=False,</span><br><span class="line">)</span><br><span class="line">pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)</span><br><span class="line"></span><br><span class="line">exe = EXE(</span><br><span class="line">    pyz,</span><br><span class="line">    a.scripts,  # 打包成EXE的脚本文件</span><br><span class="line">    # a.binaries,  # 如果是单文件模式，则需要添加；多文件也可以添加</span><br><span class="line">   	# a.zipfiles,</span><br><span class="line">    # a.datas,</span><br><span class="line">    [],</span><br><span class="line">    exclude_binaries=True,  # 是否排除二进制文件，为True时，为排除二进制的文件，当文件交大时包含二进制文件运行较快，如果是单文件，则没有这个选项</span><br><span class="line">    name=&#x27;main&#x27;,  # 打包程序的名字</span><br><span class="line">    debug=False,  # 是否启用调试功能</span><br><span class="line">    bootloader_ignore_signals=False,</span><br><span class="line">    # runtime_tmpdir=None,  # 生成单文件时需要这个参数，定义运行时的临时文件夹</span><br><span class="line">    strip=False,</span><br><span class="line">    upx=True,  # 打包的时候进行压缩，False表示不压缩；要用到一个压缩程序UPX，用于压缩文件，需要单独下载</span><br><span class="line">    console=True,  # 打包后的可执行文件双击运行时屏幕会出现一个cmd窗口，不影响原程序运行，等于是是否加-w参数</span><br><span class="line">    disable_windowed_traceback=False,  </span><br><span class="line">    argv_emulation=False,</span><br><span class="line">    target_arch=None,</span><br><span class="line">    codesign_identity=None,</span><br><span class="line">    entitlements_file=None,</span><br><span class="line">    </span><br><span class="line">    &quot;&quot;&quot;添加选项，初始化时没有的&quot;&quot;&quot;</span><br><span class="line">    icon=&quot;&quot;,  # 指定应用程序的图标，传入路径，可以相对路径</span><br><span class="line">    </span><br><span class="line">)</span><br><span class="line">coll = COLLECT(</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    如果是单文件模式，不需要这个COLLECT类，同时需要将：</span><br><span class="line">        a.binaries,</span><br><span class="line">    	a.zipfiles,</span><br><span class="line">    	a.datas,</span><br><span class="line">    这些数据文件添加到EXE中</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    exe,</span><br><span class="line">    a.binaries,</span><br><span class="line">    a.zipfiles,</span><br><span class="line">    a.datas,</span><br><span class="line">    strip=False,</span><br><span class="line">    upx=True,</span><br><span class="line">    upx_exclude=[],</span><br><span class="line">    name=&#x27;main&#x27;,</span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-使用pec文件进行打包"><a href="#3-使用pec文件进行打包" class="headerlink" title="3.使用pec文件进行打包"></a>3.使用pec文件进行打包</h4><p>使用pec文件进行打包非常简单，命令如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller test.spec</span><br></pre></td></tr></table></figure>
+<p>至此，打包结束。</p>
+<h2 id="Pyinstaller打包资源文件"><a href="#Pyinstaller打包资源文件" class="headerlink" title="Pyinstaller打包资源文件"></a>Pyinstaller打包资源文件</h2><p>在上文中打包的python项目都是不带有音视频、文本等资源文件的，有时候我们的工程除了python文件之外还包括一些外部资源文件，如图片、配置文件等，例如在tools目录中有一个setting.json的配置文件，我们需要在 test_pyinstaller中需要读取这个配置文件，结构目录:<br>│─test_pyinstaller.py<br>└─tools<br>  └─setting.json</p>
+<p>test_pyinstaller.py的代码为:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import json</span><br><span class="line">import os</span><br><span class="line">#获取配置文件路径</span><br><span class="line">path = os.path.join(&quot;tools&quot;, &quot;setting.json&quot;)</span><br><span class="line">#加载配置文件</span><br><span class="line">setting_file = open(path, encoding=&quot;utf-8&quot;)</span><br><span class="line">setting_json=json.load(setting_file)</span><br><span class="line">print(&quot;读取到的配置文件为:&quot;,setting_json)</span><br></pre></td></tr></table></figure>
+<p>这段代码在本地直接是可以运行的，但是将它通过<code>pyinstaller -F test_pyinstaller.py</code>打包成.exe文件以后，运行会报错。因为普通的打包方式并没有没有将setting.json资源文件打包到.exe文件中去。Pyinstaller给我们<br>提供了两种方式将资源文件打包到.exe文件中去。也就是上文说的通过命令行添加参数的的方式或者通过编辑.spec配置文件添加参数的方式进行打包。</p>
+<h4 id="方式一-通过命令行添加参数的的方式"><a href="#方式一-通过命令行添加参数的的方式" class="headerlink" title="方式一:通过命令行添加参数的的方式"></a>方式一:通过命令行添加参数的的方式</h4><p>可以通过–add-data将<code>C:\Users\WIN10\Desktop\pyinstaller\tools</code>目录打包到目标exe中的根目录的tools目录下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller -F test_pyinstaller.py --add-data &quot;C:\Users\WIN10\Desktop\pyinstaller\tools;./tools&quot;</span><br></pre></td></tr></table></figure>
+<p>当然也可以使用相对路径:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller -F test_pyinstaller.py --add-data &quot;./tools;./tools&quot;</span><br></pre></td></tr></table></figure>
+<p>将当前工程目录下的tools目录，打包到目标exe中的根目录的tools目录下。</p>
+<h4 id="方式二-通过编辑-spec配置文件方式-推荐"><a href="#方式二-通过编辑-spec配置文件方式-推荐" class="headerlink" title="方式二:通过编辑.spec配置文件方式(推荐)"></a>方式二:通过编辑.spec配置文件方式(推荐)</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">省略部分....</span><br><span class="line">a = Analysis([&#x27;test_pyinstaller.py&#x27;],</span><br><span class="line">             pathex=[],</span><br><span class="line">             binaries=[],</span><br><span class="line">             datas=[(&#x27;tools&#x27;,&#x27;tools&#x27;)],</span><br><span class="line">             hiddenimports=[],</span><br><span class="line">             hookspath=[],</span><br><span class="line">             hooksconfig=&#123;&#125;,</span><br><span class="line">             runtime_hooks=[],</span><br><span class="line">             excludes=[],</span><br><span class="line">             win_no_prefer_redirects=False,</span><br><span class="line">             win_private_assemblies=False,</span><br><span class="line">             cipher=block_cipher,</span><br><span class="line">             noarchive=False)</span><br><span class="line">pyz = PYZ(a.pure, a.zipped_data,</span><br><span class="line">             cipher=block_cipher)</span><br><span class="line"></span><br><span class="line">省略部分....</span><br></pre></td></tr></table></figure>
+<p>注意<strong>binaries</strong>和<strong>datas</strong>这两个的值，binaries接收一个元组表示将二进制文件（如.exe&#x2F;.dll&#x2F;.so等）打包到.exe文件中，比如<code>binaries=[(&#39;ci64.dll&#39;,&#39;.&#39;),(&#39;ABDLL64.dll&#39;,&#39;.&#39;)]</code>。<br>datas接收一个元组表示将非二进制文件（如图片文件、文本文件等）打包到.exe文件中，例如：<code>datas=[(&#39;tools&#39;,&#39;tools’)]</code>。<br>其中元组第一个参数表示需要被打包的文件&#x2F;目录路径，第二个表示打包到.exe程序中的文件&#x2F;目录路径，可以枚举一个或多个。例如:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#下面表示将./lib/general.xml拷贝到./data文件夹下</span><br><span class="line">datas=[(&#x27;./lib/general.xml&#x27;,r&#x27;./data&#x27;)],</span><br><span class="line"></span><br><span class="line">#还可以整个文件夹的拷贝，或者一类文件的拷贝。如下设置了多个规则的</span><br><span class="line">datas= [( &#x27;/media/data&#x27;, &#x27;data&#x27; ),#/media/data文件夹下所有文件打包到data目录中</span><br><span class="line">        (&#x27;/media/music/*.mp3&#x27;, &#x27;music&#x27; ) ,#将/media/music/目录中所有mp3,打包到music目录中</span><br><span class="line">		( &#x27;src/README.txt&#x27;, &#x27;.&#x27; ),#将src/README.txt文件,打包到根目录中</span><br><span class="line">		],</span><br></pre></td></tr></table></figure>
+
+<h4 id="python文件路径修改"><a href="#python文件路径修改" class="headerlink" title="python文件路径修改"></a>python文件路径修改</h4><p>通过选择上文两种方式中的一种，就已经将资源文件打包到.exe文件种去了，此时如果使用<code>pyinstaller -D</code>打包的程序目录，可以在dist里面找到打包到里面的资源文件,程序也是可以直接运行的。<br>但是如果是通过<code>pyinstaller -F</code>打包的.exe单文件，此时如果执行程序会报找不到setting.json的错误。其原因就是单Exe中增加了一个类似于代理或boot的程序段，Exe运行后，会将python、第三方库、资源文件等东西解压到一个临时文件夹中，<br>脚本运行完毕，会丢弃临时文件。临时文件夹的路径会随着每次运行而更改，但对其位置的引用会添加到sys._MEIPASS中。程序可通过sys._MEIPASS访问临时文件夹中的资源。<br>然而我们在python代码中使用了相对路径去读取文件，当然就会读取不到了，因此需要在python文件种对路径进行转换。在python文件对代码中的路径进行转换处理，<br>当打包成exe文件时py程序里面的路径要从.&#x2F;xxx&#x2F;yy(相对路径)换成xxx&#x2F;yy (绝对路径)并且进行路径转换但如果不打包资源文件的话 最好路径还是用作.&#x2F;xxx&#x2F;yy 并且不进行路径转换 ，修改test_pyinstaller.py代码为:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import json</span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">#生成资源文件目录访问路径</span><br><span class="line">def resource_path(relative_path):</span><br><span class="line">    if getattr(sys, &#x27;frozen&#x27;, False): #是否Bundle Resource 捆绑资源</span><br><span class="line">        base_path = sys._MEIPASS</span><br><span class="line">    else:</span><br><span class="line">        base_path = os.path.abspath(&quot;.&quot;)</span><br><span class="line">    return os.path.join(base_path, relative_path)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#获取配置文件路径</span><br><span class="line">path = resource_path(os.path.join(&quot;tools&quot;, &quot;setting.json&quot;))</span><br><span class="line">#加载配置文件</span><br><span class="line">setting_file = open(path, encoding=&quot;utf-8&quot;)</span><br><span class="line">setting_json=json.load(setting_file)</span><br><span class="line">print(&quot;读取到的配置文件为:&quot;,setting_json)</span><br></pre></td></tr></table></figure>
+<p>此时再打包，运行就可以获取到正确得配置文件了。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="http://www.pyinstaller.org/">pyinstaller官网</a><br><a target="_blank" rel="noopener" href="https://pyinstaller.readthedocs.io/en/stable/">pyinstaller官方帮助文档</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6973214749437722638">2个技巧，学会Pyinstaller打包的高级用法</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/kevinshift/article/details/104880101">python使用pyinstaller打包python程序</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2020/11/06/Python%E4%BD%BF%E7%94%A8Pyinstaller%E5%B0%86%E6%BA%90%E4%BB%A3%E7%A0%81%E6%89%93%E5%8C%85%E6%88%90exe%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6/">https://lxlfpeng.github.io/2020/11/06/Python%E4%BD%BF%E7%94%A8Pyinstaller%E5%B0%86%E6%BA%90%E4%BB%A3%E7%A0%81%E6%89%93%E5%8C%85%E6%88%90exe%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/11/08/Flutter%E4%BD%BF%E7%94%A8Provider%E8%BF%9B%E8%A1%8C%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/" title="Flutter使用Provider进行状态管理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Flutter使用Provider进行状态管理</div></div><div class="info-2"><div class="info-item-1">provider状态管理几种常见情况，点击一个按钮,改变另外一个控件的值思路: 首先给要改变值得控件绑定一个监听,${context.watch().count}，如果点击按钮改变了数据,监听文字自动发生改变。 点击一个按钮,获取另外一个控件的值思路:首先这个控件上显示的数据肯定不是死数据, 否则也没有获取的意义了,如果你说默认是死数据但是有可能会发生改变, 那么发生改变的时候应该用一个变量来控制。也就是先用${context.watch().count}监听, 死数据也通过改变数据的方式来改变控件文字。这样获取的时候就用${context.read().count}即可。 初始化数据后, 通过数据改变更改控件数据思路:和第二种情况类似, 通过model来驱动视图。 看下 ChangeNotifierProvider 用法，一个单一的观察者模式 123456789101112131415161718192021222324//继承ChangeNotifier后，可以通知所有订阅者class Counter with ChangeNotifier &#123;  int...</div></div></div></a><a class="pagination-related" href="/2020/11/02/AndroidStudio%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/" title="AndroidStudio使用技巧"><img class="cover" src="/images/87f42f55c8644e1103e4c56020007b5e.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">AndroidStudio使用技巧</div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Pyinstaller%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">Pyinstaller简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Pyinstaller%E6%89%93%E5%8C%85exe%E6%96%87%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">使用Pyinstaller打包exe文件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Pyinstaller%E6%A8%A1%E5%9D%97"><span class="toc-number">2.1.</span> <span class="toc-text">安装Pyinstaller模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pyinstaller%E7%AE%80%E5%8D%95%E6%89%93%E5%8C%85%E5%91%BD%E4%BB%A4"><span class="toc-number">2.2.</span> <span class="toc-text">Pyinstaller简单打包命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pyinstaller%E6%89%93%E5%8C%85%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0"><span class="toc-number">2.3.</span> <span class="toc-text">Pyinstaller打包常用参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pyinstaller%E4%BD%BF%E7%94%A8spec%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8C%E6%89%93%E5%8C%85"><span class="toc-number">2.4.</span> <span class="toc-text">Pyinstaller使用spec文件进行打包</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%88%9B%E5%BB%BAspec%E6%96%87%E4%BB%B6"><span class="toc-number">2.4.0.1.</span> <span class="toc-text">1.创建spec文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%A0%B9%E6%8D%AE%E8%87%AA%E5%B7%B1%E7%9A%84%E9%A1%B9%E7%9B%AE%E7%BC%96%E8%BE%91spec%E6%96%87%E4%BB%B6"><span class="toc-number">2.4.0.2.</span> <span class="toc-text">2.根据自己的项目编辑spec文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E4%BD%BF%E7%94%A8pec%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8C%E6%89%93%E5%8C%85"><span class="toc-number">2.4.0.3.</span> <span class="toc-text">3.使用pec文件进行打包</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pyinstaller%E6%89%93%E5%8C%85%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6"><span class="toc-number">2.5.</span> <span class="toc-text">Pyinstaller打包资源文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80-%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%B7%BB%E5%8A%A0%E5%8F%82%E6%95%B0%E7%9A%84%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-number">2.5.0.1.</span> <span class="toc-text">方式一:通过命令行添加参数的的方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C-%E9%80%9A%E8%BF%87%E7%BC%96%E8%BE%91-spec%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%96%B9%E5%BC%8F-%E6%8E%A8%E8%8D%90"><span class="toc-number">2.5.0.2.</span> <span class="toc-text">方式二:通过编辑.spec配置文件方式(推荐)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#python%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84%E4%BF%AE%E6%94%B9"><span class="toc-number">2.5.0.3.</span> <span class="toc-text">python文件路径修改</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

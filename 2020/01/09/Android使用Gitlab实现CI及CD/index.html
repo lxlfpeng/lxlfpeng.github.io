@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Android使用Gitlab实现CI及CD | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Android 项目配置 gitlab-ci 持续集成这里只通过docker执行器来进行，如果使用shell也是可以的，不过需要自己写shell代码不如docker方便快捷。docker容器搭建Android打包环境一般有两种方式:一种是通过基于openjdk:8-jdk 写shell配置好打包环境进行打包处理，另外一种则是通过docker hub上面别人配置好的Android打包环境docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android使用Gitlab实现CI及CD">
+<meta property="og:url" content="https://lxlfpeng.github.io/2020/01/09/Android%E4%BD%BF%E7%94%A8Gitlab%E5%AE%9E%E7%8E%B0CI%E5%8F%8ACD/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="Android 项目配置 gitlab-ci 持续集成这里只通过docker执行器来进行，如果使用shell也是可以的，不过需要自己写shell代码不如docker方便快捷。docker容器搭建Android打包环境一般有两种方式:一种是通过基于openjdk:8-jdk 写shell配置好打包环境进行打包处理，另外一种则是通过docker hub上面别人配置好的Android打包环境docker">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2020-01-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.828Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2020/01/09/Android%E4%BD%BF%E7%94%A8Gitlab%E5%AE%9E%E7%8E%B0CI%E5%8F%8ACD/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Android使用Gitlab实现CI及CD',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Android使用Gitlab实现CI及CD</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Android使用Gitlab实现CI及CD</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2020-01-08T16:00:00.000Z" title="发表于 2020-01-09 00:00:00">2020-01-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CI-CD/">CI/CD</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Android-项目配置-gitlab-ci-持续集成"><a href="#Android-项目配置-gitlab-ci-持续集成" class="headerlink" title="Android 项目配置 gitlab-ci 持续集成"></a>Android 项目配置 gitlab-ci 持续集成</h1><p>这里只通过docker执行器来进行，如果使用shell也是可以的，不过需要自己写shell代码不如docker方便快捷。<br>docker容器搭建Android打包环境一般有两种方式:一种是通过基于openjdk:8-jdk 写shell配置好打包环境进行打包处理，另外一种则是通过docker hub上面别人配置好的Android打包环境docker容器进行。</p>
+<h3 id="1-使用OpenJdk镜像自行打包环境做Gitlab-CI-CD"><a href="#1-使用OpenJdk镜像自行打包环境做Gitlab-CI-CD" class="headerlink" title="1.使用OpenJdk镜像自行打包环境做Gitlab-CI&#x2F;CD"></a>1.使用OpenJdk镜像自行打包环境做Gitlab-CI&#x2F;CD</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">#使用 openjdk镜像</span><br><span class="line">image: openjdk:8-jdk </span><br><span class="line"></span><br><span class="line">#定义Android版本变量</span><br><span class="line">variables:</span><br><span class="line">  ANDROID_COMPILE_SDK: &quot;28&quot;</span><br><span class="line">  ANDROID_BUILD_TOOLS: &quot;28.0.2&quot;</span><br><span class="line">  ANDROID_SDK_TOOLS:   &quot;4333796&quot;</span><br><span class="line"># 构建开始执行的脚本</span><br><span class="line">before_script:</span><br><span class="line">  - apt-get --quiet update --yes</span><br><span class="line">  - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1</span><br><span class="line">  - wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-$&#123;ANDROID_SDK_TOOLS&#125;.zip</span><br><span class="line">  - unzip -d android-sdk-linux android-sdk.zip</span><br><span class="line">  - echo y | android-sdk-linux/tools/bin/sdkmanager &quot;platforms;android-$&#123;ANDROID_COMPILE_SDK&#125;&quot; &gt;/dev/null</span><br><span class="line">  - echo y | android-sdk-linux/tools/bin/sdkmanager &quot;platform-tools&quot; &gt;/dev/null</span><br><span class="line">  - echo y | android-sdk-linux/tools/bin/sdkmanager &quot;build-tools;$&#123;ANDROID_BUILD_TOOLS&#125;&quot; &gt;/dev/null</span><br><span class="line">  - export ANDROID_HOME=$PWD/android-sdk-linux</span><br><span class="line">  - export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/</span><br><span class="line">  - chmod +x ./gradlew</span><br><span class="line">  # temporarily disable checking for EPIPE error and use yes to accept all licenses</span><br><span class="line">  - set +o pipefail</span><br><span class="line">  - yes | android-sdk-linux/tools/bin/sdkmanager --licenses</span><br><span class="line">  - set -o pipefail</span><br><span class="line"></span><br><span class="line">stages:</span><br><span class="line">  - build</span><br><span class="line">  - test</span><br><span class="line"></span><br><span class="line">lintDebug:</span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint</span><br><span class="line"></span><br><span class="line">assembleDebug:</span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew assembleDebug#执行打包任务</span><br><span class="line">  only: </span><br><span class="line">    - tags #这里tags的作用是当修改gitlab项目tag的时候会触发</span><br><span class="line">    - test # 监听GitLab的这个分支</span><br><span class="line"> # 指定由哪一个runner运行</span><br><span class="line">  tags:</span><br><span class="line">    - dev # 这个dev是上文注册Runner时的tag，和注册时候tag一样的话就会用对应的Runner来执行任务</span><br><span class="line">  # 指定成功后应附加到任务的文件和目录的列表</span><br><span class="line">  artifacts:</span><br><span class="line">    paths:</span><br><span class="line">    - app/build/outputs/# 保留app/build/outputs/文件夹</span><br><span class="line">debugTests:</span><br><span class="line">  stage: test</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew -Pci --console=plain :app:testDebug</span><br><span class="line"># 构建完成之后执行的脚本</span><br><span class="line">#after_script:</span><br><span class="line">#  - 这里如果是要配合monkey的话，一般在这个地方执行monkey的脚本</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-使用DockerAndroid配置好的打包环境做Gitlab-CI-CD"><a href="#2-使用DockerAndroid配置好的打包环境做Gitlab-CI-CD" class="headerlink" title="2.使用DockerAndroid配置好的打包环境做Gitlab-CI&#x2F;CD"></a>2.使用DockerAndroid配置好的打包环境做Gitlab-CI&#x2F;CD</h3><h5 id="1-runmymind-docker-android-sdk"><a href="#1-runmymind-docker-android-sdk" class="headerlink" title="(1.)runmymind&#x2F;docker-android-sdk"></a>(1.)<a target="_blank" rel="noopener" href="https://hub.docker.com/r/runmymind/docker-android-sdk">runmymind&#x2F;docker-android-sdk</a></h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">image: runmymind/docker-android-sdk:latest</span><br><span class="line">before_script:</span><br><span class="line">  - chmod +x ./gradlew</span><br><span class="line">stages:</span><br><span class="line">  - build</span><br><span class="line">assembleDebug:</span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew clean</span><br><span class="line">    - ./gradlew assembleDebug</span><br><span class="line">  artifacts:</span><br><span class="line">    paths:</span><br><span class="line">    - app/build/outputs/</span><br><span class="line">  only:</span><br><span class="line">    - master</span><br><span class="line"></span><br><span class="line">assembleRelease:</span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew clean</span><br><span class="line">    - ./gradlew assembleRelease</span><br><span class="line">  artifacts:</span><br><span class="line">    paths:</span><br><span class="line">    - app/build/outputs/</span><br><span class="line">  only:</span><br><span class="line">    - master</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-jangrewe-gitlab-ci-android"><a href="#2-jangrewe-gitlab-ci-android" class="headerlink" title="(2.)jangrewe&#x2F;gitlab-ci-android"></a>(2.)<a target="_blank" rel="noopener" href="https://hub.docker.com/r/jangrewe/gitlab-ci-android">jangrewe&#x2F;gitlab-ci-android</a></h5><p>jangrewe&#x2F;gitlab-ci-android的tag里面有基于sdk30、29、28、27、26等版本可以选择:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">image: gitlab-ci-android:30 # 用来编译 android 项目的镜像</span><br><span class="line">variables:</span><br><span class="line">  GRADLE_OPTS: &quot;-Dorg.gradle.daemon=false&quot; # 禁用 gradle 守护进程</span><br><span class="line">before_script:</span><br><span class="line">  #  配置 gradle 的缓存目录</span><br><span class="line">  - export GRADLE_USER_HOME=/cache/.gradle</span><br><span class="line">  #  获取权限</span><br><span class="line">  - chmod +x ./gradlew</span><br><span class="line">  - chmod +x ./update-version-code.sh</span><br><span class="line">stages:</span><br><span class="line">  - build</span><br><span class="line"># 提交代码自动编译</span><br><span class="line">build:</span><br><span class="line">  stage: build</span><br><span class="line">  only:</span><br><span class="line">    - master</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew assembleDebug</span><br><span class="line">  tags:</span><br><span class="line">    - android</span><br><span class="line"># 构建测试包</span><br><span class="line">qa:</span><br><span class="line">  stage: build</span><br><span class="line">  only:</span><br><span class="line">    - qa</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew assembleDebug</span><br><span class="line">    - sh -x /cache/deploy-android.sh</span><br><span class="line">  artifacts:</span><br><span class="line">    paths:</span><br><span class="line">      - app/build/outputs/apk/debug/</span><br><span class="line">  tags:</span><br><span class="line">    - android</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-androidsdk"><a href="#3-androidsdk" class="headerlink" title="(3.)androidsdk"></a>(3.)<a target="_blank" rel="noopener" href="https://hub.docker.com/u/androidsdk">androidsdk</a></h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">image: androidsdk/android-30:latest</span><br><span class="line">before_script:</span><br><span class="line">  - chmod +x ./gradlew</span><br><span class="line">stages:</span><br><span class="line">  - build</span><br><span class="line">cache:</span><br><span class="line">  paths:</span><br><span class="line">    - .gradle/wrapper</span><br><span class="line">    - .gradle/caches</span><br><span class="line">assembleDebug:</span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">    - ./gradlew assembleDebug</span><br><span class="line">    - cp app/build/outputs/apk/debug/app-debug.apk app-debug.apk</span><br><span class="line">  artifacts:</span><br><span class="line">    paths:</span><br><span class="line">      - app-debug.apk</span><br></pre></td></tr></table></figure>
+
+<h5 id="4-android-build-box"><a href="#4-android-build-box" class="headerlink" title="(4.)android-build-box"></a>(4.)<a target="_blank" rel="noopener" href="https://hub.docker.com/r/mingc/android-build-box">android-build-box</a></h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">image: mingc/android-build-box:latest</span><br><span class="line"></span><br><span class="line">pipelines:</span><br><span class="line">  default:</span><br><span class="line">    - step:</span><br><span class="line">        caches:</span><br><span class="line">          - gradle</span><br><span class="line">          - gradle-wrapper</span><br><span class="line">          - android-emulator</span><br><span class="line">        script:</span><br><span class="line">          - bash ./gradlew assemble</span><br><span class="line">definitions:</span><br><span class="line">  caches:</span><br><span class="line">    gradle-wrapper: ~/.gradle/wrapper</span><br><span class="line">    android-emulator: $ANDROID_HOME/system-images/android-21</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-配置-runner-的Dokcker缓存路径"><a href="#3-配置-runner-的Dokcker缓存路径" class="headerlink" title="3.配置 runner 的Dokcker缓存路径"></a>3.配置 runner 的Dokcker缓存路径</h3><p>在服务器上找一个文件夹挂载到 docker 容器里边，给 .gradle 做一个缓存，这样每次编译的时候，就不用一直下载 gradle 了，这里我挂载的是 &#x2F;home&#x2F;android-cache 文件夹：<br>vi &#x2F;etc&#x2F;gitlab-runner&#x2F;config.toml<br><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/410e2f809177436ebf8eb5add59fcd9d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2RlbzM2MDE=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center"></a><br>pull_policy &#x3D; “if-not-present” 避免docker 镜像每次都pull<br>注意，如果你的 gitlab 服务器迁移了之后，如果不想再重新注册 runner，可以改这个配置文件的 url 和 token 为迁移后的值</p>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/wgyscsf/article/details/97533811">Docker在Android中的应用</a><br><a target="_blank" rel="noopener" href="https://my.oschina.net/yunwangjun/blog/4934308">GitLab CI&#x2F;CD 介绍和使用</a><br><a target="_blank" rel="noopener" href="http://blinkfox.com/2018/11/22/ruan-jian-gong-ju/devops/gitlab-ci-jie-shao-he-shi-yong/#toc-heading-8">GitLab CI&#x2F;CD 介绍和使用</a><br><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000022939875">使用gitlab api触发ci</a><br><a target="_blank" rel="noopener" href="http://quickapp.vivo.com.cn/how-to-use-gitlab-api-to-trigger-ci/">如何使用 gitlab api 触发 CI</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/e0553d3ac743/">超简单配置Android持续集成自动化打包流程 - GitHub+GitLab-CI+蒲公英+钉钉</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/aimqqroad-13/p/10115799.html">Android 项目配置 gitlab-ci 持续集成</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/Captive_Rainbow_/article/details/90407356">Android 持续集成实践（二）——配置 Docker + gitlab-runner 实现线上自动编译</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/Captive_Rainbow_/article/details/90480269">Android 持续集成实践（三）——编写 .gitlab-ci.yml 实现自动化</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/Captive_Rainbow_/article/details/90634669">Android 持续集成实践（四）——配置 WebHook 通知编译结果</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/Captive_Rainbow_/article/details/118856664">Android 持续集成实践（五）—— ABI 分包、特殊渠道编译需求</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2020/01/09/Android%E4%BD%BF%E7%94%A8Gitlab%E5%AE%9E%E7%8E%B0CI%E5%8F%8ACD/">https://lxlfpeng.github.io/2020/01/09/Android%E4%BD%BF%E7%94%A8Gitlab%E5%AE%9E%E7%8E%B0CI%E5%8F%8ACD/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/01/12/%E4%B8%87%E5%AD%97%E9%95%BF%E6%96%87%E6%80%BB%E7%BB%93MySQL%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" title="万字长文总结MySQL关系型数据库"><img class="cover" src="/images/6d9745d8ee86584dd4929e520fb298d8.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">万字长文总结MySQL关系型数据库</div></div><div class="info-2"><div class="info-item-1">数据库介绍什么是数据库？数据库的英文单词：data base，简称DB。数据库本质就是一个文件系统，它可以按照特定的格式把数据存储起来，可以方便对存储的数据进行增删改查操作。 数据库的分类目前数据库总共分为两个大类:  关系型数据库：是建立在关系模型基础上的数据库。（MySQL、Oracle、DB2、SQL Server等等）。 非关系型数据库（NO SQL）：通常指数据之间无关系的数据库。（monggodb、redis等等）。  数据库服务器、数据库和数据表的关系数据库服务器是一台安装了一个数据库管理系统（比如： MySQL）的主机，通常会开放一个远程连接的端口(例如MySQL的3306端口)来对外提供数据服务，通过数据库管理系统(MySQL)可以创建并管理管理多个数据库，一般开发人员会针对每一个应用创建一个数据库。在一个数据库中可以创建多张数据表，这些数据表是真正存储数据的载体。表的每一行称为一条记录（Record）。 SQL语言简介SQL(Structured Query...</div></div></div></a><a class="pagination-related" href="/2020/01/07/Android%E4%BD%BF%E7%94%A8RecyclerView%E5%AE%9E%E7%8E%B0%E5%A0%86%E5%8F%A0%E5%A4%B4%E5%83%8F%E6%95%88%E6%9E%9C/" title="Android使用RecyclerView实现堆叠头像效果"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Android使用RecyclerView实现堆叠头像效果</div></div><div class="info-2"><div class="info-item-1">第二个盖住第一个视图:item.layout 123456789101112&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;androidx.cardview.widget.CardView xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;    android:layout_width=&quot;24dp&quot;    android:layout_height=&quot;24dp&quot;    android:layout_marginRight=&quot;-10dp&quot;    android:elevation=&quot;0dp&quot;    app:cardBackgroundColor=&quot;@color/white&quot;   ...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Android-%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE-gitlab-ci-%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90"><span class="toc-number">1.</span> <span class="toc-text">Android 项目配置 gitlab-ci 持续集成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%BD%BF%E7%94%A8OpenJdk%E9%95%9C%E5%83%8F%E8%87%AA%E8%A1%8C%E6%89%93%E5%8C%85%E7%8E%AF%E5%A2%83%E5%81%9AGitlab-CI-CD"><span class="toc-number">1.0.1.</span> <span class="toc-text">1.使用OpenJdk镜像自行打包环境做Gitlab-CI&#x2F;CD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%BD%BF%E7%94%A8DockerAndroid%E9%85%8D%E7%BD%AE%E5%A5%BD%E7%9A%84%E6%89%93%E5%8C%85%E7%8E%AF%E5%A2%83%E5%81%9AGitlab-CI-CD"><span class="toc-number">1.0.2.</span> <span class="toc-text">2.使用DockerAndroid配置好的打包环境做Gitlab-CI&#x2F;CD</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-runmymind-docker-android-sdk"><span class="toc-number">1.0.2.0.1.</span> <span class="toc-text">(1.)runmymind&#x2F;docker-android-sdk</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-jangrewe-gitlab-ci-android"><span class="toc-number">1.0.2.0.2.</span> <span class="toc-text">(2.)jangrewe&#x2F;gitlab-ci-android</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-androidsdk"><span class="toc-number">1.0.2.0.3.</span> <span class="toc-text">(3.)androidsdk</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-android-build-box"><span class="toc-number">1.0.2.0.4.</span> <span class="toc-text">(4.)android-build-box</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE-runner-%E7%9A%84Dokcker%E7%BC%93%E5%AD%98%E8%B7%AF%E5%BE%84"><span class="toc-number">1.0.3.</span> <span class="toc-text">3.配置 runner 的Dokcker缓存路径</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

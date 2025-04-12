@@ -1,0 +1,286 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Android上传aar到Jcenter和Jitpack | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.上传项目到Jcenter1.注册jcenter账号进入注册地址选择右边sign up here 进行注册,建议直接使用github账号授权登录。(qq，网易等邮箱很多时候收不到验证码，所以要想成功完成注册最好用google邮箱) 2.创建Repository（仓库）注册成功之后创建Repository，作为存放开源库的仓库，最好选择为公共仓库（public），仓库名称和仓库类型为maven，仓">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android上传aar到Jcenter和Jitpack">
+<meta property="og:url" content="https://lxlfpeng.github.io/2017/08/01/Android%E4%B8%8A%E4%BC%A0aar%E5%88%B0Jcenter%E5%92%8CJitpack/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.上传项目到Jcenter1.注册jcenter账号进入注册地址选择右边sign up here 进行注册,建议直接使用github账号授权登录。(qq，网易等邮箱很多时候收不到验证码，所以要想成功完成注册最好用google邮箱) 2.创建Repository（仓库）注册成功之后创建Repository，作为存放开源库的仓库，最好选择为公共仓库（public），仓库名称和仓库类型为maven，仓">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2017-07-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.828Z">
+<meta property="article:author" content="peng">
+<meta property="article:tag" content="Gradle">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2017/08/01/Android%E4%B8%8A%E4%BC%A0aar%E5%88%B0Jcenter%E5%92%8CJitpack/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Android上传aar到Jcenter和Jitpack',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Android上传aar到Jcenter和Jitpack</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Android上传aar到Jcenter和Jitpack</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2017-07-31T16:00:00.000Z" title="发表于 2017-08-01 00:00:00">2017-08-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-上传项目到Jcenter"><a href="#一-上传项目到Jcenter" class="headerlink" title="一.上传项目到Jcenter"></a>一.上传项目到Jcenter</h1><h3 id="1-注册jcenter账号"><a href="#1-注册jcenter账号" class="headerlink" title="1.注册jcenter账号"></a>1.注册jcenter账号</h3><p>进入<a target="_blank" rel="noopener" href="https://bintray.com/">注册地址</a>选择右边sign up here 进行注册,建议直接使用github账号授权登录。(qq，网易等邮箱很多时候收不到验证码，所以要想成功完成注册最好用google邮箱)<br><img src="/images/5d02a57b10ae75ab984e58b782de1e6d.webp" alt="image.png"></p>
+<h3 id="2-创建Repository（仓库）"><a href="#2-创建Repository（仓库）" class="headerlink" title="2.创建Repository（仓库）"></a>2.创建Repository（仓库）</h3><p>注册成功之后创建Repository，作为存放开源库的仓库，最好选择为公共仓库（public），仓库名称和仓库类型为maven，仓库名称在后面上传时需要用到。<br><img src="/images/eea73bb55e14215bcc1b521decb3916b.webp"><br><img src="/images/54c34cd1b58ef0dbf9131b20178fa31f.webp"></p>
+<h3 id="3-获取-API-Key"><a href="#3-获取-API-Key" class="headerlink" title="3.获取 API Key"></a>3.获取 API Key</h3><p>登录bintray， Edit profile -&gt; API Key 可以获取上传的秘钥key，后面上传项目的时候需要使用。<br><img src="/images/ade53e475358a7f14a17f70e0b489d84.webp"></p>
+<h3 id="4-配置引入-bintray-release插件"><a href="#4-配置引入-bintray-release插件" class="headerlink" title="4.配置引入 bintray-release插件"></a>4.配置引入 bintray-release插件</h3><p>项目根目录build.gradle配置，加入bintray-release插件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">buildscript &#123;</span><br><span class="line">       ...</span><br><span class="line">    repositories &#123;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">       ...</span><br><span class="line">        classpath &#x27;com.novoda:bintray-release:0.9.2&#x27;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">     ...</span><br><span class="line">    &#125;</span><br><span class="line">    //解决lib中中文乱码问题</span><br><span class="line">    tasks.withType(Javadoc) &#123; </span><br><span class="line">        options.addStringOption(&#x27;Xdoclint:none&#x27;, &#x27;-quiet&#x27;)</span><br><span class="line">        options.addStringOption(&#x27;encoding&#x27;, &#x27;UTF-8&#x27;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>开源库目录build.gradle配置，每个配置描述都已经给出，完成这两个步骤，就可以准备上传开源库到jcenter了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: &#x27;com.android.library&#x27;</span><br><span class="line">apply plugin: &#x27;com.novoda.bintray-release&#x27;//添加 bintray-release 配置</span><br><span class="line">android &#123;</span><br><span class="line">    ...</span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">    ...    </span><br><span class="line">    &#125;</span><br><span class="line">    buildTypes &#123;  </span><br><span class="line">    &#125;</span><br><span class="line">    compileOptions &#123;</span><br><span class="line">        sourceCompatibility = 1.8</span><br><span class="line">        targetCompatibility = 1.8</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">dependencies &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">//添加</span><br><span class="line">publish &#123;</span><br><span class="line">    userOrg = &#x27;lxlfpeng&#x27;//bintray.com用户名</span><br><span class="line">    repoName = &#x27;RecordingButton&#x27;   // bintray上仓库的名字</span><br><span class="line">    groupId = &#x27;com.lagua&#x27;//jcenter上的路径</span><br><span class="line">    artifactId = &#x27;RecordingButton&#x27;//项目名称</span><br><span class="line">    publishVersion = &#x27;1.0.0&#x27;//版本号</span><br><span class="line">    desc = &#x27;Make flow layouts simpler&#x27;// 描述</span><br><span class="line">    website = &#x27;https://github.com/lxlfpeng/RecordingButton.git&#x27;//一般填github 项目地址,一定是要有效的地址</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-上传开源库"><a href="#5-上传开源库" class="headerlink" title="5.上传开源库"></a>5.上传开源库</h3><h5 id="1-在项目根目录下执行上传命令"><a href="#1-在项目根目录下执行上传命令" class="headerlink" title="(1.)在项目根目录下执行上传命令"></a>(1.)在项目根目录下执行上传命令</h5><p><img src="/images/69ddabfe7b26d894d314945643df52c7.webp"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># window 下执行</span><br><span class="line">gradlew clean build bintrayUpload -PbintrayUser=Xxxx -PbintrayKey=Xxxxxxxxx -PdryRun=false</span><br><span class="line"></span><br><span class="line"># linux 下执行</span><br><span class="line">./gradlew clean build bintrayUpload -PbintrayUser=Xxxx -PbintrayKey=xxxxxxxxx -PdryRun=false</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-上传命令解析"><a href="#2-上传命令解析" class="headerlink" title="(2.)上传命令解析"></a>(2.)上传命令解析</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gradlew clean build bintrayUpload //根命令</span><br><span class="line">-PbintrayUser=Xxxxxxxxx  //jcenter 账号用户名</span><br><span class="line">-PbintrayKey=Xxxxxxxxx  //文章开头获取的API Key</span><br><span class="line">-PdryRun=false //配置参数，true 执行所以细节但是不上传开源库，false上传开源库</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="二-添加到Jcenter中央仓库"><a href="#二-添加到Jcenter中央仓库" class="headerlink" title="二.添加到Jcenter中央仓库"></a>二.添加到Jcenter中央仓库</h1><h3 id="1-Add-to-JCenter"><a href="#1-Add-to-JCenter" class="headerlink" title="1. Add to JCenter"></a>1. Add to JCenter</h3><p>上传成功之后就可以打开项目详情，选择 Add to JCenter 就可以申请添加到 JCenter 了，如下图所示：经过上面的步骤，我确实已经把开源库上传到Jcenter了，但是我们还不能引用，要想引用上传的开源库还得提交人工审核，人工审核通过会收到站内message，并且开源库中的Add to Jcenter 也会消失。<br><img src="/images/be301d1f3b878377e53655ad2b6473fc.webp"></p>
+<h3 id="2-审核期间引用"><a href="#2-审核期间引用" class="headerlink" title="2. 审核期间引用"></a>2. 审核期间引用</h3><p>在工程(projrct)的build.gradle文件中，添加maven支持<br><img src="/images/8495782680729379a9b1ec7268453cc9.webp"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">       ...</span><br><span class="line">        maven &#123; url &#x27;https://dl.bintray.com/lxlfpeng/xxxxx&#x27; &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在moudle的build.gradle文件中,添加依赖</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    ...</span><br><span class="line">    implementation &#x27;com.xx:xx:1.0.0&#x27;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="三-Jcenter托管项目版本更新"><a href="#三-Jcenter托管项目版本更新" class="headerlink" title="三.Jcenter托管项目版本更新"></a>三.Jcenter托管项目版本更新</h1><h3 id="1-提交版本"><a href="#1-提交版本" class="headerlink" title="1.提交版本"></a>1.提交版本</h3><p>开源库有bug，或者我们进行迭代，就会涉及到版本更新，那就只需要修改开源库目录build.gradle配置中的版本号，其他配置保持不变，再次执行上传开源库命令就可以达到版本更新的目的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">publish &#123;</span><br><span class="line">    userOrg = &#x27;maoqitian&#x27;//bintray.com用户名</span><br><span class="line">    repoName = &#x27;maolibrary&#x27;   // bintray上仓库的名字</span><br><span class="line">    groupId = &#x27;com.mao&#x27;//jcenter上的路径</span><br><span class="line">    artifactId = &#x27;flexibleflowlayout&#x27;//项目名称</span><br><span class="line">    publishVersion = &#x27;2.0.0&#x27;//版本号</span><br><span class="line">    desc = &#x27;Make flow layouts simpler&#x27;// 描述</span><br><span class="line">    website = &#x27;https://github.com/maoqitian/FlowLayout&#x27;//一般填github 项目地址,一定是要有效的地址</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-审核通过"><a href="#2-审核通过" class="headerlink" title="2.审核通过"></a>2.审核通过</h3><p>审核通过会发送站内message，同时Add to jCenter按钮消失，并且可以通过访问<a target="_blank" rel="noopener" href="https://jcenter.bintray.com/%E4%BD%A0%E7%9A%84groupId%E6%9F%A5%E7%9C%8B%E3%80%82">https://jcenter.bintray.com/你的groupId查看。</a></p>
+<h1 id="四-Jcenter托管项目问题相关"><a href="#四-Jcenter托管项目问题相关" class="headerlink" title="四.Jcenter托管项目问题相关"></a>四.Jcenter托管项目问题相关</h1><h3 id="1-上传成功后jcenter项目首页不显示pom"><a href="#1-上传成功后jcenter项目首页不显示pom" class="headerlink" title="1.上传成功后jcenter项目首页不显示pom"></a>1.上传成功后jcenter项目首页不显示pom</h3><p><strong>问题：</strong><br>上传成功后jcenter项目首页不显示pom，点击add to jcenter弹出以下错误提示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Please fix the following before submitting a JCenter inclusion request: - Add a POM file to the latest version of your package.</span><br></pre></td></tr></table></figure>
+<p>原因是:是由于编码问题导致javadoc生成失败导致。</p>
+<p><strong>解决：</strong><br>方式一：在Project的build.gradle中配置以下语句：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        google()</span><br><span class="line">        jcenter()</span><br><span class="line">    &#125;</span><br><span class="line">    // 新增</span><br><span class="line">    tasks.withType(Javadoc) &#123; </span><br><span class="line">        options.addStringOption(&#x27;Xdoclint:none&#x27;, &#x27;-quiet&#x27;)</span><br><span class="line">        options.addStringOption(&#x27;encoding&#x27;, &#x27;UTF-8&#x27;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>方式二：拆分上传命令：</p>
+<ol>
+<li>在Terminal执行<code>gradlew clean build</code>命令。</li>
+<li>先右击执行generatePomFileForReleasePublication task，再右击执行publishReleasePublicationToMavenLocal task，具体操作看图：<br><img src="/images/c9d4181728269298376675d92ac73b24.webp"></li>
+<li>在Terminal中执行<code>gradlew bintrayUpload -PbintrayUser=username -PbintrayKey=API Key -PdryRun=false</code>命令。</li>
+</ol>
+<h3 id="2-Lint检查报错"><a href="#2-Lint检查报错" class="headerlink" title="2.Lint检查报错"></a>2.Lint检查报错</h3><p><strong>问题：</strong><br>Lint检查报错，导致Build &amp; Upload失败。</p>
+<p><strong>解决：</strong><br>方式一：需要自行根据错误信息修正Error级别的问题。<br>方式二：为Library项目的build.gradle配置以下Lint选项实现，–该方式摘自网络，未验证：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line"> </span><br><span class="line">    ...</span><br><span class="line"> </span><br><span class="line">    lintOptions &#123;</span><br><span class="line">        abortOnError false // 即使有报错也不会停止打包</span><br><span class="line">        checkReleaseBuilds false // 打包Release版本的时候也不进行Lint检测</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-网络问题导致的上传失败"><a href="#3-网络问题导致的上传失败" class="headerlink" title="3.网络问题导致的上传失败"></a>3.网络问题导致的上传失败</h3><p><strong>问题：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">* What went wrong:</span><br><span class="line">Execution failed for task &#x27;:utils:bintrayUpload&#x27;.</span><br><span class="line">&gt; javax.net.ssl.SSLPeerUnverifiedException: peer not authenticated</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">* What went wrong:</span><br><span class="line">Execution failed for task &#x27;:utils:bintrayUpload&#x27;.</span><br><span class="line">&gt; org.apache.http.conn.HttpHostConnectException: Connection to http://127.0.0.1:8888 refused</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">* What went wrong:</span><br><span class="line">Execution failed for task &#x27;:utils:bintrayUpload&#x27;.</span><br><span class="line">&gt; org.apache.http.NoHttpResponseException: The target server failed to respond</span><br></pre></td></tr></table></figure>
+<p><strong>解决：</strong></p>
+<ol>
+<li>关闭代理软件，重启网络。</li>
+<li>关闭由上传操作自动开启的Java客户端（Mac上会出现，其他设备不清楚）。</li>
+</ol>
+<h1 id="五-上传项目到Jitpack"><a href="#五-上传项目到Jitpack" class="headerlink" title="五.上传项目到Jitpack"></a>五.上传项目到Jitpack</h1><h3 id="1-准备好项目以及要发布的开源库"><a href="#1-准备好项目以及要发布的开源库" class="headerlink" title="1.准备好项目以及要发布的开源库"></a>1.准备好项目以及要发布的开源库</h3><p>上传到JitPack的开源库默认使用项目的名称，而不是要发布的开源库的名称，所以尽量给项目起一个比较优雅的名字（这里我们使用同名）。<br><img src="/images/7ea1a9d3e1c2233c4dd1cf3cb4034cb9.webp"></p>
+<h3 id="2-配置gradle插件"><a href="#2-配置gradle插件" class="headerlink" title="2.配置gradle插件"></a>2.配置gradle插件</h3><p>用到一个的插件**<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=https://github.com/dcendents/android-maven-gradle-plugin">android-maven-gradle-plugin</a>**</p>
+<ol>
+<li><p>在项目的build.gradle添加<code>classpath &#39;com.github.dcendents:android-maven-gradle-plugin:1.5&#39;</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">buildscript &#123;</span><br><span class="line">   ...</span><br><span class="line">    repositories &#123;</span><br><span class="line">        google()</span><br><span class="line">        jcenter()</span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        classpath &#x27;com.android.tools.build:gradle:3.5.2&#x27;</span><br><span class="line">        classpath &#x27;com.github.dcendents:android-maven-gradle-plugin:1.5&#x27;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">allprojects &#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/29dee4c9795fbd1f3e7b158ccf81037a.webp"></p>
+</li>
+<li><p>在要上传的library的build.gralde文件添加如下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: &#x27;com.android.library&#x27;</span><br><span class="line">// JitPack Maven</span><br><span class="line">apply plugin: &#x27;com.github.dcendents.android-maven&#x27;</span><br><span class="line">// Your Group</span><br><span class="line">group=&#x27;com.github.username&#x27;</span><br><span class="line">android &#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>将项目上传到github。</p>
+</li>
+</ol>
+<h3 id="3-在github主页，创建一个Release或Tag"><a href="#3-在github主页，创建一个Release或Tag" class="headerlink" title="3.在github主页，创建一个Release或Tag"></a>3.在github主页，创建一个Release或Tag</h3><p><img src="/images/4f0d6a6fa9e6f2f3d636e1ae3aa8840f.webp" alt="image.png"><br><img src="/images/540beb26db7ed47d9a84227d985ce4eb.webp" alt="image.png"><br><img src="/images/e081706c7b396f98659b89776455a1d8.webp" alt="image.png"><br><img src="/images/c402e7bb54fa2c1eb585e4d0107673f2.webp" alt="image.png"></p>
+<h3 id="4-将项目的仓库提交到jitpack-io"><a href="#4-将项目的仓库提交到jitpack-io" class="headerlink" title="4.将项目的仓库提交到jitpack.io"></a>4.将项目的仓库提交到<a target="_blank" rel="noopener" href="https://jitpack.io/">jitpack.io</a></h3><p><img src="/images/1e932235725ba95013dd6cd10cc3f304.webp" alt="image.png"><br>版本提交完成后，JitPack会自动生成引用该library的配置信息:<br><img src="/images/742f63e3c02cdb2458d4a4c2cd47b04c.webp" alt="image.png"></p>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="https://www.maoqitian.com/2019/09/03/%E5%BC%80%E6%BA%90%E5%BA%93%E4%B8%8A%E4%BC%A0-jcenter/">开源库上传 jcenter</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/b09871d84fc1">AS上传Library到JCenter 教程+踩坑记录</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6f04943efd3d">亲测android Studio发布Lib到jCenter</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/csdn576038874/article/details/79308391">如何一步一步的将自己的开源项目上传到jcenter</a><br><a target="_blank" rel="noopener" href="https://juejin.im/post/5df10c116fb9a0165936e0b7">如何上传Android库项目的到JCenter</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2017/08/01/Android%E4%B8%8A%E4%BC%A0aar%E5%88%B0Jcenter%E5%92%8CJitpack/">https://lxlfpeng.github.io/2017/08/01/Android%E4%B8%8A%E4%BC%A0aar%E5%88%B0Jcenter%E5%92%8CJitpack/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Gradle/">Gradle</a></div><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2017/08/02/%E6%BC%AB%E8%B0%88Http%E5%92%8CHttps/" title="漫谈Http和Https"><img class="cover" src="/images/a58a9e4c7f56b6574ef299b35d84a74e.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">漫谈Http和Https</div></div><div class="info-2"><div class="info-item-1">一.Http🦄Http简介HTTP协议是Hyper Text Transfer Protocol（超文本传输协议）的缩写，它是构建于 TCP&#x2F;IP 协议之上的一个应用层协议(网络进行通信的规则)，默认端口号是 80。HTTP协议工作于客户端-服务端架构之上。HTTP客户端通过URL向HTTP服务端发送所有请求，HTTP服务端根据接收到的请求后， 向客户端发送响应信息。HTTP 是一种无状态 (stateless) 协议，HTTP协议本身不会对发送过的请求和相应的通信状态进行持久化处理。这样做的目的是为了保持HTTP协议的简单性，从而能够快速处理大量的事务， 提高效率。 但是，很多应用场景中，我们需要保持各种状态，如：登录状态等。我们就必须引入一些技术来记录管理状态，例如Cookie等技术。目前绝大多数的Web开发，都是构建在HTTP协议之上的。 🦓Http的特点HTTP...</div></div></div></a><a class="pagination-related" href="/2017/06/11/Okhttp3.0%E9%85%8D%E7%BD%AE%E6%94%AF%E6%8C%81%E7%AC%AC%E4%B8%89%E6%96%B9%E7%AD%BE%E5%90%8DHttps%E8%AF%81%E4%B9%A6/" title="Okhttp3.0配置支持第三方签名Https证书"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Okhttp3.0配置支持第三方签名Https证书</div></div><div class="info-2"><div class="info-item-1">一.Https简介HTTPS全称为Hyper Text Transfer Protocol over Secure Socket Layer或是Hypertext Transfer Protocol Secure 中文含义为“超文本传输安全协议” 。是以安全为目标的HTTP通道，在HTTP的基础上通过传输加密和身份认证保证了传输过程的安全性 。HTTPS 在HTTP 的基础下加入SSL，HTTPS 的安全基础是 SSL，因此加密的详细内容就需要 SSL。 HTTPS 存在不同于 HTTP 的默认端口及一个加密&#x2F;身份验证层（在 HTTP与 TCP 之间）。这个系统提供了身份验证与加密通讯方法。它被广泛用于万维网上安全敏感的通讯，例如交易支付等方面。 二.Okhttp支持Httpsokhttp默认情况下是支持https协议的网站的，比如https://www.baidu.com等，可以直接通过okhttp请求就可以获取对应的数据。需要注意的是Okhttp支持的https的网站基本都是CA机构颁发的证书，...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2022/10/03/Android%E9%A1%B9%E7%9B%AEGadle%E7%BB%9F%E4%B8%80%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/" title="Android项目Gadle统一依赖管理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-03</div><div class="info-item-2">Android项目Gadle统一依赖管理</div></div><div class="info-2"><div class="info-item-1">一.Gradle管理依赖版本在中大型Android项目中，都会有多个Module进行协同配合。这些module中可能会依赖同一个库的不同版本，这将导致一些问题，要么是代码冲突，要么是APK包体积增大，亦或是项目构建的时间变长，拖慢开发效率。 例如:下图就是在不同的module中依赖同一个库的不同版本。要解决这个问题我们首先要了解在Android项目中目前有那些方案来引入第三方依赖:  直接编写(默认方式) 使用ext扩展抽取公共版本 使用buildSrc管理依赖 使用composing builds管理依赖 使用catalog管理依赖(gradle7版本以上才能用，因此暂时忽略)  二.直接编写(默认方式)简介直接编写是Android项目工程自带的默认管理方式，在每一个module中都写死了不同依赖及版本号，因此每次升级依赖库时都需要对每一个module做大量的手动更改。 module_a&#x2F;build.gradle: 1234567dependencies &#123;    implementation...</div></div></div></a><a class="pagination-related" href="/2019/08/01/Apk%E6%9E%84%E5%BB%BA%E6%80%BB%E7%BB%93%E4%B9%8B%E4%B8%80%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B%E5%8F%8A%E5%AE%89%E8%A3%85%E6%B5%81%E7%A8%8B/" title="Apk构建总结之一打包流程及安装流程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-08-01</div><div class="info-item-2">Apk构建总结之一打包流程及安装流程</div></div><div class="info-2"><div class="info-item-1">一. 分析已经打好的apk要了解APK的打包流程,我们首先来了解下打包完成以后APK包里面包含哪些东西。.apk文件其实就是一个压缩文件，把文件的后缀改成.zip就可以用解压软件解压了： 1. 将apk后缀改成rar包 2. 解压rar包 apk是一个压缩包，里面有lib，META-INF，classes.dex，res，resources.arsc文件夹和文件。下面看看它们各自的作用。  assets资源。 lib不是每个apk都有的，主要看项目,文件夹里面存放的是so动态链接库，so动态链接库不需要做处理。 META-INF是签名文件夹，里面有三个文件。 res:除图片和 res&#x2F;raw 文件夹下的文件外，其余的 xml 文件都被 aapt 编译成二进制的 xml 文件,里面还会分animator,anim,color,drawable,layout,menu和raw这几个文件夹。 AndroidManifest.xml:经过 aapt 编译后的二进制的 xml 文件,它位于整个项目的根目录，描述了package中暴露的组件（activities,...</div></div></div></a><a class="pagination-related" href="/2019/08/05/Apk%E6%9E%84%E5%BB%BA%E6%80%BB%E7%BB%93%E4%B9%8B%E4%BA%8C%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7(Ant%E3%80%81Maven%E3%80%81Gradle)/" title="Apk构建总结之二构建工具(Ant、Maven、Gradle)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-08-05</div><div class="info-item-2">Apk构建总结之二构建工具(Ant、Maven、Gradle)</div></div><div class="info-2"><div class="info-item-1">一. 构建工具1.什么是构建工具？在进行编程操作的时候，我们经常会遇到很多与编程无关的项目管理工作。如下载依赖、编译源码、单元测试、项目部署等操作。一般的，小型项目我们可以手动实现这些操作，然而大型项目这些工作则相对复杂。所以我们需要用到构建工具。构建工具是帮助我们实现一系列项目管理、测试和部署操作的工具。构建工具可以把源代码生成可执行应用程序的过程自动化的程序（例如Android app生成apk）。构建工具包括编译、连接跟把代码打包成可用的或可执行的形式。 总的来说构建的自动化是编写或使一大部分任务自动执行的一个动作，而这些任务则是软件开发者的日常，像是：  下载依赖。 将源代码编译成二进制代码。 打包生成的二进制代码。 进行单元测试。 部署到生产系统。  2.为什么要使用构建工具？比如我们要写一个Java程序，一般的步骤也就是编译，测试，打包。这个构建的过程，如果文件比较少，我们可以手动使用java, javac,...</div></div></div></a><a class="pagination-related" href="/2022/09/10/%E4%B8%8A%E4%BC%A0Aar%E5%88%B0maven%E5%BA%93/" title="上传Aar到maven库"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-10</div><div class="info-item-2">上传Aar到maven库</div></div><div class="info-2"><div class="info-item-1">方式一:12345678910111213141516171819202122232425262728293031323334353637383940plugins &#123;    id &#x27;com.android.library&#x27;    id &#x27;org.jetbrains.kotlin.android&#x27;    id &#x27;maven-publish&#x27;&#125;task androidSourceJar(type: Jar) &#123;    from android.sourceSets.main.java.getSrcDirs()//源码路径 包括Java和Kotlin源码    archiveClassifier.set(&quot;sources&quot;)&#125;afterEvaluate &#123;    publishing &#123;        publications &#123;            plugin(MavenPublication) &#123;          ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-%E4%B8%8A%E4%BC%A0%E9%A1%B9%E7%9B%AE%E5%88%B0Jcenter"><span class="toc-number">1.</span> <span class="toc-text">一.上传项目到Jcenter</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%B3%A8%E5%86%8Cjcenter%E8%B4%A6%E5%8F%B7"><span class="toc-number">1.0.1.</span> <span class="toc-text">1.注册jcenter账号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BARepository%EF%BC%88%E4%BB%93%E5%BA%93%EF%BC%89"><span class="toc-number">1.0.2.</span> <span class="toc-text">2.创建Repository（仓库）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%8E%B7%E5%8F%96-API-Key"><span class="toc-number">1.0.3.</span> <span class="toc-text">3.获取 API Key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%85%8D%E7%BD%AE%E5%BC%95%E5%85%A5-bintray-release%E6%8F%92%E4%BB%B6"><span class="toc-number">1.0.4.</span> <span class="toc-text">4.配置引入 bintray-release插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E4%B8%8A%E4%BC%A0%E5%BC%80%E6%BA%90%E5%BA%93"><span class="toc-number">1.0.5.</span> <span class="toc-text">5.上传开源库</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E5%9C%A8%E9%A1%B9%E7%9B%AE%E6%A0%B9%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%BC%A0%E5%91%BD%E4%BB%A4"><span class="toc-number">1.0.5.0.1.</span> <span class="toc-text">(1.)在项目根目录下执行上传命令</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E4%B8%8A%E4%BC%A0%E5%91%BD%E4%BB%A4%E8%A7%A3%E6%9E%90"><span class="toc-number">1.0.5.0.2.</span> <span class="toc-text">(2.)上传命令解析</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-%E6%B7%BB%E5%8A%A0%E5%88%B0Jcenter%E4%B8%AD%E5%A4%AE%E4%BB%93%E5%BA%93"><span class="toc-number">2.</span> <span class="toc-text">二.添加到Jcenter中央仓库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Add-to-JCenter"><span class="toc-number">2.0.1.</span> <span class="toc-text">1. Add to JCenter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%A1%E6%A0%B8%E6%9C%9F%E9%97%B4%E5%BC%95%E7%94%A8"><span class="toc-number">2.0.2.</span> <span class="toc-text">2. 审核期间引用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-Jcenter%E6%89%98%E7%AE%A1%E9%A1%B9%E7%9B%AE%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0"><span class="toc-number">3.</span> <span class="toc-text">三.Jcenter托管项目版本更新</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%8F%90%E4%BA%A4%E7%89%88%E6%9C%AC"><span class="toc-number">3.0.1.</span> <span class="toc-text">1.提交版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%A1%E6%A0%B8%E9%80%9A%E8%BF%87"><span class="toc-number">3.0.2.</span> <span class="toc-text">2.审核通过</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-Jcenter%E6%89%98%E7%AE%A1%E9%A1%B9%E7%9B%AE%E9%97%AE%E9%A2%98%E7%9B%B8%E5%85%B3"><span class="toc-number">4.</span> <span class="toc-text">四.Jcenter托管项目问题相关</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%8A%E4%BC%A0%E6%88%90%E5%8A%9F%E5%90%8Ejcenter%E9%A1%B9%E7%9B%AE%E9%A6%96%E9%A1%B5%E4%B8%8D%E6%98%BE%E7%A4%BApom"><span class="toc-number">4.0.1.</span> <span class="toc-text">1.上传成功后jcenter项目首页不显示pom</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Lint%E6%A3%80%E6%9F%A5%E6%8A%A5%E9%94%99"><span class="toc-number">4.0.2.</span> <span class="toc-text">2.Lint检查报错</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E7%BD%91%E7%BB%9C%E9%97%AE%E9%A2%98%E5%AF%BC%E8%87%B4%E7%9A%84%E4%B8%8A%E4%BC%A0%E5%A4%B1%E8%B4%A5"><span class="toc-number">4.0.3.</span> <span class="toc-text">3.网络问题导致的上传失败</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94-%E4%B8%8A%E4%BC%A0%E9%A1%B9%E7%9B%AE%E5%88%B0Jitpack"><span class="toc-number">5.</span> <span class="toc-text">五.上传项目到Jitpack</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%87%86%E5%A4%87%E5%A5%BD%E9%A1%B9%E7%9B%AE%E4%BB%A5%E5%8F%8A%E8%A6%81%E5%8F%91%E5%B8%83%E7%9A%84%E5%BC%80%E6%BA%90%E5%BA%93"><span class="toc-number">5.0.1.</span> <span class="toc-text">1.准备好项目以及要发布的开源库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AEgradle%E6%8F%92%E4%BB%B6"><span class="toc-number">5.0.2.</span> <span class="toc-text">2.配置gradle插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%9C%A8github%E4%B8%BB%E9%A1%B5%EF%BC%8C%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AARelease%E6%88%96Tag"><span class="toc-number">5.0.3.</span> <span class="toc-text">3.在github主页，创建一个Release或Tag</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%B0%86%E9%A1%B9%E7%9B%AE%E7%9A%84%E4%BB%93%E5%BA%93%E6%8F%90%E4%BA%A4%E5%88%B0jitpack-io"><span class="toc-number">5.0.4.</span> <span class="toc-text">4.将项目的仓库提交到jitpack.io</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

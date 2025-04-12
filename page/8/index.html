@@ -1,0 +1,245 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta property="og:type" content="website">
+<meta property="og:title" content="鹏哥的Blog">
+<meta property="og:url" content="https://lxlfpeng.github.io/page/8/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/page/8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '鹏哥的Blog',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/images/home_bg.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">鹏哥的Blog</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/07/11/Android%E5%BC%B9%E7%AA%97BottomSheetDialog%E6%80%BB%E7%BB%93/" title="Android弹窗BottomSheetDialog总结">Android弹窗BottomSheetDialog总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-07-10T16:00:00.000Z" title="发表于 2020-07-11 00:00:00">2020-07-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="content">圆角效果 先设置原有背景透明  style.xml 1234567&lt;!--实现BottomSheetDialog圆角效果--&gt;&lt;style name=&quot;BottomSheetDialog&quot; parent=&quot;Theme.Design.Light.BottomSheetDialog&quot;&gt;    &lt;item name=&quot;bottomSheetStyle&quot;&gt;@style/bottomSheetStyleWrapper&lt;/item&gt;&lt;/style&gt;&lt;style name=&quot;bottomSheetStyleWrapper&quot; parent=&quot;Widget.Design.BottomSheet.Modal&quot;&gt;    &lt;item...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/06/12/Android%E6%95%B0%E6%8D%AE%E5%BA%93Room%E4%B9%8B%E4%BA%8C%E5%AE%9E%E4%BD%93%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB/" title="Android数据库Room之二实体之间的关系">Android数据库Room之二实体之间的关系</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-06-11T16:00:00.000Z" title="发表于 2020-06-12 00:00:00">2020-06-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="content">一.定义对象之间的关系由于 SQLite 是关系型数据库，因此您可以定义各个实体之间的关系。尽管大多数对象关系映射库都允许实体对象互相引用，但 Room 明确禁止这样做。如需了解此决策背后的技术原因，请参阅了解 Room 为何不允许对象引用。Room 的数据实体类跟数据库表是对应的，所以，有些表关系可以直接通过定义数据实体类之间的关系来实现，这样就可以无需编写 SQL 语句实现插入和查询过操作。 🐼两种可能的方法在 Room 中，您可以通过两种方式定义和查询实体之间的关系：使用具有嵌入式对象的中间数据类或具有多重映射返回值类型的关系型查询方法来建立关系。 🐻中间数据类在中间数据类方法中，您可以定义数据类，以便在 Room 实体之间建立关系。此数据类保存一个实体的实例与另一个实体的实例之间的对应方式（作为嵌入式对象）。然后，查询方法可以返回此数据类的实例，通过此数据类的实例我们就可以拿到对应实体的数据。 例如，您可以定义 UserBook 数据类来表示已借阅特定图书的图书馆用户，并定义一个查询方法用于从数据库中检索 UserBook...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/06/10/Android%E6%95%B0%E6%8D%AE%E5%BA%93Room%E4%B9%8B%E4%B8%80%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/" title="Android数据库Room之一基础使用">Android数据库Room之一基础使用</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-06-09T16:00:00.000Z" title="发表于 2020-06-10 00:00:00">2020-06-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="content">一.Room简介Room是Google推出的数据库框架，是一个 ORM (Object Relational Mapping)对象关系映射数据库、其底层还是对SQLite的封装。 使用ORM可以让开发者更加关注业务逻辑，而不是SQL 语句。在JavaWeb领域也有类似的ORM 数据库框架Hibernate、MyBatis等等。 1.Android平台数据库框架在 Android 中常见的数据库框架：  Greendao  Realm  DBFlow LitePal Jetpack-Room  🦝Greendao: 是 room 之前用得最广泛的 ORM 数据库框架，不过官方目前已经不再积极维护（官方在推新品 ObjectBox )在 ROOM,，出来以后据非官方数据统计多种场景下(插入、更新、删除)，ROOM 性能上也只是和 greendao 不相上下，强得有限，毕竟底层都还是 Android 的 SQLite 只能通过包装层和生成语句去优化。Greendao的缺点是配置复杂，不支持监听数据表&#x2F;Kotlin&#x2F;协程等特性。🦁Realm: 不是基于...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/06/01/%E4%BD%BF%E7%94%A8Appuim+Python%E8%84%9A%E6%9C%AC%E5%AE%9E%E7%8E%B0Android%E5%BA%94%E7%94%A8%E8%87%AA%E5%8A%A8%E5%8C%96/" title="使用Appuim+Python脚本实现Android应用自动化">使用Appuim+Python脚本实现Android应用自动化</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-05-31T16:00:00.000Z" title="发表于 2020-06-01 00:00:00">2020-06-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python%E5%BC%80%E5%8F%91/">Python开发</a></span></div><div class="content">一.引言众所周知在App应用开发时我们会有不同的服务器环境来进行开发调试，例如测试环境，预发布环境，正式服环境.由于环境众多所以在测试工程师反馈问题时总要不断的去登录不同的服务器环境进行验证和调试。流程如下:  打开应用 登录界面输入不同环境的账户密码 登录验证  通过这三部才能进入App中进行调试。这三部的过程的执行重复率非常高，作为程序与我们能不能通过程序简化人工的操作呢?笔者将在本文中通过分析和实践来实现这一功能。 二.Appuim的安装和配置对于Android手机屏幕的自动化控制有很多种方案。本文中将选择appuim来进行实现。 1.安装JDK环境和Android环境安装配置appuim首先需要配置好JDK环境和Android Sdk环境。这两点不必多说，网上面大把的相关教程。 2.安装appium环境下载appium-desktop文件，点击进行安装。 3.配置appium1。 安装好appium，打开程序，需要进行配置，host与port默认即可.2. 配置JDK环境和Android Sdk环境。填写Android_home及Java_home后，Save and...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/04/08/Flutter%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/" title="Flutter开发基础总结">Flutter开发基础总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-04-07T16:00:00.000Z" title="发表于 2020-04-08 00:00:00">2020-04-08</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Flutter%E5%BC%80%E5%8F%91/">Flutter开发</a></span></div><div class="content">一.命令式UI和声明式UI1. 命令式编程和声明式编程的区别命令式编程：命令“机器”如何去做事情(how)，这样不管你想要的是什么(what)，它都会按照你的命令实现。声明式编程：告诉“机器”你想要的是什么(what)，让机器想出如何去做(how)。 2. Flutter中命令式编程的应用在Flutter中每个组件，会有个build函数，这里会返回一个能够完整描述UI的对象结构。每当数据改变时，就重新调用build函数，返回新的结构。如何高效渲染，就是框架去做的事情了。通过这种方式，不管是UI的初始布局结构，还是后面的修改，都是build函数返回的对象结构去声明的，完整的声明式UI由此而来。所以Flutter是构建新的widget实例，而不是改变旧的实例。 二.Flutter中的WidgetFlutter 中Widget 是一切的基础,一切的显示都是 Widget,利用响应式模式进行渲染。在 Flutter 中自定义组件就是一个类，这个类需要继承 StatelessWidget\StatefulWidget。Widget 分为 有状态(StatefulWidget) 和...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/03/22/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" title="Java多线程模型及线程安全问题总结">Java多线程模型及线程安全问题总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-03-21T16:00:00.000Z" title="发表于 2020-03-22 00:00:00">2020-03-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Java%E8%AF%AD%E8%A8%80/">Java语言</a></span></div><div class="content">一.线程和进程1.什么是进程进程是系统中正在运行的一个程序，程序一旦运行就是进程。进程可以看成程序执行的一个实例。进程是系统资源分配的独立实体，每个进程都拥有独立的地址空间。一个进程无法访问另一个进程的变量和数据结构，如果想让一个进程访问另一个进程的资源，需要使用进程间通信，比如管道，文件，套接字等。 2.什么是线程线程从属于进程，是程序的实际执行者。一个进程至少包含一个主线程，也可以有更多的子线程。 3.进程和线程的区别与联系 线程是进程的一部分，一个线程只能属于一个进程，而一个进程可以有多个线程，但至少有一个线程。 资源分配给进程，同一进程的所有线程共享该进程的所有资源。 虚拟机分给线程，即真正在虚拟机上运行的是线程。 线程在执行过程中，需要协作同步。不同进程的线程间要利用消息通信的办法实现同步。  二.Java线程的创建Java中线程的创建常见有如下三种基本形式: 1.继承Thread类，重写该类的run()方法1234567891011121314public class MyThread extends Thread &#123;    @Override   ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/03/11/Java%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F(%E4%B8%8B)/" title="Java常见的设计模式(下)">Java常见的设计模式(下)</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-03-10T16:00:00.000Z" title="发表于 2020-03-11 00:00:00">2020-03-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">编程基础</a></span></div><div class="content">一. 常见的软件设计模式接上一篇，我们说到面向对象设计模式总体来说23种设计模式分为三大类： 创建型模式（5种）单例模式、建造者模式、工厂方法模式、抽象工厂模式、原型模式。 结构型模式（7种）适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。 行为型模式（11种）策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。 二. 适配器模式1. 概念将一个类的接口转换成客户希望的另外一个接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作。例子：笔记本电脑电源一般用的都是5V电压，但是我们的家用电是220V，我们要让笔记本充上电，最好的办法应该是通过一个工具把220V的电压转换成5V，这个工具就是适配器。 2. 适配器模式涉及3个角色 目标 Target（目标抽象类）：目标抽象类定义客户所需接口，可以是一个抽象类或接口，也可以是具体类，相当于插座。 适配器...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2020/02/18/Dockerfile%E4%B9%8BENTRYPOINT%E5%92%8CCMD%E7%9A%84%E5%BC%82%E5%90%8C/" title="Dockerfile之ENTRYPOINT和CMD的异同"><img class="post-bg" src="/images/075436a543601219ed7b207a2164f00d.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Dockerfile之ENTRYPOINT和CMD的异同"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/02/18/Dockerfile%E4%B9%8BENTRYPOINT%E5%92%8CCMD%E7%9A%84%E5%BC%82%E5%90%8C/" title="Dockerfile之ENTRYPOINT和CMD的异同">Dockerfile之ENTRYPOINT和CMD的异同</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-02-17T16:00:00.000Z" title="发表于 2020-02-18 00:00:00">2020-02-18</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Docker%E5%AE%B9%E5%99%A8/">Docker容器</a></span></div><div class="content">Dockerfile中CMD和ENTRYPOINT的区别在我们查阅Dockerfile的官方文档时, 有可能发现一些命令的功能重复(至少看起来干的事情差不多), 我已经在上文分析过ADD和COPY命令的区别(他们功能类似), 现在我们分析另外2个命令, 他们的功能也非常类似, 是CMD和ENTRYPOINT. 尽管ENTRYPOINT和CMD都是在docker image里执行一条命令, 但是他们有一些微妙的区别. 在绝大多数情况下, 你只要在这2者之间选择一个调用就可以. 但他们有更高级的应用, CMD和ENTRYPOINT组合起来使用, 完成更加丰富的功能. ENTRYPOINT还是CMD?从根本上说, ENTRYPOINT和CMD都是让用户指定一个可执行程序, 这个可执行程序在container启动后自动启动. 实际上, 如果你想让自己制作的镜像自动运行程序(不需要在docker run后面添加命令行指定运行的命令), 你必须在Dockerfile里面, 使用ENTRYPOINT或者CMD命令 比如执行运行一个没有调用ENTRYPOINT或者CMD的docker镜像,...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/02/10/Java%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F(%E4%B8%8A)/" title="Java常见的设计模式(上)">Java常见的设计模式(上)</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-02-09T16:00:00.000Z" title="发表于 2020-02-10 00:00:00">2020-02-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">编程基础</a></span></div><div class="content">一. 常见的软件设计模式总体来说23种设计模式分为三大类： 创建型模式（5种）单例模式、建造者模式、工厂方法模式、抽象工厂模式、原型模式。 结构型模式（7种）适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。 行为型模式（11种）策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。 二. 单例模式1. 单例模式的特点?确保一个类最多只有一个实例对象，并向整个系统提供这个实例。优点：由于单例模式只生成了一个实例，所以能够节约系统资源，减少性能开销，提高系统效率，同时也能够严格控制客户对它的访问。缺点：也正是因为系统中只有一个实例，这样就导致了单例类的职责过重，违背了“单一职责原则”，同时也没有抽象类，这样扩展起来有一定的困难。 2.单例模式的使用场景 整个程序的运行中只允许有一个类的实例。 需要频繁实例化然后销毁的对象。 创建对象时耗时过多或者耗资源过多，但又经常用到的对象。 方便资源相互通信的环境。  3....</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2020/01/09/Android%E4%BD%BF%E7%94%A8Gitlab%E5%AE%9E%E7%8E%B0CI%E5%8F%8ACD/" title="Android使用Gitlab实现CI及CD">Android使用Gitlab实现CI及CD</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-01-08T16:00:00.000Z" title="发表于 2020-01-09 00:00:00">2020-01-09</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CI-CD/">CI/CD</a></span></div><div class="content">Android 项目配置 gitlab-ci 持续集成这里只通过docker执行器来进行，如果使用shell也是可以的，不过需要自己写shell代码不如docker方便快捷。docker容器搭建Android打包环境一般有两种方式:一种是通过基于openjdk:8-jdk 写shell配置好打包环境进行打包处理，另外一种则是通过docker hub上面别人配置好的Android打包环境docker容器进行。 1.使用OpenJdk镜像自行打包环境做Gitlab-CI&#x2F;CD12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455#使用 openjdk镜像image: openjdk:8-jdk #定义Android版本变量variables:  ANDROID_COMPILE_SDK: &quot;28&quot;  ANDROID_BUILD_TOOLS: &quot;28.0.2&quot; ...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/7/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/#content-inner">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/#content-inner">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/#content-inner">13</a><a class="extend next" rel="next" href="/page/9/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+      <i class="fas fa-angle-right"></i></a>
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Android%E5%BC%80%E5%8F%91/"><span class="card-category-list-name">Android开发</span><span class="card-category-list-count">45</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/CI-CD/"><span class="card-category-list-name">CI/CD</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Docker%E5%AE%B9%E5%99%A8/"><span class="card-category-list-name">Docker容器</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Flutter%E5%BC%80%E5%8F%91/"><span class="card-category-list-name">Flutter开发</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Git/"><span class="card-category-list-name">Git</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/GitHub/"><span class="card-category-list-name">GitHub</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Java%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/"><span class="card-category-list-name">Java后端开发</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Java%E8%AF%AD%E8%A8%80/"><span class="card-category-list-name">Java语言</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/JetpackCompose/"><span class="card-category-list-name">JetpackCompose</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Kotlin%E8%AF%AD%E8%A8%80/"><span class="card-category-list-name">Kotlin语言</span><span class="card-category-list-count">5</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/JetpackCompose/" style="font-size: 1.5em; color: #99a9bf">JetpackCompose</a> <a href="/tags/Android%E5%BC%B9%E7%AA%97/" style="font-size: 1.1em; color: #999">Android弹窗</a> <a href="/tags/Okhttp/" style="font-size: 1.1em; color: #999">Okhttp</a> <a href="/tags/Android%E8%87%AA%E5%8A%A8%E5%8C%96/" style="font-size: 1.1em; color: #999">Android自动化</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 1.1em; color: #999">Java基础</a> <a href="/tags/Shell/" style="font-size: 1.1em; color: #999">Shell</a> <a href="/tags/Gradle/" style="font-size: 1.42em; color: #99a6b7">Gradle</a> <a href="/tags/NodeJs/" style="font-size: 1.18em; color: #999ca1">NodeJs</a> <a href="/tags/Retrofit/" style="font-size: 1.1em; color: #999">Retrofit</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" style="font-size: 1.26em; color: #999fa8">依赖注入</a> <a href="/tags/linux/" style="font-size: 1.1em; color: #999">linux</a> <a href="/tags/Vue/" style="font-size: 1.1em; color: #999">Vue</a> <a href="/tags/Flutter%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/" style="font-size: 1.1em; color: #999">Flutter状态管理</a> <a href="/tags/Android%E8%87%AA%E5%8A%A8%E5%8C%96%E6%89%93%E5%8C%85/" style="font-size: 1.1em; color: #999">Android自动化打包</a> <a href="/tags/Https/" style="font-size: 1.1em; color: #999">Https</a> <a href="/tags/AOP/" style="font-size: 1.1em; color: #999">AOP</a> <a href="/tags/Redis/" style="font-size: 1.1em; color: #999">Redis</a> <a href="/tags/Feed43/" style="font-size: 1.1em; color: #999">Feed43</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" style="font-size: 1.1em; color: #999">编程基础</a> <a href="/tags/Android%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD/" style="font-size: 1.1em; color: #999">Android文件下载</a> <a href="/tags/MacOs/" style="font-size: 1.1em; color: #999">MacOs</a> <a href="/tags/Android%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" style="font-size: 1.18em; color: #999ca1">Android逆向工程</a> <a href="/tags/%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8/" style="font-size: 1.1em; color: #999">分区存储</a> <a href="/tags/Javascript/" style="font-size: 1.1em; color: #999">Javascript</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 1.34em; color: #99a3b0">数据库</a> <a href="/tags/Android%E7%8A%B6%E6%80%81%E6%A0%8F/" style="font-size: 1.1em; color: #999">Android状态栏</a> <a href="/tags/Mysql/" style="font-size: 1.1em; color: #999">Mysql</a> <a href="/tags/%E6%8A%93%E5%8C%85/" style="font-size: 1.1em; color: #999">抓包</a> <a href="/tags/Html/" style="font-size: 1.1em; color: #999">Html</a> <a href="/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/" style="font-size: 1.1em; color: #999">音视频</a> <a href="/tags/Fiddler/" style="font-size: 1.1em; color: #999">Fiddler</a> <a href="/tags/MongoDB/" style="font-size: 1.1em; color: #999">MongoDB</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E6%9F%A5/" style="font-size: 1.1em; color: #999">代码审查</a> <a href="/tags/%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/" style="font-size: 1.1em; color: #999">切面编程</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 1.1em; color: #999">数据结构</a> <a href="/tags/wsl/" style="font-size: 1.1em; color: #999">wsl</a> <a href="/tags/CSS/" style="font-size: 1.1em; color: #999">CSS</a> <a href="/tags/Android%E5%AD%98%E5%82%A8/" style="font-size: 1.1em; color: #999">Android存储</a> <a href="/tags/Koltin/" style="font-size: 1.1em; color: #999">Koltin</a> <a href="/tags/Nginx/" style="font-size: 1.18em; color: #999ca1">Nginx</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/" title="查看更多"><i class="fas fa-angle-right"></i></a>
+    </div>
+    <ul class="card-archive-list">
+  
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2023/02/">
+          <span class="card-archive-list-date">二月 2023</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/12/">
+          <span class="card-archive-list-date">十二月 2022</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/10/">
+          <span class="card-archive-list-date">十月 2022</span>
+          <span class="card-archive-list-count">2</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/09/">
+          <span class="card-archive-list-date">九月 2022</span>
+          <span class="card-archive-list-count">4</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/08/">
+          <span class="card-archive-list-date">八月 2022</span>
+          <span class="card-archive-list-count">4</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/07/">
+          <span class="card-archive-list-date">七月 2022</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/06/">
+          <span class="card-archive-list-date">六月 2022</span>
+          <span class="card-archive-list-count">3</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/05/">
+          <span class="card-archive-list-date">五月 2022</span>
+          <span class="card-archive-list-count">4</span>
+        </a>
+      </li>
+    </ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">127</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">565.5k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-04-12T15:17:05.800Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/images/home_bg.webp);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: subtitleType => {
+    if (true) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  }
+}
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
+</script><script>function subtitleType () {
+  if (true) {
+    typedJSFn.init(["学而不思则罔，思而不学则殆","今日事&#44;今日毕"])
+  } else {
+    document.getElementById("subtitle").textContent = "学而不思则罔，思而不学则殆"
+  }
+}
+typedJSFn.run(subtitleType)</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

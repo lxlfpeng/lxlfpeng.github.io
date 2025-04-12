@@ -1,0 +1,431 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Win10及11安装Wsl2 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.安装Wsl2环境要求必须运行 Windows 10 版本 2004 及更高版本（内部版本 19041 及更高版本）或 Windows 11。 WSL2 是 WSL 1 的升级版，带来的主要优势：  提高文件系统性能 支持完全的系统调用兼容性  WSL2 使用了 hyper-v 虚拟化技术，它就是一个你感知不到的虚拟机（VM），比以前的版本性能更高。 安装步骤1.启用虚拟机平台和 Linux 子">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Win10及11安装Wsl2">
+<meta property="og:url" content="https://lxlfpeng.github.io/2023/02/19/Win10%E5%8F%8A11%E5%AE%89%E8%A3%85Wsl2/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.安装Wsl2环境要求必须运行 Windows 10 版本 2004 及更高版本（内部版本 19041 及更高版本）或 Windows 11。 WSL2 是 WSL 1 的升级版，带来的主要优势：  提高文件系统性能 支持完全的系统调用兼容性  WSL2 使用了 hyper-v 虚拟化技术，它就是一个你感知不到的虚拟机（VM），比以前的版本性能更高。 安装步骤1.启用虚拟机平台和 Linux 子">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/cc3fde25723873a32d2d9398535bd722.webp">
+<meta property="article:published_time" content="2023-02-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.855Z">
+<meta property="article:author" content="peng">
+<meta property="article:tag" content="wsl">
+<meta property="article:tag" content="ubuntu">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/cc3fde25723873a32d2d9398535bd722.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2023/02/19/Win10%E5%8F%8A11%E5%AE%89%E8%A3%85Wsl2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Win10及11安装Wsl2',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/cc3fde25723873a32d2d9398535bd722.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Win10及11安装Wsl2</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Win10及11安装Wsl2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2023-02-18T16:00:00.000Z" title="发表于 2023-02-19 00:00:00">2023-02-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Windows%E7%B3%BB%E7%BB%9F/">Windows系统</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-安装Wsl2"><a href="#一-安装Wsl2" class="headerlink" title="一.安装Wsl2"></a>一.安装Wsl2</h1><h2 id="环境要求"><a href="#环境要求" class="headerlink" title="环境要求"></a>环境要求</h2><p>必须运行 Windows 10 版本 2004 及更高版本（内部版本 19041 及更高版本）或 Windows 11。 WSL2 是 WSL 1 的升级版，带来的主要优势：</p>
+<ul>
+<li>提高文件系统性能</li>
+<li>支持完全的系统调用兼容性</li>
+</ul>
+<p>WSL2 使用了 hyper-v 虚拟化技术，它就是一个你感知不到的虚拟机（VM），比以前的版本性能更高。</p>
+<h2 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h2><h3 id="1-启用虚拟机平台和-Linux-子系统功能"><a href="#1-启用虚拟机平台和-Linux-子系统功能" class="headerlink" title="1.启用虚拟机平台和 Linux 子系统功能"></a>1.启用虚拟机平台和 Linux 子系统功能</h3><p><strong>方式一:使用控制面板</strong></p>
+<p>打开控制面版，再点击程序与功能—&gt;启用或关闭Windows功能:</p>
+<ul>
+<li>适用于Linux的Windows子系统</li>
+<li>虚拟机平台</li>
+<li>hyper-v<br>重启电脑。</li>
+</ul>
+<p><strong>方式二:使用命令行工具</strong><br>以管理员权限启动PowerShell或者cmd，然后输入以下命令启用虚拟机平台：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart</span><br></pre></td></tr></table></figure>
+<p>然后输入以下命令启用 Linux 子系统功能：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-设置wsl默认版本为Wsl2"><a href="#2-设置wsl默认版本为Wsl2" class="headerlink" title="2.设置wsl默认版本为Wsl2"></a>2.设置wsl默认版本为Wsl2</h3><p>将 WSL 2 设置为默认版本，再打开的powershell窗口中输入如下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --set-default-version 2</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-安装一个Linux发行版"><a href="#3-安装一个Linux发行版" class="headerlink" title="3.安装一个Linux发行版"></a>3.安装一个Linux发行版</h3><p><strong>方式一:wsl下载</strong></p>
+<ol>
+<li>查看可安装版本<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --list --online // 列出所有可安装的linux版本</span><br></pre></td></tr></table></figure></li>
+<li>开始安装<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --install -d Ubuntu-20.04 // 安装Ubuntu-20.04</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><strong>方式二:windows应用商店下载</strong><br>打开微软商店应用，在搜索框中输入“Linux”或者“ubuntu”然后搜索，你可以看到搜索结果中有很多的 Linux 发行版可以选择。选择一个你喜欢的 Linux 发行版本然后安装。</p>
+<h3 id="4-启动Ubuntu"><a href="#4-启动Ubuntu" class="headerlink" title="4.启动Ubuntu"></a>4.启动Ubuntu</h3><ul>
+<li>可以通过开始菜单 像运行本地程序一样运行Ubuntu ，直接运行开始菜单里的 Ubuntu 20.04 LTS即可。</li>
+<li>在命令提示符中 输入 WSL</li>
+</ul>
+<h1 id="二-发行版本WSL1升级至WSL2"><a href="#二-发行版本WSL1升级至WSL2" class="headerlink" title="二.发行版本WSL1升级至WSL2"></a>二.发行版本WSL1升级至WSL2</h1><h2 id="1-检查发行版的wsl版本"><a href="#1-检查发行版的wsl版本" class="headerlink" title="1.检查发行版的wsl版本"></a>1.检查发行版的wsl版本</h2><p>首先，我们要确认发行版本是否是1.0版本执行以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl -l -v</span><br></pre></td></tr></table></figure>
+
+<p>显示结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NAME            STATE           VERSION</span><br><span class="line">* Ubuntu-20.04    Stopped         1</span><br></pre></td></tr></table></figure>
+
+<p>即代表目前的版本是1.0，可以升级。</p>
+<h2 id="2-升级发行版至Wsl2版本"><a href="#2-升级发行版至Wsl2版本" class="headerlink" title="2.升级发行版至Wsl2版本"></a>2.升级发行版至Wsl2版本</h2><p>执行命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --set-version 分发版名称 版本号</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --set-version Ubuntu-20.04 2</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>WSL2 是基于虚拟机的，所以可以在后台运行各种任务，比如 Docker 等等，但是带来的相应问题就是会占用一部分内存，使用 wsl –shutdown &lt;分发版名称&gt; 可以再不使用的时候停止它，以节约资源。</p>
+</blockquote>
+<h1 id="三-导入导出Linux发行版"><a href="#三-导入导出Linux发行版" class="headerlink" title="三.导入导出Linux发行版"></a>三.导入导出Linux发行版</h1><p>通过使用tar文件导入导出Linux发行版，可使其在任意地方安装Linux发行版或者共享自己的Linux发行版：</p>
+<ol>
+<li>查看已安装的Linux发行版</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl -l --all -v</span><br></pre></td></tr></table></figure>
+<p>如果Linux发行版处于运行状态使用下面的命令关闭:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --shutdown</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>导出Linux发行版tar文件到D盘<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --export Ubuntu-20.04 d:/wsl-ubuntu-20.04.tar</span><br></pre></td></tr></table></figure></li>
+<li>卸载当前Linux发行版<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --unregister Ubuntu-20.04</span><br></pre></td></tr></table></figure></li>
+<li>重新导入并安装WSL2到D盘<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --import Ubuntu-20.04 d:/wsl-ubuntu-20.04 d:/wsl-ubuntu-20.04.tar --version 2</span><br></pre></td></tr></table></figure></li>
+<li>设置默认登录用户为安装时用户名<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ubuntu2004 config --default-user USERNAME</span><br></pre></td></tr></table></figure></li>
+</ol>
+<blockquote>
+<p>此时导出的wsl-ubuntu-20.04.tar文件即可共享给任何使用Wsl2的开发人员使用。在协同开发中使用更多，为每个开发者提供一致统一的开发环境。</p>
+</blockquote>
+<h1 id="四-发行版本安装桌面及远程控制"><a href="#四-发行版本安装桌面及远程控制" class="headerlink" title="四.发行版本安装桌面及远程控制"></a>四.发行版本安装桌面及远程控制</h1><p>发行版本中可以根据自己的喜好安装 KDE、Gnome、xfce、lxde 等桌面环境。个人比较喜欢Xfce。 它是一种快速，稳定且轻巧的桌面环境，非常适合在远程服务器上使用。也可以使用Gnome，Gnome是 Ubuntu 的默认桌面上环境，<br>也是多数发行版的默认桌面环境。</p>
+<h3 id="1-安装Xfce桌面-建议"><a href="#1-安装Xfce桌面-建议" class="headerlink" title="1.安装Xfce桌面(建议)"></a>1.安装Xfce桌面(建议)</h3><p>Gnome与xfce相比，xfce由于其轻巧，它可以安装在低端台式机上。Xfce优雅的外观，增强了用户体验，它对用户非常友好，性能优于其他桌面环境，它提供了许多可定制的接触点以供灵活使用。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install xfce4</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-安装Gnome桌面"><a href="#2-安装Gnome桌面" class="headerlink" title="2.安装Gnome桌面"></a>2.安装Gnome桌面</h3><p>Gnome与xfce相比，Gnome它具有简单但有效的用户界面。用户在屏幕上有更多动态的工作区域。它具有内置的恢复功能，可帮助用户保持工作的连续性非常适合初学者浏览所有功能并学习。它为开发着的应用程序的运行提供了一个完美的兼容平台。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install ubuntu-desktop</span><br><span class="line"><span class="comment">#或者</span></span><br><span class="line"><span class="built_in">sudo</span> apt install ubuntu-gnome-desktop</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-通过Xrdp远程控制桌面"><a href="#3-通过Xrdp远程控制桌面" class="headerlink" title="3.通过Xrdp远程控制桌面"></a>3.通过Xrdp远程控制桌面</h3><h5 id="安装Xrdp远程控制服务"><a href="#安装Xrdp远程控制服务" class="headerlink" title="安装Xrdp远程控制服务"></a>安装Xrdp远程控制服务</h5><p>Xrdp 是一个微软远程桌面协议（RDP）的开源实现，它允许你通过图形界面控制远程系统。通过 RDP，你可以登录远程机器，并且创建一个真实的桌面会话，就像你登录本地机器一样。Xrdp包含在默认的Ubuntu存储库中。 要安装它，请运行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install xrdp</span><br></pre></td></tr></table></figure>
+<p>安装完成后，Xrdp 服务将会自动启动。你可以输入下面的命令，验证它是否再运行，有running代表服务成功运行。：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl status xrdp</span><br></pre></td></tr></table></figure>
+<p>如果您的电脑未安装systemctl命令则可以使用:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> service xrdp status</span><br></pre></td></tr></table></figure>
+<p>或者:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> /etc/init.d/xrdp start</span><br></pre></td></tr></table></figure>
+<p>xrdp默认使用的端口号是3389，如果要改用其他的端口号，则可以再&#x2F;etc&#x2F;xrdp&#x2F;xrdp.ini配置文件中进行修改:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vim /etc/xrdp/xrdp.ini</span><br></pre></td></tr></table></figure>
+<p>编辑xrdp.ini 把port从3389改成3390，然后重新启动xrdp:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl restart xrdp</span><br></pre></td></tr></table></figure>
+
+<p>或者使用命令的方式直接修改对应的端口号。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> sed -i <span class="string">&#x27;s/3389/3390/g&#x27;</span> /etc/xrdp/xrdp.ini</span><br></pre></td></tr></table></figure>
+
+<h5 id="远程连接接Xrdp服务"><a href="#远程连接接Xrdp服务" class="headerlink" title="远程连接接Xrdp服务"></a>远程连接接Xrdp服务</h5><p>配置好Xrdp服务以后，如果是 Windows 电脑，你可以使用默认的 RDP 客户端。在 Windows 搜索栏输入“remote”(远程桌面连接)，并且点击“Remote Desktop Connection”。这将会打开一个 RDP 客户端。在“Computer”区域输入远程服务器 IP地址，并且点击“Connect”。 在登录屏幕，输入你的用户名和密码，点击“OK”。登录成功后，你将看到默认的 Gnome 或者 Xfce 桌面。如果使用的是 macOS，<br>可以从Mac App Store安装 Microsoft Remote Desktop应用。 Linux 用户则可以使用一个 RDP 客户端，例如 Remmina 或者 Vinagre来进行连接使用。</p>
+<blockquote>
+<p>建议使用root账户登录，以免某些版本导致的登录失败等问题。XRDP在xfce下工作良好，但在ghome等其他桌面环境可能无法运行，因此优先选择xfce。</p>
+</blockquote>
+<h5 id="Xrdp连接出现闪退的问题"><a href="#Xrdp连接出现闪退的问题" class="headerlink" title="Xrdp连接出现闪退的问题"></a>Xrdp连接出现闪退的问题</h5><p>闪退的原因是安装远程桌面时.xsession文件可能被修改，所以就出现远程桌面闪退情况。</p>
+<p>需要在该用户目录创建一个.xsession 不懂没关系，在SSH中输入：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">touch</span> .xsession</span><br></pre></td></tr></table></figure>
+<p>根据自己的电脑上的运行的桌面环境来确定执行哪个:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># gnome桌面</span></span><br><span class="line"><span class="built_in">echo</span> gnome-session &gt; ~/.xsession</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># xfce桌面</span></span><br><span class="line"><span class="built_in">echo</span> xfce4-session &gt;~/.xsession</span><br></pre></td></tr></table></figure>
+<p>然后把它放到用户目录下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">chown</span> username:username .xsession</span><br></pre></td></tr></table></figure>
+<p>然后重新启动xrdp:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl restart xrdp</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-通过Xming远程控制桌面"><a href="#4-通过Xming远程控制桌面" class="headerlink" title="4.通过Xming远程控制桌面"></a>4.通过Xming远程控制桌面</h3><ol>
+<li>在Windos电脑上下载并安装<a target="_blank" rel="noopener" href="https://sourceforge.net/projects/xming/">Xming</a></li>
+<li>安装完成后启动Xming，选择one window-&gt;下一步-&gt;start no client-&gt; 下一步-&gt;勾选No Access Control-&gt;下一步，这样Xming就监听，等待连接了。</li>
+<li>回到linux系统中在.bashrc文件中添加一行，地址是Xming监听应用设备的IP地址。 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bashrc</span><br><span class="line">export DISPLAY=172.17.208.1:0</span><br></pre></td></tr></table></figure></li>
+<li>配置好保存退出后 使用<code>source ~/.bashrc </code>使配置生效。</li>
+<li>unbunt 执行 <code>startxfce4</code>或者是<code>gnome-session</code></li>
+</ol>
+<h1 id="五-WSL2与Windows之间文件访问"><a href="#五-WSL2与Windows之间文件访问" class="headerlink" title="五.WSL2与Windows之间文件访问"></a>五.WSL2与Windows之间文件访问</h1><h3 id="WSL-WSL2在windows的哪个目录"><a href="#WSL-WSL2在windows的哪个目录" class="headerlink" title="WSL&#x2F;WSL2在windows的哪个目录"></a>WSL&#x2F;WSL2在windows的哪个目录</h3><ol>
+<li>WSL2所在目录。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\用户名\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu20.04onWindows_79rhkp1fndgsc\LocalState</span><br></pre></td></tr></table></figure>
+wsl中linux的文件系统整个是个镜像文件，我们可以看到上面目录中有个ext4.vhdx文件</li>
+<li>WSL所在目录。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\用户名\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu20.04onWindows_79rhkp1fndgsc\LocalState\rootfs</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="Windows访问Linux目录"><a href="#Windows访问Linux目录" class="headerlink" title="Windows访问Linux目录"></a>Windows访问Linux目录</h3><p>上文说到在windows中有一个Wsl2的对应目录里面有ext4.vhdx文件。启动Wsl系统后，这个文件系统映射到了<code>\\wsl$\系统名</code>下面，在浏览器输入<code>\\wsl$\Ubuntu-20.04\</code>可以查看文件。</p>
+<h3 id="Linux子系统访问Windows目录"><a href="#Linux子系统访问Windows目录" class="headerlink" title="Linux子系统访问Windows目录"></a>Linux子系统访问Windows目录</h3><p>进入linux后，windows的硬盘被挂载在&#x2F;mnt下，通过<code>cd /mnt</code>可以直接访问。</p>
+<p><strong>小技巧：可在Windows中指定位置创建一个share文件夹，在WSL2使用<code>ln -s /mnt/xx/share ~/share</code>方式可快速在Windows和Wsl2中共享文件。</strong></p>
+<h1 id="六-清空重置linux发行版"><a href="#六-清空重置linux发行版" class="headerlink" title="六.清空重置linux发行版"></a>六.清空重置linux发行版</h1><p>要在 Windows Subsystem for Linux 2 上重置 Linux 发行版，请使用以下步骤：</p>
+<ol>
+<li>在 Windows 10 上打开设置。</li>
+<li>单击应用程序。</li>
+<li>单击应用程序和功能。</li>
+<li>选择您的 Linux 发行版并单击高级选项链接。</li>
+<li>单击重置按钮。</li>
+</ol>
+<h1 id="七-使用VS-Code连接到WSL2-Linux发行版"><a href="#七-使用VS-Code连接到WSL2-Linux发行版" class="headerlink" title="七.使用VS Code连接到WSL2 Linux发行版"></a>七.使用VS Code连接到WSL2 Linux发行版</h1><p>vscode和其他程序一样，可以访问linux，通过\wsl$\。 在win上安装vscode，打上Remote-WSL插件，就能通过vscode直接使用wsl的环境了，相当方便。</p>
+<h1 id="八-wsl2-内存限制"><a href="#八-wsl2-内存限制" class="headerlink" title="八.wsl2 内存限制"></a>八.wsl2 内存限制</h1><p>在<code>C:\Users\&lt;UserName&gt;\.wslconfig</code>创建一个文件，配置如下所示。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[wsl2]</span><br><span class="line">memory=4GB</span><br><span class="line">swap=8GB</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>swap类似于Windows的虚拟内存，从硬盘中划分出一个分区，在物理内存不够时，就会将硬盘空间虚拟成内存使用，用于解决内存不足的情况。</p>
+</blockquote>
+<p>配置格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[wsl2]</span><br><span class="line">memory=&lt;size&gt;              </span><br><span class="line">processors=&lt;number&gt;       </span><br><span class="line">swap=&lt;size&gt;                </span><br><span class="line">localhostForwarding=&lt;bool&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在配置设置完之后，执行<code>wsl --shutdown</code>命令进行关闭，随后执行<code>wsl</code>命令再次启动即可。</p>
+<ul>
+<li>memory：限制内存</li>
+<li>swap：交换分区</li>
+<li>processors：限制核心数</li>
+<li>localhostForwarding：关闭默认连接，将WSL2本地主机绑定到Windows本地主机</li>
+</ul>
+<h1 id="九-wsl常用命令"><a href="#九-wsl常用命令" class="headerlink" title="九.wsl常用命令"></a>九.wsl常用命令</h1><h2 id="安装默认发行版本"><a href="#安装默认发行版本" class="headerlink" title="安装默认发行版本"></a>安装默认发行版本</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --install</span><br></pre></td></tr></table></figure>
+
+<p>安装 WSL 和 Linux 的 Ubuntu 发行版。 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/wsl/install">了解详细信息</a>。</p>
+<h2 id="安装特定的-Linux-发行版"><a href="#安装特定的-Linux-发行版" class="headerlink" title="安装特定的 Linux 发行版"></a>安装特定的 Linux 发行版</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --install --distribution &lt;Distribution Name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>通过将 <code>&lt;Distribution Name&gt;</code> 替换为发行版名称，指定除默认发行版 (Ubuntu) 之外的 Linux 发行版进行安装。 此命令也可输入为：<code>wsl -d &lt;Distribution Name&gt;</code>。</p>
+<h2 id="列出可用的-Linux-发行版"><a href="#列出可用的-Linux-发行版" class="headerlink" title="列出可用的 Linux 发行版"></a>列出可用的 Linux 发行版</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --list --online</span><br></pre></td></tr></table></figure>
+
+<p>查看可通过在线商店获得的 Linux 发行版列表。 此命令也可输入为：<code>wsl -l -o</code>。</p>
+<h2 id="列出已安装的-Linux-发行版"><a href="#列出已安装的-Linux-发行版" class="headerlink" title="列出已安装的 Linux 发行版"></a>列出已安装的 Linux 发行版</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --list --verbose</span><br></pre></td></tr></table></figure>
+
+<p>查看安装在 Windows 计算机上的 Linux 发行版列表，其中包括状态（发行版是正在运行还是已停止）和运行发行版的 WSL 版本（WSL 1 或 WSL 2）。 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/wsl/compare-versions">比较 WSL 1 和 WSL 2</a>。 此命令也可输入为：<code>wsl -l -v</code>。 可与 list 命令一起使用的其他选项包括：<code>--all</code>（列出所有发行版）、<code>--running</code>（仅列出当前正在运行的发行版）或 <code>--quiet</code>（仅显示发行版名称）。</p>
+<h2 id="将-WSL-版本设置为-1-或-2"><a href="#将-WSL-版本设置为-1-或-2" class="headerlink" title="将 WSL 版本设置为 1 或 2"></a>将 WSL 版本设置为 1 或 2</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --set-version &lt;distribution name&gt; &lt;versionNumber&gt;</span><br></pre></td></tr></table></figure>
+
+<p>若要指定运行 Linux 发行版的 WSL 版本（1 或 2），请将 <code>&lt;distribution name&gt;</code> 替换为发行版的名称，并将 <code>&lt;versionNumber&gt;</code> 替换为 1 或 2。 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/wsl/compare-versions">比较 WSL 1 和 WSL 2</a>。</p>
+<h2 id="设置默认-WSL-版本"><a href="#设置默认-WSL-版本" class="headerlink" title="设置默认 WSL 版本"></a>设置默认 WSL 版本</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --set-default-version &lt;Version&gt;</span><br></pre></td></tr></table></figure>
+
+<p>若要将默认版本设置为 WSL 1 或 WSL 2，请将 <code>&lt;Version&gt;</code> 替换为数字 1 或 2，表示对于安装新的 Linux 发行版，你希望默认使用哪个版本的 WSL。 例如，<code>wsl --set-default-version 2</code>。 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/wsl/compare-versions">比较 WSL 1 和 WSL 2</a>。</p>
+<h2 id="设置默认-Linux-发行版"><a href="#设置默认-Linux-发行版" class="headerlink" title="设置默认 Linux 发行版"></a>设置默认 Linux 发行版</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --set-default &lt;Distribution Name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>若要设置 WSL 命令将用于运行的默认 Linux 发行版，请将 <code>&lt;Distribution Name&gt;</code> 替换为你首选的 Linux 发行版的名称。</p>
+<h2 id="将目录更改为主页"><a href="#将目录更改为主页" class="headerlink" title="将目录更改为主页"></a>将目录更改为主页</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl ~</span><br></pre></td></tr></table></figure>
+
+<p><code>~</code> 可与 wsl 一起使用，以在用户的主目录中启动。 若要在 WSL 命令提示符中从任何目录跳回到主目录，可使用命令 <code>cd ~</code>。</p>
+<h2 id="通过-PowerShell-或-CMD-运行特定的-Linux-发行版"><a href="#通过-PowerShell-或-CMD-运行特定的-Linux-发行版" class="headerlink" title="通过 PowerShell 或 CMD 运行特定的 Linux 发行版"></a>通过 PowerShell 或 CMD 运行特定的 Linux 发行版</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --distribution &lt;Distribution Name&gt; --user &lt;User Name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>若要通过特定用户运行特定 Linux 发行版，请将 <code>&lt;Distribution Name&gt;</code> 替换为你首选的 Linux 发行版的名称（例如 Debian），将 <code>&lt;User Name&gt;</code> 替换为现有用户的名称（例如 root）。 如果 WSL 发行版中不存在该用户，你将会收到一个错误。 若要输出当前用户名，请使用 <code>whoami</code> 命令。</p>
+<h2 id="更新-WSL"><a href="#更新-WSL" class="headerlink" title="更新 WSL"></a>更新 WSL</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --update</span><br></pre></td></tr></table></figure>
+
+<p>手动更新 WSL Linux 内核的版本。 还可以使用 <code>wsl --update rollback</code> 命令回滚到 WSL Linux 内核的上一版本。</p>
+<h2 id="检查-WSL-状态"><a href="#检查-WSL-状态" class="headerlink" title="检查 WSL 状态"></a>检查 WSL 状态</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --status</span><br></pre></td></tr></table></figure>
+
+<p>查看有关 WSL 配置的常规信息，例如默认发行版类型、默认发行版和内核版本。</p>
+<h2 id="Help-命令"><a href="#Help-命令" class="headerlink" title="Help 命令"></a>Help 命令</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --help</span><br></pre></td></tr></table></figure>
+
+<p>查看 WSL 中可用的选项和命令列表。</p>
+<h2 id="以特定用户的身份运行"><a href="#以特定用户的身份运行" class="headerlink" title="以特定用户的身份运行"></a>以特定用户的身份运行</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl -u &lt;Username&gt;`, `wsl --user &lt;Username&gt;</span><br></pre></td></tr></table></figure>
+
+<p>若要以指定用户身份运行 WSL，请将 <code>&lt;Username&gt;</code> 替换为 WSL 发行版中存在的用户名。</p>
+<h2 id="更改发行版的默认用户"><a href="#更改发行版的默认用户" class="headerlink" title="更改发行版的默认用户"></a>更改发行版的默认用户</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;DistributionName&gt; config --default-user &lt;Username&gt;</span><br></pre></td></tr></table></figure>
+
+<p>更改用于发行版登录的默认用户。 用户必须已经存在于发行版中才能成为默认用户。</p>
+<p>例如：<code>ubuntu config --default-user johndoe</code> 会将 Ubuntu 发行版的默认用户更改为“johndoe”用户。</p>
+<p>如果在确定发行版名称时遇到问题，请使用命令 <code>wsl -l</code>。</p>
+<p>此命令不适用于导入的发行版，因为这些发行版没有可执行启动器。 可以改为使用 <code>/etc/wsl.conf</code> 文件来更改导入的发行版的默认用户。 请参阅<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/wsl/wsl-config#user-settings">高级设置配置</a>文档中的“自动装载”选项。</p>
+<h2 id="关闭"><a href="#关闭" class="headerlink" title="关闭"></a>关闭</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --shutdown</span><br></pre></td></tr></table></figure>
+
+<p>立即终止所有正在运行的发行版和 WSL 2 轻量级实用工具虚拟机。 在需要重启 WSL 2 虚拟机环境的情形下，例如<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/wsl/vhd-size">更改内存使用限制</a>或更改 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/wsl/manage#">.wslconfig 文件</a>，可能必须使用此命令。</p>
+<h2 id="Terminate"><a href="#Terminate" class="headerlink" title="Terminate"></a>Terminate</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --terminate &lt;Distribution Name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>若要终止指定的发行版或阻止其运行，请将 <code>&lt;Distribution Name&gt;</code> 替换为目标发行版的名称。</p>
+<h2 id="将发行版导出到-TAR-文件"><a href="#将发行版导出到-TAR-文件" class="headerlink" title="将发行版导出到 TAR 文件"></a>将发行版导出到 TAR 文件</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --export &lt;Distribution Name&gt; &lt;FileName&gt;</span><br></pre></td></tr></table></figure>
+
+<p>将分发版导出到 tar 文件。 在标准输出中，文件名可以是 -。</p>
+<h2 id="导入新发行版"><a href="#导入新发行版" class="headerlink" title="导入新发行版"></a>导入新发行版</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --import &lt;Distribution Name&gt; &lt;InstallLocation&gt; &lt;FileName&gt;</span><br></pre></td></tr></table></figure>
+
+<p>导入指定的 tar 文件作为新的分发版。 在标准输入中，文件名可以是 -。 <code>--version</code> 选项还可与此命令一起使用，用于指定导入的发行版将在 WSL 1 还是 WSL 2 上运行。</p>
+<h2 id="注销或卸载-Linux-发行版"><a href="#注销或卸载-Linux-发行版" class="headerlink" title="注销或卸载 Linux 发行版"></a>注销或卸载 Linux 发行版</h2><p>尽管可以通过 Microsoft Store 安装 Linux 发行版，但无法通过 Store 将其卸载。</p>
+<p>注销并卸载 WSL 发行版：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --unregister &lt;DistributionName&gt;</span><br></pre></td></tr></table></figure>
+
+<p>如果将 <code>&lt;DistributionName&gt;</code> 替换为目标 Linux 发行版的名称，则将从 WSL 取消注册该发行版，以便可以重新安装或清理它。  <strong>警告：</strong> 取消注册后，与该分发版关联的所有数据、设置和软件将永久丢失。 从 Store 重新安装会安装分发版的干净副本。 例如：<code>wsl --unregister Ubuntu</code> 将从可用于 WSL 的发行版中删除 Ubuntu。 运行 <code>wsl --list</code> 将会显示它不再列出。</p>
+<p>还可以像卸载任何其他应用商店应用程序一样卸载 Windows 计算机上的 Linux 发行版应用。 若要重新安装，请在 Microsoft Store 中找到该发行版，然后选择“启动”。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2023/02/19/Win10%E5%8F%8A11%E5%AE%89%E8%A3%85Wsl2/">https://lxlfpeng.github.io/2023/02/19/Win10%E5%8F%8A11%E5%AE%89%E8%A3%85Wsl2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/wsl/">wsl</a><a class="post-meta__tags" href="/tags/ubuntu/">ubuntu</a><a class="post-meta__tags" href="/tags/linux/">linux</a></div><div class="post-share"><div class="social-share" data-image="/images/cc3fde25723873a32d2d9398535bd722.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2022/12/18/Win11%E6%AD%A3%E5%BC%8F%E7%89%88(21H2)%E5%AE%89%E8%A3%85Android%E5%AD%90%E7%B3%BB%E7%BB%9F/" title="Win11正式版(21H2)安装Android子系统"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Win11正式版(21H2)安装Android子系统</div></div><div class="info-2"><div class="info-item-1"> 本教程的背景是Win11正式版本(21H2)暂未全面推送Android子系统的情况的尝鲜教程。  一. Win11dev版本wsa在win11测试版本上面已经可以直接使用了，只设置区域为美国，设置-&gt;启动关闭windows功能-&gt;开启hyper-v和虚拟机平台，电脑重启后，去商店搜索Window Subsystem for Android即可使用。 二. Win11正式版：1. 修改区域为美国设置-&gt;时间和语言-&gt;语言&amp;区域-&gt;国家和地区-&gt;选择美国。 2. 打开虚拟化技术 菜单-&gt;启动关闭windows功能-&gt;开启hyper-v和虚拟机平台-&gt;重启电脑。 重启的时候检查下BIOS的虚拟化是否开启Intel为VT， AMD为SVM    3. 下载Windows Subsystem for...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-%E5%AE%89%E8%A3%85Wsl2"><span class="toc-number">1.</span> <span class="toc-text">一.安装Wsl2</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82"><span class="toc-number">1.1.</span> <span class="toc-text">环境要求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.2.</span> <span class="toc-text">安装步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%90%AF%E7%94%A8%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%B9%B3%E5%8F%B0%E5%92%8C-Linux-%E5%AD%90%E7%B3%BB%E7%BB%9F%E5%8A%9F%E8%83%BD"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.启用虚拟机平台和 Linux 子系统功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%AE%BE%E7%BD%AEwsl%E9%BB%98%E8%AE%A4%E7%89%88%E6%9C%AC%E4%B8%BAWsl2"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.设置wsl默认版本为Wsl2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AE%89%E8%A3%85%E4%B8%80%E4%B8%AALinux%E5%8F%91%E8%A1%8C%E7%89%88"><span class="toc-number">1.2.3.</span> <span class="toc-text">3.安装一个Linux发行版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%90%AF%E5%8A%A8Ubuntu"><span class="toc-number">1.2.4.</span> <span class="toc-text">4.启动Ubuntu</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%ACWSL1%E5%8D%87%E7%BA%A7%E8%87%B3WSL2"><span class="toc-number">2.</span> <span class="toc-text">二.发行版本WSL1升级至WSL2</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A3%80%E6%9F%A5%E5%8F%91%E8%A1%8C%E7%89%88%E7%9A%84wsl%E7%89%88%E6%9C%AC"><span class="toc-number">2.1.</span> <span class="toc-text">1.检查发行版的wsl版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8D%87%E7%BA%A7%E5%8F%91%E8%A1%8C%E7%89%88%E8%87%B3Wsl2%E7%89%88%E6%9C%AC"><span class="toc-number">2.2.</span> <span class="toc-text">2.升级发行版至Wsl2版本</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BALinux%E5%8F%91%E8%A1%8C%E7%89%88"><span class="toc-number">3.</span> <span class="toc-text">三.导入导出Linux发行版</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC%E5%AE%89%E8%A3%85%E6%A1%8C%E9%9D%A2%E5%8F%8A%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6"><span class="toc-number">4.</span> <span class="toc-text">四.发行版本安装桌面及远程控制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85Xfce%E6%A1%8C%E9%9D%A2-%E5%BB%BA%E8%AE%AE"><span class="toc-number">4.0.1.</span> <span class="toc-text">1.安装Xfce桌面(建议)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85Gnome%E6%A1%8C%E9%9D%A2"><span class="toc-number">4.0.2.</span> <span class="toc-text">2.安装Gnome桌面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%80%9A%E8%BF%87Xrdp%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6%E6%A1%8C%E9%9D%A2"><span class="toc-number">4.0.3.</span> <span class="toc-text">3.通过Xrdp远程控制桌面</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Xrdp%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6%E6%9C%8D%E5%8A%A1"><span class="toc-number">4.0.3.0.1.</span> <span class="toc-text">安装Xrdp远程控制服务</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5%E6%8E%A5Xrdp%E6%9C%8D%E5%8A%A1"><span class="toc-number">4.0.3.0.2.</span> <span class="toc-text">远程连接接Xrdp服务</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Xrdp%E8%BF%9E%E6%8E%A5%E5%87%BA%E7%8E%B0%E9%97%AA%E9%80%80%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">4.0.3.0.3.</span> <span class="toc-text">Xrdp连接出现闪退的问题</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%80%9A%E8%BF%87Xming%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6%E6%A1%8C%E9%9D%A2"><span class="toc-number">4.0.4.</span> <span class="toc-text">4.通过Xming远程控制桌面</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94-WSL2%E4%B8%8EWindows%E4%B9%8B%E9%97%B4%E6%96%87%E4%BB%B6%E8%AE%BF%E9%97%AE"><span class="toc-number">5.</span> <span class="toc-text">五.WSL2与Windows之间文件访问</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#WSL-WSL2%E5%9C%A8windows%E7%9A%84%E5%93%AA%E4%B8%AA%E7%9B%AE%E5%BD%95"><span class="toc-number">5.0.1.</span> <span class="toc-text">WSL&#x2F;WSL2在windows的哪个目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows%E8%AE%BF%E9%97%AELinux%E7%9B%AE%E5%BD%95"><span class="toc-number">5.0.2.</span> <span class="toc-text">Windows访问Linux目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%AE%BF%E9%97%AEWindows%E7%9B%AE%E5%BD%95"><span class="toc-number">5.0.3.</span> <span class="toc-text">Linux子系统访问Windows目录</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD-%E6%B8%85%E7%A9%BA%E9%87%8D%E7%BD%AElinux%E5%8F%91%E8%A1%8C%E7%89%88"><span class="toc-number">6.</span> <span class="toc-text">六.清空重置linux发行版</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83-%E4%BD%BF%E7%94%A8VS-Code%E8%BF%9E%E6%8E%A5%E5%88%B0WSL2-Linux%E5%8F%91%E8%A1%8C%E7%89%88"><span class="toc-number">7.</span> <span class="toc-text">七.使用VS Code连接到WSL2 Linux发行版</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AB-wsl2-%E5%86%85%E5%AD%98%E9%99%90%E5%88%B6"><span class="toc-number">8.</span> <span class="toc-text">八.wsl2 内存限制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B9%9D-wsl%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">9.</span> <span class="toc-text">九.wsl常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%BB%98%E8%AE%A4%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC"><span class="toc-number">9.1.</span> <span class="toc-text">安装默认发行版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E7%89%B9%E5%AE%9A%E7%9A%84-Linux-%E5%8F%91%E8%A1%8C%E7%89%88"><span class="toc-number">9.2.</span> <span class="toc-text">安装特定的 Linux 发行版</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%97%E5%87%BA%E5%8F%AF%E7%94%A8%E7%9A%84-Linux-%E5%8F%91%E8%A1%8C%E7%89%88"><span class="toc-number">9.3.</span> <span class="toc-text">列出可用的 Linux 发行版</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%97%E5%87%BA%E5%B7%B2%E5%AE%89%E8%A3%85%E7%9A%84-Linux-%E5%8F%91%E8%A1%8C%E7%89%88"><span class="toc-number">9.4.</span> <span class="toc-text">列出已安装的 Linux 发行版</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86-WSL-%E7%89%88%E6%9C%AC%E8%AE%BE%E7%BD%AE%E4%B8%BA-1-%E6%88%96-2"><span class="toc-number">9.5.</span> <span class="toc-text">将 WSL 版本设置为 1 或 2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E9%BB%98%E8%AE%A4-WSL-%E7%89%88%E6%9C%AC"><span class="toc-number">9.6.</span> <span class="toc-text">设置默认 WSL 版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E9%BB%98%E8%AE%A4-Linux-%E5%8F%91%E8%A1%8C%E7%89%88"><span class="toc-number">9.7.</span> <span class="toc-text">设置默认 Linux 发行版</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E7%9B%AE%E5%BD%95%E6%9B%B4%E6%94%B9%E4%B8%BA%E4%B8%BB%E9%A1%B5"><span class="toc-number">9.8.</span> <span class="toc-text">将目录更改为主页</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E8%BF%87-PowerShell-%E6%88%96-CMD-%E8%BF%90%E8%A1%8C%E7%89%B9%E5%AE%9A%E7%9A%84-Linux-%E5%8F%91%E8%A1%8C%E7%89%88"><span class="toc-number">9.9.</span> <span class="toc-text">通过 PowerShell 或 CMD 运行特定的 Linux 发行版</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0-WSL"><span class="toc-number">9.10.</span> <span class="toc-text">更新 WSL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5-WSL-%E7%8A%B6%E6%80%81"><span class="toc-number">9.11.</span> <span class="toc-text">检查 WSL 状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Help-%E5%91%BD%E4%BB%A4"><span class="toc-number">9.12.</span> <span class="toc-text">Help 命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A5%E7%89%B9%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9A%84%E8%BA%AB%E4%BB%BD%E8%BF%90%E8%A1%8C"><span class="toc-number">9.13.</span> <span class="toc-text">以特定用户的身份运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E5%8F%91%E8%A1%8C%E7%89%88%E7%9A%84%E9%BB%98%E8%AE%A4%E7%94%A8%E6%88%B7"><span class="toc-number">9.14.</span> <span class="toc-text">更改发行版的默认用户</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%97%AD"><span class="toc-number">9.15.</span> <span class="toc-text">关闭</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Terminate"><span class="toc-number">9.16.</span> <span class="toc-text">Terminate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E5%8F%91%E8%A1%8C%E7%89%88%E5%AF%BC%E5%87%BA%E5%88%B0-TAR-%E6%96%87%E4%BB%B6"><span class="toc-number">9.17.</span> <span class="toc-text">将发行版导出到 TAR 文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%BC%E5%85%A5%E6%96%B0%E5%8F%91%E8%A1%8C%E7%89%88"><span class="toc-number">9.18.</span> <span class="toc-text">导入新发行版</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E9%94%80%E6%88%96%E5%8D%B8%E8%BD%BD-Linux-%E5%8F%91%E8%A1%8C%E7%89%88"><span class="toc-number">9.19.</span> <span class="toc-text">注销或卸载 Linux 发行版</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/images/cc3fde25723873a32d2d9398535bd722.webp);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

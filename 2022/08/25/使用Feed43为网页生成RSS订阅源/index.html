@@ -1,0 +1,259 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>使用Feed43为网页生成RSS订阅源 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="简介在我们使用Rss时候发现很多的网站并不支持Rss服务，如果自己使用Rsshub，Huginn等搭建订阅源，不单单需要懂一些编程和服务器部署的知识，还需要买服务器。如果只是轻度的使用那么完全可以试试FEED43，通过FEED43提供的免费服务可以为静态网页生成订阅源。 步骤总览 准备好需要解析的网站网址(必须是服务端渲染页面网站，也就是常说的静态网页)。 注册好Feed43的账号，并登录。 使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Feed43为网页生成RSS订阅源">
+<meta property="og:url" content="https://lxlfpeng.github.io/2022/08/25/%E4%BD%BF%E7%94%A8Feed43%E4%B8%BA%E7%BD%91%E9%A1%B5%E7%94%9F%E6%88%90RSS%E8%AE%A2%E9%98%85%E6%BA%90/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="简介在我们使用Rss时候发现很多的网站并不支持Rss服务，如果自己使用Rsshub，Huginn等搭建订阅源，不单单需要懂一些编程和服务器部署的知识，还需要买服务器。如果只是轻度的使用那么完全可以试试FEED43，通过FEED43提供的免费服务可以为静态网页生成订阅源。 步骤总览 准备好需要解析的网站网址(必须是服务端渲染页面网站，也就是常说的静态网页)。 注册好Feed43的账号，并登录。 使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2022-08-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.855Z">
+<meta property="article:author" content="peng">
+<meta property="article:tag" content="Feed43">
+<meta property="article:tag" content="Rss">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2022/08/25/%E4%BD%BF%E7%94%A8Feed43%E4%B8%BA%E7%BD%91%E9%A1%B5%E7%94%9F%E6%88%90RSS%E8%AE%A2%E9%98%85%E6%BA%90/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '使用Feed43为网页生成RSS订阅源',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">使用Feed43为网页生成RSS订阅源</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">使用Feed43为网页生成RSS订阅源</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2022-08-24T16:00:00.000Z" title="发表于 2022-08-25 00:00:00">2022-08-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/RSS%E8%AE%A2%E9%98%85/">RSS订阅</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>在我们使用Rss时候发现很多的网站并不支持Rss服务，如果自己使用Rsshub，Huginn等搭建订阅源，不单单需要懂一些编程和服务器部署的知识，还需要买服务器。如果只是轻度的使用那么完全可以试试FEED43，通过FEED43提供的免费服务可以为静态网页生成订阅源。</p>
+<h1 id="步骤总览"><a href="#步骤总览" class="headerlink" title="步骤总览"></a>步骤总览</h1><ol>
+<li>准备好需要解析的网站网址(必须是服务端渲染页面网站，也就是常说的静态网页)。</li>
+<li>注册好Feed43的账号，并登录。</li>
+<li>使用Feed43解析网页源码。</li>
+<li>分析网页源码，找到哪一动态部分内容是自己需要的。</li>
+<li>根据分析出来的自己需要获取的动态内容编写提取规则。</li>
+<li>根据提取出来的内容调整优化提取规则。</li>
+<li>将提取出来的内容匹配到信息流。</li>
+<li>生成Rss订阅源，完成订阅。</li>
+</ol>
+<h1 id="准备好网址"><a href="#准备好网址" class="headerlink" title="准备好网址"></a>准备好网址</h1><p>这里我们用<a target="_blank" rel="noopener" href="https://www.cfan.com.cn/">电脑爱好者</a>这个网站，我们需要爬取这一个列表里面的内容。<br><img src="/images/d59598dbf5ebf2ae0f1b4da236ca9e65.webp"></p>
+<blockquote>
+<p>必须是服务端渲染页面网站，也就是常说的静态网页。网页端渲染的页面是无法获取内容的。</p>
+</blockquote>
+<h1 id="注册账号"><a href="#注册账号" class="headerlink" title="注册账号"></a>注册账号</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://feed43.com/">Feed43</a>官网注册好账号。</li>
+<li>打开<a target="_blank" rel="noopener" href="https://feed43.com/">Feed43</a>官方网站，点击Create your first RSS feed。</li>
+</ol>
+<h1 id="使用Feed43解析出网页源码"><a href="#使用Feed43解析出网页源码" class="headerlink" title="使用Feed43解析出网页源码"></a>使用Feed43解析出网页源码</h1><p><img src="/images/b5f599a1523668dcbdd709d982a1e8aa.webp" alt="image.png"></p>
+<p>填入网址进行解析:</p>
+<p><img src="/images/68d40c90dd8be7770c081ba7d63ecd7c.webp"></p>
+<p>点击 Reload，你就会在下面的选框中看到当前网页的源代码了。</p>
+<h1 id="分析网页源码"><a href="#分析网页源码" class="headerlink" title="分析网页源码"></a>分析网页源码</h1><p><img src="/images/0a183e8257ade03ee04c5a6ad66c32f1.webp"></p>
+<p>Feed43 它会自动捕捉一些标记标题的源码，并标识成粉红色，当然也不是很准确，需要自己酌情修改。通过比对源码我们发现，有如下代码是一致的，只是内容不同，也就是我们需要的列表里面的内容:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&quot;https://www.cfan.com.cn/2022/0411/136391.shtml&quot; target=&quot;_blank&quot; title=&quot;系统小技巧：按需显示 文件夹查看方式我做主&quot;&gt;</span><br><span class="line">&lt;div class=&quot;left-post-pic&quot; style=&quot;background:url(https://upload.cfan.com.cn/2022/0411/1649641391945.png)no-repeat center;background-size:cover;&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;left-post-info&quot; style=&quot;position:relative;&quot;&gt;</span><br><span class="line">&lt;h1 class=&quot;left-post-title&quot;&gt;系统小技巧：按需显示 文件夹查看方式我做主&lt;/h1&gt;</span><br><span class="line">&lt;div class=&quot;left-post-txt&quot;&gt;为了便于查看和整理文件，我们经常会对文件夹的查看方式进行专门的设置，比如查看图片文件夹习惯于使用缩略图的方式，查看文档则喜欢使用列表形式，而对于文档、图片混合的...&lt;/div&gt;</span><br><span class="line">&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+
+<h1 id="定义提取规则"><a href="#定义提取规则" class="headerlink" title="定义提取规则"></a>定义提取规则</h1><p>定义提取规则。将标题、链接等变化的字段删去用<code>&#123;%&#125;</code>代替。将固定且多余的字段删去用<code>&#123;*&#125;</code>代替。源码中有换行的地方均需要添加<code>&#123;*&#125;</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&#123;%&#125; &#123;*&#125; title=&#123;%&#125;&gt;&#123;*&#125;</span><br><span class="line">&lt;div class=&quot;left-post-pic&quot; style=&quot;background:url(&#123;%&#125;)no-repeat center;background-size:cover;&quot;&gt;&lt;/div&gt;&#123;*&#125;</span><br><span class="line">&lt;div class=&quot;left-post-info&quot; style=&quot;position:relative;&quot;&gt;&#123;*&#125;</span><br><span class="line">&lt;h1 class=&quot;left-post-title&quot;&gt;&#123;%&#125;&lt;/h1&gt;&#123;*&#125;</span><br><span class="line">&lt;div class=&quot;left-post-txt&quot;&gt;&#123;%&#125;&lt;/div&gt;&#123;*&#125;</span><br><span class="line">&lt;/a&gt;&#123;*&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="检查匹配规则"><a href="#检查匹配规则" class="headerlink" title="检查匹配规则"></a>检查匹配规则</h1><p>将上一步我们定义好的规则进行填入:<br><img src="/images/b2ad42ef28d4db384a66306cffef5794.webp"><br>显示绿色的OK (N items found)，则代表成功了。看一看抓取到的内容是否有格式错误的地方。如果没有抓取到内容，或者有格式错误，则需要继续仔细分析然后进行调整。</p>
+<h1 id="匹配信息流数据"><a href="#匹配信息流数据" class="headerlink" title="匹配信息流数据"></a>匹配信息流数据</h1><p>这一步需要将定义提取规则获取到的动态内容和我们Rss信息流匹配起来，Item Title Template（标题）、Item Link Template（链接）、Item Content Template（全文内容），将第二步获取到的内容输入，{ \ % 数字}的形式</p>
+<p><img src="/images/75e359b12d374bb6579e484c52327c72.webp"></p>
+<h1 id="生成Rss订阅源"><a href="#生成Rss订阅源" class="headerlink" title="生成Rss订阅源"></a>生成Rss订阅源</h1><p><img src="/images/f21c844edb080982ceca27c8d742c355.webp"><br>当然，你也可以随时修改或者删除此RSS订阅源。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>使用 Feed43 最大的好处就是，不需要自己搭建服务器就可以将那些不支持 RSS 的页面变成 RSS 方便订阅。Feed43的缺点，免费版只会每6小时抓取一次，每次只提取20条消息。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2022/08/25/%E4%BD%BF%E7%94%A8Feed43%E4%B8%BA%E7%BD%91%E9%A1%B5%E7%94%9F%E6%88%90RSS%E8%AE%A2%E9%98%85%E6%BA%90/">https://lxlfpeng.github.io/2022/08/25/%E4%BD%BF%E7%94%A8Feed43%E4%B8%BA%E7%BD%91%E9%A1%B5%E7%94%9F%E6%88%90RSS%E8%AE%A2%E9%98%85%E6%BA%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Feed43/">Feed43</a><a class="post-meta__tags" href="/tags/Rss/">Rss</a></div><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2022/08/28/%E4%BD%BF%E7%94%A8Huginn%E6%89%93%E9%80%A0%E8%87%AA%E5%8A%A8%E5%8C%96%E4%BF%A1%E6%81%AF%E5%A4%84%E7%90%86%E4%B8%AD%E5%BF%83/" title="使用Huginn打造自动化信息处理中心"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">使用Huginn打造自动化信息处理中心</div></div><div class="info-2"><div class="info-item-1">一.Huginn简介在北欧神话中，奥丁的肩膀上坐着两只乌鸦，一只名叫 Huginn，一只名叫 Muninn。这两只乌鸦告诉奥丁他们的所见所闻，毫无遗漏。奥丁在黎明时派出它们，它们飞遍全世界然后在晚餐之前回来汇报，因此，奥丁能知晓很多事情。在Huginn的项目主页上，作者对它有详细的介绍。我们同样可以通过Huginn创建不同的代理，通过这些代理发送HTTP请求获得相关数据，然后将获取到的数据进行处理，就可以在互联网上面收集到各类我们需要的信息了。通过Huginn我们可以比较方便的实现如下功能:  监控你关心的事项例如知乎、微博、贴吧等平台指定的信息，一旦监控到信息，邮件通知你。 监控各大购物平台商品信息，一旦发现折扣信息，邮件通知你。 支持各种形式的发送和接收...</div></div></div></a><a class="pagination-related" href="/2022/08/22/%E4%BD%BF%E7%94%A8Python(PyRSS2Gen)%E5%88%B6%E4%BD%9CRSS%E6%BA%90/" title="使用Python(PyRSS2Gen)制作RSS源"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">使用Python(PyRSS2Gen)制作RSS源</div></div><div class="info-2"><div class="info-item-1">一.Rss订阅源的本质要通过代码生成Rss订阅源，首先应该了解Rss订阅源到底是什么东西。 1.分析Rss订阅源我们打开少数派官方提供给我们的Rss订阅源，保存网页可以看到Rss订阅源本质上就是一个储存在文件服务器里面的Xml文件。 2.Rss订阅源的结构打开xml文件，结构如下: 12345678910111213141516171819202122232425262728293031323334353637&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;rss    xmlns:atom=&quot;http://www.w3.org/2005/Atom&quot;    xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot; version=&quot;2.0&quot;&gt;    &lt;channel&gt;        &lt;title&gt;少数派&lt;/title&gt;       ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2022/08/28/%E4%BD%BF%E7%94%A8Huginn%E6%89%93%E9%80%A0%E8%87%AA%E5%8A%A8%E5%8C%96%E4%BF%A1%E6%81%AF%E5%A4%84%E7%90%86%E4%B8%AD%E5%BF%83/" title="使用Huginn打造自动化信息处理中心"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-08-28</div><div class="info-item-2">使用Huginn打造自动化信息处理中心</div></div><div class="info-2"><div class="info-item-1">一.Huginn简介在北欧神话中，奥丁的肩膀上坐着两只乌鸦，一只名叫 Huginn，一只名叫 Muninn。这两只乌鸦告诉奥丁他们的所见所闻，毫无遗漏。奥丁在黎明时派出它们，它们飞遍全世界然后在晚餐之前回来汇报，因此，奥丁能知晓很多事情。在Huginn的项目主页上，作者对它有详细的介绍。我们同样可以通过Huginn创建不同的代理，通过这些代理发送HTTP请求获得相关数据，然后将获取到的数据进行处理，就可以在互联网上面收集到各类我们需要的信息了。通过Huginn我们可以比较方便的实现如下功能:  监控你关心的事项例如知乎、微博、贴吧等平台指定的信息，一旦监控到信息，邮件通知你。 监控各大购物平台商品信息，一旦发现折扣信息，邮件通知你。 支持各种形式的发送和接收...</div></div></div></a><a class="pagination-related" href="/2022/08/22/%E4%BD%BF%E7%94%A8Python(PyRSS2Gen)%E5%88%B6%E4%BD%9CRSS%E6%BA%90/" title="使用Python(PyRSS2Gen)制作RSS源"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-08-22</div><div class="info-item-2">使用Python(PyRSS2Gen)制作RSS源</div></div><div class="info-2"><div class="info-item-1">一.Rss订阅源的本质要通过代码生成Rss订阅源，首先应该了解Rss订阅源到底是什么东西。 1.分析Rss订阅源我们打开少数派官方提供给我们的Rss订阅源，保存网页可以看到Rss订阅源本质上就是一个储存在文件服务器里面的Xml文件。 2.Rss订阅源的结构打开xml文件，结构如下: 12345678910111213141516171819202122232425262728293031323334353637&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;rss    xmlns:atom=&quot;http://www.w3.org/2005/Atom&quot;    xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot; version=&quot;2.0&quot;&gt;    &lt;channel&gt;        &lt;title&gt;少数派&lt;/title&gt;       ...</div></div></div></a><a class="pagination-related" href="/2022/08/20/%E4%BD%BF%E7%94%A8RssHub%E4%B8%BA%E7%BD%91%E9%A1%B5%E7%94%9F%E6%88%90RSS%E8%AE%A2%E9%98%85%E6%BA%90/" title="使用RssHub为网页生成RSS订阅源"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-08-20</div><div class="info-item-2">使用RssHub为网页生成RSS订阅源</div></div><div class="info-2"><div class="info-item-1">一.RSSHub简介众所周知，网站提供 RSS 并不能为他的站点带来更多的流量，反而会减少主站的访客数。因此很多的网站没有提供Rss订阅源供大家使用。 RSSHub就是这样的一款神器，借助 RSSHub 可以方便地通过 RSS 订阅知乎、豆瓣、Facebook 等现代媒体社交平台。RSSHub RSSHub 是一个开源、简单易用、易于扩展的 RSS 生成器，可以给任何奇奇怪怪的内容生成 RSS 订阅源。 RSSHub 借助于开源社区的力量快速发展中，聚集了众多 RSS 爱好者来为现代的网站构建 RSS 订阅源，目前已适配数百家网站的上千项内容。  GitHub开源地址：https://github.com/DIYgod/RSSHub 官方文档：https://docs.rsshub.app/usage.html#sheng-cheng-ding-yue-yuan 部署文档：https://docs.rsshub.app/install/ 可以配合浏览器扩展 RSSHub Radar 和 移动端辅助 App RSSBud (iOS) 与 RSSAid (Android)...</div></div></div></a><a class="pagination-related" href="/2022/09/01/%E8%87%AA%E5%AE%9A%E4%B9%89Rss%E6%BA%90%E6%AF%94%E8%BE%83/" title="自定义Rss源比较"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-01</div><div class="info-item-2">自定义Rss源比较</div></div><div class="info-2"><div class="info-item-1">万物皆可RSS简书荒废有近两年，最近发现一个RSS神器，所以又有了动力写一点东西。前年关于使用RSS订阅微信公众号、知乎、社交网络等，有写几篇文章：  【干货】如何高效地订阅微信公众号 【干货】如何通过 RSS 订阅知乎 【干货】如何通过RSS订阅社交网络  其中，最最主要的方法是使用部署的Huginn去制作相应的RSS，但是，这种方法的学习成本稍高，对不懂编程语言的人不太友好；那么到底有没有更简单的方法呢？果真,Github就出现了这样一个强大的工具——RSSHub。最近花了一点时间研究后发现，这个工具实在是功能强大且使用简单，所以就想一定要推荐给大家。  如果想了解并部署Huginn，可以看我的这篇文章：Huginn 安装教程 — 建立你自己的 IFTTT  1....</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4%E6%80%BB%E8%A7%88"><span class="toc-number">2.</span> <span class="toc-text">步骤总览</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%A5%BD%E7%BD%91%E5%9D%80"><span class="toc-number">3.</span> <span class="toc-text">准备好网址</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B3%A8%E5%86%8C%E8%B4%A6%E5%8F%B7"><span class="toc-number">4.</span> <span class="toc-text">注册账号</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Feed43%E8%A7%A3%E6%9E%90%E5%87%BA%E7%BD%91%E9%A1%B5%E6%BA%90%E7%A0%81"><span class="toc-number">5.</span> <span class="toc-text">使用Feed43解析出网页源码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E7%BD%91%E9%A1%B5%E6%BA%90%E7%A0%81"><span class="toc-number">6.</span> <span class="toc-text">分析网页源码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E6%8F%90%E5%8F%96%E8%A7%84%E5%88%99"><span class="toc-number">7.</span> <span class="toc-text">定义提取规则</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E5%8C%B9%E9%85%8D%E8%A7%84%E5%88%99"><span class="toc-number">8.</span> <span class="toc-text">检查匹配规则</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8C%B9%E9%85%8D%E4%BF%A1%E6%81%AF%E6%B5%81%E6%95%B0%E6%8D%AE"><span class="toc-number">9.</span> <span class="toc-text">匹配信息流数据</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%94%9F%E6%88%90Rss%E8%AE%A2%E9%98%85%E6%BA%90"><span class="toc-number">10.</span> <span class="toc-text">生成Rss订阅源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">11.</span> <span class="toc-text">总结</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

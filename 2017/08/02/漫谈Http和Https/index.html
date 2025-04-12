@@ -1,0 +1,404 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>漫谈Http和Https | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.Http🦄Http简介HTTP协议是Hyper Text Transfer Protocol（超文本传输协议）的缩写，它是构建于 TCP&#x2F;IP 协议之上的一个应用层协议(网络进行通信的规则)，默认端口号是 80。HTTP协议工作于客户端-服务端架构之上。HTTP客户端通过URL向HTTP服务端发送所有请求，HTTP服务端根据接收到的请求后， 向客户端发送响应信息。HTTP 是一种无">
+<meta property="og:type" content="article">
+<meta property="og:title" content="漫谈Http和Https">
+<meta property="og:url" content="https://lxlfpeng.github.io/2017/08/02/%E6%BC%AB%E8%B0%88Http%E5%92%8CHttps/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.Http🦄Http简介HTTP协议是Hyper Text Transfer Protocol（超文本传输协议）的缩写，它是构建于 TCP&#x2F;IP 协议之上的一个应用层协议(网络进行通信的规则)，默认端口号是 80。HTTP协议工作于客户端-服务端架构之上。HTTP客户端通过URL向HTTP服务端发送所有请求，HTTP服务端根据接收到的请求后， 向客户端发送响应信息。HTTP 是一种无">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/a58a9e4c7f56b6574ef299b35d84a74e.webp">
+<meta property="article:published_time" content="2017-08-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.855Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/a58a9e4c7f56b6574ef299b35d84a74e.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2017/08/02/%E6%BC%AB%E8%B0%88Http%E5%92%8CHttps/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '漫谈Http和Https',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/a58a9e4c7f56b6574ef299b35d84a74e.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">漫谈Http和Https</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">漫谈Http和Https</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2017-08-01T16:00:00.000Z" title="发表于 2017-08-02 00:00:00">2017-08-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">网络基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">7.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>22分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-Http"><a href="#一-Http" class="headerlink" title="一.Http"></a>一.Http</h1><h3 id="🦄Http简介"><a href="#🦄Http简介" class="headerlink" title="🦄Http简介"></a>🦄Http简介</h3><p>HTTP协议是Hyper Text Transfer Protocol（超文本传输协议）的缩写，它是构建于 TCP&#x2F;IP 协议之上的一个应用层协议(网络进行通信的规则)，默认端口号是 80。HTTP协议工作于客户端-服务端架构之上。HTTP客户端通过URL向HTTP服务端发送所有请求，HTTP服务端根据接收到的请求后， 向客户端发送响应信息。HTTP 是一种无状态 (stateless) 协议，<br>HTTP协议本身不会对发送过的请求和相应的通信状态进行持久化处理。这样做的目的是为了保持HTTP协议的简单性，从而能够快速处理大量的事务， 提高效率。 但是，很多应用场景中，我们需要保持各种状态，如：登录状态等。我们就必须引入一些技术来记录管理状态，例如Cookie等技术。目前绝大多数的Web开发，都是构建在HTTP协议之上的。</p>
+<h3 id="🦓Http的特点"><a href="#🦓Http的特点" class="headerlink" title="🦓Http的特点"></a>🦓Http的特点</h3><p>HTTP 协议一共有五大特点：1、支持客户&#x2F;服务器模式；2、简单快速；3、灵活；4、无连接；5、无状态。</p>
+<h5 id="1-支持客户-服务器模式"><a href="#1-支持客户-服务器模式" class="headerlink" title="1.支持客户&#x2F;服务器模式"></a>1.支持客户&#x2F;服务器模式</h5><p>HTTP遵循请求（Request）&#x2F;应答（Response）模型。 由客户端向服务器端发起建立连接请求(三次握手)连接以后发起请求消息，即Request；然后服务器返回响应到客户端，即Response，然后客户端和服务器之间的链接断开(四次挥手)。</p>
+<h5 id="2-简单快速"><a href="#2-简单快速" class="headerlink" title="2.简单快速"></a>2.简单快速</h5><p>客户向服务器请求服务时，只需传送请求方法和路径。请求方法常用的有GET、HEAD、POST。每种方法规定了客户与服务器联系的类型不同。由于HTTP协议简单，使得HTTP服务器的程序规模小，因而通信速度很快。</p>
+<h5 id="3-灵活"><a href="#3-灵活" class="headerlink" title="3.灵活"></a>3.灵活</h5><p>HTTP允许传输任意类型的数据对象。正在传输的类型由Content-Type（Content-Type是HTTP包中用来表示内容类型的标识）加以标记。</p>
+<h5 id="4-无连接"><a href="#4-无连接" class="headerlink" title="4.无连接"></a>4.无连接</h5><p>无连接的含义是限制每次连接只处理一个请求。服务器处理完客户的请求，并收到客户的应答后，即断开连接。采用这种方式可以节省传输时间。 早期这么做的原因是 HTTP 协议产生于互联网，<br>因此服务器需要处理同时面向全世界数十万、上百万客户端的网页访问，但每个客户端（即浏览器）与服务器之间交换数据的间歇性较大（即传输具有突发性、瞬时性）， 并且网页浏览的联想性、发散性导致两次传送的数据关联性很低，大部分通道实际上会很空闲、无端占用资源。因此 HTTP<br>的设计者有意利用这种特点将协议设计为请求时建连接、请求完释放连接，以尽快将资源释放出来服务其他客户端。 随着时间的推移，网页变得越来越复杂，里面可能嵌入了很多图片，这时候每次访问图片都需要建立一次 TCP 连接就显得很低效。后来，Keep-Alive 被提出用来解决这效率低的问题。<br>Keep-Alive 功能使客户端到服务器端的连接持续有效，当出现对服务器的后继请求时，Keep-Alive 功能避免了建立或者重新建立连接。市场上的大部分 Web 服务器，包括 iPlanet、IIS 和 Apache，都支持 HTTP<br>Keep-Alive。对于提供静态内容的网站来说，这个功能通常很有用。但是，对于负担较重的网站来说，这里存在另外一个问题：虽然为客户保留打开的连接有一定的好处，但它同样影响了性能，因为在处理暂停期间，本来可以释放的资源仍旧被占用。当Web服务器和应用服务器在同一台机器上运行时，Keep-Alive<br>功能对资源利用的影响尤其突出。这样一来，客户端和服务器之间的 HTTP 连接就会被保持，不会断开（超过 Keep-Alive 规定的时间，意外断电等情况除外），当客户端发送另外一个请求时，就使用这条已经建立的连接。</p>
+<h5 id="5-无状态"><a href="#5-无状态" class="headerlink" title="5.无状态"></a>5.无状态</h5><p>HTTP协议是无状态协议，无状态是指协议对于事务处理没有记忆能力，服务器不知道客户端是什么状态。即我们给服务器发送 HTTP 请求之后，服务器根据请求，会给我们发送数据过来，但是，发送完，不会记录任何信息。<br>缺少状态意味着如果后续处理需要前面的信息，则它必须重传，这样可能导致每次连接传送的数据量增大。另一方面，在服务器不需要先前信息时它的应答就较快。 HTTP 协议这种特性有优点也有缺点，优点在于解放了服务器，每一次请求“点到为止”不会造成不必要连接占用，缺点在于每次请求会传输大量重复的内容信息。<br>客户端与服务器进行动态交互的 Web 应用程序出现之后，HTTP 无状态的特性严重阻碍了这些应用程序的实现，毕竟交互是需要承前启后的，简单的购物车程序也要知道用户到底在之前选择了什么商品。于是，两种用于保持 HTTP 连接状态的技术就应运而生了，一个是 Cookie，而另一个则是 Session。<br>Cookie可以保持登录信息到用户下次与服务器的会话，换句话说，下次访问同一网站时，用户会发现不必输入用户名和密码就已经登录了（当然，不排除用户手工删除Cookie）。而还有一些Cookie在用户退出会话的时候就被删除了，这样可以有效保护个人隐私。 Cookies<br>最典型的应用是判定注册用户是否已经登录网站，用户可能会得到提示，是否在下一次进入此网站时保留用户信息以便简化登录手续，这些都是 Cookies 的功用。另一个重要应用场合是“购物车”之类处理。用户可能会在一段时间内在同一家网站的不同页面中选择不同的商品，这些信息都会写入<br>Cookies，以便在最后付款时提取信息。 与 Cookie 相对的一个解决方案是 Session，它是通过服务器来保持状态的。 当客户端访问服务器时，服务器根据需求设置 Session，将会话信息保存在服务器上，同时将标示 Session 的 SessionId 传递给客户端浏览器，浏览器将这个<br>SessionId 保存在内存中，我们称之为无过期时间的 Cookie。浏览器关闭后，这个 Cookie 就会被清掉，它不会存在于用户的 Cookie 临时文件。 以后浏览器每次请求都会额外加上这个参数值，服务器会根据这个 SessionId，就能取得客户端的数据信息。<br>如果客户端浏览器意外关闭，服务器保存的 Session 数据不是立即释放，此时数据还会存在，只要我们知道那个 SessionId，就可以继续通过请求获得此 Session 的信息，因为此时后台的 Session 还存在，当然我们可以设置一个 Session<br>超时时间，一旦超过规定时间没有客户端请求时，服务器就会清除对应 SessionId 的 Session 信息。</p>
+<h3 id="🐴HTTP的工作过程"><a href="#🐴HTTP的工作过程" class="headerlink" title="🐴HTTP的工作过程"></a>🐴HTTP的工作过程</h3><h5 id="1-域名解析"><a href="#1-域名解析" class="headerlink" title="1.域名解析"></a>1.域名解析</h5><p>当请求一个超链接时，HTTP就开始工作了，上文说到Http是基于TCP&#x2F;IP协议的，因此首先需要对域名进行解析找到正确的IP地址，然后才能进行正常的通信，<br>DNS域名解析采用的是递归查询的方式，过程是先去找DNS缓存-&gt;缓存找不到就去找根域名服务器 根域名又会去找下一级，这样递归查找之后，找到了，<br>域名解析步骤如下:</p>
+<ol>
+<li>浏览器首先检查自己本地是缓存是否有对应的域名，有则直接使用（缓存时间比较短，大概只有1分钟，且只能容纳1000条缓存）。</li>
+<li>如果浏览器缓存中没有，则查询系统DNS缓存中的域名表缓存，有则直接使用。</li>
+<li>系统缓存中还是没有，则检查hosts文件中的映射表。【windows中hosts文件路径：C:\Windows\System32\drivers\etc】</li>
+<li>本地实在找不到，则递归地去域名服务器去查找(就近查找)。【DNS服务器IP是本地配置的首选服务器，一般常用的有114.114.114.114（电信运营商提供）和8.8.8.8（Google提供）】</li>
+</ol>
+<blockquote>
+<p>DNS服务器首先查找自身的缓存，有对应的域名ip则返回结果 如果缓存中查找不到，DNS服务器则发起递归DNS请求，首先向根域服务器发起请求查询，假如本次请求的是<a target="_blank" rel="noopener" href="http://www.baidu.com,根域服务器发现这是一个com的顶级域名,就把com域的ip地址返回给dns服务器/">www.baidu.com，根域服务器发现这是一个com的顶级域名，就把com域的ip地址返回给DNS服务器</a><br> DNS服务器向com域ip地址发起请求，查询该域名的ip，此时该服务器返回了baidu.com的DNS地址。 最后DNS服务器又向baidu.com的DNS地址发起查询请求，最后找到了完整的ip路径返回给DNS服务器，DNS再把ip信息返回给windows内核，内核再返回给浏览器，于是浏览器就知道该域名对应的ip地址了，可以开始进一步请求了。</p>
+</blockquote>
+<h5 id="2-建立TCP连接"><a href="#2-建立TCP连接" class="headerlink" title="2.建立TCP连接"></a>2.建立TCP连接</h5><p>在HTTP工作开始之前，客户端首先要通过网络与服务端建立连接。HTTP是比TCP更高层次的应用层协议， 根据规则，只有低层协议建立之后才能进行更高层协议的连接， 因此， 首先要建立TCP连接， 一般TCP连接的端口号是80。 通过域名解析找到对应主机的ip地址以后， 就可以通过三次握手建立tcp连接，进行通信。<br><img src="/images/0ab84bb8a7ded72f43df4cab8fe70674.webp"></p>
+<ul>
+<li><p>第一次握手：建立连接时，客户端发送syn包（seq&#x3D;j）到服务器，并进入SYN_SENT状态，等待服务器确认；SYN：同步序列编号（Synchronize Sequence Numbers）。</p>
+</li>
+<li><p>第二次握手：服务器收到syn包，必须确认客户的SYN（ack&#x3D;j+1），同时自己也发送一个SYN包（seq&#x3D;k），即SYN+ACK包，此时服务器进入SYN_RECV状态。</p>
+</li>
+<li><p>第三次握手：客户端收到服务器的SYN+ACK包，向服务器发送确认包ACK(ack&#x3D;k+1），此包发送完毕，客户端和服务器进入ESTABLISHED（TCP连接成功）状态，完成三次握手。</p>
+</li>
+</ul>
+<p>【建立连接的最重要目是让连接的双方交换初始序号(ISN， Initial Sequence Number)，所以再响应的ACK报文中会包含序列号递增序列】</p>
+<h5 id="3-客户端像服务端发送请求数据"><a href="#3-客户端像服务端发送请求数据" class="headerlink" title="3.客户端像服务端发送请求数据"></a>3.客户端像服务端发送请求数据</h5><p>通过三次握手建立tcp连接以后，客户端就可以开始向服务端发送Http请求报文。一个HTTP请求报文由请求行（request line）、请求头部（header）、空行和请求数据4个部分组成。<br><img src="/images/821253c3bc86dc2ed52f5a02b62f9034.webp"></p>
+<ol>
+<li><p>客户端首先会向服务端发送请求行，它包括了请求方法、请求 URI(Uniform Resource Identifier)和 HTTP 版本协议。 它们用空格分隔。例如:</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET/sample/hello.jsp HTTP/1.1</span><br></pre></td></tr></table></figure>
+<p> <strong>请求行</strong>：用于描述客户端的请求方式（GET&#x2F;POST等），请求的资源名称(URL)以及使用的HTTP协议的版本号。<br>   HTTP协议的请求方法有如下：<br> - GET 获取资源 (幂等)<br> - POST 新增资源<br> - HEAD 获取 HEAD 元数据 (幂等)<br> - PUT 更新资源 (带条件时幂等)<br> - DELETE 删除资源 (幂等)<br> - CONNECT 建立 Tunnel 隧道<br> - OPTIONS 获取服务器支持访问资源的方法 (幂等)<br> - TRACE 回显服务器收到的请求，可以定位问题。(有安全风险)</p>
+</li>
+<li><p>在客户端发送请求行命令之后，还要以请求头形式发送其他一些信息，把客户端的一些基础信息告诉服务器。比如包含了客户端所使用的操作系统、客户端内核等信息，以及当前请求的域名信息、Cookie等。</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Host: www.example.com</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6)</span><br><span class="line">Gecko/20050225 Firefox/1.0.1</span><br><span class="line">Connection: Keep-Alive</span><br></pre></td></tr></table></figure>
+<p> <strong>请求头</strong>：请求头部由关键字&#x2F;值对组成，每行一对，关键字和值用英文冒号“:”分隔。请求头部通知服务器有关于客户端请求的信息，典型的请求头有：</p>
+<ul>
+<li>Accept<ul>
+<li>作用：指定客户端能够接收的内容类型</li>
+<li>示例：<code>Accept:text/html</code></li>
+</ul>
+</li>
+<li>Accept-Charset<ul>
+<li>作用：客户端可以接受的字符编码集</li>
+<li>示例：<code>Accept-Charset:utf-8</code></li>
+</ul>
+</li>
+<li>Accept-Encoding<ul>
+<li>作用：指定客户端可以支持web服务器返回内容的压缩编码类型</li>
+<li>示例：<code>Accept-Encoding:gzip</code></li>
+</ul>
+</li>
+<li>Accept-Language<ul>
+<li>作用：客户端可接受的语言</li>
+<li>示例：<code>Accept-Language:en</code></li>
+</ul>
+</li>
+<li>Accept-Ranges<ul>
+<li>作用：可以请求网页实体的一个或者多个子范围字段</li>
+<li>示例：<code>Accept-Ranges:bytes</code></li>
+</ul>
+</li>
+<li>Authorization<ul>
+<li>作用：HTTP授权的授权证书类型</li>
+</ul>
+</li>
+<li>Cache-Control<ul>
+<li>作用：指定请求和响应遵循的缓存机制</li>
+<li>示例：<code>Cache-Control:no-cache</code></li>
+</ul>
+</li>
+<li>Connection<ul>
+<li>作用：表示是否需要持久连接，注意HTTP1.1默认进行持久连接</li>
+<li>示例：<code>Connection:close</code></li>
+</ul>
+</li>
+<li>Cookie<ul>
+<li>作用：HTTP请求发送时，会把保存在该请求域名下的所有cookie值一起发送给web服务器</li>
+<li>示例：<code>Cookie:$Version=1;Skin=new</code></li>
+</ul>
+</li>
+<li>Content-Length<ul>
+<li>作用：请求的内容长度</li>
+<li>示例：<code>Content-Length:348</code></li>
+</ul>
+</li>
+<li>Content-Type<ul>
+<li>作用：请求与实体对应的MIME信息</li>
+</ul>
+</li>
+<li>Host<ul>
+<li>作用：请求的主机名，允许多个域名同处一个IP地址，即虚拟主机。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>之后客户端发送了一空白行来通知服务器， 表示它已经结束了该头信息的发送。<br> <strong>空行</strong>：最后一个请求头之后是一个空行，发送回车符和换行符，通知服务器以下不再是请求头。</p>
+</li>
+</ol>
+<p>4.客户端发送请求数据。<br>    GET方法并没有请求数据，在发送POST请求时才会有请求正文。<br>    <strong>请求数据</strong>：当使用POST等方法时，通常需要客户端向服务器传递数据。这些数据就储存在请求正文中（GET方式是保存在url地址后面）。POST方法适用于需要客户填写表单的场合。与请求数据相关的最常使用的请求头是Content-Type和Content-Length。</p>
+<h5 id="4-服务端向客户端发送响应数据"><a href="#4-服务端向客户端发送响应数据" class="headerlink" title="4.服务端向客户端发送响应数据"></a>4.服务端向客户端发送响应数据</h5><p>服务端收到接收到HTTP请求之后，处理完自身的逻辑以后，会将HTTP响应给客户端，HTTP响应报文主要由状态行、响应头部、空行以及响应数据组成。<br><img src="/images/3729f815469f4d5f2bd639ea500ab1bc.webp"></p>
+<ol>
+<li><p>服务器会返回响应行，包括协议版本和状态码。</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br></pre></td></tr></table></figure>
+<p> <strong>状态行</strong>：由3部分组成，分别为：协议版本，状态码，状态码描述。<br> 其中协议版本与请求报文一致，状态码描述是对状态码的简单描述。一些常见的状态码一般分为五类：</p>
+<ul>
+<li>1xx——信息响应，这一类型的状态码，代表请求已被接受，需要继续处理，这类响应是临时响应，只包含状态行和某些可选的响应头信息，并以空行结束，这一类型的状态码，代表请求已被接受，需要继续处理。这类响应是临时响应，只包含状态行和某些可选的响应头信息，并以空行结束。由于HTTP&#x2F;1.0协议中没有定义任何1xx状态码，所以除非在某些试验条件下，服务器禁止向此类客户端发送1xx响应。这些状态码代表的响应都是信息性的，标示客户应该采取的其他行动。</li>
+<li>2xx——成功响应，求已成功被服务器接收，理解，并接受，也就是一次成功的响应。</li>
+<li>3xx——重定向，这类状态码代表需要客户端采取进一步的操作才能完成请求。通常，这些状态码用来重定向，后续的请求地址（重定向目标）在本次响应的Location域中指明。当且仅当后续的请求所使用的方法是GET或者HEAD时，用户浏览器才可以在没有用户介入的情况下自动提交所需要的后续请求。</li>
+<li>4xx——客户端错误，这类的状态码代表了客户端看起来可能发生了错误，妨碍了服务器的处理。除非响应的是一个HEAD请求，否则服务器就应该返回一个解释当前错误状况的实体，以及这是临时的还是永久性的状况。这些状态码适用于任何请求方法。浏览器应当向用户显示任何包含在此类错误响应中的实体内容。</li>
+<li>5xx——服务端错误，表示服务器无法完成明显有效的请求。这类状态码代表了服务器在处理请求的过程中有错误或者异常状态发生，也有可能是服务器意识到以当前的软硬件资源无法完成对请求的处理。除非这是一个HEAD请求，否则服务器应当包含一个解释当前错误状态以及这个状况是临时的还是永久的解释信息实体。浏览器应当向用户展示任何在当前响应中被包含的实体。这些状态码适用于任何响应方法。</li>
+</ul>
+</li>
+<li><p>正如客户端会随同请求发送请求头一样，服务器也会随同响应向客户端发送响应头。响应头包含了服务器自身的一些信息， 比如服务器生成返回数据的时间、返回的数据类型(JSON、HTML、流媒体等类型)，以及服务器要在客户端保存的 Cookie 等信息。<br> <strong>响应头</strong>：响应头用于描述服务器的基本信息，以及客户端如何处理数据。</p>
+</li>
+<li><p>空格：**CRLF（即 \r\n）分割<br>最后一个响应头头之后是一个空行，通知客户端以下不再是响应头的内容。</p>
+</li>
+<li><p>服务器发送响应体数据，通常包含了数据返回的实际内容。<br><strong>消息体</strong>：服务器返回给客户端的数据 Content-Type 表示消息体的类型，通常浏览网页其类型是HTML，当然还会有其他类型，比如图片、视频等。</p>
+</li>
+<li><p>特殊情况-重定向<br><img src="/images/0040852b1d93bd095182c4009ad40b17.webp"><br>如果响应行返回的状态码是 301，那么就是服务端告诉客户端，需要重定向到另外的链接获取资源，而需要重定向的网址正是包含在响应头的 Location 字段中接下来，客户端获取 Location 字段中的地址，并使用该地址重新导航，这就是一个完整重定向的执行流程。</p>
+</li>
+</ol>
+<h5 id="5-服务端关闭TCP连接"><a href="#5-服务端关闭TCP连接" class="headerlink" title="5.服务端关闭TCP连接"></a>5.服务端关闭TCP连接</h5><p>一般情况下， 一旦Web服务器向浏览器发送了响应数据， 它就要关闭TCP连接(四次挥手)。 如果浏览器或者服务器在其头信息加入了这行代码:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Connection:keep-alive</span><br></pre></td></tr></table></figure>
+
+<p>TCP连接在发送后将仍然保持打开状态。于是， 浏览器可以继续通过相同的连接发送请求. 保持连接节省了为每个请求建立新连接所需的时间， 还节约了网络带宽。<br><img src="/images/3d98f02c52c28c5caaf76b5099285e71.webp"></p>
+<ul>
+<li>第一次分手：主机1（可以使客户端，也可以是服务器端），设置Sequence Number，向主机2发送一个FIN报文段；此时，主机1进入FIN_WAIT_1状态；这表示主机1没有数据要发送给主机2了；</li>
+<li>第二次分手：主机2收到了主机1发送的FIN报文段，向主机1回一个ACK报文段，Acknowledgment Number为Sequence Number加1；主机1进入FIN_WAIT_2状态；主机2告诉主机1，我“同意”你的关闭请求；</li>
+<li>第三次分手：主机2向主机1发送FIN报文段，请求关闭连接，同时主机2进入LAST_ACK状态；</li>
+<li>第四次分手：主机1收到主机2发送的FIN报文段，向主机2发送ACK报文段，然后主机1进入TIME_WAIT状态；主机2收到主机1的ACK报文段以后，就关闭连接；此时，主机1等待2MSL后依然没有收到回复，则证明Server端已正常关闭，那好，主机1也可以关闭连接了。</li>
+</ul>
+<h1 id="二-Https"><a href="#二-Https" class="headerlink" title="二.Https"></a>二.Https</h1><h3 id="🐣Https简介"><a href="#🐣Https简介" class="headerlink" title="🐣Https简介"></a>🐣Https简介</h3><p>HTTP 在传输数据的过程中，所有的数据都是明文传输，自然没有安全性可言，特别是一些敏感数据，比如用户密码和信用卡信息等，而这些明文数据会经过WiFi、路由器、运营商、机房等多个物理设备节点，如果在这中间任意一个节点被监听，传输的内容就会完全暴露，这一攻击手法叫做MITM（Man In The Middle）中间人攻击。<br>为了解决HTTP明文传输数据可能导致的安全问题，1994年网景公司提出了HTTPS（HyperText Transfer Protocol Secure）超文本传输安全协议，数据通信仍然是HTTP，但利用SSL&#x2F;TLS加密数据包。<br><img src="/images/4a7cc220b9b55d3073081cd97a7896e2.webp" alt="在这里插入图片描述"><br>采用 HTTPS 协议的服务器必须要有一套数字 CA (Certification Authority)证书，证书是需要申请的，并由专门的数字证书认证机构(CA)通过非常严格的审核之后颁发的电子证书 (当然了是要钱的，安全级别越高价格越贵)。 颁发证书的同时会产生一个私钥和公钥。私钥由服务端自己保存，不可泄漏。公钥则是附带在证书的信息中，可以公开的。证书本身也附带一个证书电子签名，这个签名用来验证证书的完整性和真实性，可以防止证书被篡改。</p>
+<h3 id="🦢Https通信加密"><a href="#🦢Https通信加密" class="headerlink" title="🦢Https通信加密"></a>🦢Https通信加密</h3><p>通信需要加密是为了解决数据被窃取问题。因为HTTP不对通信内容进行加密处理，所以衍生了SSL加密技术协议，SSL采用混合加密（同时使用非对称加密和对称加密）的方式建立起安全的HTTP通信，经过加密后的内容即使被窃听了，窃听的人也无法解密对应的数据。</p>
+<ol>
+<li><p>对称加密<br> 对称加密是指加密和解密的密钥为同一个。 在通信时还需将密钥传输给对方用来解密，密钥传输过程中同样可能被截获，所以这种加密方式通信安全的前提是如何安全的传输密钥。</p>
+</li>
+<li><p>非对称加密<br> 与对称加密不同，非对称加密的密钥是成对的（公钥和私钥）。 这种方式又被称之为公开密钥加密，使用一对非对称的密钥，一把叫做公开密钥（public key），一把叫做私有密钥（private key），其中公开密钥可以随意发送，私有密钥必须保密。</p>
+</li>
+<li><p>混合加密<br>虽然非对称加密很安全，但是和对称加密比起来，它的解密速度非常慢；所以通常会用混合加密的方式进行通信，混合加密是用非对称加密的方式交换双方的对称加密秘钥，交换对称加密秘钥之后双方再用对称加密的方式进行通信。</p>
+</li>
+</ol>
+<h3 id="🐓Https数字证书"><a href="#🐓Https数字证书" class="headerlink" title="🐓Https数字证书"></a>🐓Https数字证书</h3><p>数字认证机构（CA，Certificate Authority）和其相关机关颁发的公开密钥证书，数字证书认证机构处于客户端与服务器双方都可信赖的第三方机构的立场上，其具体的业务流程如下：</p>
+<ol>
+<li>服务器运营人员向数字证书认证机构提出公开密钥的申请。</li>
+<li>数字证书认证机构判明身份之后，会对已申请的公开密钥做数字签名，并将该公开密钥放入公钥证书后绑定在一起，服务器会将这份由数字认证机构颁发的公钥证书发送给客户端。</li>
+<li>客户端获取到数字认证机构颁发的公开密钥后，对其进行数字签名验证，一是确认公开密钥是真实的数字认证机构颁发的，二是确认公开密钥的值得信赖的。</li>
+<li>确认无误后，使用该公开密钥加密报文。</li>
+<li>服务器使用私有密钥进行报文解密。</li>
+</ol>
+<h3 id="🦖Https请求流程"><a href="#🦖Https请求流程" class="headerlink" title="🦖Https请求流程"></a>🦖Https请求流程</h3><p><img src="/images/d403a2f7912d076e2144c91f079490a2.webp"></p>
+<ol>
+<li>客户端发起请求，例如在浏览器输入<code>https://www/baidu.com</code>，请求服务器443端口</li>
+<li>服务端收到客户端请求后，会将网站支持的证书信息（证书中包含公钥）传送一份给客户端。</li>
+<li>客户端收到证书之后，读取证书中的证书所有者、有效期等信息，进行校验，主要验证：</li>
+</ol>
+<ul>
+<li>证书是否过期</li>
+<li>发行证书的机构是否可靠</li>
+<li>返回的公钥是否能正确解开返回证书中的数字签名</li>
+<li>证书域名和请求的域名是否匹配</li>
+</ul>
+<ol start="4">
+<li>客户端开始查找操作系统中已内置的受信任的证书发布机构CA，与服务器发来的证书中的颁发者CA比对，用于校验证书是否为合法机构颁发</li>
+<li>如果找不到，浏览器就会报错，说明服务器发来的证书是不可信任的。</li>
+<li>如果找到，那么浏览器就会从操作系统中取出 颁发者CA 的公钥，然后对服务器发来的证书里面的签名进行解密</li>
+<li>客户端使用相同的hash算法计算出服务器发来的证书的hash值，将这个计算的hash值与证书中签名做对比</li>
+<li>对比结果一致，则证明服务器发来的证书合法，没有被冒充</li>
+<li>如果证书验证通过，客户端将生成的随机堆成加密秘钥，并通过服务端传过来的的公钥加密，发给服务器</li>
+<li>服务器收到客户端用公钥加密过的随机秘钥之后，用私钥解密出秘钥</li>
+<li>服务器用解出来的客户端秘钥，将要响应的内容用秘钥对称加密，响应给客户端</li>
+<li>客户端将得到的内容，用刚刚自己生成的秘钥解密出内容</li>
+</ol>
+<h3 id="🐐HTTPS的缺点"><a href="#🐐HTTPS的缺点" class="headerlink" title="🐐HTTPS的缺点"></a>🐐HTTPS的缺点</h3><ul>
+<li>HTTPS协议多次握手，导致页面的加载时间延长近50%；</li>
+<li>HTTPS连接缓存不如HTTP高效，会增加数据开销和功耗；</li>
+<li>申请SSL证书需要钱，功能越强大的证书费用越高。</li>
+<li>SSL涉及到的安全算法会消耗 CPU 资源，对服务器资源消耗较大。</li>
+</ul>
+<h3 id="🦔Https能防止被抓包吗"><a href="#🦔Https能防止被抓包吗" class="headerlink" title="🦔Https能防止被抓包吗?"></a>🦔Https能防止被抓包吗?</h3><p>HTTPS 的数据是加密的，常规下抓包工具代理请求后抓到的包内容是加密状态，无法直接查看。<br>但是，正如前文所说，浏览器只会提示安全风险，如果用户授权仍然可以继续访问网站，完成请求。因此，只要客户端是我们自己的终端，我们授权的情况下，便可以组建中间人网络，而抓包工具便是作为中间人的代理。通常 HTTPS 抓包工具的使用方法是会生成一个证书，用户需要手动把证书安装到客户端中，然后终端发起的所有请求通过该证书完成与抓包工具的交互，然后抓包工具再转发请求到服务器，最后把服务器返回的结果在控制台输出后再返回给终端，从而完成整个请求的闭环。<br>既然 HTTPS 不能防抓包，那 HTTPS 有什么意义？HTTPS 可以防止用户在不知情的情况下通信链路被监听，对于主动授信的抓包操作是不提供防护的，因为这个场景用户是已经对风险知情。要防止被抓包，需要采用应用级的安全防护，例如采用私有的对称加密，同时做好移动端的防反编译加固，防止本地算法被破解。</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/43789231">彻底搞懂HTTPS的加密原理</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/130333796">全网最透彻HTTPS加解密原理，看完不懂你来打我</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2017/08/02/%E6%BC%AB%E8%B0%88Http%E5%92%8CHttps/">https://lxlfpeng.github.io/2017/08/02/%E6%BC%AB%E8%B0%88Http%E5%92%8CHttps/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/a58a9e4c7f56b6574ef299b35d84a74e.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2017/08/21/Android%20APK%E5%8F%8D%E7%BC%96%E8%AF%91%E5%8F%8A%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" title="Android APK反编译及逆向工程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Android APK反编译及逆向工程</div></div><div class="info-2"><div class="info-item-1">一. 分析已经打好的apk.首先来简单的说明下Apk文件本质上其实是一个zip包。我们直接进行解压就能看到其中的目录。 1. 目录说明 AndroidManifest.xml：应用的全局配置文件 classes.dex：源代码编译成class后，转成jar，再压缩成dex文件，dex是可以直接在Android虚拟机上运行的文件。 lib文件夹：引用的第三方sdk的so文件。 META-INF文件夹：Apk签名文件。 res文件夹：资源文件，包括了布局、图片等等。 resources.arsc：记录资源文件和资源id的映射关系。 其中还有一个没有显示就是→assets文件夹：原始资源文件夹，对应着Android工程的assets文件夹，一般用于存放原始的网页、音频等等。  上述的这些说明...</div></div></div></a><a class="pagination-related" href="/2017/08/01/Android%E4%B8%8A%E4%BC%A0aar%E5%88%B0Jcenter%E5%92%8CJitpack/" title="Android上传aar到Jcenter和Jitpack"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Android上传aar到Jcenter和Jitpack</div></div><div class="info-2"><div class="info-item-1">一.上传项目到Jcenter1.注册jcenter账号进入注册地址选择右边sign up here 进行注册,建议直接使用github账号授权登录。(qq，网易等邮箱很多时候收不到验证码，所以要想成功完成注册最好用google邮箱) 2.创建Repository（仓库）注册成功之后创建Repository，作为存放开源库的仓库，最好选择为公共仓库（public），仓库名称和仓库类型为maven，仓库名称在后面上传时需要用到。 3.获取 API Key登录bintray， Edit profile -&gt; API Key 可以获取上传的秘钥key，后面上传项目的时候需要使用。 4.配置引入 bintray-release插件项目根目录build.gradle配置，加入bintray-release插件 1234567891011121314151617181920buildscript &#123;       ...    repositories &#123;       ...    &#125;    dependencies &#123;       ...    ...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-Http"><span class="toc-number">1.</span> <span class="toc-text">一.Http</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%84Http%E7%AE%80%E4%BB%8B"><span class="toc-number">1.0.1.</span> <span class="toc-text">🦄Http简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%93Http%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-number">1.0.2.</span> <span class="toc-text">🦓Http的特点</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E6%94%AF%E6%8C%81%E5%AE%A2%E6%88%B7-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.0.2.0.1.</span> <span class="toc-text">1.支持客户&#x2F;服务器模式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E7%AE%80%E5%8D%95%E5%BF%AB%E9%80%9F"><span class="toc-number">1.0.2.0.2.</span> <span class="toc-text">2.简单快速</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E7%81%B5%E6%B4%BB"><span class="toc-number">1.0.2.0.3.</span> <span class="toc-text">3.灵活</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-%E6%97%A0%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.0.2.0.4.</span> <span class="toc-text">4.无连接</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-%E6%97%A0%E7%8A%B6%E6%80%81"><span class="toc-number">1.0.2.0.5.</span> <span class="toc-text">5.无状态</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%B4HTTP%E7%9A%84%E5%B7%A5%E4%BD%9C%E8%BF%87%E7%A8%8B"><span class="toc-number">1.0.3.</span> <span class="toc-text">🐴HTTP的工作过程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90"><span class="toc-number">1.0.3.0.1.</span> <span class="toc-text">1.域名解析</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E5%BB%BA%E7%AB%8BTCP%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.0.3.0.2.</span> <span class="toc-text">2.建立TCP连接</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%83%8F%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE"><span class="toc-number">1.0.3.0.3.</span> <span class="toc-text">3.客户端像服务端发送请求数据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%90%91%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%91%E9%80%81%E5%93%8D%E5%BA%94%E6%95%B0%E6%8D%AE"><span class="toc-number">1.0.3.0.4.</span> <span class="toc-text">4.服务端向客户端发送响应数据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%85%B3%E9%97%ADTCP%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.0.3.0.5.</span> <span class="toc-text">5.服务端关闭TCP连接</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-Https"><span class="toc-number">2.</span> <span class="toc-text">二.Https</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%A3Https%E7%AE%80%E4%BB%8B"><span class="toc-number">2.0.1.</span> <span class="toc-text">🐣Https简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%A2Https%E9%80%9A%E4%BF%A1%E5%8A%A0%E5%AF%86"><span class="toc-number">2.0.2.</span> <span class="toc-text">🦢Https通信加密</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%93Https%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6"><span class="toc-number">2.0.3.</span> <span class="toc-text">🐓Https数字证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%96Https%E8%AF%B7%E6%B1%82%E6%B5%81%E7%A8%8B"><span class="toc-number">2.0.4.</span> <span class="toc-text">🦖Https请求流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%90HTTPS%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-number">2.0.5.</span> <span class="toc-text">🐐HTTPS的缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%94Https%E8%83%BD%E9%98%B2%E6%AD%A2%E8%A2%AB%E6%8A%93%E5%8C%85%E5%90%97"><span class="toc-number">2.0.6.</span> <span class="toc-text">🦔Https能防止被抓包吗?</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/images/a58a9e4c7f56b6574ef299b35d84a74e.webp);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>AndroidJetpack分页组件paging3 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.什么是pagingJetpack Paging提供了列表中分页数据加载的解决方案，已经被广泛熟知和使用，目前这个库升级到了3.0版本。Paging3 基于Kotlin协程进行了重写，兼容Flow、Rxjava、LiveData等多种API方式。  每一页的数据会缓存至内存中，以此保证处理分页数据时更有效的使用系统资源 内置请求重复数据删除功能，确保应用有效地使用网络带宽和系统资源 支持Kotl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AndroidJetpack分页组件paging3">
+<meta property="og:url" content="https://lxlfpeng.github.io/2021/09/02/AndroidJetpack%E5%88%86%E9%A1%B5%E7%BB%84%E4%BB%B6paging3/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.什么是pagingJetpack Paging提供了列表中分页数据加载的解决方案，已经被广泛熟知和使用，目前这个库升级到了3.0版本。Paging3 基于Kotlin协程进行了重写，兼容Flow、Rxjava、LiveData等多种API方式。  每一页的数据会缓存至内存中，以此保证处理分页数据时更有效的使用系统资源 内置请求重复数据删除功能，确保应用有效地使用网络带宽和系统资源 支持Kotl">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2021-09-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.828Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2021/09/02/AndroidJetpack%E5%88%86%E9%A1%B5%E7%BB%84%E4%BB%B6paging3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'AndroidJetpack分页组件paging3',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">AndroidJetpack分页组件paging3</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">AndroidJetpack分页组件paging3</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2021-09-01T16:00:00.000Z" title="发表于 2021-09-02 00:00:00">2021-09-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-什么是paging"><a href="#一-什么是paging" class="headerlink" title="一.什么是paging"></a>一.什么是paging</h1><p>Jetpack Paging提供了列表中分页数据加载的解决方案，已经被广泛熟知和使用，目前这个库升级到了3.0版本。Paging3 基于Kotlin协程进行了重写，兼容Flow、Rxjava、LiveData等多种API方式。</p>
+<ul>
+<li>每一页的数据会缓存至内存中，以此保证处理分页数据时更有效的使用系统资源</li>
+<li>内置请求重复数据删除功能，确保应用有效地使用网络带宽和系统资源</li>
+<li>支持Kotlin协程、Flow、LiveData以及RxJava</li>
+<li>内置错误处理支持，如刷新和重试功能。</li>
+</ul>
+<h1 id="二-引入依赖"><a href="#二-引入依赖" class="headerlink" title="二.引入依赖"></a>二.引入依赖</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//java</span><br><span class="line">implementation &#x27;androidx.paging:paging-runtime:3.0.0-alpha07&#x27;</span><br><span class="line">//kotlin</span><br><span class="line">implementation &#x27;androidx.paging:paging-runtime-ktx:3.0.0-alpha07&#x27;</span><br></pre></td></tr></table></figure>
+<h1 id="三-初步使用"><a href="#三-初步使用" class="headerlink" title="三.初步使用"></a>三.初步使用</h1><h3 id="1-配置数据源"><a href="#1-配置数据源" class="headerlink" title="1. 配置数据源"></a>1. 配置数据源</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">class ArticleDataSource : PagingSource&lt;Int, DemoReqData.DataBean.DatasBean&gt;() &#123;</span><br><span class="line">    override suspend fun load(params: LoadParams&lt;Int&gt;): LoadResult&lt;Int, DemoReqData.DataBean.DatasBean&gt; &#123;</span><br><span class="line">        return try &#123;</span><br><span class="line">            //param.key页码未定义置为1 默认加载第1页数据。</span><br><span class="line">            var currentPage = params.key ?: 1</span><br><span class="line">            //仓库层请求数据</span><br><span class="line">            Log.d(&quot;PagingSource&quot;, &quot;请求第$&#123;currentPage&#125;页&quot;)</span><br><span class="line">            var demoReqData = RetrofitService.api.getArticleListData(currentPage)</span><br><span class="line">            //数据获取成功返回LoadResult数据</span><br><span class="line">            LoadResult.Page(</span><br><span class="line">                    //需要加载的数据</span><br><span class="line">                    data = demoReqData.data.datas,</span><br><span class="line">                    //如果可以往上加载更多就设置该参数，否则不设置</span><br><span class="line">                    prevKey = null,</span><br><span class="line">                    //加载下一页的key 如果传null就说明到底了</span><br><span class="line">                    nextKey = if (currentPage &lt; demoReqData.data?.pageCount ?: 0) &#123;</span><br><span class="line">                        //当前页码 小于 总页码 页面加1</span><br><span class="line">                        currentPage + 1</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        null</span><br><span class="line">                    &#125;</span><br><span class="line">            )</span><br><span class="line">        &#125; catch (e: Exception) &#123;</span><br><span class="line">            Log.d(&quot;PagingSource&quot;, &quot;----error---&gt;$&#123;e.message&#125;&quot;)</span><br><span class="line">            LoadResult.Error(throwable = e)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-生成可观察的数据集"><a href="#2-生成可观察的数据集" class="headerlink" title="2.生成可观察的数据集"></a>2.生成可观察的数据集</h3><p>观察数据集包括 LiveData 、Flow 以及 RxJava 中的 Observable 和 Flowable，其中，RxJava 需要单独引入扩展库去支持的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class PagingViewModel : ViewModel()  &#123;</span><br><span class="line">    fun getArticleData(): Flow&lt;PagingData&lt;DemoReqData.DataBean.DatasBean&gt;&gt; = Pager(PagingConfig(pageSize = 1)) &#123;</span><br><span class="line">        ArticleDataSource()</span><br><span class="line">    &#125;.flow</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>PagerConfig 可以提供分页的参数，比如每一页的加载数、初始加载数和最大数等。</li>
+<li>pagingSourceFactory 和 remoteMediator 都是数据源，我们使用其中的一个即可。</li>
+</ul>
+<p>PagingData是数据源和RecyclerView Adapter之间的一个桥梁，每一页数据就是一个PagingData首先创建Flow&lt;PagingData<XXX>&gt;,可以通过Pager().flow()去实现<br>，可以传入PagingConfig到Pager中去设置一些分页的参数，比如：</p>
+<ul>
+<li><p>pageSize : 每一页的数据量</p>
+</li>
+<li><p>prefetchDistance : 预取数据的距离，也就是距离最后一个item多远时开始加载下一页数据，默认是一页的数据量ppagesize，也就是说你获取到N页数据之后会自动开始获取第N+1页的数据，如果设置为0那么loadmore的效果就会消失</p>
+</li>
+<li><p>initialLoadSize : 初始化加载的数量，默认为pagesize * 3</p>
+</li>
+</ul>
+<p>Flow<PagingData>有一个方便的cachedIn()方法，使我们可以将内容缓存Flow<PagingData>在CoroutineScope中，如果我们放在viewmodel中，<br>这样我们就可以在配置被更改之后，activity能够接收到原有的数据而不用重新开始获取，如果你要在flow上用map等操作符的时候，要确保cachedIn()是在最后面的，<br>如果没有缓存，那么在切换横竖屏的时候就会重新开始请求.</p>
+<h3 id="3-创建Adapter"><a href="#3-创建Adapter" class="headerlink" title="3.创建Adapter"></a>3.创建Adapter</h3><p>用Paging库时需要recyclerview的adapter继承PagingDataAdapter</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">// 首先构造方法里需要传入diffutil的callback</span><br><span class="line">class PagingWanAdapter : PagingDataAdapter&lt;ArticleDataListData.DataBean.DatasBean, PagingWanAdapter.CustomViewHolder&gt;(ArticleDiffCallback()) &#123;</span><br><span class="line">    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) &#123;</span><br><span class="line">        val dataBean = getItem(position)</span><br><span class="line">        holder.txtInfo.text = dataBean?.desc</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder &#123;</span><br><span class="line">        val view = LayoutInflater.from(parent.context).inflate(R.layout.test_item_paging, parent, false)</span><br><span class="line">        return CustomViewHolder(view)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) &#123;</span><br><span class="line">        val txtInfo: TextView = itemView.findViewById(R.id.txt_view)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//这是判断item是否需要更新的部分</span><br><span class="line">class ArticleDiffCallback : DiffUtil.ItemCallback&lt;ArticleDataListData.DataBean.DatasBean&gt;() &#123;</span><br><span class="line">    override fun areItemsTheSame(oldItem: ArticleDataListData.DataBean.DatasBean, newItem: ArticleDataListData.DataBean.DatasBean): Boolean &#123;</span><br><span class="line">        return oldItem.id == newItem.id</span><br><span class="line">    &#125;</span><br><span class="line">    @SuppressLint(&quot;DiffUtilEquals&quot;)</span><br><span class="line">    override fun areContentsTheSame(oldItem: ArticleDataListData.DataBean.DatasBean, newItem: ArticleDataListData.DataBean.DatasBean): Boolean &#123;</span><br><span class="line">        return oldItem == newItem</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>paging3的设计理念是不建议对列表数据直接修改；而是对数据源进行操作，数据源的变化会自动更新到列表；<br>DiffUtil.ItemCallback 就是用来比对数据变化，从而决定更新对应UI；并执行条目动画；</p>
+<ul>
+<li><p>areItemsTheSame<br>比对新旧条目是否是同一个条目；<br>一般比对条目的唯一标示id即可，谨慎对待，如果条目不同则可能不会更新UI；</p>
+</li>
+<li><p>areContentsTheSame<br>当上面的方法确定是同一个条目之后，这里比对条目的内容是否一样，不一样则会更新条目UI<br>建议这里的比对把UI展示的数据都写上，写漏了会导致UI不更新对应字段；</p>
+</li>
+<li><p>getChangePayload （可选）<br>用于条目内部的局部刷新；</p>
+</li>
+</ul>
+<h3 id="4-在界面中使用"><a href="#4-在界面中使用" class="headerlink" title="4.在界面中使用"></a>4.在界面中使用</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">class PagingHomeMainActivity : AppCompatActivity(), CoroutineScope by MainScope() &#123;</span><br><span class="line">    private val btnLoadData by lazy &#123;</span><br><span class="line">        findViewById&lt;Button&gt;(R.id.btn_load_data)</span><br><span class="line">    &#125;</span><br><span class="line">    private val rlvData by lazy &#123;</span><br><span class="line">        findViewById&lt;RecyclerView&gt;(R.id.rlv_data)</span><br><span class="line">    &#125;</span><br><span class="line">    private val mPagingWanAdapter: PagingWanAdapter by lazy &#123;</span><br><span class="line">        PagingWanAdapter()</span><br><span class="line">    &#125;</span><br><span class="line">    private val mPagingViewModel: PagingViewModel by lazy &#123;</span><br><span class="line">        ViewModelProvider(this).get(PagingViewModel::class.java)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    override fun onCreate(savedInstanceState: Bundle?) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState)</span><br><span class="line">        setContentView(R.layout.test_activity_paging_home_main)</span><br><span class="line">        rlvData.adapter = mPagingWanAdapter</span><br><span class="line">        btnLoadData.setOnClickListener &#123;</span><br><span class="line">            launch &#123;</span><br><span class="line">                // 在activity中订阅pager的数据流，并且通过submitData方法把数据传给adapter</span><br><span class="line">                mPagingViewModel?.getArticleData()?.collectLatest &#123;</span><br><span class="line">                    //  mPagingData=it</span><br><span class="line">                // 把数据转化成itemview然后让adapter刷新ui</span><br><span class="line">                    mPagingWanAdapter.submitData(it)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    override fun onDestroy() &#123;</span><br><span class="line">        super.onDestroy()</span><br><span class="line">        cancel()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="四-注意事项"><a href="#四-注意事项" class="headerlink" title="四.注意事项"></a>四.注意事项</h1><h3 id="1-调整预取阈值"><a href="#1-调整预取阈值" class="headerlink" title="1.调整预取阈值"></a>1.调整预取阈值</h3><p>构建Pager时，使用到PagingConfig，其中有一个属性值为prefetchDistance，用于表示距离底部多少条数据开始预加载，设置0则表示滑到底部才加载。默认值为分页大小。<br>若要让用户对加载无感，适当增加预取阈值即可。比如调整到分页大小的5倍。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class PagingViewModel : ViewModel() &#123;</span><br><span class="line">    fun getArticleData() = Pager(PagingConfig(pageSize = 10, prefetchDistance = 50)) &#123;</span><br><span class="line">        ArticleDataSource()</span><br><span class="line">    &#125;.flow.cachedIn(viewModelScope)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-Paging的加载状态"><a href="#2-Paging的加载状态" class="headerlink" title="2.Paging的加载状态"></a>2.Paging的加载状态</h3><p>想要监听数据获取的状态在PagingDataAdapter里有两个方法</p>
+<ul>
+<li><p>addDataRefreshListener 这个方法是当新的PagingData被提交并且显示的回调</p>
+</li>
+<li><p>addLoadStateListener这个相较于上面那个比较复杂，listener中的回调会返回一个CombinedLoadStates对象</p>
+</li>
+</ul>
+<p>上面我们在Activity中创建了dataRecycleViewAdapter来显示页面数据，我们可以使用addLoadStateListener方法添加加载状态的监听事件，如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mPagingWanAdapter.addLoadStateListener &#123;</span><br><span class="line">    when (it.refresh) &#123;</span><br><span class="line">        is LoadState.NotLoading -&gt; &#123;</span><br><span class="line">            Log.d(TAG, &quot;is NotLoading&quot;)</span><br><span class="line">        &#125;</span><br><span class="line">        is LoadState.Loading -&gt; &#123;</span><br><span class="line">            Log.d(TAG, &quot;is Loading&quot;)</span><br><span class="line">        &#125;</span><br><span class="line">        is LoadState.Error -&gt; &#123;</span><br><span class="line">            Log.d(TAG, &quot;is Error&quot;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>状态返回的参数 CombinedLoadStates，包含了</p>
+<ul>
+<li><p>refresh:刷新(在初始化刷新的使用)</p>
+</li>
+<li><p>prepend:向前加载更多</p>
+</li>
+<li><p>append:向后加载更多(在加载更多的时候使用)</p>
+</li>
+<li><p>source:数据源</p>
+</li>
+<li><p>mediator:调解员<br>每个行为分为3中状态：</p>
+</li>
+<li><p>LoadState.Loading 加载中 (加载数据时候回调)</p>
+</li>
+<li><p>LoadState.NotLoading 没有加载中 (加载数据前和加载数据完成后回调)</p>
+</li>
+<li><p>LoadState.Error 加载失败 （加载数据失败回调）</p>
+</li>
+</ul>
+<p>也就是说如果监测的是it.refresh，当加载第二页第三页的时候，状态是监听不到的，这里只以it.refresh为例。</p>
+<p>监听方式除了addLoadStateListener外，还可以直接使用loadStateFlow的方式，由于flow内部是一个挂起函数 所以我们需要在协程中执行(,代码如下所示:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">lifecycleScope.launch &#123;</span><br><span class="line">    mPagingWanAdapter.loadStateFlow.collectLatest &#123;</span><br><span class="line">        when (it.refresh) &#123;</span><br><span class="line">            is LoadState.NotLoading -&gt; &#123;</span><br><span class="line"> </span><br><span class="line">            &#125;</span><br><span class="line">            is LoadState.Loading -&gt; &#123;</span><br><span class="line"> </span><br><span class="line">            &#125;</span><br><span class="line">            is LoadState.Error -&gt; &#123;</span><br><span class="line"> </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-刷新和重试"><a href="#3-刷新和重试" class="headerlink" title="3.刷新和重试"></a>3.刷新和重试</h3><h5 id="1-使用第三方刷新库"><a href="#1-使用第三方刷新库" class="headerlink" title="(1.) 使用第三方刷新库"></a>(1.) 使用第三方刷新库</h5><p>在下拉刷新控制的下拉监听中直接调用adapter.refresh()方法就可以完成刷新了，那什么时候关闭刷新动画呢，需要调用adapter.loadStateFlow.collectLatest方法来监听</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">lifecycleScope.launchWhenCreated &#123;</span><br><span class="line">            @OptIn(ExperimentalCoroutinesApi::class)</span><br><span class="line">            adapter.loadStateFlow.collectLatest &#123;</span><br><span class="line">                if(it.refresh !is LoadState.Loading)&#123;</span><br><span class="line">                    refreshView.finishRefresh()</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>收集流的状态，如果是不是Loading状态的说明加载完成了，可以关闭动画了。</p>
+<h5 id="2-使用PagingDataAdapter添加刷新和加载更多"><a href="#2-使用PagingDataAdapter添加刷新和加载更多" class="headerlink" title="(2.)使用PagingDataAdapter添加刷新和加载更多"></a>(2.)使用PagingDataAdapter添加刷新和加载更多</h5><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>使用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>fun withLoadStateHeader(header: LoadStateAdapter&lt;*&gt; )</td>
+<td>头部添加状态适配器</td>
+</tr>
+<tr>
+<td>fun withLoadStateFooter(footer: LoadStateAdapter&lt;*&gt; )</td>
+<td>底部添加状态适配器</td>
+</tr>
+<tr>
+<td>fun withLoadStateHeaderAndFooter(header: LoadStateAdapter&lt;*&gt;, footer: LoadStateAdapter&lt;*&gt; )</td>
+<td>头尾都添加状态适配器</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">class ArticleLoadStateAdapter(val retrycallback: () -&gt; Unit) : LoadStateAdapter&lt;ArticleLoadStateAdapter.ArticleLoadStateViewHolder&gt;() &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    class ArticleLoadStateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) &#123;</span><br><span class="line">        val pbLoading = itemView.findViewById&lt;ProgressBar&gt;(R.id.pb_loading)</span><br><span class="line">        val btnerror = itemView.findViewById&lt;Button&gt;(R.id.btn_error)</span><br><span class="line">        val txtEnd = itemView.findViewById&lt;TextView&gt;(R.id.txt_end)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    override fun onBindViewHolder(holder: ArticleLoadStateViewHolder, loadState: LoadState) &#123;</span><br><span class="line">        when (loadState) &#123;</span><br><span class="line">            is LoadState.Error -&gt; &#123;</span><br><span class="line">                LogTest.d(&quot;LoadState.Error&quot;)</span><br><span class="line">                holder.pbLoading.visibility = View.GONE</span><br><span class="line">                holder.btnerror.visibility = View.VISIBLE</span><br><span class="line">                holder.txtEnd.visibility = View.GONE</span><br><span class="line">                holder.btnerror.setOnClickListener &#123;</span><br><span class="line">                    retrycallback()</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            is LoadState.Loading -&gt; &#123;</span><br><span class="line">                LogTest.d(&quot;LoadState.Loading&quot;)</span><br><span class="line">                holder.pbLoading.visibility = View.VISIBLE</span><br><span class="line">                holder.btnerror.visibility = View.GONE</span><br><span class="line">                holder.txtEnd.visibility = View.GONE</span><br><span class="line">            &#125;</span><br><span class="line">            is LoadState.NotLoading -&gt; &#123;</span><br><span class="line">                LogTest.d(&quot;LoadState.NotLoading&quot;)</span><br><span class="line">                holder.pbLoading.visibility = View.GONE</span><br><span class="line">                holder.btnerror.visibility = View.GONE</span><br><span class="line">                holder.txtEnd.visibility = View.VISIBLE</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): ArticleLoadStateViewHolder &#123;</span><br><span class="line">        val rootView = LayoutInflater.from(parent.context).inflate(R.layout.test_item_loadstate, parent, false)</span><br><span class="line">        return ArticleLoadStateViewHolder(rootView)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">//    override fun displayLoadStateAsItem(loadState: LoadState): Boolean &#123;</span><br><span class="line">//       // return super.displayLoadStateAsItem(loadState)</span><br><span class="line">//        return true</span><br><span class="line">//    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>参考资料:<br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6911620350581145614">Android Paging3 LoadStateAdapter显示已加载完所有数据</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2021/09/02/AndroidJetpack%E5%88%86%E9%A1%B5%E7%BB%84%E4%BB%B6paging3/">https://lxlfpeng.github.io/2021/09/02/AndroidJetpack%E5%88%86%E9%A1%B5%E7%BB%84%E4%BB%B6paging3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2021/09/29/%E4%BD%BF%E7%94%A8Getx%E6%A1%86%E6%9E%B6%E7%AE%80%E5%8C%96Flutter%E5%BC%80%E5%8F%91/" title="使用Getx框架简化Flutter开发"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">使用Getx框架简化Flutter开发</div></div><div class="info-2"><div class="info-item-1">一. GetX的作用GetX 是 Flutter 上的一个轻量且强大的解决方案,包含了以下的功能.  页面状态管理(跨页面交互) 路由管理 国际化、主题的适配 全局BuildContext 无Context弹窗 依赖注入  二. GetX安装GetX 1. 引入GetX依赖在pubspec.yaml文件中添加Getx依赖: 1get: ^4.x.x 2. GetX入口配置各模块导包，均使用下面包即可 1import &#x27;package:get/get.dart&#x27;; 只需要将MaterialApp改成GetMaterialApp便可以使用GetX提供的相关功能. 123456789101112void main() &#123;  runApp(MyApp());&#125;class MyApp extends StatelessWidget &#123;  @override  Widget build(BuildContext context) &#123;    return GetMaterialApp(      home: HomePage(), ...</div></div></div></a><a class="pagination-related" href="/2021/08/20/Web%E5%89%8D%E7%AB%AF%E5%90%8E%E7%AB%AF%E6%B8%B2%E6%9F%93/" title="Web前端后端渲染"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Web前端后端渲染</div></div><div class="info-2"><div class="info-item-1">渲染以Jade,YAML为代表的模板渲染引擎一般作用于服务器作为后端的视图部分。互联网早期，用户使用浏览器浏览的都是一些没有复杂逻辑的、简单的页面，这些页面都是在后端将html拼接好的然后将之返回给前端完整的html文件，浏览器拿到这个html文件之后就可以直接解析展示了，而这也就是所谓的服务器端渲染了。因为后端拼接完了html，浏览器只需要直接渲染出来。 1、为什么会有服务端渲染和客户端渲染？ 越来越复杂的 UI 意味着越来越多的渲染工作。目前，通常有两种选择：服务端渲染和客户端渲染。 以 Jade 和 YAML 为代表的模板渲染引擎一般作为后端视图部分作用于服务器。 使用直接处理HTML DOM 作用于前端，本质是客户端进行渲染。 最终用户看到的效果在两者之间是相同的。 最后，Web App 必须在 HTML 和 CSS 中实现，然后才能反映在用户界面中。 后端渲染归根结底就是将一些模板规范语言翻译成以上三种语言，传回给前端；而前端渲染则是将生成的整个逻辑代码传回前端，再由客户端生成用户界面。 一开始，Web...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-%E4%BB%80%E4%B9%88%E6%98%AFpaging"><span class="toc-number">1.</span> <span class="toc-text">一.什么是paging</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-%E5%BC%95%E5%85%A5%E4%BE%9D%E8%B5%96"><span class="toc-number">2.</span> <span class="toc-text">二.引入依赖</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">三.初步使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="toc-number">3.0.1.</span> <span class="toc-text">1. 配置数据源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%94%9F%E6%88%90%E5%8F%AF%E8%A7%82%E5%AF%9F%E7%9A%84%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-number">3.0.2.</span> <span class="toc-text">2.生成可观察的数据集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%9B%E5%BB%BAAdapter"><span class="toc-number">3.0.3.</span> <span class="toc-text">3.创建Adapter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%9C%A8%E7%95%8C%E9%9D%A2%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="toc-number">3.0.4.</span> <span class="toc-text">4.在界面中使用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">4.</span> <span class="toc-text">四.注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%B0%83%E6%95%B4%E9%A2%84%E5%8F%96%E9%98%88%E5%80%BC"><span class="toc-number">4.0.1.</span> <span class="toc-text">1.调整预取阈值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Paging%E7%9A%84%E5%8A%A0%E8%BD%BD%E7%8A%B6%E6%80%81"><span class="toc-number">4.0.2.</span> <span class="toc-text">2.Paging的加载状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%B7%E6%96%B0%E5%92%8C%E9%87%8D%E8%AF%95"><span class="toc-number">4.0.3.</span> <span class="toc-text">3.刷新和重试</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E4%BD%BF%E7%94%A8%E7%AC%AC%E4%B8%89%E6%96%B9%E5%88%B7%E6%96%B0%E5%BA%93"><span class="toc-number">4.0.3.0.1.</span> <span class="toc-text">(1.) 使用第三方刷新库</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E4%BD%BF%E7%94%A8PagingDataAdapter%E6%B7%BB%E5%8A%A0%E5%88%B7%E6%96%B0%E5%92%8C%E5%8A%A0%E8%BD%BD%E6%9B%B4%E5%A4%9A"><span class="toc-number">4.0.3.0.2.</span> <span class="toc-text">(2.)使用PagingDataAdapter添加刷新和加载更多</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Android存储之分区存储适配 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.Android存储分区介绍1.简介Android 存储分为内部存储（Internal storage）和外部存储（External storage）。有许多用户认为外部存储意味着SD存储卡或外部硬盘，这是完全错误的认识。 2.内部存储内部存储是用于存储Android系统本身和应用程序的存储区域，Android设备中的Android系统和应用程序都是存在该内部存储区，例如手机的&#x2F;sys">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android存储之分区存储适配">
+<meta property="og:url" content="https://lxlfpeng.github.io/2021/10/18/Android%E5%AD%98%E5%82%A8%E4%B9%8B%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8%E9%80%82%E9%85%8D/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.Android存储分区介绍1.简介Android 存储分为内部存储（Internal storage）和外部存储（External storage）。有许多用户认为外部存储意味着SD存储卡或外部硬盘，这是完全错误的认识。 2.内部存储内部存储是用于存储Android系统本身和应用程序的存储区域，Android设备中的Android系统和应用程序都是存在该内部存储区，例如手机的&#x2F;sys">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2021-10-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.828Z">
+<meta property="article:author" content="peng">
+<meta property="article:tag" content="存储">
+<meta property="article:tag" content="分区存储">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2021/10/18/Android%E5%AD%98%E5%82%A8%E4%B9%8B%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8%E9%80%82%E9%85%8D/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Android存储之分区存储适配',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Android存储之分区存储适配</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Android存储之分区存储适配</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2021-10-17T16:00:00.000Z" title="发表于 2021-10-18 00:00:00">2021-10-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">7.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>26分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-Android存储分区介绍"><a href="#一-Android存储分区介绍" class="headerlink" title="一.Android存储分区介绍"></a>一.Android存储分区介绍</h1><h3 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h3><p>Android 存储分为内部存储（Internal storage）和外部存储（External storage）。有许多用户认为外部存储意味着SD存储卡或外部硬盘，这是完全错误的认识。</p>
+<h3 id="2-内部存储"><a href="#2-内部存储" class="headerlink" title="2.内部存储"></a>2.内部存储</h3><p><strong>内部存储是用于存储Android系统本身和应用程序的存储区域</strong>，Android设备中的Android系统和应用程序都是存在该内部存储区，例如手机的&#x2F;system&#x2F;目录、&#x2F;data&#x2F;等目录。 如果没有这一块存储区域是无法运行Android系统和应用程序的。其中data&#x2F;data&#x2F;包名&#x2F;目录是Android系统提供给应用存储数据的内部存储空间，由应用程序创建的SharedPreferences、Sqlite数据库、缓存文件等目录都是保存在该文件夹中。该目录只能由该应用程序自身访问，其他应用程序和用户无法访问存储在此空间中的文件，并且该目录会随着的应用的卸载而被移除。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//获取手机内部存储空间的绝对路径:/data</span><br><span class="line">Environment.getDataDirectory().getAbsolutePath();</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>需要注意的一点是如果Android设备被获取到了最高权限(ROOT)那么是可以访问内部存储空间中的文件数据的!</p>
+</blockquote>
+<h3 id="2-外部存储"><a href="#2-外部存储" class="headerlink" title="2.外部存储"></a>2.外部存储</h3><p>手机的内部存储空间通常不会很大，一旦手机的内部存储容量被用完， 可能会出现手机无法使用的情形。因此我们需要将一些比较大的媒体文件放置到机身外部存储中。在早先的手机中是具备一个SD存储卡槽的，插入SD存储卡，系统会将Sd储存卡的存储空间挂载成外部存储空间。不过现在大部分手机已经取消支持SD存储卡扩展功能了。取而代之的是手机会自带一个机身内置存储空间，这个机身存储和SD存储卡的功能是完全一样的，Android系统会将内置存储空间的一部分区域划分为内部存储，另一部分划分为外部存储空间，然后通过 Linux 文件挂载的方式将这些存储空间进行挂载。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//获取手机外部存储的路径：/storage/emulated/0</span><br><span class="line">Environment.getExternalStorageDirectory().getAbsolutePath();</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-内部存储和外部存储的区别"><a href="#3-内部存储和外部存储的区别" class="headerlink" title="3.内部存储和外部存储的区别"></a>3.内部存储和外部存储的区别</h3><p>上文中讲到在以前的安卓手机中内置存储（机身存储）就是内部存储，外部存储就是扩展的SD卡。但目前很多的中高端机器的自带的内置存储都是很大的储存空间了， 因此Android4.4系统及以上的手机将机身内置存储分为了”内部存储internal” 和”外部存储external”两个不同的储存区域，用来存储不同的数据。如果Android4.4系统及以上的手机还支持单独外接SD卡，那么外接的SD卡一定是外部存储。此时手机上是有两个外部存储空间的。那么如何去区分这两个外部存储?google官方给我们提供了getExternalFilesDirs这样一个API来获取多个外部存储空间， 它返回一个File数组，File数组中就包含了手机自身所带的外部存储和外接SD卡所定义的外部存储了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.KITKAT) &#123;</span><br><span class="line">    File[] files = getExternalFilesDirs(Environment.MEDIA_MOUNTED);</span><br><span class="line">    for(File file:files)&#123;</span><br><span class="line">        Log.e(&quot;Environment&quot;, file.getAbsolutePath())</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：Android手机是支持外接多个外部存储介质空间的，如果用户在设备上移除了介质，则外部存储可能变为不可用状态。 所以在使用外部存储执行任何工作之前， 最好调用 getExternalStorageState() 以检查介质是否可用。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//判断外部存储是否可用</span><br><span class="line">if(Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/3ec191925fd40f626dec9583583c6c47.webp"><br>对于Android开发者来说只和外部存储和内部存储打交道，Android提供的开发接口也只是获取内部存储和外部存储的目录地址。而对开发者屏蔽了内置存储卡和外置SD卡相关操作。</p>
+<p><strong>结论内部存储和外部存储可以是在同一块存储介质上面的，只是概念上做了区分，内部存储和外部存储是一块存储介质上的不同区域。</strong></p>
+<h1 id="二-Android应用存储目录"><a href="#二-Android应用存储目录" class="headerlink" title="二.Android应用存储目录"></a>二.Android应用存储目录</h1><h3 id="1-内部存储空间中的应用私有目录"><a href="#1-内部存储空间中的应用私有目录" class="headerlink" title="1.内部存储空间中的应用私有目录"></a>1.内部存储空间中的应用私有目录</h3><p>对于设备中每一个安装的 App，系统都会在内部存储空间的 data&#x2F;data 目录下以应用包名为名字自动创建与之对应的文件夹。这个文件夹包含了SharedPreferences 和 SQLiteDatabase 持久化应用相关数据等。该文件夹是应用的私有文件夹，其他应用（和用户）不能访问文件夹里面的内容的(Root用户除外)。每个应用访问自己的内部存储是不需要权限的。 当用户卸载该应用时，这些文件也会被移除。<br>Android SDK 提供有如下方法可以获取并操作内部存储空间下应用私有目录文件的方法，都位于 Application Context 中，供开发者直接调用：</p>
+<ul>
+<li><p>获取当前应用包名文件夹下的files文件夹路径:</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">context.getFilesDir().getAbsolutePath();</span><br></pre></td></tr></table></figure>
+<p>返回结果:data&#x2F;data&#x2F;packagename&#x2F;files</p>
+</li>
+<li><p>获取当前应用包名文件夹下cache文件夹路径:</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">context.getCacheDir().getAbsolutePath();</span><br></pre></td></tr></table></figure>
+<p>返回结果:data&#x2F;data&#x2F;packagename&#x2F;cache</p>
+</li>
+<li><p>在内部存储空间内创建（或打开现有的）目录:</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">context.getDir(&quot;setting&quot;, MODE_PRIVATE).getAbsolutePath();</span><br></pre></td></tr></table></figure>
+<p>返回结果:data&#x2F;data&#x2F;packagename&#x2F;setting</p>
+</li>
+<li><p>获取内部存储files路径下的所有文件名:</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">context.fileList();</span><br></pre></td></tr></table></figure></li>
+<li><p>删除内部存储files路径下的文件:</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//返回true则表示删除成功</span><br><span class="line">context.deleteFile(filename);</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>要在files或者cache其中一个目录中创建新文件，可以使用File()构造函数，传递给File上述方法提供的指定内部存储目录的方法:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//保存内容到私有的files目录</span><br><span class="line">public void save(String filename, String content)throws IOException&#123;</span><br><span class="line">    File file= new File(context.getFilesDir(), filename);</span><br><span class="line">    FileOutputStream myfos= new  FileOutputStream(file);</span><br><span class="line">    myfos.write(content.getBytes());</span><br><span class="line">    myfos.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>或者是读取文件:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//通过文件名来获取私有的files目录中的文件</span><br><span class="line">public String get(String filename) throws IOException &#123;</span><br><span class="line">    File file= new File(context.getFilesDir(), filename);</span><br><span class="line">    FileInputStream fis = new FileInputStream(file);</span><br><span class="line">    ByteArrayOutputStream baos = new ByteArrayOutputStream();</span><br><span class="line">    byte[] data = new byte[1024];</span><br><span class="line">    int len = -1;</span><br><span class="line">    while ((len = fis.read(data)) != -1) &#123;</span><br><span class="line">        baos.write(data, 0, len);</span><br><span class="line">    &#125;</span><br><span class="line">    return new String(baos.toByteArray());</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>并且Android系统可以调用Context类中提供了一个openFileOutput()方法，以获取FileOutputStream来对文件进行操作。 openFileOutput()方法接受两个参数：</p>
+<ul>
+<li>第一个参数是文件名，在文本创建的时候使用的就是这个名称，注意这里指定的文件名不可以包含路径（因为默认存储到&#x2F;data&#x2F;data&#x2F;<packagename>&#x2F;files&#x2F;目录下）。</li>
+<li>第二个参数是文件的操作模式，主要有两种：<ol>
+<li>MODE_PRIVATE：默认的操作模式，表示当指定同样文件名的时候，当该文件名有内容时，再次调用会覆盖原内容。</li>
+<li>MODE_APPEND：表示该文件如果已存在就往文件里面追加内容。</li>
+</ol>
+</li>
+</ul>
+<p>调用 openFileOutput() 来获取 FileOutputStream，得到这个对象后就可以使用Java流的方式将数据写入到文件中了。 写入文件:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//保存内容到私有的files目录</span><br><span class="line">public void save(String filename, String content)throws IOException&#123;</span><br><span class="line">    FileoutputStream myfos=context.openFileoutput(filename,Context.MODE_PRIVATE);</span><br><span class="line">    myfos.write(content.getBytes());</span><br><span class="line">    myfos.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>读取文件:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//通过文件名来获取私有的files目录中的文件</span><br><span class="line">public String get(String filename) throws IOException &#123;</span><br><span class="line">    FileInputStream fis = context.openFileInput(filename);</span><br><span class="line">    ByteArrayOutputStream baos = new ByteArrayOutputStream();</span><br><span class="line">    byte[] data = new byte[1024];</span><br><span class="line">    int len = -1;</span><br><span class="line">    while ((len = fis.read(data)) != -1) &#123;</span><br><span class="line">        baos.write(data, 0, len);</span><br><span class="line">    &#125;</span><br><span class="line">    return new String(baos.toByteArray());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果要将文件保存在data&#x2F;data&#x2F;packagename&#x2F;cache目录中同样可以使用File进行保存，但是需要注意的一点是此目录适用于临时文件，应定期清理。如果磁盘空间不足，系统可能会删除cache中的文件，因此请确保在读取之前检查缓存文件是否存在。</p>
+</blockquote>
+<h3 id="2-外部存储空间中的应用私有目录"><a href="#2-外部存储空间中的应用私有目录" class="headerlink" title="2.外部存储空间中的应用私有目录"></a>2.外部存储空间中的应用私有目录</h3><p>外部存储可以是外置SD卡，也可以是内置存储卡的部分分区。 外部存储可分为公共目录和私有目录，同样的操作外部存储的私有目录不再需要 READ_EXTERNAL_STORAGE 或 WRITE_EXTERNAL_STORAGE 权限。 Android SDK 中也提供有便捷的 API供开发人员直接操作外部存储空间下的应用私有目录：</p>
+<ul>
+<li><p>获取某个应用在外部存储中的files路径</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">context.getExternalFilesDir(type).getAbsolutePath();</span><br></pre></td></tr></table></figure>
+<p>返回结果:&#x2F;storage&#x2F;emulated&#x2F;0&#x2F;Android&#x2F;data&#x2F;packagename&#x2F;files</p>
+</li>
+<li><p>获取某个应用在外部存储中的cache路径</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">context.getExternalCacheDir().getAbsolutePath();</span><br></pre></td></tr></table></figure>
+<p>返回结果:&#x2F;storage&#x2F;emulated&#x2F;0&#x2F;Android&#x2F;data&#x2F;packagename&#x2F;cache</p>
+</li>
+</ul>
+<p>当用户卸载应用时，此目录及其内容将被删除。此外，系统媒体扫描程序不会读取这些目录中的文件，因此不能从MediaStore内容提供程序访问这些文件。因此，如果你的媒体文件不需要其他应用使用，则应该存储在外部存储上的私有存储目录。</p>
+<p>可以通过调用getExternalFilesDir()并向其传递一个名称来获取一个外部存储的私有目录。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public void save(String filename, String content)throws IOException&#123;</span><br><span class="line">    boolean canUse=Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);</span><br><span class="line">    if(canUse)&#123;</span><br><span class="line">      File file= new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), &quot;c.txt&quot;);</span><br><span class="line">      FileOutputStream myfos= new  FileOutputStream(file);</span><br><span class="line">      myfos.write(content.getBytes());</span><br><span class="line">      myfos.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果没有提前定义好子文件目录名，则可以调用 getExternalFilesDir()并传递 null，这将返回外部存储上应用程序私有目录的根目录。 type根据文件类型可传<code>系统预定义的子目录常量</code>  ，如图片Environment.DIRECTORY_PICTURES，此时返回<code>/storage/emulated/0/Android/data/包名/files/Pictures</code>。或者传null直接返回<code>/storage/emulated/0/Android/data/包名/files</code>。</p>
+<blockquote>
+<p>外部存储空间中的应用私有目录在用户卸载应用程序时会删除该目录。如果您保存的文件需要在用户卸载应用程序后仍然可用例如当您的应用程序下载照片并且用户应保留这些照片时，应该将文件保存到外部存储的公共目录中去。</p>
+</blockquote>
+<h3 id="3-外部存储空间中的公共目录"><a href="#3-外部存储空间中的公共目录" class="headerlink" title="3.外部存储空间中的公共目录"></a>3.外部存储空间中的公共目录</h3><p>通常来说，应用涉及到的持久化数据分为两类：应用相关数据和应用无关数据。前者是指专供宿主 App 使用的数据信息，比如一些应用的配置信息，数据库信息，缓存文件等。当应用被卸载，这些信息也应该被随之删除，避免存储空间产生不必要的占用。应用无关的公共文件这类文件可被其他程序自由访问，当应用被卸载之后，文件仍然保留。比如相机类应用被卸载后，照片仍然存在。在Android中外部存储中的公共目录有 9 大类，均为系统创建的文件夹，如果操作外部存储的公共目录，还是要申请 READ_EXTERNAL_STORAGE 或 WRITE_EXTERNAL_STORAGE 等权限。开发人员可以通过 Environment 类提供的方法直接获取相应目录的绝对路径，传递不同的 type 参数类型即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Environment.getExternalStorageDirectory().getAbsolutePath()</span><br><span class="line">//这个方法是获取外部存储的根路径 </span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Environment.getExternalStoragePublicDirectory(String type); </span><br><span class="line">//这个方法是获取外部存储的共享目录 </span><br></pre></td></tr></table></figure>
+<p>Environment 类提供诸多 type 参数的常量，比如：</p>
+<ul>
+<li>Environment.DIRECTORY_DCIM ： 数字相机拍摄的照片</li>
+<li>Environment.DIRECTORY_MUSIC：用户音乐</li>
+<li>Environment.DIRECTORY_PODCASTS：音频 &#x2F; 视频的剪辑片段</li>
+<li>Environment.DIRECTORY_RINGTONES：铃声</li>
+<li>Environment.DIRECTORY_ALARMS：闹钟的声音</li>
+<li>Environment.DIRECTORY_PICTURES：所有的图片 (不包括那些用照相机拍摄的照片)</li>
+<li>Environment.DIRECTORY_MOVIES：所有的电影 (不包括那些用摄像机拍摄的视频) 和 Download &#x2F; 其他下载的内容。</li>
+</ul>
+<blockquote>
+<p>注意在Android10版本也就是api29以后Android官方开始推荐分区存储，该方案主要是对外部存储空间中的公共目录的文件操作做了相关的限制。</p>
+</blockquote>
+<h1 id="三-Android-10分区存储适配"><a href="#三-Android-10分区存储适配" class="headerlink" title="三.Android 10分区存储适配"></a>三.Android 10分区存储适配</h1><h3 id="1-什么是分区存储"><a href="#1-什么是分区存储" class="headerlink" title="1.什么是分区存储?"></a>1.什么是分区存储?</h3><p>在上文中我们了解到，外部存储空间分为私有目录和公共目录，在Android10以前，应用程序通过获取READ_EXTERNAL_STORAGE 和 WRITE_EXTERNAL_STORAGE 权限。获得外部存储空间的权限以后直接通过<code>file path</code>读取和修改外部存储空间中任意的文件，当然也包括其他应用的外部私有目录文件，这样一来极易造成泄露用户隐私。而且很多应用会在外部存储根目录建一个自己应用的文件夹，用于存放应用的数据。这样会导致用户卸载后，应用数据不会随之删除。导致手机文件特别混乱，长期占用空间。其实 Android 早就提供了 getCacheDir()、getFilesDir()、getExternalFilesDir()、getExternalCacheDir() 等 API 供开发者使用操作应用的私有目录，但是大部分开发者并没有去使用这套规则，几乎所有的App都喜欢在SD卡的根目录下建立一个自己专属的目录，用来存放各类文件和数据。 为了解决这个问题，从 Android 10 开始，Google 添加了一个新特性 Scoped Storage，可以称之为分区存储。<br>分区存储的重点调整有两点:</p>
+<ul>
+<li>第一点在于限制了访问外部存储的公共目录必须要需要通过 MediaStore 或者 Storage Access Framework（以下简称 SAF）来获取到文件的Uri来进行访问，不能通过<code>file path</code>来访问资源。<br>其中媒体文件（图片，音频，视频）能通过 MediaStore 和 SAF 两种方式访问，非媒体文件只能通过 SAF 访问。</li>
+<li>第二点在于限制了应用程序对外部存储空间的操作权限。就算是通过申请取READ_EXTERNAL_STORAGE 和 WRITE_EXTERNAL_STORAGE 权限后，也不能读写整个外部存储空间中的目录了。应用程序只能访问外部存储中的公共媒体目录， 这里的外部存储的公共目录仅是指android系统创建的几个大类的文件夹，例如 DCIM、Pictures、Alarms， Music， Notifications，Podcasts， Ringtones、Movies、Download等。而对于外部存储的非公共目录，例如外部存储的根目录，其他应用的外部存储中的私有目录等是无法进行访问和操作的。</li>
+</ul>
+<p>总的来说分区存储主要有两点变更:1.访问外部储存的文件方式变更。2.访问外部储存的文件权限变更。</p>
+<h3 id="2-访问外部储存的文件方式变更"><a href="#2-访问外部储存的文件方式变更" class="headerlink" title="2.访问外部储存的文件方式变更"></a>2.访问外部储存的文件方式变更</h3><p>在Android 10.0 之前访问外部存储访问目录&#x2F;文件可通过如下两个方法：</p>
+<ul>
+<li>通过File路径访问：File路径可以直接构造文件路径也可以通过MediaStore获取文件路径。</li>
+<li>通过Uri访问：Uri可以通过MediaStore或者SAF获取。</li>
+</ul>
+<p>Android 10.0 之后访问外部存储的公共目录中的媒体文件即 <code>/storage/emulated/0</code> 目录下的文件，例如 DCIM、Pictures、Alarms， Music， Notifications，Podcasts， Ringtones、Movies、Download等。<br>必须通过 MediaStore 或者 Storage Access Framework（以下简称 SAF）获取到Uri，然后通过Uri进行访问。非媒体文件只能通过 SAF 获取到Uri进行访问。App无法通过路径File(filePath)直接访问、新建、删除、修改目录&#x2F;文件等。</p>
+<h3 id="3-访问外部储存的文件权限变更"><a href="#3-访问外部储存的文件权限变更" class="headerlink" title="3.访问外部储存的文件权限变更"></a>3.访问外部储存的文件权限变更</h3><p><strong>Android 10.0 之前申请权限的操作：</strong><br>在Android10之前的系统中无论是通过MediaStore API或者是File Path方式向外部存储中读写数据都需要申请READ_EXTERNAL_STORAGE 和 WRITE_EXTERNAL_STORAGE 读写的权限。</p>
+<p><strong>Android 10.0 之后无需申请权限的操作：</strong><br>应用通过 MediaStore API在指定的共享媒体目录下创建媒体文件，或者对该应用所创建的媒体文件集进行查询、修改、删除的操作，不需要申请READ_EXTERNAL_STORAGE 和 WRITE_EXTERNAL_STORAGE 读写的权限。因为在创建的时候系统会将我们的应用的 packageName 写入到系统文件数据库中的 owner_package_name 字段从而在后续的使用中判断这个文件是哪个应用创建的。（如果该应用卸载后重装，之前保存的文件将不属于该应用创建的文件）。</p>
+<p><strong>需要申请READ_EXTERNAL_STORAGE 权限：</strong><br>通过 MediaStore API对其他应用在共享媒体目录下贡献的媒体文件(图片、音频、视频)进行查询时需要申请READ_EXTERNAL_STORAGE 权限，如果未申请该权限，通过ContentResolver查询不到其他应用贡献的文件Uri，仅能查询到自己应用贡献的文件。使用MediaStore API 时，就算READ_EXTERNAL_STORAGE 权限， 也仅允许读取其他应用共享的音频、视频和图片等媒体文件，并不允许访问其他应用创建的下载数据和非媒体文件(pdf、office、doc、txt等)。 在 Android 10 里唯一一种访问其他应用贡献的非媒体文件的途径是使用存储访问框架 (Storage Access Framework) 提供的文档选择器向用户申请操作指定的文件。</p>
+<p><strong>需要申请 WRITE_EXTERNAL_STORAGE 权限：</strong><br>如果需要编辑修改甚至删除其他应用贡献的媒体文件，则需要申请 WRITE_EXTERNAL_STORAGE 权限。如果当应用没有 WRITE_EXTERNAL_STORAGE 权限时，去修改其他 App 的文件时，<br>则会 <code>throw java.lang.SecurityException: xxxx has no access to content://media/external/images/media/52 </code>的异常<br>当应用拥有了 WRITE_EXTERNAL_STORAGE 权限后，去修改其他应用贡献的媒体文件时，会 throw 另一个 <code>Exception android.app.RecoverableSecurityException: xxxxxx has no access to content://media/external/images/media/52</code>如果我们将这个 RecoverableSecurityException 给 Catch 住，并向用户申请修改该文件的权限，用户操作同意后，我们就可以在 onActivityResult 回调中拿到Uri结果进行操作了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">    editFile(editFileUri)</span><br><span class="line">&#125;catch (rse : RecoverableSecurityException)&#123;</span><br><span class="line">    requestForOtherAppFiles(REQUEST_CODE_FOR_EDIT_IMAGE,rse)</span><br><span class="line">&#125;</span><br><span class="line">private fun requestForOtherAppFiles(requestCode: Int, rse: RecoverableSecurityException)&#123;</span><br><span class="line">    if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.O) &#123;</span><br><span class="line">        startIntentSenderForResult(</span><br><span class="line">            rse.userAction.actionIntent.intentSender</span><br><span class="line">            , requestCode,</span><br><span class="line">            null, 0, 0, 0, null)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) &#123;</span><br><span class="line">    super.onActivityResult(requestCode, resultCode, data)</span><br><span class="line">    if (resultCode == Activity.RESULT_OK)&#123;</span><br><span class="line">        when(requestCode)&#123;</span><br><span class="line">            REQUEST_CODE_FOR_EDIT_IMAGE -&gt;&#123;</span><br><span class="line">                editImage(editImageUri)</span><br><span class="line">            &#125;</span><br><span class="line">            REQUEST_CODE_FOR_DELETE_IMAGE -&gt;&#123;</span><br><span class="line">                contentResolver.delete(deleteImageUri,null,null)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面是关于分区存储权限和其他相关项目的表格:</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>位置</th>
+<th>访问应用自己生成的文件</th>
+<th>访问其他应用生成的的文件</th>
+<th>访问方法</th>
+<th>卸载应用是否删除文件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>外部存储</td>
+<td>Photo&#x2F; Video&#x2F; Audio&#x2F;</td>
+<td>无需权限</td>
+<td>需要权限READ_EXTERNAL_STORAGE</td>
+<td>MediaStore Ap</td>
+<td>否</td>
+</tr>
+<tr>
+<td>外部存储</td>
+<td>Downloads</td>
+<td>无需权限</td>
+<td>无需权限</td>
+<td>通过存储访问框架SAF，加载系统文件选择器</td>
+<td>否</td>
+</tr>
+<tr>
+<td>外部存储</td>
+<td>应用特定的目录</td>
+<td>无需权限</td>
+<td>无法直接访问</td>
+<td>getExternalFilesDir()获取到属于应用自己的文件路径</td>
+<td>是</td>
+</tr>
+</tbody></table>
+<h3 id="4-避免分区存储适配的方式"><a href="#4-避免分区存储适配的方式" class="headerlink" title="4.避免分区存储适配的方式"></a>4.避免分区存储适配的方式</h3><p>如果应用程序还未做好分区适配，在 Android 10 得设备上，仍然可以通过以下两种手段避免分区存储：<br><strong>方式一:设置targetSdkVersion</strong><br>Android 一般升级功能的时候都会配合targetSdkVersion使用。只要targetSdkVersion&lt;&#x3D;28，分区存储功能就不会开启。也就是说如果你的项目指定的targetSdkVersion低于29，那么即使不做任何作用域存储方面的适配，你的项目也可以成功运行到Android 10及以上版本手机上。</p>
+<p><strong>方式二:禁用分区存储</strong><br>如果你的targetSdkVersion已经指定成了29，假如你还不想进行作用域存储的适配，只需要在AndroidManifest.xml 里application标签下添加： <code>android:requestLegacyExternalStorage=&quot;true&quot;</code> 可禁用分区存储：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;manifest ... &gt;</span><br><span class="line">  &lt;application android:requestLegacyExternalStorage=&quot;true&quot; ...&gt;</span><br><span class="line">    ...</span><br><span class="line">  &lt;/application&gt;</span><br><span class="line">&lt;/manifest&gt;</span><br></pre></td></tr></table></figure>
+<p>如上配置以后我们的程序运行在Android10及以下版本的设备上并不会开启分区存储。但是如果将targetSdkVersion修改为30就会强制开启分区存储，requestLegacyExternalStorage 会失效，如果没有适配分区存储，运行应用则会出现问题。 虽然又增加了 preserveLegacyExternalStorage 属性，对于覆盖安装的应用还能继续不使用分区存储，但是新安装得应用不能用。因此不想适配分区存储的方式就只剩下方式一了。</p>
+<h3 id="5-内部存储和外部存储的私有目录访问"><a href="#5-内部存储和外部存储的私有目录访问" class="headerlink" title="5.内部存储和外部存储的私有目录访问"></a>5.内部存储和外部存储的私有目录访问</h3><p>应用私有目录包含内部存储空间中的应用私有目录和外部存储空间中的应用私有目录，这两块没有做相应的变更。还是和以前一样这两个应用私有目录并不需要添加任何权限就可以访问，并且可以通过路径File(filePath)直接访问、新建、删除、修改目录&#x2F;文件等。 并且当对应的应用程序卸载以后这两个私有目录也会被移除。</p>
+<blockquote>
+<p>需要注意的是私有目录只能由对应的应用程序访问，(除Root权限外)该应用程序无法访问其他应用程序的内部存储空间中的应用私有目录和外部存储空间中的应用私有目录。</p>
+</blockquote>
+<h1 id="四-Android-11分区存储适配"><a href="#四-Android-11分区存储适配" class="headerlink" title="四.Android 11分区存储适配"></a>四.Android 11分区存储适配</h1><h3 id="1-简介-1"><a href="#1-简介-1" class="headerlink" title="1.简介"></a>1.简介</h3><p>Android 11 (R) 在 Android 10 (Q) 中分区存储的基础上进行了调整，这里主要的变更有四点:</p>
+<ol>
+<li>访问外部储存的文件方式变更。</li>
+<li>针对文件管理应用的特殊权限。</li>
+<li>对其他应用提供的多个共享文件的操作权限。</li>
+<li>SAF(Storage Access Framework)调整。</li>
+</ol>
+<h3 id="2-使用直接文件路径和原生库访问文件"><a href="#2-使用直接文件路径和原生库访问文件" class="headerlink" title="2.使用直接文件路径和原生库访问文件"></a>2.使用直接文件路径和原生库访问文件</h3><p>Android 10 中要求所有应用都使用 MediaStore API 来创建或访问照片、视频和音乐等媒体文件。即使是在共享目录DCIM，Pictures，Movies等下也无法使用mkdir，mkdirs，createNewFile等api对文件进行操作。 但是鉴于很多深度依赖基于File Path操作文件的应用和第三方库是很难切换到使用MediaStore API 来。 因此在 Android 11 里，依赖File Path(原始文件路径)的API和库可以再次使用了，简单来说就是又可以通过 File()，mkDir()等API访问有权限访问的媒体文件了。在实际的运行中，依赖File Path(原始文件路径)的 I&#x2F;O 请求会被重定向到使用 MediaStore API， 当使用这种方式访问本应用存储空间之外的文件时，重定向会造成性能影响，而且直接使用原始文件路径，并不会比使用 MediaStore API 有更多优势，因此Android还是强烈建议直接使用 MediaStore API。</p>
+<blockquote>
+<p>需要注意的是：此种方式只是访问文件的方式改变了，访问文件的权限并没有被修改。</p>
+</blockquote>
+<h3 id="3-针对文件管理应用的特殊权限"><a href="#3-针对文件管理应用的特殊权限" class="headerlink" title="3.针对文件管理应用的特殊权限"></a>3.针对文件管理应用的特殊权限</h3><p>针对文件管理器以及一些备份类的应用，它们需要获得共享存储的更广泛的访问权限。Android 11 里引入了一个特别的权限叫做  <strong>MANAGE_EXTERNAL_STORAGE</strong> ，该权限将授权读写所有共享存储内容，这也将同时包含非媒体类型的文件。 但是获得这个权限的应用还是<strong>无法访问其他应用的应用专属目录 (app-specific directory)<strong>，无论是外部存储还是内部存储。 在 Android 11 中，通过Intent申请</strong>MANAGE_EXTERNAL_STORAGE</strong>权限，可以将用户引导至系统设置页面，让用户选择是否允许该应用 “访问所有文件” (All Files Access)。例如下面的两种应用可能会使用到该权限:</p>
+<ul>
+<li>文件管理器 — 该类应用的主要功能是管理文件；</li>
+<li>备份和恢复 — 该类应用需要访问大批量的文件 (比如切换设备的时候进行数据迁移，或者将数据备份到云端)。</li>
+</ul>
+<p><strong>如下方法可以判断是否拥有MANAGE_EXTERNAL_STORAGE权限：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Environment.isExternalStorageManager()</span><br></pre></td></tr></table></figure>
+
+<p><strong>声明权限方式如下：</strong></p>
+<ol>
+<li><p>manifest中声明权限:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;uses-permission android:name=&quot;android.permission.MANAGE_EXTERNAL_STORAGE&quot;/&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>申请权限代码:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.R) &#123;</span><br><span class="line">    startActivity(Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="4-批量文件修改权限申请"><a href="#4-批量文件修改权限申请" class="headerlink" title="4.批量文件修改权限申请"></a>4.批量文件修改权限申请</h3><p>上文说到,如果要对别的应用程序贡献的媒体文件进行修改，那么只有通过异常捕获者一种方式实现，这一种依赖异常捕获的方式本身就不是很合理，而且每次只能申请一个文件的修改权限。在Android 11向<br><strong>MediaStore API</strong> 中添加了多种方法，用于简化特定媒体文件修改流程（例如在原位置编辑照片），分别是：</p>
+<ul>
+<li><strong>createWriteRequest()</strong> 用户向应用授予对指定媒体文件组的写入访问权限的请求。</li>
+<li><strong>createFavoriteRequest()</strong> 用户将设备上指定的媒体文件标记为“收藏”的请求。对该文件具有读取访问权限的任何应用都可以看到用户已将该文件标记为“收藏”。</li>
+<li><strong>createTrashRequest()</strong> 用户将指定的媒体文件放入设备垃圾箱的请求。垃圾箱中的内容会在系统定义的时间段后被永久删除。</li>
+</ul>
+<ul>
+<li><strong>createDeleteRequest()</strong> 用户立即永久删除指定的媒体文件（而不是先将其放入垃圾箱）的请求。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">val urisToModify = listOf(uri,uri,...)</span><br><span class="line">val editPendingIntent = MediaStore.createWriteRequest(contentResolver,</span><br><span class="line">        urisToModify)</span><br><span class="line"></span><br><span class="line">// 申请权限</span><br><span class="line">startIntentSenderForResult(editPendingIntent.intentSender, EDIT_REQUEST_CODE,</span><br><span class="line">    null, 0, 0, 0)</span><br><span class="line"></span><br><span class="line">override fun onActivityResult(requestCode: Int, resultCode: Int,data: Intent?) &#123;</span><br><span class="line">    when (requestCode) &#123;</span><br><span class="line">        EDIT_REQUEST_CODE -&gt;</span><br><span class="line">            if (resultCode == Activity.RESULT_OK) &#123;</span><br><span class="line">                /*获得权限*/</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                /*未获得权限*/</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>传入uri的集合，获取用户的同意后，就可以进行批量操作了。</p>
+<h3 id="5-对-SAF-Storage-Access-Framework-的更新"><a href="#5-对-SAF-Storage-Access-Framework-的更新" class="headerlink" title="5.对 SAF(Storage Access Framework) 的更新"></a>5.对 SAF(Storage Access Framework) 的更新</h3><p>当Android10推出分区存储对广泛的存储访问进行限制后，一些开发者试图使用 Storage Access Framework (SAF) 遍历整个文件系统。但是，SAF 并不适用于广泛地访问共享存储内容。因此 ，Google对SAF进行了更新，限制了它对某些路径的可见性。</p>
+<ul>
+<li>SAF使用 ACTION_OPEN_DOCUMENT_TREE 或 ACTION_OPEN_DOCUMENT，无法浏览到Android&#x2F;data&#x2F; 和 Android&#x2F;obb&#x2F; 目录及其所有子目录。</li>
+<li>SAF使用 ACTION_OPEN_DOCUMENT_TREE无法授权访问存储根目录、Download文件夹。</li>
+</ul>
+<h1 id="五-总结"><a href="#五-总结" class="headerlink" title="五.总结"></a>五.总结</h1><h3 id="情况一-不需要进行分区存储适配"><a href="#情况一-不需要进行分区存储适配" class="headerlink" title="情况一:不需要进行分区存储适配"></a>情况一:不需要进行分区存储适配</h3><p>如果应用不需要分区存储适配，那么只需要将targetSdkVersion设置成小于等于28，或者targetSdkVersion&#x3D;29，requestLegacyExternalStorage&#x3D;”true”。那么在这两种情况下那么程序无论是运行在Android10之上或者之下的设备，都无需进行分区存储适配。 可以继续通过获取READ_EXTERNAL_STORAGE 和 WRITE_EXTERNAL_STORAGE 权限，对外部存储中的所有文件进行操作。也可以继续可以使用<code>File path</code>方式在外部存储空间中进行文件操作。</p>
+<h3 id="情况二-targetSdkVersion-29-开启分区存储"><a href="#情况二-targetSdkVersion-29-开启分区存储" class="headerlink" title="情况二:targetSdkVersion&#x3D;29 开启分区存储"></a>情况二:targetSdkVersion&#x3D;29 开启分区存储</h3><p>如果应用的targetSdkVersion&#x3D;29，并且没有配置requestLegacyExternalStorage&#x3D;”true”，那么就会开启分区存储。在代码中我们需要根据Build.VERSION.SDK_INT判断当前系统的版本做不同的适配。例如:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">fun saveBitmapFile() &#123;</span><br><span class="line">    val bitmap = BitmapFactory.decodeResource(resources,R.mipmap.ic_launcher)</span><br><span class="line">    if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.Q) &#123;</span><br><span class="line">        // 拿到 MediaStore.Images 表的uri</span><br><span class="line">        val tableUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;</span><br><span class="line">        // 创建图片索引</span><br><span class="line">        val values = ContentValues()</span><br><span class="line">        values.put(MediaStore.Images.Media.DISPLAY_NAME, &quot;$&#123;System.currentTimeMillis()&#125;.png&quot;)</span><br><span class="line">        values.put(MediaStore.Images.Media.MIME_TYPE, &quot;image/png&quot;)</span><br><span class="line">        values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis())</span><br><span class="line">        values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DCIM)</span><br><span class="line">        // 将该索引信息插入数据表，获得图片的Uri</span><br><span class="line">        val imageUri = contentResolver.insert(tableUri, values)</span><br><span class="line">        try &#123;</span><br><span class="line">            // 通过图片uri获得输出流</span><br><span class="line">            val outputStream = contentResolver.openOutputStream(imageUri!!)</span><br><span class="line">            if (outputStream != null) &#123;</span><br><span class="line">                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)</span><br><span class="line">                outputStream.close()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (e: Exception) &#123;</span><br><span class="line">            e.printStackTrace()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) &#123;</span><br><span class="line">            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            val fileName =</span><br><span class="line">                &quot;$&#123;Environment.getExternalStorageDirectory().path&#125;$&#123;File.separator&#125;$&#123;Environment.DIRECTORY_DCIM&#125;$&#123;File.separator&#125;$&#123;System.currentTimeMillis()&#125;.png&quot;</span><br><span class="line">            val filePic = File(fileName)</span><br><span class="line">            try &#123;</span><br><span class="line">                val fos: FileOutputStream = FileOutputStream(filePic)</span><br><span class="line">                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)</span><br><span class="line">                fos.flush()</span><br><span class="line">                fos.close()</span><br><span class="line">                // 插入图库</span><br><span class="line">            &#125; catch (e: IOException) &#123;</span><br><span class="line">                e.printStackTrace()</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>上面代码通过Build.VERSION.SDK_INT判断当前系统，如果程序运行在Android10及以上版本，无法使用FilePath对文件进行操作，这里用的MediaStore API获取Uri然后将图片进行插入操作，并且如果是对应用程序自己创建的媒体文件完成各种操作是不需要文件读写权限就可以的。如果需要访问别的应用贡献的媒体文件，则需要添加READ_EXTERNAL_STORAGE 权限。如果要对别的应用贡献的媒体文件做修改删除等操作，需要通过异常捕获机制捕获RecoverableSecurityException异常来申请修改的权限。如果程序运行在Android10及以下版本上，无论是访问自己创建的文件媒体文件还是别的应用创建的媒体文件都需要添加储存权限，因此首先需要获取WRITE_EXTERNAL_STORAGE写权限，并且可以利用FilePath对文件进行操作。</p>
+<h3 id="情况二-targetSdkVersion-30-开启分区存储"><a href="#情况二-targetSdkVersion-30-开启分区存储" class="headerlink" title="情况二:targetSdkVersion&#x3D;30 开启分区存储"></a>情况二:targetSdkVersion&#x3D;30 开启分区存储</h3><p>如果应用targetSdkVersion设置成了30，那么也需要对应用进行分区存储适配。上文说到在Android11上面又可以使用FilePath对共享的文件进行操作了，但是Android10又不支持FilePath对共享的文件的操作， 此时可以在AndroidManifest.xml 里application标签下添加：<code>android:requestLegacyExternalStorage=&quot;true&quot;</code> 可禁用分区存储在Android10上面开启，我们就可以不针对Android10进行单独适配了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">fun buttonClick(view: View) &#123;</span><br><span class="line">    if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.Q) &#123;</span><br><span class="line">        saveBitmapFile()</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) &#123;</span><br><span class="line">            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            saveBitmapFile()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun saveBitmapFile() &#123;</span><br><span class="line">    val bitmap = BitmapFactory.decodeResource(</span><br><span class="line">        resources,</span><br><span class="line">        R.mipmap.ic_launcher</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    val fileName =</span><br><span class="line">        &quot;$&#123;Environment.getExternalStorageDirectory().path&#125;$&#123;File.separator&#125;$&#123;Environment.DIRECTORY_DCIM&#125;$&#123;File.separator&#125;$&#123;System.currentTimeMillis()&#125;.png&quot;</span><br><span class="line">    val filePic = File(fileName)</span><br><span class="line">    try &#123;</span><br><span class="line">        val fos: FileOutputStream = FileOutputStream(filePic)</span><br><span class="line">        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)</span><br><span class="line">        fos.flush()</span><br><span class="line">        fos.close()</span><br><span class="line">        ToastUtil.showToastShort(&quot;成功!!!&quot;)</span><br><span class="line">        // 插入图库</span><br><span class="line">    &#125; catch (e: IOException) &#123;</span><br><span class="line">        e.printStackTrace()</span><br><span class="line">        ToastUtil.showToastShort(&quot;失败!!!&quot;+e.message)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样可以在所有的系统版本上面都可以使用FilePath对文件进行操作。关于文件访问权限的变更需要参照上文，通过Build.VERSION.SDK_INT判断当前系统 分别对Android10及以上设备和Android10以下设备进行分别处理。</p>
+<h1 id="六-其它"><a href="#六-其它" class="headerlink" title="六.其它"></a>六.其它</h1><h3 id="1-切换媒体文件待处理状态"><a href="#1-切换媒体文件待处理状态" class="headerlink" title="1.切换媒体文件待处理状态"></a>1.切换媒体文件待处理状态</h3><p>如果应用操作可能非常耗时（例如写入文件），那么在我们操作文件期间应该避免让其他应用有处理文件的机会。我们可以通过将 <code>ContentValue.put(MediaStore.Audio.Media.IS_PENDING, 1)</code> 标记的值设为 1 来获取此独占访问权限。<br>这样就只有我们的的应用可以操作该文件，直到我们的应用将 IS_PENDING 的值改回 0。</p>
+<h4 id="照片中的位置信息"><a href="#照片中的位置信息" class="headerlink" title="照片中的位置信息"></a>照片中的位置信息</h4><p>一些图片会包含位置信息，因为位置对于用户属于敏感信息， Android 10 应用在分区存储模式下图片位置信息默认获取不到，应用通过以下两项设置可以获取图片位置信息，在manifest 中申请 <code>ACCESS_MEDIA_LOCATION </code>调用 MediaStore setRequireOriginal(Uri uri) 接口更新图片Uri。</p>
+<p>#参考资料<br><a target="_blank" rel="noopener" href="https://ppting.me/2020/04/19/2020_04_19_how_to_use_Android_MediaStore_Api/">Android MediaStore Api 使用</a><br><a target="_blank" rel="noopener" href="https://guolin.blog.csdn.net/article/details/113954552">Android 11新特性，Scoped Storage又有了新花样</a><br><a target="_blank" rel="noopener" href="https://guolin.blog.csdn.net/article/details/105419420">Android 10适配要点，作用域存储</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2021/10/18/Android%E5%AD%98%E5%82%A8%E4%B9%8B%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8%E9%80%82%E9%85%8D/">https://lxlfpeng.github.io/2021/10/18/Android%E5%AD%98%E5%82%A8%E4%B9%8B%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8%E9%80%82%E9%85%8D/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%98%E5%82%A8/">存储</a><a class="post-meta__tags" href="/tags/%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8/">分区存储</a></div><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2021/10/19/Android%E5%AD%98%E5%82%A8%E4%B9%8BMediaStore%E7%9A%84%E4%BD%BF%E7%94%A8/" title="Android存储之MediaStore的使用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Android存储之MediaStore的使用</div></div><div class="info-2"><div class="info-item-1">Android系统内容提供者ContentProvider安卓系统会在每次开机之后扫描所有文件并分类整理存入数据库，这个数据库保存了手机上存储的所有文件的信息。该数据库文件存放在Android设备的/data/data/com.android.providers.media/databases或/data/data/com.android.providers.media.module/databases目录当中，该目录下有两个数据库文件分别是internal.db(内部存储数据库文件)和external.db(外部存储数据库文件)， 这两个数据库文件中的数据表和表结构都大体相似，区别在于internal.db是用来存放内部存储中的文件信息的，而external.db是用来存储外部存储中的文件信息的。因此可以通过访问这两个数据库获取例如媒体文件(音频、视频、图片)等的文件信息， 而不必通过遍历媒体文件的方式来获取文件信息。但是在android设备中是禁止应用程序直接对这个数据进行直接操作的，而是将这个数据库的操作通过ContentProvider(内容提供者)将数据操作提供出来，...</div></div></div></a><a class="pagination-related" href="/2021/10/10/GitHubAction%E8%AF%A6%E8%A7%A3/" title="GitHubAction详解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">GitHubAction详解</div></div><div class="info-2"><div class="info-item-1">一.GitHubAction简介🧅什么是Github Action ?GitHubActions是一个持续集成和持续交付的平台，它可以帮助你通过自动化的构建（包括编译、发布、自动化测试）来验证你的代码，从而尽快地发现集成错误。github于2019年11月后对该功能全面开放，现在所有的github用户可以直接使用该功能。GitHub 提供 Linux、Windows 和 macOS 虚拟机来运行您的工作流程，或者您可以在自己的数据中心或云基础架构中托管自己的自托管运行器。在使用Github Action之前首先需要了解以下前置知识:  持续集成&#x2F;持续交付的概念。 Git相关知识。 Linux或Windows或macOS脚本相关知识。 Yaml基础语法。  🍤什么是Yaml ?编写GithubAction的流程时，需要创建一个workflow工作流，workflow必须存储在你的项目库根路径下的.github/workflows目录中，每一个 workflow对应一个具体的.yml 文件（或者 .yaml）。yml是YAML（YAML Ain’t Markup...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-Android%E5%AD%98%E5%82%A8%E5%88%86%E5%8C%BA%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">一.Android存储分区介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.0.1.</span> <span class="toc-text">1.简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%86%85%E9%83%A8%E5%AD%98%E5%82%A8"><span class="toc-number">1.0.2.</span> <span class="toc-text">2.内部存储</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8"><span class="toc-number">1.0.3.</span> <span class="toc-text">2.外部存储</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%86%85%E9%83%A8%E5%AD%98%E5%82%A8%E5%92%8C%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.0.4.</span> <span class="toc-text">3.内部存储和外部存储的区别</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-Android%E5%BA%94%E7%94%A8%E5%AD%98%E5%82%A8%E7%9B%AE%E5%BD%95"><span class="toc-number">2.</span> <span class="toc-text">二.Android应用存储目录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%86%85%E9%83%A8%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E7%A7%81%E6%9C%89%E7%9B%AE%E5%BD%95"><span class="toc-number">2.0.1.</span> <span class="toc-text">1.内部存储空间中的应用私有目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E7%A7%81%E6%9C%89%E7%9B%AE%E5%BD%95"><span class="toc-number">2.0.2.</span> <span class="toc-text">2.外部存储空间中的应用私有目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E4%B8%AD%E7%9A%84%E5%85%AC%E5%85%B1%E7%9B%AE%E5%BD%95"><span class="toc-number">2.0.3.</span> <span class="toc-text">3.外部存储空间中的公共目录</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-Android-10%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8%E9%80%82%E9%85%8D"><span class="toc-number">3.</span> <span class="toc-text">三.Android 10分区存储适配</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8"><span class="toc-number">3.0.1.</span> <span class="toc-text">1.什么是分区存储?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%AE%BF%E9%97%AE%E5%A4%96%E9%83%A8%E5%82%A8%E5%AD%98%E7%9A%84%E6%96%87%E4%BB%B6%E6%96%B9%E5%BC%8F%E5%8F%98%E6%9B%B4"><span class="toc-number">3.0.2.</span> <span class="toc-text">2.访问外部储存的文件方式变更</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%AE%BF%E9%97%AE%E5%A4%96%E9%83%A8%E5%82%A8%E5%AD%98%E7%9A%84%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90%E5%8F%98%E6%9B%B4"><span class="toc-number">3.0.3.</span> <span class="toc-text">3.访问外部储存的文件权限变更</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%81%BF%E5%85%8D%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8%E9%80%82%E9%85%8D%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-number">3.0.4.</span> <span class="toc-text">4.避免分区存储适配的方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%86%85%E9%83%A8%E5%AD%98%E5%82%A8%E5%92%8C%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E7%9A%84%E7%A7%81%E6%9C%89%E7%9B%AE%E5%BD%95%E8%AE%BF%E9%97%AE"><span class="toc-number">3.0.5.</span> <span class="toc-text">5.内部存储和外部存储的私有目录访问</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-Android-11%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8%E9%80%82%E9%85%8D"><span class="toc-number">4.</span> <span class="toc-text">四.Android 11分区存储适配</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%AE%80%E4%BB%8B-1"><span class="toc-number">4.0.1.</span> <span class="toc-text">1.简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%BD%BF%E7%94%A8%E7%9B%B4%E6%8E%A5%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84%E5%92%8C%E5%8E%9F%E7%94%9F%E5%BA%93%E8%AE%BF%E9%97%AE%E6%96%87%E4%BB%B6"><span class="toc-number">4.0.2.</span> <span class="toc-text">2.使用直接文件路径和原生库访问文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%92%88%E5%AF%B9%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86%E5%BA%94%E7%94%A8%E7%9A%84%E7%89%B9%E6%AE%8A%E6%9D%83%E9%99%90"><span class="toc-number">4.0.3.</span> <span class="toc-text">3.针对文件管理应用的特殊权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%89%B9%E9%87%8F%E6%96%87%E4%BB%B6%E4%BF%AE%E6%94%B9%E6%9D%83%E9%99%90%E7%94%B3%E8%AF%B7"><span class="toc-number">4.0.4.</span> <span class="toc-text">4.批量文件修改权限申请</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%AF%B9-SAF-Storage-Access-Framework-%E7%9A%84%E6%9B%B4%E6%96%B0"><span class="toc-number">4.0.5.</span> <span class="toc-text">5.对 SAF(Storage Access Framework) 的更新</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94-%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">五.总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%83%85%E5%86%B5%E4%B8%80-%E4%B8%8D%E9%9C%80%E8%A6%81%E8%BF%9B%E8%A1%8C%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8%E9%80%82%E9%85%8D"><span class="toc-number">5.0.1.</span> <span class="toc-text">情况一:不需要进行分区存储适配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%83%85%E5%86%B5%E4%BA%8C-targetSdkVersion-29-%E5%BC%80%E5%90%AF%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8"><span class="toc-number">5.0.2.</span> <span class="toc-text">情况二:targetSdkVersion&#x3D;29 开启分区存储</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%83%85%E5%86%B5%E4%BA%8C-targetSdkVersion-30-%E5%BC%80%E5%90%AF%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8"><span class="toc-number">5.0.3.</span> <span class="toc-text">情况二:targetSdkVersion&#x3D;30 开启分区存储</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD-%E5%85%B6%E5%AE%83"><span class="toc-number">6.</span> <span class="toc-text">六.其它</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%87%E6%8D%A2%E5%AA%92%E4%BD%93%E6%96%87%E4%BB%B6%E5%BE%85%E5%A4%84%E7%90%86%E7%8A%B6%E6%80%81"><span class="toc-number">6.0.1.</span> <span class="toc-text">1.切换媒体文件待处理状态</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%85%A7%E7%89%87%E4%B8%AD%E7%9A%84%E4%BD%8D%E7%BD%AE%E4%BF%A1%E6%81%AF"><span class="toc-number">6.0.1.1.</span> <span class="toc-text">照片中的位置信息</span></a></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta property="og:type" content="website">
+<meta property="og:title" content="鹏哥的Blog">
+<meta property="og:url" content="https://lxlfpeng.github.io/page/2/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/page/2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '鹏哥的Blog',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/images/home_bg.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">鹏哥的Blog</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2015/10/31/Git%E5%91%BD%E4%BB%A4%E5%8F%8AGIt%20Flow%E5%B7%A5%E4%BD%9C%E6%B5%81/" title="Git命令及GIt Flow工作流"><i class="fas fa-thumbtack sticky"></i>Git命令及GIt Flow工作流</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2015-10-30T16:00:00.000Z" title="发表于 2015-10-31 00:00:00">2015-10-31</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Git/">Git</a></span></div><div class="content">一.Git简介Git是目前世界上最先进的分布式版本控制系统。它就没有中央服务器的，每个人的电脑就是一个完整的版本库，这样，工作的时候就不需要联网了，因为版本都是在自己的电脑上。完成开发以后再将各自的修改推送给对方，就可以互相看到对方的修改了(为了便于项目中的所有开发者分享代码，我们将代码存放远程 Git 仓库例如github)。与此对应的是SVN是集中式版本控制系统，版本库是集中放在中央服务器的，而干活的时候，用的都是自己的电脑，所以首先要从中央服务器哪里得到最新的版本，然后干活，干完后，需要把自己做完的活推送到中央服务器。而且集中式版本控制系统是必须联网才能工作。 二.Git文件状态 Untracked: 未跟踪, 此文件在文件夹中, 但并没有加入到git库, 不参与版本控制. 通过git add 状态变为Staged Unmodify: 文件已经入库, 未修改, 即版本库中的文件快照内容与文件夹中完全一致. 这种类型的文件有两种去处, 如果它被修改, 而变为Modified. 如果使用git rm移出版本库, 则成为Untracked文件 Modified: 文件已修改,...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/02/19/Win10%E5%8F%8A11%E5%AE%89%E8%A3%85Wsl2/" title="Win10及11安装Wsl2"><img class="post-bg" src="/images/cc3fde25723873a32d2d9398535bd722.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Win10及11安装Wsl2"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/02/19/Win10%E5%8F%8A11%E5%AE%89%E8%A3%85Wsl2/" title="Win10及11安装Wsl2">Win10及11安装Wsl2</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-02-18T16:00:00.000Z" title="发表于 2023-02-19 00:00:00">2023-02-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Windows%E7%B3%BB%E7%BB%9F/">Windows系统</a></span></div><div class="content">一.安装Wsl2环境要求必须运行 Windows 10 版本 2004 及更高版本（内部版本 19041 及更高版本）或 Windows 11。 WSL2 是 WSL 1 的升级版，带来的主要优势：  提高文件系统性能 支持完全的系统调用兼容性  WSL2 使用了 hyper-v 虚拟化技术，它就是一个你感知不到的虚拟机（VM），比以前的版本性能更高。 安装步骤1.启用虚拟机平台和 Linux 子系统功能方式一:使用控制面板 打开控制面版，再点击程序与功能—&gt;启用或关闭Windows功能:  适用于Linux的Windows子系统 虚拟机平台 hyper-v重启电脑。  方式二:使用命令行工具以管理员权限启动PowerShell或者cmd，然后输入以下命令启用虚拟机平台： 1dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart 然后输入以下命令启用 Linux 子系统功能： 1dism.exe /online /enable-feature...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/12/18/Win11%E6%AD%A3%E5%BC%8F%E7%89%88(21H2)%E5%AE%89%E8%A3%85Android%E5%AD%90%E7%B3%BB%E7%BB%9F/" title="Win11正式版(21H2)安装Android子系统">Win11正式版(21H2)安装Android子系统</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-12-17T16:00:00.000Z" title="发表于 2022-12-18 00:00:00">2022-12-18</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Windows%E7%B3%BB%E7%BB%9F/">Windows系统</a></span></div><div class="content"> 本教程的背景是Win11正式版本(21H2)暂未全面推送Android子系统的情况的尝鲜教程。  一. Win11dev版本wsa在win11测试版本上面已经可以直接使用了，只设置区域为美国，设置-&gt;启动关闭windows功能-&gt;开启hyper-v和虚拟机平台，电脑重启后，去商店搜索Window Subsystem for Android即可使用。 二. Win11正式版：1. 修改区域为美国设置-&gt;时间和语言-&gt;语言&amp;区域-&gt;国家和地区-&gt;选择美国。 2. 打开虚拟化技术 菜单-&gt;启动关闭windows功能-&gt;开启hyper-v和虚拟机平台-&gt;重启电脑。 重启的时候检查下BIOS的虚拟化是否开启Intel为VT， AMD为SVM    3. 下载Windows Subsystem for...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/10/28/Android%E6%B2%89%E6%B5%B8%E5%BC%8F%E7%8A%B6%E6%80%81%E6%A0%8F%E5%AE%9E%E7%8E%B0%E6%80%BB%E7%BB%93/" title="Android沉浸式状态栏实现总结">Android沉浸式状态栏实现总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-10-27T16:00:00.000Z" title="发表于 2022-10-28 00:00:00">2022-10-28</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="content">Android api 30+ 可用新的api实现沉浸式状态栏等方案状态栏字体颜色修改：&#x2F;&#x2F;状态栏字体改为白色 1WindowCompat.getInsetsController(window,window.decorView).isAppearanceLightStatusBars = false &#x2F;&#x2F;状态栏字体改为黑色 1WindowCompat.getInsetsController(window,window.decorView).isAppearanceLightStatusBars = true   在API 11及其以上 Window Tranfer flag已经过时了，我们使用如下的方法 12345678910111213window.statusBarColor = Color.TRANSPARENTwindow.navigationBarColor = Color.TRANSPARENT//内容扩展到状态栏WindowCompat.setDecorFitsSystemWindows(window,...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/10/03/Android%E9%A1%B9%E7%9B%AEGadle%E7%BB%9F%E4%B8%80%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/" title="Android项目Gadle统一依赖管理">Android项目Gadle统一依赖管理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-10-02T16:00:00.000Z" title="发表于 2022-10-03 00:00:00">2022-10-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="content">一.Gradle管理依赖版本在中大型Android项目中，都会有多个Module进行协同配合。这些module中可能会依赖同一个库的不同版本，这将导致一些问题，要么是代码冲突，要么是APK包体积增大，亦或是项目构建的时间变长，拖慢开发效率。 例如:下图就是在不同的module中依赖同一个库的不同版本。要解决这个问题我们首先要了解在Android项目中目前有那些方案来引入第三方依赖:  直接编写(默认方式) 使用ext扩展抽取公共版本 使用buildSrc管理依赖 使用composing builds管理依赖 使用catalog管理依赖(gradle7版本以上才能用，因此暂时忽略)  二.直接编写(默认方式)简介直接编写是Android项目工程自带的默认管理方式，在每一个module中都写死了不同依赖及版本号，因此每次升级依赖库时都需要对每一个module做大量的手动更改。 module_a&#x2F;build.gradle: 1234567dependencies &#123;    implementation...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/09/23/Android%E5%8D%B3%E6%97%B6%E9%80%9A%E8%AE%AFIm%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93/" title="Android即时通讯Im开发总结">Android即时通讯Im开发总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-09-22T16:00:00.000Z" title="发表于 2022-09-23 00:00:00">2022-09-23</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="content">实现即时通讯IM的方式一. 使用第三方IM服务对于短平快的公司，完全可以采用第三方SDK来实现。国内IM的第三方服务商有很多，类似云信、环信、融云、LeanCloud，当然还有其它的很多，这里就不一一举例了，感兴趣的小伙伴可以自行查阅下。第三方服务商IM底层协议基本上都是TCP。他们的IM方案很成熟，有了它们，我们甚至不需要自己去搭建IM后台，什么都不需要去考虑。如果你甚至连UI都不需要自己做，这些第三方有各自一套IM的UI，拿来就可以直接用。但是缺点也很明显，定制化程度不太高，很多东西我们不可控。当然还有一个最最重要的一点，就是太贵了…作为真正社交为主打的APP，仅此一点，就足以让我们望而却步。 当然，如果IM对于APP只是一个辅助功能，那么用第三方服务也无可厚非。主流的第三方IM服务:  环信IM。 融云IM。 野火IM(半开源)。  二. 自己实现自己实现大约有三种方案:  客户端不断通过http轮询服务端获取消息(不建议)。 使用第三方推送服务将消息推送到客户端(不建议)。 自己使用长连接技术保持和服务端的连接获取到消息(建议)。  1....</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/09/18/Android%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1Services%E5%92%8CWorkManager%E6%80%BB%E7%BB%93/" title="Android后台任务Services和WorkManager总结">Android后台任务Services和WorkManager总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-09-17T16:00:00.000Z" title="发表于 2022-09-18 00:00:00">2022-09-18</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="content">Android后台服务限制Android O对应用在后台运行时可以执行的操作施加了限制，称为后台执行限制（Background Execution Limits），这可以大大减少应用的内存使用和耗电量，提高用户体验。后台执行限制分为两个部分： 后台服务限制（Background Service Limitations）、 广播限制（BroadcastLimitations）。除了下面情况外都是后台应用:  具有可见的Activity 具有前台服务 另一个前台应用已关联到该应用（通过bindService或者使用该应用的ContentProvider）。  应用在后台期间保留其后台服务的能力将受到限制。如果应用处于后台时调用了startService()将会抛出IllegalStateException，除非：  应用已经处于前台，则可以调用 startService()，不会抛出IllegalStateException，但一旦进入后台，后台应用将被置于一个临时白名单中，位于白名单中时，在这段时间内，应用可以无限制地启动服务，其后台服务也可以运行。但这个时间期一过(Nexus...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/09/10/%E4%B8%8A%E4%BC%A0Aar%E5%88%B0maven%E5%BA%93/" title="上传Aar到maven库">上传Aar到maven库</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-09-09T16:00:00.000Z" title="发表于 2022-09-10 00:00:00">2022-09-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="content">方式一:12345678910111213141516171819202122232425262728293031323334353637383940plugins &#123;    id &#x27;com.android.library&#x27;    id &#x27;org.jetbrains.kotlin.android&#x27;    id &#x27;maven-publish&#x27;&#125;task androidSourceJar(type: Jar) &#123;    from android.sourceSets.main.java.getSrcDirs()//源码路径 包括Java和Kotlin源码    archiveClassifier.set(&quot;sources&quot;)&#125;afterEvaluate &#123;    publishing &#123;        publications &#123;            plugin(MavenPublication) &#123;          ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/09/01/%E8%87%AA%E5%AE%9A%E4%B9%89Rss%E6%BA%90%E6%AF%94%E8%BE%83/" title="自定义Rss源比较">自定义Rss源比较</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-08-31T16:00:00.000Z" title="发表于 2022-09-01 00:00:00">2022-09-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/RSS%E8%AE%A2%E9%98%85/">RSS订阅</a></span></div><div class="content">万物皆可RSS简书荒废有近两年，最近发现一个RSS神器，所以又有了动力写一点东西。前年关于使用RSS订阅微信公众号、知乎、社交网络等，有写几篇文章：  【干货】如何高效地订阅微信公众号 【干货】如何通过 RSS 订阅知乎 【干货】如何通过RSS订阅社交网络  其中，最最主要的方法是使用部署的Huginn去制作相应的RSS，但是，这种方法的学习成本稍高，对不懂编程语言的人不太友好；那么到底有没有更简单的方法呢？果真,Github就出现了这样一个强大的工具——RSSHub。最近花了一点时间研究后发现，这个工具实在是功能强大且使用简单，所以就想一定要推荐给大家。  如果想了解并部署Huginn，可以看我的这篇文章：Huginn 安装教程 — 建立你自己的 IFTTT  1....</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2022/08/28/%E4%BD%BF%E7%94%A8Huginn%E6%89%93%E9%80%A0%E8%87%AA%E5%8A%A8%E5%8C%96%E4%BF%A1%E6%81%AF%E5%A4%84%E7%90%86%E4%B8%AD%E5%BF%83/" title="使用Huginn打造自动化信息处理中心">使用Huginn打造自动化信息处理中心</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2022-08-27T16:00:00.000Z" title="发表于 2022-08-28 00:00:00">2022-08-28</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/RSS%E8%AE%A2%E9%98%85/">RSS订阅</a></span></div><div class="content">一.Huginn简介在北欧神话中，奥丁的肩膀上坐着两只乌鸦，一只名叫 Huginn，一只名叫 Muninn。这两只乌鸦告诉奥丁他们的所见所闻，毫无遗漏。奥丁在黎明时派出它们，它们飞遍全世界然后在晚餐之前回来汇报，因此，奥丁能知晓很多事情。在Huginn的项目主页上，作者对它有详细的介绍。我们同样可以通过Huginn创建不同的代理，通过这些代理发送HTTP请求获得相关数据，然后将获取到的数据进行处理，就可以在互联网上面收集到各类我们需要的信息了。通过Huginn我们可以比较方便的实现如下功能:  监控你关心的事项例如知乎、微博、贴吧等平台指定的信息，一旦监控到信息，邮件通知你。 监控各大购物平台商品信息，一旦发现折扣信息，邮件通知你。 支持各种形式的发送和接收...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/#content-inner">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/#content-inner">13</a><a class="extend next" rel="next" href="/page/3/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+      <i class="fas fa-angle-right"></i></a>
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Android%E5%BC%80%E5%8F%91/"><span class="card-category-list-name">Android开发</span><span class="card-category-list-count">45</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/CI-CD/"><span class="card-category-list-name">CI/CD</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Docker%E5%AE%B9%E5%99%A8/"><span class="card-category-list-name">Docker容器</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Flutter%E5%BC%80%E5%8F%91/"><span class="card-category-list-name">Flutter开发</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Git/"><span class="card-category-list-name">Git</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/GitHub/"><span class="card-category-list-name">GitHub</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Java%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/"><span class="card-category-list-name">Java后端开发</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Java%E8%AF%AD%E8%A8%80/"><span class="card-category-list-name">Java语言</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/JetpackCompose/"><span class="card-category-list-name">JetpackCompose</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Kotlin%E8%AF%AD%E8%A8%80/"><span class="card-category-list-name">Kotlin语言</span><span class="card-category-list-count">5</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/JetpackCompose/" style="font-size: 1.5em; color: #99a9bf">JetpackCompose</a> <a href="/tags/Android%E5%BC%B9%E7%AA%97/" style="font-size: 1.1em; color: #999">Android弹窗</a> <a href="/tags/Okhttp/" style="font-size: 1.1em; color: #999">Okhttp</a> <a href="/tags/Android%E8%87%AA%E5%8A%A8%E5%8C%96/" style="font-size: 1.1em; color: #999">Android自动化</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 1.1em; color: #999">Java基础</a> <a href="/tags/Shell/" style="font-size: 1.1em; color: #999">Shell</a> <a href="/tags/Gradle/" style="font-size: 1.42em; color: #99a6b7">Gradle</a> <a href="/tags/NodeJs/" style="font-size: 1.18em; color: #999ca1">NodeJs</a> <a href="/tags/Retrofit/" style="font-size: 1.1em; color: #999">Retrofit</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" style="font-size: 1.26em; color: #999fa8">依赖注入</a> <a href="/tags/linux/" style="font-size: 1.1em; color: #999">linux</a> <a href="/tags/Vue/" style="font-size: 1.1em; color: #999">Vue</a> <a href="/tags/Flutter%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/" style="font-size: 1.1em; color: #999">Flutter状态管理</a> <a href="/tags/Android%E8%87%AA%E5%8A%A8%E5%8C%96%E6%89%93%E5%8C%85/" style="font-size: 1.1em; color: #999">Android自动化打包</a> <a href="/tags/Https/" style="font-size: 1.1em; color: #999">Https</a> <a href="/tags/AOP/" style="font-size: 1.1em; color: #999">AOP</a> <a href="/tags/Redis/" style="font-size: 1.1em; color: #999">Redis</a> <a href="/tags/Feed43/" style="font-size: 1.1em; color: #999">Feed43</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" style="font-size: 1.1em; color: #999">编程基础</a> <a href="/tags/Android%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD/" style="font-size: 1.1em; color: #999">Android文件下载</a> <a href="/tags/MacOs/" style="font-size: 1.1em; color: #999">MacOs</a> <a href="/tags/Android%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" style="font-size: 1.18em; color: #999ca1">Android逆向工程</a> <a href="/tags/%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8/" style="font-size: 1.1em; color: #999">分区存储</a> <a href="/tags/Javascript/" style="font-size: 1.1em; color: #999">Javascript</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 1.34em; color: #99a3b0">数据库</a> <a href="/tags/Android%E7%8A%B6%E6%80%81%E6%A0%8F/" style="font-size: 1.1em; color: #999">Android状态栏</a> <a href="/tags/Mysql/" style="font-size: 1.1em; color: #999">Mysql</a> <a href="/tags/%E6%8A%93%E5%8C%85/" style="font-size: 1.1em; color: #999">抓包</a> <a href="/tags/Html/" style="font-size: 1.1em; color: #999">Html</a> <a href="/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/" style="font-size: 1.1em; color: #999">音视频</a> <a href="/tags/Fiddler/" style="font-size: 1.1em; color: #999">Fiddler</a> <a href="/tags/MongoDB/" style="font-size: 1.1em; color: #999">MongoDB</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E6%9F%A5/" style="font-size: 1.1em; color: #999">代码审查</a> <a href="/tags/%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/" style="font-size: 1.1em; color: #999">切面编程</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 1.1em; color: #999">数据结构</a> <a href="/tags/wsl/" style="font-size: 1.1em; color: #999">wsl</a> <a href="/tags/CSS/" style="font-size: 1.1em; color: #999">CSS</a> <a href="/tags/Android%E5%AD%98%E5%82%A8/" style="font-size: 1.1em; color: #999">Android存储</a> <a href="/tags/Koltin/" style="font-size: 1.1em; color: #999">Koltin</a> <a href="/tags/Nginx/" style="font-size: 1.18em; color: #999ca1">Nginx</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/" title="查看更多"><i class="fas fa-angle-right"></i></a>
+    </div>
+    <ul class="card-archive-list">
+  
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2023/02/">
+          <span class="card-archive-list-date">二月 2023</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/12/">
+          <span class="card-archive-list-date">十二月 2022</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/10/">
+          <span class="card-archive-list-date">十月 2022</span>
+          <span class="card-archive-list-count">2</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/09/">
+          <span class="card-archive-list-date">九月 2022</span>
+          <span class="card-archive-list-count">4</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/08/">
+          <span class="card-archive-list-date">八月 2022</span>
+          <span class="card-archive-list-count">4</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/07/">
+          <span class="card-archive-list-date">七月 2022</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/06/">
+          <span class="card-archive-list-date">六月 2022</span>
+          <span class="card-archive-list-count">3</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/05/">
+          <span class="card-archive-list-date">五月 2022</span>
+          <span class="card-archive-list-count">4</span>
+        </a>
+      </li>
+    </ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">127</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">565.5k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-04-12T15:17:05.800Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/images/home_bg.webp);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: subtitleType => {
+    if (true) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  }
+}
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
+</script><script>function subtitleType () {
+  if (true) {
+    typedJSFn.init(["学而不思则罔，思而不学则殆","今日事&#44;今日毕"])
+  } else {
+    document.getElementById("subtitle").textContent = "学而不思则罔，思而不学则殆"
+  }
+}
+typedJSFn.run(subtitleType)</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

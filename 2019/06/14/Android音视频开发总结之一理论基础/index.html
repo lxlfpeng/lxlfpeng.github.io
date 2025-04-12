@@ -1,0 +1,372 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Android音视频开发总结之一理论基础 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一. 音频技术基础概念1. 声音的物理性质众所周知，声音是由物体振动而产生的。声音是一种压力波，当演奏乐器或者说话时，它们的振动都会引起空气有节奏的振动， 使周围的空气产生疏密变化，由此就产生了声波，这种现象会一直延续到振动消失为止。 声波具有三要素：  音调：也叫音频，频率越高，波长就会越短，而低频声响的波长则较长。所以这样的声音更容易绕过障碍物。能量衰减就越小，声音就会传播的越远； 音量：就是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android音视频开发总结之一理论基础">
+<meta property="og:url" content="https://lxlfpeng.github.io/2019/06/14/Android%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93%E4%B9%8B%E4%B8%80%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一. 音频技术基础概念1. 声音的物理性质众所周知，声音是由物体振动而产生的。声音是一种压力波，当演奏乐器或者说话时，它们的振动都会引起空气有节奏的振动， 使周围的空气产生疏密变化，由此就产生了声波，这种现象会一直延续到振动消失为止。 声波具有三要素：  音调：也叫音频，频率越高，波长就会越短，而低频声响的波长则较长。所以这样的声音更容易绕过障碍物。能量衰减就越小，声音就会传播的越远； 音量：就是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2019-06-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.836Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2019/06/14/Android%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93%E4%B9%8B%E4%B8%80%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Android音视频开发总结之一理论基础',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Android音视频开发总结之一理论基础</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Android音视频开发总结之一理论基础</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2019-06-13T16:00:00.000Z" title="发表于 2019-06-14 00:00:00">2019-06-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">8.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>26分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-音频技术基础概念"><a href="#一-音频技术基础概念" class="headerlink" title="一. 音频技术基础概念"></a>一. 音频技术基础概念</h1><h3 id="1-声音的物理性质"><a href="#1-声音的物理性质" class="headerlink" title="1. 声音的物理性质"></a>1. 声音的物理性质</h3><p>众所周知，声音是由物体振动而产生的。声音是一种压力波，当演奏乐器或者说话时，它们的振动都会引起空气有节奏的振动， 使周围的空气产生疏密变化，由此就产生了声波，这种现象会一直延续到振动消失为止。</p>
+<p>声波具有三要素：</p>
+<ul>
+<li>音调：也叫音频，频率越高，波长就会越短，而低频声响的波长则较长。所以这样的声音更容易绕过障碍物。能量衰减就越小，声音就会传播的越远；</li>
+<li>音量：就是振动的幅度。用不同的力度敲打桌面，声音的大小势必发生变换。在生活中，我们用分贝描述声音的响度；</li>
+<li>音色：在同样的频率和响度下，不同的物体发出的声音不一样。波形的形状决定了声音的音色。因为不同的介质所产生的波形不同，就会产生不一样的音色。</li>
+</ul>
+<h3 id="2-数字音频"><a href="#2-数字音频" class="headerlink" title="2. 数字音频"></a>2. 数字音频</h3><p>在自然界中，声音是连续不断的，是一种模拟信号，为了能够将声音保存下来就需要把声音数字化，即将其转换为数字信号。既然声音是一种波，有自己的振幅和频率，那么要保存声音，就要保存声音在各个时间点上的振幅。而数字信号并不能连续保存所有时间点的振幅，事实上，也并不需要保存连续的信号，就可以还原到人耳可接受的声音。模拟信号的数字化过程，<code>就是将模拟信号转换为数字信号的过程</code>，包括<strong>采样、量化和编码</strong>。<br>数字音频采集步骤分为以下步骤：模拟信号-&gt;采样-&gt;量化-&gt;编码-&gt;数字信号。<br><img src="/images/512a72cc00615b89655c920d8105f4d3.webp" alt="img"></p>
+<h3 id="3-采样"><a href="#3-采样" class="headerlink" title="3. 采样"></a>3. 采样</h3><p>音频采样，是把声音从模拟信号转换为数字信号，也可以理解为在时间轴上对信号进行数字化。采样率：就是每秒对声音进行采集的次数，同样也是所得的数字信号的每秒样本数。每秒从连续信号中提取并组成离散信号的采样个数，它用赫兹（Hz）来表示。采样频率越高，音频质量越好。常用的音频采样频率有：8kHz、16kHz、44.1kHz、48kHz 等。人耳能听到的声音一般在 20Hz~20KHz之间。通常用采样率来保证一定频率范围内的声音可以被数字化成功，<br>比如：采样频率一般是44.1KHZ，指的就是1秒会采样44100次。</p>
+<ul>
+<li>8000 Hz：电话所用采样率, 对于人的说话已经足够。</li>
+<li>11025 Hz：AM调幅广播所用采样率。</li>
+<li>22050 Hz 和 24,000 Hz：FM调频广播所用采样率。</li>
+<li>44100Hz：音频CD，常用于 MPEG-1 音频（VCD，SVCD，MP3）所用采样率。</li>
+<li>47,250 Hz：商用 PCM 录音机所用采样率。</li>
+<li>48,000 Hz：miniDV、数字电视、DVD、DAT、电影和专业音频所用的数字声音所用采样率。<blockquote>
+<p>CD 音乐的标准采样频率为 44.1KHz，这也是目前声卡与计算机作业间最常用的采样频率，目前比较盛行的蓝光的采样率就相当的高，达到了 192kHz。而目前的声卡，<br>绝大多数都可以支持 44.1kHz、48kHz、96kHz，高端产品可支持 192kHz 甚至更高，总之，采样率越高，获得的声音文件质量越好，占用存储空间也就越大。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="4-量化"><a href="#4-量化" class="headerlink" title="4. 量化"></a>4. 量化</h3><p>音频在经过采样得到样本后，还需要对该样本执行量化。量化指的是在幅度轴上对信号进行数字化，每个采样点用多少数据量表示，它以位（Bit）为单位。位数越多，表示得就越精细，声音质量就越好，当然数据量也越大。<br>比如：常用16bit的二进制信号来存放一个采样，这又叫做量化级。量化级是数字声音质量的重要指标，通常将声音描述为24bit（量化级）、48KHZ（采样率）。</p>
+<ul>
+<li>8bit (也就是1字节) 只能记录 256 个数, 也就是只能将振幅划分成 256 个等级。</li>
+<li>16bit  (也就是2字节) 可以细到 65536 个数, 这已是 CD 标准了。</li>
+<li>32bit (也就是4字节) 能把振幅细分到 4294967296 个等级, 实在是没必要了。</li>
+</ul>
+<blockquote>
+<p>量化位数又叫做采样位数、位深度、分辨率， 它是指声音的连续强度被数字表示后可以分为多少级。N-bit的意思声音的强度被均分为2^N级。16-bit的话，就是65535级。<br>这是一个很大的数了，人可能也分辨不出六万五千五百三十五分之一的音强差别。也可以说是声卡的分辨率，它的数值越大，分辨率也就越高，所发出声音的能力越强。<br>这里的采样倍数主要针对的是信号的强度特性，采样率针对的是信号的时间（频率）特性这是两个不一样的概念。</p>
+</blockquote>
+<h3 id="5-音频编码"><a href="#5-音频编码" class="headerlink" title="5. 音频编码"></a>5. 音频编码</h3><p><code>音频编码是指按照一定的格式记录采样和量化后的数据。</code>之所以需要编码是因为采集和量化后的数据是非常大的，从存储或者网络实时传播的角度来说，这个数据量都太大了。<br>音频编码的格式有很多种，通常所说的音频裸数据指的是脉冲编码调制(PCM)数据。PCM音频流的码率可以用来描述PCM数据，采集的原始 PCM 音频，一般不直接用来网络传输。<br>音频编码的主要作用是将音频采样数据（PCM等）压缩成为音频码流，从而降低音频的数据量。压缩编码的实质就是压缩冗余的信号，冗余信号就是指不能被人耳感知的信号，<br>包括：人耳听觉范围之外的音频信号以及被掩盖掉的音频信号。 常用格式主要包括：WMA编码；MP3编码；AAC编码，OGG编码等。AAC是新一代的音频有损压缩技术，一种高压缩比的音频压缩算法。<br>在MP4视频中的音频数据，大多数时候都是采用AAC压缩格式。采集的原始 PCM 音频，一般不直接用来网络传输，而是经过编码器压缩成 AAC，这样就提高了传输效率，节省了网络带宽。</p>
+<ul>
+<li>压缩编码的指标是压缩比，压缩比通常是小于1的。</li>
+<li>压缩编码算法分为2种：有损压缩和无损压缩。</li>
+</ul>
+<ol>
+<li>无损压缩：解压后的数据可以完全复原。在常用的压缩格式。用的较多的都是有损压缩。</li>
+<li>有损压缩：解压后的数据不能完全复原，会丢失一部分信息。压缩比越小，丢失的信息就会越多，信号还原的失真就会越大。</li>
+</ol>
+<blockquote>
+<p>我们经常会讨论说音频的有损和无损，其实呢，有损和无损是相对的。相对于大自然中的原始声音，计算机中音频无论怎么编码都是有损的，无法做到完全的复原。<br>而我们大多数人口中的无损一般是指音频采样率为44.1KHz、采样大小16bit、双声道的音频，有损自然是相较于质量差的音频了。</p>
+</blockquote>
+<h5 id="声道"><a href="#声道" class="headerlink" title="声道"></a>声道</h5><p>声道是指声音在录制会播放时在不同空间位置采集或回放的相互独立的音频信号，所以声道也就是声源数量或播放时相应的扬声器数量。</p>
+<ul>
+<li>单声道：1个声道</li>
+<li>双声道：2个声道</li>
+<li>立体声道：默认为2个声道</li>
+<li>立体声道（4声道）：4个声道</li>
+</ul>
+<h5 id="比特率（BitRate）"><a href="#比特率（BitRate）" class="headerlink" title="比特率（BitRate）"></a>比特率（BitRate）</h5><p>每秒音频占用(每秒的传输速率)的比特数量，单位是 bps（Bit Per Second）,如705.6kbps 或 705600bps, 其中的 b 是 bit, ps 是每秒(per second)的意思，表示每秒705600bit的容量。<br>压缩的音频文件常常用倍速来表示，譬如达到CD音质的MP3是128kbps&#x2F;44100HZ。注意这里的单位是bit而不是Byte,一个Byte等于8个bit(位),bit是最小的单位，一般用于网络速度的描述和各种通信速度，<br>Byte则用于计算硬盘，内存的大小。比特率越高，压缩比越小，声音质量越好，音频体积也越大。</p>
+<ul>
+<li>Mbps 即：Milionbit per second(百万位每秒)；</li>
+<li>Kbps 即： Kilobit per second（千位每秒);</li>
+<li>bps 即：bit per second (位每秒)， 相应的换算关系为：</li>
+</ul>
+<h3 id="6-采样率、采样位数、比特率三者之间的关系"><a href="#6-采样率、采样位数、比特率三者之间的关系" class="headerlink" title="6. 采样率、采样位数、比特率三者之间的关系"></a>6. 采样率、采样位数、比特率三者之间的关系</h3><p>例：根据一个文件的大小推算出文件时长<br>譬如 “Windows XP 启动.wav” 的文件长度是 424,644 字节, 它是 “22050HZ &#x2F; 16bit &#x2F; 立体声” 格式(这可以从其 “属性-&gt;摘要” 里看到),<br>那么它的每秒的传输速率(位速, 也叫比特率、取样率)是 22050<em>16</em>2 &#x3D; 705600(bit&#x2F;s), 换算成字节单位就是 705600&#x2F;8 &#x3D; 88200(字节&#x2F;秒),<br>播放时间：424644(总字节数) &#x2F; 88200(每秒字节数) ≈ 4.8145578(秒)。<br>但是这还不够精确, 包装标准的 PCM 格式的 WAVE 文件(<em>.wav)中至少带有 42 个字节的头信息, 在计算播放时间时应该将其去掉,<br>所以就有：(424644-42) &#x2F; (22050</em>16*2&#x2F;8) ≈ 4.8140816(秒). 这样就比较精确了。也就是：<br>（文件总大小 - 头信息）&#x2F; (采样率 * 采样位数 * 通道数 &#x2F; 8) {也就是比特率} ≈ 文件时长。</p>
+<p><img src="/../image/image_12.png" alt="image_12"></p>
+<p>通过上述的流程，就实现了音频信号的数字化过程。转为数字信号之后，就可以对这些数据进行存储、播放、复制获取等其他操作了。</p>
+<h1 id="二-视频技术基础概念"><a href="#二-视频技术基础概念" class="headerlink" title="二. 视频技术基础概念"></a>二. 视频技术基础概念</h1><p>视频，是由内容元素、编码格式和封装容器构成的。<br><img src="/images/1699534c1a733b917e5e262f526de035.webp" alt="img"></p>
+<ul>
+<li>内容元素：包括图像（Image）、音频（Audio）和元信息（Metadata）。</li>
+<li>编码格式：包括视频常用编码格式H264，和音频常用编码格式AAC。</li>
+<li>封装容器：这就是常见的文件格式，如MP4、MOV、FLV、RMVB、AVI等等。</li>
+</ul>
+<p>图像是人对视觉感知的物质重现。三维图像的对象包括：深度、纹理和亮度信息，二维图像包括纹理和亮度信息，我们可以简单的把纹理就理解为图像。<br>视频是由多幅图像构成的，是一组连续的图像。一个基本的数字视频，基本是通过“采集——处理——显示”形成的。</p>
+<h3 id="1-图像的物理现象"><a href="#1-图像的物理现象" class="headerlink" title="1.图像的物理现象"></a>1.图像的物理现象</h3><p>红绿蓝三种光无法被分解，故称为三原色光。每个像素点由三个子像素点组成。这三个像素点分别为红、绿、蓝，共同作用下形成一种颜色。</p>
+<h3 id="2-图像的数值表示"><a href="#2-图像的数值表示" class="headerlink" title="2.图像的数值表示"></a>2.图像的数值表示</h3><p>表示方式常见两种表示方式为: RGB, YUV</p>
+<h5 id="RGB表示方式"><a href="#RGB表示方式" class="headerlink" title="RGB表示方式"></a>RGB表示方式</h5><p>任何一个图像都可以由RGB组成, 那么像素里的子像素如何表示.通常有下面两种表示方式:</p>
+<ul>
+<li>浮点表示: 取值范围为 0.0 ~ 1.0,</li>
+<li>整数表示:取值范围为  0 ~ 255 或者0 ~ FF.</li>
+</ul>
+<h5 id="YUV表示方式"><a href="#YUV表示方式" class="headerlink" title="YUV表示方式"></a>YUV表示方式</h5><p>对于视频帧的裸数据表示,其实更多的是YUV数据格式的表示.YUV主要应用于优化彩色视频信号的传输.与RGB视频信号传输相比,它最大的有点在于只需要占用极少的频宽(RGB要求三个独立的视频信号同时传输),<br>其中”Y”表示明亮度(Luma),也称灰阶值;而”U”和”V”表示的则是色度,它们的作用是描述影像的色彩及饱和度.</p>
+<h5 id="图像的压缩格式JPEG-、PNG-和-BMP-等"><a href="#图像的压缩格式JPEG-、PNG-和-BMP-等" class="headerlink" title="图像的压缩格式JPEG 、PNG 和 BMP 等"></a>图像的压缩格式JPEG 、PNG 和 BMP 等</h5><p>有了图像的原始数据(YUV 或 RGB 数据)，我们需要将原始数据进行存储，如果不进行压缩的话，保存图像需要的空间将十分大。800w 像素的 YUV420 格式数据大小为 12M（326424483B*0.5）。<br>不同的压缩方式就产生了不同的图片格式，通常这个过程就叫做编码，将 YUV 数据编码成 JPEG 的意思就是将 YUV 数据按 JPEG 的图像压缩标准进行压缩。<br>原始数据的压缩也叫编码，将压缩后的数据进行还原就叫做解码，因此在处理图像或者视频涉及到的编解码实际上就是对原始数据的压缩和对压缩后的数据的还原。<br>编解码的过程常常由对应的编解码器来完成，不同的编解码器实现了不同的压缩还原算法，例如 JPEG 编解码器就实现了 JPEG 压缩算法。</p>
+<ul>
+<li>JPEG<br>JPEG 也叫 JPG （因 DOS、Windows 95等早期系统采用的 8.3 命名规则只支持最长 3 字符的扩展名，为了兼容采用了 .jpg。也因历史习惯和兼容性考虑，.jpg 目前更流行）<br>JPEG格式也是应用最广泛的图片格式之一，它采用一种特殊的有损压缩算法，将不易被人眼察觉的图像颜色删除。</li>
+<li>PNG<br>PNG:采用一种基于 LZ77 派生算法的无损数据压缩。其支持支持透明效果，在图像边缘和背景显得更平滑。</li>
+<li>BMP<br>BMP:Windows系统下的标准位图格式,未经过压缩，一般图像文件会比较大。<br>其他 svg , gif ,webp 等都是图像的格式，这里就不做展开说明。</li>
+</ul>
+<blockquote>
+<p>YUV虽说是视频帧的裸数据，YUV数据是不能直接用于渲染，一个图像最终要变成RGB的表现方式才可以渲染到显示屏上，YUV主要应用于优化彩色视频信号的传输。</p>
+</blockquote>
+<h3 id="3-视频相关概念"><a href="#3-视频相关概念" class="headerlink" title="3.视频相关概念"></a>3.视频相关概念</h3><h5 id="帧-Frame"><a href="#帧-Frame" class="headerlink" title="帧 Frame"></a>帧 Frame</h5><p>帧是视频开发常见的一个基本概念，可以表示为一张画面，一个段视频本质上就是有许多画面组成，因此，一个视频就是由许许多多的视频帧组成。<br>简单的理解帧就是为视频或者动画中的每一张画面，而视频和动画特效就是由无数张画面组合而成，每一张画面都是一帧。<br>在视频数据的压缩处理中，每帧都代表着一副画面，由于视频前后两帧的画面极为相似，因此可以通过前一帧的画面数据来进行压缩或者解压缩，根据参考的帧的不同，可以划分为 I 帧、P 帧 和 B 帧。</p>
+<ul>
+<li>I 帧：（Intra Picture）帧内编码帧，也叫关键帧，I 帧不需要参考其他帧就可以进行解码。</li>
+<li>P 帧：（Predictive-Frame）向前预测编码帧，即需要参考前面的一帧才能进行解码。</li>
+<li>B 帧：（bi-directional interpolated prediction frame）双向预测内插编码帧，也叫双向预测帧。即需要参考前面已编码的帧，又需要参考图像序列后面的已编码帧，才能进行解码。</li>
+</ul>
+<p>GOP ，Group of Picture ，指的是两个 I 帧之间的间隔。</p>
+<h5 id="帧率"><a href="#帧率" class="headerlink" title="帧率"></a>帧率</h5><p>帧率，即单位时间内帧的数量，单位为：帧&#x2F;秒 或fps（frames per second）。帧率越高，单位时间内播放的图片图片越多，画面越顺滑，过渡越自然。比如说一个视频的30帧，指的就是这个视频帧率，即1秒中会显示30帧；<br><code>视频帧率影响的是画面流畅感</code>，也就是说视频帧率超高，表现出来的效果就是：画面越显得流畅。当然视频帧率越高，意味着画面越多，相应的，这个视频文件的大小也会随之增加，占用存储空间也就增大许多了。<br>例如帧率：</p>
+<ul>
+<li>24&#x2F;25 fps：1秒 24&#x2F;25 帧，一般的电影帧率。</li>
+<li>30&#x2F;60 fps：1秒 30&#x2F;60 帧，游戏的帧率(例如王者普通模式是30fps,高帧率模式是60fps)。<br>帧率和视频流畅度有关，帧率越大视频越流畅，帧率越小视频就会卡。通常设置帧率为 25 fps,因为当帧率大于 24 fps 时，画面对人眼视觉效果是连续的。<br>帧率(Frame rate) &#x3D; 帧数(Frames)&#x2F;时间(Time)，单位为帧每秒(f&#x2F;s, frames per second, fps)</li>
+</ul>
+<p>帧率是用于测量显示帧数的量度，测量单位为“每秒显示帧数”（ Frame per Second， FPS）或“赫兹”（ Hz），一般来说 FPS 用于描述视频、电子绘图或游戏每秒播放多少幀。</p>
+<h5 id="刷新率"><a href="#刷新率" class="headerlink" title="刷新率"></a>刷新率</h5><p><code>屏幕(硬件)每秒画面被刷新的次数</code>，以赫兹(Hz)为单位，刷新率越高，图像就越稳定，图像显示就越自然流畅。例如一个游戏中能够获得超过200帧率(fps)的画面，但是由于显示器刷新率只有30Hz，<br>只能“抓取”其中的30帧进行显示，最终你所看到的画面也是30帧，其余170帧全是无效帧数。</p>
+<h5 id="分辨率"><a href="#分辨率" class="headerlink" title="分辨率"></a>分辨率</h5><p>分辨率&#x3D;画面水平方向的像素值 * 画面垂直方向的像素值。常见有1280x720（720P），表示水平方向有 1280 个像素，竖直方向有 720 个像素。对于固定显示的宽高，分辨率越高，图像大小越大，越清晰；<br>分辨率越低，图像大小越小，如果固定宽高大于图像分辨率，那么图像就会变模糊。</p>
+<p>通常所说的1280x720（720p）或者1920x1080（1080p），就是视频的分辨率。分辨率影响图像大小，与图像大小成正比：分辨率越高，图像越大；分辨率越低，图像越小。<br>理论上来说肯定是分辨率越高视频的显示效果越清晰，可是实际电影视频文件中，1080P的文件有的是1GB，有的是3GB、4GB，有的要10GB大小。<br>他们的清晰层度当然不同。要解释这个现象，就要引入下面要讲的”码率“这一概念。</p>
+<h5 id="码率"><a href="#码率" class="headerlink" title="码率"></a>码率</h5><p>bps, Bits per second。指的是每秒传送的数据位数。常见的单位 kbps （k bits per s） 和 mbps (m bits per s) 。帧率越大，每秒传输的帧数越大；分辨率越大，每一帧的内容大小越大；因此帧率越大，分辨率越大，码率就越大。<br>码率指的是单位时间播放连续的媒体的比特数量。单位一般是kb&#x2F;s即千位每秒。比特率越高，带宽消耗得越多。码率影响体积，与体积成正比：码率越大，体积越大；码率越小，体积越小。码率还影响清晰度，同分辨率情况下，码率越高清晰度也就越高。需要注意的是码率超过一定数值，对图像的质量的影响就变小了。几乎所有的编码格式重视的都是如何用最低的码率达到最少的失真。<br>通常来说，一个视频文件包括画面和声音，音频及视频都有各自不同的码率，也就是说，同一个视频文件音频和视频的码率并不相同。而通常所说的视频文件码率大小，一般是指视频文件中音频和视频码率的总和。<br>比特率越高，传送的数据越大，还原后的音质、画质就越好，在视频领域,比特率常翻译为码率。</p>
+<h3 id="3-视频编码"><a href="#3-视频编码" class="headerlink" title="3.视频编码"></a>3.视频编码</h3><h5 id="为什么要对音视频进行编码？"><a href="#为什么要对音视频进行编码？" class="headerlink" title="为什么要对音视频进行编码？"></a>为什么要对音视频进行编码？</h5><p>在计算机的世界中，一切都是0和1组成的，音频和视频数据也不例外。由于音视频的数据量庞大，如果按照裸流数据存储的话，那将需要耗费非常大的存储空间，也不利于传送。<br>而音视频中，其实包含了大量0和1的重复数据，因此可以通过一定的算法来压缩这些0和1的数据。特别在视频中，由于画面是逐渐过渡的，因此整个视频中，包含了大量画面&#x2F;像素的重复，这正好提供了非常大的压缩空间。<br><code>编码的意义：编码可以大大减小音视频数据的大小，让音视频更容易存储和传送。</code><br><code>编码的核心：就是去除视频或是音频多的冗余信息。</code></p>
+<p>视频编解码的过程是指对数字视频进行压缩或解压缩的过程。<br>压缩编码有很多标准，目前应用最广泛的视频编解码方式有H.26X系列和MPEG系列，它的优点是低码率、图像质量高、容错能力强、网络适应性更强，并且已被广泛应用于实时视频应用中。</p>
+<h5 id="视频编码格式"><a href="#视频编码格式" class="headerlink" title="视频编码格式"></a>视频编码格式</h5><p>视频编码格式(Video Coding Format)，又称视频编码规范，视频压缩格式。常见的有H.264、H.265。由于原始的视音频数据非常大，不方便存储和传输，通过压缩编码的方式将原始视音频进行压缩。<br>它定义了视频数据在存储和传输过程中的规范。<br>视频编码格式有很多，比如H26x系列和MPEG系列的编码，这些编码格式都是为了适应时代发展而出现的。<br>其中，H26x（1&#x2F;2&#x2F;3&#x2F;4&#x2F;5）系列由ITU（International Telecommunication Union）国际电传视讯联盟主导<br>MPEG（1&#x2F;2&#x2F;3&#x2F;4）系列由MPEG（Moving Picture Experts Group, ISO旗下的组织）主导。<br>当然，他们也有联合制定的编码标准，那就是现在主流的编码格式H264。<br>下面是一些常见的视频编码器：</p>
+<ul>
+<li>H.264&#x2F;AVC</li>
+<li>HEVC&#x2F;H.265</li>
+<li>VP8</li>
+<li>VP9</li>
+<li>FFmpeg<br><code>注：音频编码器有Mp3, AAC等。</code></li>
+</ul>
+<h5 id="H-264"><a href="#H-264" class="headerlink" title="H.264"></a>H.264</h5><p>原理：分组，组内每一帧之间可以通过互相参照，从而去掉冗余的信息。<br>在H.264中，图像是包括帧、顶场和底场的，一副完整的图像就是一帧。<br>当采集视频信号时，如果采用逐行扫描，则每次扫描得到的信号就是一副图像，也就是一帧。如果采用隔行扫描（奇、偶数行），则扫描下来的一帧图像就被分为了两个部分，这每一部分就称为场，<br>根据次序分为：顶场（也成为偶数场）和底场（也成为奇数场）。<br>帧和场的概念又带来了不同的编码方式：帧编码和场编码。逐行扫描适合于运动图像，所以对于运动图像采用帧编码更好；而隔行扫描适合于非运动图像，所以对于非运动图像采用场编码更理想。<br>此外，每一帧图像可以分为多个片，每一个片由宏块构成，而每个宏块又是由子块所构成的。<br>H.264是一种高性能的视频编解码技术，是由“国际电联”和“国际标准化组织ISO”联合组建的联合视频组共同制定的新的数字视频编码标准。<br>我们在上面已经说到了H.264编码技术的优势，我们接下来看一下H.264所涉及的关键技术：<br>我们首先要知道，无论是视频或音频编码，其目的都是压缩。视频编码的目的，是抽取出冗余信息，这些冗余信息包括：空间冗余、时间冗余、编码冗余、视觉冗余和知识冗余。<br>基于此，H.264的压缩技术涉及：</p>
+<ul>
+<li>帧内预测压缩，解决的就是空间数据冗余问题。空间冗余数据就是图里数据在宽高空间内包含了很多颜色和光亮，人的肉眼很难察觉的数据。对于这些数据，我们是可以直接压缩掉的。<br>帧内压缩对应的是I帧——即关键帧。那么什么是I帧呢？网上教程中有一个经典的例子，如果摄像头对着你拍摄，1秒之内实际你发生的变化是非常少的。摄像机一般1秒钟会抓取几十帧的数据，比如像动画，就是25帧&#x2F;s，<br>一般视频文件都是在30帧&#x2F;s左右。那些对于一组帧来说变化很小的，为了便于压缩数据，就将第一帧完整的保存下来。如果没有这个关键帧后面解码数据是完成不了的，所以I帧是特别关键的。</li>
+<li>帧间预测压缩，解决的是时间数据冗余问题。在上面的例子中，摄像头在一段时间内所捕捉的数据没有较大的变化，我们针对这一时间内的相同的数据压缩掉，这就是时间数据压缩。<br>帧间压缩对应的是P帧和B帧。P帧是向前参考帧，压缩时只参考前一个帧。而B帧是双向参考帧，压缩时即参考前一帧也参考后一帧。</li>
+<li>整数离散余弦变换（DCT），将空间上的相关性变为频域上无关的数据然后进行量化。</li>
+<li>CABAC压缩：无损压缩。</li>
+</ul>
+<p>H.264除了上述的关键技术，还有几个重要的概念需要了解：</p>
+<ul>
+<li><strong>GOF</strong>：一组帧，就是一个I帧到下一个I帧，这一组的数据。包括B帧&#x2F;P帧，我们称为GOF。</li>
+<li><strong>SPS和PPS</strong>：SPS和PPS是GOF的参数，SPS是存放帧数，参考帧数目，解码图像尺寸，帧场编码模式选择标识等。而PPS是存放熵编码模式选择标识，片组数目，初始量化参数和去方块滤波系数调整标识等。</li>
+</ul>
+<p>在进行视频解码的时候，接收到一组帧GOF之前，我们首先收到的是SPS&#x2F;PPS数据，如果没有这组参数的话，是无法进行解码的。</p>
+<p>因此，如果在解码时发生错误，首先要检查是否有SPS&#x2F;PPS。如果没有，就要检查是因为对端没有发送过来还是因为对端在发送过程中丢失了。</p>
+<p>更加详细的H.264编码原理这里就不做介绍了，大家感兴趣的可以上网查阅一下资料，比如：宏块分组划分、宏块查找、帧内预测、DCT压缩以及H.264的码流结构等知识。</p>
+<p>视频编码主要是去掉冗余信息，有帧间编码和帧内编码技术，帧内编码就是不依赖其他图片就可以解码的，而帧间就是解压需要一个参考帧（关键帧），相当于做差分。</p>
+<h1 id="三-音视频封装"><a href="#三-音视频封装" class="headerlink" title="三. 音视频封装"></a>三. 音视频封装</h1><p>一个视频文件中，通常包含着音频数据和视频数据，一个视频文件包含两路数据流，一路视频流，一路音频流，有汉英切换的视频就有两路音频流。如何将已经编码压缩好的视频数据和音频数据按照一定的格式放到一个文件中的过程就叫做封装，<br>而承载这些数据的封装格式，通常就叫做容器。例如 mp4 容器中有一路 H264 的视频流和一路 AAC 的音频流。常见的视频封装格式有 Mp4、Flv 和 AVI 等。<br>说到视频的格式，首先想到的可能会是mp4、3gp、avi、flv、rmvb、mkv等日常生活中常见视频文件格式。这些格式其实只是视频的封装格式。事实上视频的格式分为两种：<strong>封装格式</strong>和<strong>编码格式</strong>。</p>
+<h3 id="1-音视频封装格式"><a href="#1-音视频封装格式" class="headerlink" title="1. 音视频封装格式"></a>1. 音视频封装格式</h3><p>封装相当于一种储存视频信息的容器，我们所看的视频包含音频和视频两个部分（有时还包括字幕），H.264就是视频编码，aaC、mp3等是音频编码，我们把用H.264视频编码和MP3音频编码按照mkv的封装标准封装起来，<br>这样我们看到的就是mkv格式的视频文件。封装格式并不影响画质，它只负责把内部的视频轨和音频轨集成在一起，并没有对视频轨和音频轨造成影响。<br>常见的视频封装格式:</p>
+<ul>
+<li>AVI 格式(后缀为 .avi)</li>
+<li>DV-AVI 格式(后缀为 .avi)</li>
+<li>QuickTime File Format 格式(后缀为 .mov)</li>
+<li>MPEG 格式(文件后缀可以是 .mpg .mpeg .mpe .dat .vob .asf .3gp .mp4等)</li>
+<li>WMV 格式(后缀为.wmv .asf)</li>
+<li>Real Video 格式(后缀为 .rm .rmvb)</li>
+<li>Flash Video 格式(后缀为 .flv)</li>
+<li>Matroska 格式(后缀为 .mkv)</li>
+<li>MPEG2-TS 格式 (后缀为 .ts)<br><strong>封装格式：</strong></li>
+</ul>
+<p>视频的封装格式可以看成是一个装载着视频、音频、视频编解码方式等信息的容器。一种视频封装格式可以支持多种的视频编解码方式，比如：QuickTime（.MOV）支持几乎所有的编解码方式，MPEG（.MP4）也支持大部分的编解码方式。</p>
+<p>在PC上，我们经常会使用.MOV的视频文件。通过以上的介绍，我们就知道了，这个视频的文件格式是.MOV，封装格式是QuickTime File Format，但是我们无法知道它的视频编解码方式。如果我们想要专业的去描述一个视频，可以描述成：H.264&#x2F;MOV的视频文件，这就是说它的封装方式是QuickTime File Format，文件格式是.MOV，编码方式是H.264。</p>
+<p>一个视频文件中，通常包含着音频数据和视频数据，一个视频文件包含两路数据流，一路视频流，一路音频流，有汉英切换的视频就有两路音频流。如何将已经编码压缩好的视频数据和音频数据按照一定的格式放到一个文件中的过程就叫做封装，而承载这些数据的封装格式，通常就叫做容器。例如 mp4 容器中有一路 H264 的视频流和一路 AAC 的音频流。常见的视频封装格式有 Mp4、Flv 和 AVI 等。</p>
+<h5 id="AVI"><a href="#AVI" class="headerlink" title="AVI"></a>AVI</h5><p>AVI 英文全称为 Audio Video Interleaved，即音频视频交错格式，是微软公司推出的作为其 Windows 视频软件一部分的一种容器格式。AVI 文件将音频和视频数据包含在一个文件容器中，允许音视频同步回放。</p>
+<h5 id="MP4"><a href="#MP4" class="headerlink" title="MP4"></a>MP4</h5><p>MP4 英文全称为 MPEG-4 Part 14,属于 MPEG-4 的一部分。被认为可以在其中嵌入任何形式的数据，，不过我们常见的大部分的 MP4 文件存放的 AVC（H.264） 或 MPEG-4（Part 2） 编码的视频和 AAC 编码的音频。</p>
+<h5 id="FLV"><a href="#FLV" class="headerlink" title="FLV"></a>FLV</h5><p>FLV 英文全称为 flash video 。一个 FLV 文件由一个 FLV Header 和 多个 FLV body 组成，一个 FLV body 由 previousTagSize 和 tag 组成，而 tag 则分为 video、audio或者scripts，每个 tag 就包含着音频或者视频数据。</p>
+<h5 id="TS"><a href="#TS" class="headerlink" title="TS"></a>TS</h5><p>TS 的全称则是 Transport Stream，属于 MPEG2-TS 。MPEG2-TS 格式的特点就是要求从视频流的任一片段开始都是可以独立解码的。因此常见的 ts 文件都是完整视频的一个小片段，由所有的 ts 文件组成一个完整的视频。</p>
+<h3 id="2-音视频数据传输之流媒体协议"><a href="#2-音视频数据传输之流媒体协议" class="headerlink" title="2. 音视频数据传输之流媒体协议"></a>2. 音视频数据传输之流媒体协议</h3><p>RTMP、HLS 和 HTTP-FLV 是属于直播流媒体协议。</p>
+<h5 id="RTMP"><a href="#RTMP" class="headerlink" title="RTMP"></a>RTMP</h5><p>RTMP 全称 Real Time Messaging Protocol，即实时消息传送协议。RTMP 是工作在 TCP 之上的协议，默认使用端口 1935。协议中的基本数据单元成为消息，传输的过程中消息会被拆分为更小的消息块。最后将分割后的消息块通过 TCP 协议传输，接收端再反解接收的消息块恢复成流媒体数据</p>
+<h5 id="HLS"><a href="#HLS" class="headerlink" title="HLS"></a>HLS</h5><p>HLS 是 Apple 推出的直播协议，是通过视频流切片成文件片段来直播的。首先会请求一个m3u8 文件，里面会有不同码率的流，或者直接是 ts 文件列表，通过给出的 ts 文件地址去依次播放。在直播的时候，会不断请求 m3u8 文件，检查 ts 列表是否有新的 ts 切片。<br>简单地说 HLS 协议使用地视频的封装格式是 TS。除了 TS 视频文件本身，还定义了用来控制播放的m3u8 文件（文本文件）。<br>m3u8 是 Unicode 版本的 M3U，用 UTF-8 编码。“m3u” 和 “m3u8” 文件都是 HLS 协议格式的基础，m3u8 文件实质是一个播放列表，其内部信息记录的是一系列媒体片段资源，顺序播放该片段资源，即可完整展示多媒体资源，由此可知，整个视频的总时长就是各个.ts切片资源的时长之和。<br>HLS 的播放过程时下载的m3u8 内容</p>
+<h5 id="HTTP-FLV"><a href="#HTTP-FLV" class="headerlink" title="HTTP-FLV"></a>HTTP-FLV</h5><p>HTTP-FLV 即将流媒体数据封装成 FLV 格式，然后通过 HTTP 协议传输。<br>其依靠 MIME 的特性，根据协议中的 Content-Type 来选择相应的程序去处理相应的内容，使得流媒体可以通过 HTTP 传输。<br>一个多媒体文件或者多媒体流可能包含多个视频、音频、字幕、同步信息，章节信息以及元数据等数据。也就是说我们通常看到的 .mp4 、.avi、.rmvb 等文件中的 MP4、AVI 其实是一种容器格式（container formats），用来封装这些数据，而不是视频的编码格式。</p>
+<p>参考文章：<br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/028196b8ca14">码率，分辨率，帧率</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/u010126792/article/details/86308840">Android音频相关基础</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/145102951">Android 音视频涉及到的技术总结</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/145119148">音视频篇 - Android 图像处理技术简介</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/145152440">音视频篇 - OpenGL ES 2.0简介</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/145331514">GLSurfaceView （音视频篇 ）</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/145371380">Android 音视频开篇：基础知识（硬解码）</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/145588749">Android音视频播放：音视频同步</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/145625491">老司机带你深入了解移动直播技术基础知识</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/161453747">音视频技术从零开始-音频基础</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2019/06/14/Android%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93%E4%B9%8B%E4%B8%80%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/">https://lxlfpeng.github.io/2019/06/14/Android%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93%E4%B9%8B%E4%B8%80%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2019/06/17/Android%E9%9F%B3%E8%A7%86%E9%A2%91%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93%E4%B9%8B%E4%BA%8CAndroid%E5%B9%B3%E5%8F%B0%E9%87%87%E9%9B%86%E3%80%81%E7%BC%96%E7%A0%81%E3%80%81%E8%A7%A3%E7%A0%81/" title="Android音视频开发总结之二Android平台采集、编码、解码"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Android音视频开发总结之二Android平台采集、编码、解码</div></div><div class="info-2"><div class="info-item-1">一. 音视频采集流程串联整个音视频录制流程，完成音视频的采集、编码、封包成 mp4 输出。通过摄像头和麦克风获得实时的音视频数据；  播放流程: 获取流—&gt;解码—&gt;播放。 录制播放路程: 录制音频视频—&gt;视频处理—&gt;编码—&gt;上传服务器-&gt;别人播放。 直播过程 : 录制音视频—&gt;编码—&gt;流媒体传输—&gt;服务器—&gt;流媒体传输到其他客户端—&gt;解码—&gt;播放。  视频采样数据 : 一般都是 YUV 或 RGB 格式 音频采样数据 :一般都是PCM格式 二.音频采集1.Android如何采集音频Android SDK对于音频采集提供两套API：MediaRecorder和AudioRecorder。 AudioRecordAudioRecord输出是PCM语音数据，得到原始的一帧帧PCM音频数据。如果保存成音频文件，是不能够被播放器播放的，所以必须先写代码实现数据编码以及压缩。一般直播技术采用的就是 AudioRecorder 采集音频数据。PCM(Pulse Code...</div></div></div></a><a class="pagination-related" href="/2019/03/18/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93HTML%E3%80%81CSS%E3%80%81Javascript/" title="前端开发基础总结HTML、CSS、Javascript"><img class="cover" src="/images/2e7bc322990bbb0cf755e515faa9cb11.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">前端开发基础总结HTML、CSS、Javascript</div></div><div class="info-2"><div class="info-item-1">一.Html网页1. HTML标签HTML 是用来描述网页的一种语言。HTML 标签是由尖括号包围的关键词，比如  HTML 标签通常是成对出现的，比如  和 。成对出现的标签中，第一个标签称为开始标签，第二个标签称为结束标签（闭合标签）。HTML 中的不同标签具有不同的含义，学习 HTML 其实就是学习各个标签的含义，根据实际场景的需要，选择合适的标签，从而制作出精美的网页。HTML中每个标签都有自己的语义（含义），例如标签代表段落，标签代表加粗。根据标签的不同，浏览器会使用不同的方式展示标签中的内容。一般情况下，一个 HTML 标签由开始标签、属性、内容和结束标签组成，标签的名称不区分大小写，但大多数属性的值需要区分大小写，如下所示： 12345	  属性	   ↓&lt;div class=&quot;foo&quot;&gt;C语言中文网&lt;/div&gt; ↑            ↑     ↑开始标签        内容   结束标签 除了 class 属性外，开始标签中还可以包含其它属性信息，比如 id、title 等属性，当使用浏览器打开我们编写的...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-%E9%9F%B3%E9%A2%91%E6%8A%80%E6%9C%AF%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">一. 音频技术基础概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%A3%B0%E9%9F%B3%E7%9A%84%E7%89%A9%E7%90%86%E6%80%A7%E8%B4%A8"><span class="toc-number">1.0.1.</span> <span class="toc-text">1. 声音的物理性质</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%95%B0%E5%AD%97%E9%9F%B3%E9%A2%91"><span class="toc-number">1.0.2.</span> <span class="toc-text">2. 数字音频</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%87%87%E6%A0%B7"><span class="toc-number">1.0.3.</span> <span class="toc-text">3. 采样</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%87%8F%E5%8C%96"><span class="toc-number">1.0.4.</span> <span class="toc-text">4. 量化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E9%9F%B3%E9%A2%91%E7%BC%96%E7%A0%81"><span class="toc-number">1.0.5.</span> <span class="toc-text">5. 音频编码</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A3%B0%E9%81%93"><span class="toc-number">1.0.5.0.1.</span> <span class="toc-text">声道</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AF%94%E7%89%B9%E7%8E%87%EF%BC%88BitRate%EF%BC%89"><span class="toc-number">1.0.5.0.2.</span> <span class="toc-text">比特率（BitRate）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E9%87%87%E6%A0%B7%E7%8E%87%E3%80%81%E9%87%87%E6%A0%B7%E4%BD%8D%E6%95%B0%E3%80%81%E6%AF%94%E7%89%B9%E7%8E%87%E4%B8%89%E8%80%85%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.0.6.</span> <span class="toc-text">6. 采样率、采样位数、比特率三者之间的关系</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-%E8%A7%86%E9%A2%91%E6%8A%80%E6%9C%AF%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="toc-number">2.</span> <span class="toc-text">二. 视频技术基础概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%9B%BE%E5%83%8F%E7%9A%84%E7%89%A9%E7%90%86%E7%8E%B0%E8%B1%A1"><span class="toc-number">2.0.1.</span> <span class="toc-text">1.图像的物理现象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%9B%BE%E5%83%8F%E7%9A%84%E6%95%B0%E5%80%BC%E8%A1%A8%E7%A4%BA"><span class="toc-number">2.0.2.</span> <span class="toc-text">2.图像的数值表示</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#RGB%E8%A1%A8%E7%A4%BA%E6%96%B9%E5%BC%8F"><span class="toc-number">2.0.2.0.1.</span> <span class="toc-text">RGB表示方式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#YUV%E8%A1%A8%E7%A4%BA%E6%96%B9%E5%BC%8F"><span class="toc-number">2.0.2.0.2.</span> <span class="toc-text">YUV表示方式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E7%9A%84%E5%8E%8B%E7%BC%A9%E6%A0%BC%E5%BC%8FJPEG-%E3%80%81PNG-%E5%92%8C-BMP-%E7%AD%89"><span class="toc-number">2.0.2.0.3.</span> <span class="toc-text">图像的压缩格式JPEG 、PNG 和 BMP 等</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%A7%86%E9%A2%91%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5"><span class="toc-number">2.0.3.</span> <span class="toc-text">3.视频相关概念</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%A7-Frame"><span class="toc-number">2.0.3.0.1.</span> <span class="toc-text">帧 Frame</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%A7%E7%8E%87"><span class="toc-number">2.0.3.0.2.</span> <span class="toc-text">帧率</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%B7%E6%96%B0%E7%8E%87"><span class="toc-number">2.0.3.0.3.</span> <span class="toc-text">刷新率</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%86%E8%BE%A8%E7%8E%87"><span class="toc-number">2.0.3.0.4.</span> <span class="toc-text">分辨率</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A0%81%E7%8E%87"><span class="toc-number">2.0.3.0.5.</span> <span class="toc-text">码率</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81"><span class="toc-number">2.0.4.</span> <span class="toc-text">3.视频编码</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%AF%B9%E9%9F%B3%E8%A7%86%E9%A2%91%E8%BF%9B%E8%A1%8C%E7%BC%96%E7%A0%81%EF%BC%9F"><span class="toc-number">2.0.4.0.1.</span> <span class="toc-text">为什么要对音视频进行编码？</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F"><span class="toc-number">2.0.4.0.2.</span> <span class="toc-text">视频编码格式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#H-264"><span class="toc-number">2.0.4.0.3.</span> <span class="toc-text">H.264</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%B0%81%E8%A3%85"><span class="toc-number">3.</span> <span class="toc-text">三. 音视频封装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%B0%81%E8%A3%85%E6%A0%BC%E5%BC%8F"><span class="toc-number">3.0.1.</span> <span class="toc-text">1. 音视频封装格式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#AVI"><span class="toc-number">3.0.1.0.1.</span> <span class="toc-text">AVI</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#MP4"><span class="toc-number">3.0.1.0.2.</span> <span class="toc-text">MP4</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#FLV"><span class="toc-number">3.0.1.0.3.</span> <span class="toc-text">FLV</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#TS"><span class="toc-number">3.0.1.0.4.</span> <span class="toc-text">TS</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%9F%B3%E8%A7%86%E9%A2%91%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E4%B9%8B%E6%B5%81%E5%AA%92%E4%BD%93%E5%8D%8F%E8%AE%AE"><span class="toc-number">3.0.2.</span> <span class="toc-text">2. 音视频数据传输之流媒体协议</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#RTMP"><span class="toc-number">3.0.2.0.1.</span> <span class="toc-text">RTMP</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HLS"><span class="toc-number">3.0.2.0.2.</span> <span class="toc-text">HLS</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HTTP-FLV"><span class="toc-number">3.0.2.0.3.</span> <span class="toc-text">HTTP-FLV</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

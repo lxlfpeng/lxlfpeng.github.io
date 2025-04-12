@@ -1,0 +1,347 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>编程算法基础总结 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.算法的优劣判断算法 (Algorithm)，是对特定问题求解步骤的一种描述。解决一个问题往往有不止一种方法，算法也是如此。那么解决特定问题的多个算法之间如何衡量它们的优劣呢？好的程序设计无外乎两点，”快”和”省”。”快”指程序执行速度快，高效，”省”指占用更小的内存空间。这两点其实就对应**”时间复杂度”和“空间复杂度”**。通过这两点就能衡量多个算法之间的优劣。 1.时间复杂度一个算法执行所">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编程算法基础总结">
+<meta property="og:url" content="https://lxlfpeng.github.io/2015/03/25/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.算法的优劣判断算法 (Algorithm)，是对特定问题求解步骤的一种描述。解决一个问题往往有不止一种方法，算法也是如此。那么解决特定问题的多个算法之间如何衡量它们的优劣呢？好的程序设计无外乎两点，”快”和”省”。”快”指程序执行速度快，高效，”省”指占用更小的内存空间。这两点其实就对应**”时间复杂度”和“空间复杂度”**。通过这两点就能衡量多个算法之间的优劣。 1.时间复杂度一个算法执行所">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2015-03-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.855Z">
+<meta property="article:author" content="peng">
+<meta property="article:tag" content="编程基础">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="Java基础">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2015/03/25/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '编程算法基础总结',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">编程算法基础总结</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">编程算法基础总结</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2015-03-24T16:00:00.000Z" title="发表于 2015-03-25 00:00:00">2015-03-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">编程基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">5.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>18分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-算法的优劣判断"><a href="#一-算法的优劣判断" class="headerlink" title="一.算法的优劣判断"></a>一.算法的优劣判断</h1><p>算法 (Algorithm)，是对特定问题求解步骤的一种描述。<code>解决一个问题往往有不止一种方法，算法也是如此</code>。那么解决特定问题的多个算法之间如何衡量它们的优劣呢？好的程序设计无外乎两点，”快”和”省”。”快”指程序执行速度快，高效，”省”指占用更小的内存空间。这两点其实就对应**”时间复杂度”<strong>和</strong>“空间复杂度”**。通过这两点就能衡量多个算法之间的优劣。</p>
+<h3 id="1-时间复杂度"><a href="#1-时间复杂度" class="headerlink" title="1.时间复杂度"></a>1.时间复杂度</h3><p>一个算法执行所花费的时间，需上机运行测试才能知道。但我们不可能对每个算法都上机测试，所以只需知道哪个算法花费的时间多，哪个算法花费的时间少就可以了。因为<code>一个算法花费的时间与算法中的基本操作语句的执行次数成正比例</code>，所以哪个算法中语句执行次数多，它花费时间就多。**<code>一个算法中的语句执行次数称为语句频度，记为T(n)</code><strong>。<br>n称为问题的规模，当n不断变化时，时间频度T(n)也会不断变化。为了知道变化时呈现什么规律，所以引入</strong>时间复杂度**。一般情况下，算法中的基本操作语句的重复执行次数是问题规模n的某个函数，用T(n)表示，若有某个辅助函数f(n)，使得当n趋近于无穷大时，T(n) &#x2F; f(n) 的极限值为不等于零的常数， 则称f(n)是T(n)的同数量级函数。记作 T(n)&#x3D;O( f(n) )，称O( f(n) )  为算法的渐进时间复杂度，简称时间复杂度。记为O(…)，也称为大O表示法；</p>
+<h3 id="2-空间复杂度"><a href="#2-空间复杂度" class="headerlink" title="2.空间复杂度"></a>2.空间复杂度</h3><p>算法的空间复杂度是指算法需要消耗的空间资源。 其计算和表示方法与时间复杂度类似，一般都用复杂度的渐近性来表示。</p>
+<blockquote>
+<p>注：同一个问题可以用不同的算法解决，而一个算法的优劣将影响到算法乃至程序的效率。算法分析的目的在于为特定的问题选择合适算法。一个算法的评价主要从<code>时间复杂度</code>和<code>空间复杂度</code>来考虑。但是算法在时间的高效性和空间的高效性之间通常是矛盾的。所以一般只会取一个平衡点。通常我们假设程序运行在足够大的内存空间中，所以研究更多的是算法的时间复杂度。</p>
+</blockquote>
+<h1 id="二-大O表示法对比算法的优劣"><a href="#二-大O表示法对比算法的优劣" class="headerlink" title="二.大O表示法对比算法的优劣"></a>二.大O表示法对比算法的优劣</h1><h3 id="1-BigO表示法的概念"><a href="#1-BigO表示法的概念" class="headerlink" title="1.BigO表示法的概念"></a>1.BigO表示法的概念</h3><p>上文说到在实际操作上，精确计算公式是不可能被统计计算出来的，因为不同的语句，不同的操作，耗费的时间也是不一样。所以，在实际应用中，不需要精确计算，只需要一个公式，来表达 时间花费和数据集大小的渐近关系。所以，在描述算法的时候，一般采用 大O(Big-O notation)表示，又称为渐进符号，时间复杂度，又称”渐进式时间复杂度”，表示代码执行时间与数据规模之间的增长关系。<br><strong>“大O表示法”<strong>表示程序的<code>执行时间或占用空间</code>随数据规模的</strong>增长趋势</strong>。被用来描述一个算法的性能或复杂度。大O表示法可以用来描述一个算法的<code>最差情况</code>，或者一个算法执行的耗时或占用空间（例如内存或磁盘占用）。<br><img src="/images/c4401702c4f058dcf6ff55bcb31c4d9b.webp"><br>大O表示法表示时间复杂度，注意它是某一个算法的时间复杂度。大O表示只是说有上界，由定义如果 f(n)&#x3D;O(n)，那显然成立 f(n)&#x3D;O(n^2)，它给你一个上界，但并不是上确界。一个问题本身也有它的复杂度，如果某个算法的复杂度到达了这个问题复杂度的下界，那就称这样的算法是<strong>最佳算法</strong>。</p>
+<h3 id="2-BigO表示法的特点"><a href="#2-BigO表示法的特点" class="headerlink" title="2.BigO表示法的特点"></a>2.BigO表示法的特点</h3><p><code>大O符号是关于一个算法的最坏情况的</code>。例如:你要从一个大小为 100 的数字数组中找出一个数值等于 10 的元素，我们可以从写一个循环，从头到尾对数据进行扫描，这个复杂度就是 O(n)，这里 n 等于 100， 实际上有可能第 1 次就找到了，也有可能是第 100 次才找到，但是大 O 表示法考虑的是最坏的情况，也就是一个算法理论上要执行多久才能覆盖所有的情况。</p>
+<h3 id="3-BigO表示法用法"><a href="#3-BigO表示法用法" class="headerlink" title="3.BigO表示法用法"></a>3.BigO表示法用法</h3><p>假设一个算法的时间复杂度是 O(n)，n 在这里代表的意思就是数据的个数。举个例子，如果你的代码用一个循环遍历 100 个元素，那么这个算法就是 O(n)，n 为 100，所以这里的算法在执行时就要做 100 次工作。</p>
+<blockquote>
+<p>随着问题规模n的不断增大，上述时间复杂度不断增大，算法的执行效率越低。</p>
+</blockquote>
+<h1 id="三-常见的大O表示法"><a href="#三-常见的大O表示法" class="headerlink" title="三.常见的大O表示法"></a>三.常见的大O表示法</h1><h3 id="1-常见的大O表示法介绍"><a href="#1-常见的大O表示法介绍" class="headerlink" title="1.常见的大O表示法介绍"></a>1.常见的大O表示法介绍</h3><ul>
+<li>常数阶O(1)</li>
+<li>对数阶O(log2n)</li>
+<li>线性阶O(n)</li>
+<li>线性对数阶O(nlog2n)</li>
+<li>平方阶O(n2)</li>
+<li>立方阶O(n3)</li>
+<li>k次方阶O(nk)</li>
+<li>指数阶O(2n)</li>
+</ul>
+<h4 id="O-1-常数级"><a href="#O-1-常数级" class="headerlink" title="O(1) 常数级"></a>O(1) 常数级</h4><p>不论输入数据量有多大，这个算法的运行时间总是一样的。该算法的执行时间（或执行时占用空间）总是为一个常量，不论输入的数据集是大是小。也就是说代码片段执行时间不随数据规模n的增加而增加，即使执行次数非常大，只要与数据规模无关，都算作常量阶。<br><strong>例如判断集合中第一个元素是不是为空：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">boolean isFirstElementEmpty(List&lt;String&gt; elements)&#123;</span><br><span class="line">  return elements.get(0).isEmpty();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>应用:</strong> </p>
+<ol>
+<li>基于索引取出数组中对应的元素。</li>
+<li>哈希算法就是典型的 O ( 1 ）时间复杂度，无论数据规模多大，都可以在一次计算后找到目标（不考虑冲突的话）。</li>
+</ol>
+<h4 id="O-log-n-对数级"><a href="#O-log-n-对数级" class="headerlink" title="O(log n) 对数级"></a>O(log n) 对数级</h4><p>这种算法每次循环时会把需要处理的数据量减半。如果你有 100 个元素，则只需要七步就可以找到答案。1000 个元素只要十步。100,0000 元素只要二十步。即便数据量很大这种算法也非常快。<br><strong>例如：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public int binarySearch(int[] arr, int value) &#123;</span><br><span class="line">  int start = 0, end = arr.length - 1;</span><br><span class="line">  while (start &lt;= end) &#123;</span><br><span class="line">    int middle = (start + end) / 2;</span><br><span class="line">    if (value == arr[middle]) &#123;</span><br><span class="line">      return middle;</span><br><span class="line">    &#125;</span><br><span class="line">    if (value &gt; arr[middle]) &#123;</span><br><span class="line">      start = middle + 1;</span><br><span class="line">    &#125;</span><br><span class="line">    if (value &lt; arr[middle]) &#123;</span><br><span class="line">      end = middle - 1;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  return -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>应用：二分查找就是 O ( logn ）的算法，每找一次排除一半的可能， 256 个数据中查找只要找 8 次就可以找到目标。</strong></p>
+<h4 id="O-n-线性级"><a href="#O-n-线性级" class="headerlink" title="O(n) 线性级"></a>O(n) 线性级</h4><p>O(n),算法的执行时间呈线性关系。如果你有 100 个元素，这种算法就要做 100 次工作。数据量翻倍那么运行时间也翻倍。<br><strong>例如在集合中找到某一个元素：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public boolean ContainsValue(List&lt;String&gt; elements, String value) &#123;</span><br><span class="line">  int n = elements.size();</span><br><span class="line">  for (int i = 0; i &lt; n; i++) &#123;</span><br><span class="line">    if (elements.get(i).equals(value)) &#123;</span><br><span class="line">        return true;</span><br><span class="line">     &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>花费的时间和输入的集合大小有关(集合越大理论上花费的时间就越长)，呈线性关系。寻找item要把array遍历一次。<br><strong>应用:遍历查找</strong></p>
+<h4 id="O-n-2-二次方级"><a href="#O-n-2-二次方级" class="headerlink" title="O(n^2) 二次方级"></a>O(n^2) 二次方级</h4><p>O(n^2 )，如果你有 100 个元素，这种算法需要做 100^2 &#x3D; 10000 次工作。数据量 x 2 会导致运行时间 x 4 (因为 2 的 2 次方等于 4)。例子：循环套循环的算法，比如插入排序。O(n2)表示算法的复杂度与数据集大小的平方成正比，一般的循环嵌套就是这种，随着嵌套的层级增加可能是O(n3)、O(n4)等。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">boolean ContainsDuplicates(List&lt;String&gt; elements) &#123;</span><br><span class="line">  for (int i = 0; i &lt; elements.size(); i++) &#123;</span><br><span class="line">    for (int j = 0; j &lt; elements.size(); j++) &#123;</span><br><span class="line">      if (i == j) continue;</span><br><span class="line">      if (elements.get(i).equals(elements.get(j))) return true;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>应用：选择排序</strong></p>
+<h4 id="O-2-n-指数级"><a href="#O-2-n-指数级" class="headerlink" title="O(2^n)指数级"></a>O(2^n)指数级</h4><p>表示算法的复杂度与数据集大小成指数增长。<br><strong>应用：递归</strong></p>
+<h3 id="1-常见的大O表示法总结"><a href="#1-常见的大O表示法总结" class="headerlink" title="1.常见的大O表示法总结"></a>1.常见的大O表示法总结</h3><table>
+<thead>
+<tr>
+<th>Big-O</th>
+<th>名字</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>O(1)</td>
+<td>常数级</td>
+<td>速度最快，不论输入数据量有多大，这个算法的运行时间总是一样的。例如基于索引取出数组中对应的元素。</td>
+</tr>
+<tr>
+<td>O(log n)</td>
+<td>对数级</td>
+<td>速度快，这种算法每次循环时会把需要处理的数据量减半。如果你有 100 个元素，则只需要七步就可以找到答案。1000 个元素只要十步。100,0000 元素只要二十步。即便数据量很大这种算法也非常快。例如二分查找。</td>
+</tr>
+<tr>
+<td>O(n)</td>
+<td>线性级</td>
+<td>速度比较快，如果你有 100 个元素，这种算法就要做 100 次工作。数据量翻倍那么运行时间也翻倍。例如线性查找。</td>
+</tr>
+<tr>
+<td>O(n log n)</td>
+<td>线性对数级</td>
+<td>速度一般，比线性级差了一些。例如最快的通用排序算法。</td>
+</tr>
+<tr>
+<td>O(n^2)</td>
+<td>二次方级</td>
+<td>速度有点慢，如果你有 100 个元素，这种算法需要做 100^2 &#x3D; 10000 次工作。数据量 x 2 会导致运行时间 x 4 (因为 2 的 2 次方等于 4)。例如循环套循环的算法，比如插入排序。</td>
+</tr>
+<tr>
+<td>O(n^3)</td>
+<td>三次方级</td>
+<td>速度有很慢，如果你有 100 个元素，那么这种算法就要做 100^3 &#x3D; 100,0000 次工作。数据量 x 2 会导致运行时间 x 8。例如矩阵乘法。</td>
+</tr>
+<tr>
+<td>O(2^n)</td>
+<td>指数级</td>
+<td>速度有特别慢，这种算法你要想方设法避免，但有时候你就是没得选。加一点点数据就会把运行时间成倍的加长。例如旅行商问题。</td>
+</tr>
+<tr>
+<td>O(n!)</td>
+<td>阶乘级</td>
+<td>速度有最慢！</td>
+</tr>
+</tbody></table>
+<ul>
+<li>大部分情况下用直觉就可以知道一个算法的大 O 表示法。比如说，如果你的代码用一个循环遍历你输入的每个元素，那么这个算法就是 O(n)。如果是循环套循环，那就是 O(n^2)。如果 3 个循环套在一起就是 O(n^3)，以此类推。</li>
+<li>大O表示法只是一种估算，仅仅在比较两种算法哪种更好的时候才有点用。当数据量大的时候才有用。归根结底，还是要实际测试之后才能得出结论。而且如果数据量相对较小，哪怕算法比较慢，在实际使用也不会造成太大的问题。举个例子，插入排序(Insertion Sort)的最糟情况运行时间是 O(n^2)。 理论上来说它的运行时间比归并排序(Merge Sort)要慢一些。归并排序是 O(n log n)。但对于小数据量，插入排序实际上更快一些，特别是那些已经有一部分数据是排序好的数组。</li>
+</ul>
+<h1 id="四-常见的排序算法"><a href="#四-常见的排序算法" class="headerlink" title="四.常见的排序算法"></a>四.常见的排序算法</h1><p>常见的排序方式有：<code>冒泡排序、选择排序、插入排序、快速排序</code>。</p>
+<h3 id="1-冒泡排序算法"><a href="#1-冒泡排序算法" class="headerlink" title="1.冒泡排序算法"></a>1.冒泡排序算法</h3><p><strong>特点：效率低，实现简单</strong><br>冒泡排序是最简单的排序之一了，其大体思想就是通过与相邻元素的比较和交换来把小的数交换到最前面。这个过程类似于水泡向上升一样，因此而得名。举个栗子，对8, 5, 3, 2, 4这个无序序列进行冒泡排序。首先从后向前冒泡，8和5比较，把5交换到前面，序列变成5, 8, 3, 2, 4。再使用8和3比较再交换，同理变成5, 3, 8, 2, 4。按照这样的规则，比较完成以后序列变成了5, 3,  2, 4, 8。总共冒泡次数为4次（无需与集合中自身进行比较，所以要少比较一次）。然后用目前第一个元素(5)进行冒泡操作，同理第二次比较完成以后的序列变成了3, 2, 4, 5, 8。总共冒泡次数为3次(除去自身，以及上次比较过的元素8)，按照规则对剩下的序列依次冒泡就会得到一个有序序列。冒泡排序的时间复杂度为O(n^2)。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line"> * 冒泡排序</span><br><span class="line"> * 升序（比较相邻的元素。如果前一个值比后一个值大，则交换两个元素的位置）</span><br><span class="line"> * 对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对。通过这样操作，最后的元素应该会是最大的值。</span><br><span class="line"> * 针对所有的元素重复以上的步骤，除了上一次操作的最后一个（因为上一次排序的已经判断过比本次元素的值大）。</span><br><span class="line"> * 持续每次对越来越少的元素重复上面的步骤，直到没有任何一对数字需要比较。</span><br><span class="line"> * @param array 需要排序的整型数组</span><br><span class="line"> */</span><br><span class="line">private static int[] bubbleSort(int[] array) &#123;</span><br><span class="line">    if (array.length == 0) &#123;</span><br><span class="line">        return array;</span><br><span class="line">    &#125;</span><br><span class="line">    for (int i = 0; i &lt; array.length; i++) &#123;</span><br><span class="line">        //每一个元素都不用与自身进行比较所以会减少一次比较次数，要进行-1的操作。</span><br><span class="line">        //每排一次序，数组最后的元素都会由大到小排列。所以随着排序的次数增加，比较的次数会越来越少。</span><br><span class="line">        // 直到没有任何一对数字需要比较。此时排序完成</span><br><span class="line">        for (int j = 0; j &lt; array.length - 1 - i; j++) &#123;</span><br><span class="line">            if (array[j + 1] &lt; array[j]) &#123;</span><br><span class="line">                // 升序（比较相邻的元素。如果前一个值比后一个值大，则交换两个元素的位置）</span><br><span class="line">                int temp = array[j + 1];</span><br><span class="line">                array[j + 1] = array[j];</span><br><span class="line">                array[j] = temp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return array;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-选择排序算法"><a href="#2-选择排序算法" class="headerlink" title="2.选择排序算法"></a>2.选择排序算法</h3><p><strong>特点：效率低，容易实现。</strong><br>选择排序的思想其实和冒泡排序有点类似，都是在一次排序后把最小的元素放到最前面。但是过程不同，冒泡排序是通过相邻的比较和交换。而选择排序是通过对整体的选择。举个栗子，还是对8, 5, 3, 2, 4这个无序序列进行简单选择排序，第一次选择8以外的最小数来和8进行交换，第一次排序后就变成了2, 5, 3, 8, 4。然后在选择5以外的集合中的最小数来和5进行交换，第二次排序以后就变成了2, 3, 5, 8, 4。同理对剩下的序列多次进行选择和交换，最终就会得到一个有序序列。其实选择排序可以看成冒泡排序的优化，因为其目的相同，只是选择排序只有在确定了最小数的前提下才进行交换，大大减少了交换的次数。选择排序的时间复杂度为O(n^2)。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 选择排序算法</span><br><span class="line"> * 在未排序序列中找到最小元素，存放到排序序列的起始位置</span><br><span class="line"> * 再从剩余未排序元素中继续寻找最小元素，然后放到排序序列末尾。</span><br><span class="line"> * 以此类推，直到所有元素均排序完毕。</span><br><span class="line"> */</span><br><span class="line">public static int[] selectionSort(int[] arr) &#123;</span><br><span class="line">    //选择</span><br><span class="line">    for (int i = 0; i &lt; arr.length; i++) &#123;</span><br><span class="line">        int min = arr[i]; //默认第一个是最小的。</span><br><span class="line">        int index = i;  //记录最小的下标</span><br><span class="line">        //不用与自身比较所有要做+1操作</span><br><span class="line">        for (int j = i + 1; j &lt; arr.length; j++) &#123;</span><br><span class="line">            //通过与数组中的的数据进行比较得出，最小值和下标</span><br><span class="line">            if (min &gt; arr[j]) &#123;</span><br><span class="line">                min = arr[j];</span><br><span class="line">                index = j;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        //然后将最小值与本次循环的，开始值交换</span><br><span class="line">        int temp = arr[i];</span><br><span class="line">        arr[i] = min;</span><br><span class="line">        arr[index] = temp;</span><br><span class="line">    &#125;</span><br><span class="line">    return arr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-插入排序算法"><a href="#3-插入排序算法" class="headerlink" title="3.插入排序算法"></a>3.插入排序算法</h3><p><strong>特点：效率低，容易实现。</strong><br>插入排序不是通过交换位置而是通过比较找到合适的位置插入元素来达到排序的目的的。举个栗子，对8, 5, 3, 2, 4这个无序序列进行简单插入排序。首先假设第一个数的位置时正确的，然后5要插到8前面，把8后移一位，变成5, 8, 3, 2, 4。注意在插入一个数的时候要保证这个数前面的数已经有序。简单插入排序的时间复杂度也是O(n^2)。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 插入排序</span><br><span class="line">public static int[] insertSort(int[] arr) &#123;</span><br><span class="line">    for (int i = 1; i &lt; arr.length; i++) &#123;</span><br><span class="line">        // j表示当前元素的位置，将其和左边的元素比较，若当前元素小与左边的元素，就进行位置交换，也就相当于插入左边.</span><br><span class="line">        // 这样当前元素位于j-1处，j--来更新当前元素,j一直左移不能越界，因此应该大于0</span><br><span class="line">        for (int j = i; j &gt; 0 &amp;&amp; arr[j] &lt; arr[j - 1]; j--) &#123;</span><br><span class="line">            int temp = arr[j];        // 元素交换</span><br><span class="line">            arr[j] = arr[j - 1];</span><br><span class="line">            arr[j - 1] = temp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return arr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-快速排序算法"><a href="#4-快速排序算法" class="headerlink" title="4.快速排序算法"></a>4.快速排序算法</h3><p><strong>特点：高效</strong><br>从数列中挑出一个元素，称为 “基准”（pivot），重新排序数列，比基准值小的所有元素摆放在基准左面，比基准值大的所有元素摆在基准的右面。再在左面和右面的数列中挑出一个基准元素，再按照上面的步骤分成两个数列。如此不断递归地把小于基准值元素的子数列和大于基准值元素的子数列排序，直到子序列为一个元素为止。 快速排序是不稳定的，其时间平均时间复杂度是O(nlgn)。</p>
+<h1 id="五-常见的查找算法"><a href="#五-常见的查找算法" class="headerlink" title="五.常见的查找算法"></a>五.常见的查找算法</h1><p>查找(searching)是这样一个过程，即在某个项目组中寻找某一指定目标元素，或者确定该组中并不存在该目标元素。<br>常见的查找方式有：<code>顺序查找、二分法查找、插值查找</code>。</p>
+<h3 id="1-顺序查找算法"><a href="#1-顺序查找算法" class="headerlink" title="1.顺序查找算法"></a>1.顺序查找算法</h3><p>基本思想：顺序查找也称为线形查找，属于无序查找算法。从数据结构线形表的一端开始，顺序扫描，依次将扫描到的结点关键字与给定值k相比较，若相等则表示查找成功；若扫描结束仍没有找到关键字等于k的结点，表示查找失败。<br>顺序查找的时间复杂度为O(n)。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">/**顺序查找平均时间复杂度 O（n） </span><br><span class="line"> * @param searchKey 要查找的值 </span><br><span class="line"> * @param array 数组（从这个数组中查找） </span><br><span class="line"> * @return  查找结果（数组的下标位置） </span><br><span class="line"> */  </span><br><span class="line">public static int orderSearch(int searchKey,int[] array)&#123;  </span><br><span class="line">    if(array==null||array.length&lt;1)  </span><br><span class="line">        return -1;  </span><br><span class="line">    for(int i=0;i&lt;array.length;i++)&#123;  </span><br><span class="line">        if(array[i]==searchKey)&#123;  </span><br><span class="line">            return i;  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">    return -1;  </span><br><span class="line">      </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<h3 id="2-二分法查找算法"><a href="#2-二分法查找算法" class="headerlink" title="2.二分法查找算法"></a>2.二分法查找算法</h3><p>算法思想是将数列按有序化(递增或递减)排列，查找过程中采用跳跃式方式查找，即先以有序数列的中点位置为比较对象，如果要找的元素值小 于该中点元素，则将待查序列缩小为左半部分，否则为右半部分。通过一次比较，将查找区间缩小一半。 折半查找是一种高效的查找方法。它可以明显减少比较次数，提高查找效率。但是，折半查找的先决条件是查找表中的<strong>数据元素必须有序</strong>。<br>时间复杂度为 O(logN)</p>
+<blockquote>
+<p>　说明：元素必须是有序的，如果是无序的则要先进行排序操作。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">/** </span><br><span class="line"> * 二分查找又称折半查找，它是一种效率较高的查找方法。 【二分查找要求】：1.必须采用顺序存储结构 2.必须按关键字大小有序排列。 </span><br><span class="line"> *  </span><br><span class="line"> * @param array </span><br><span class="line"> *            有序数组 * </span><br><span class="line"> * @param searchKey </span><br><span class="line"> *            查找元素 * </span><br><span class="line"> * @return searchKey的数组下标，没找到返回-1 </span><br><span class="line"> */  </span><br><span class="line">public static int binarySearch(int[] array, int searchKey) &#123;  </span><br><span class="line">  </span><br><span class="line">    int low = 0;  </span><br><span class="line">    int high = array.length - 1;  </span><br><span class="line">    while (low &lt;= high) &#123;  </span><br><span class="line">        int middle = (low + high) / 2;  </span><br><span class="line">        if (searchKey == array[middle]) &#123;  </span><br><span class="line">            return middle;  </span><br><span class="line">        &#125; else if (searchKey &lt; array[middle]) &#123;  </span><br><span class="line">            high = middle - 1;  </span><br><span class="line">        &#125; else &#123;  </span><br><span class="line">            low = middle + 1;  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">    return -1;  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+<p>由此看来，在处理已排序数据的查找工作时，二分查找法显然效率高于线性查找法。这种优势在数据量越大的时候越明显。比如说，现在有序数组中含有100万个数据，我们要求查找特定元素。如果使用线性查找法，我们必须对这一100万个数据依次考察以确定出目标元素是不是存在，最好的情况是目标元素在数组的第一个位置a[0]，这样只要一次就查找到目标元素了，最坏情况是目标元素在数组的最后a[999999]，这样我们就得比较100万次才能知道目标元素到底在不在，平均下来看的话也需要50万次比较。而如果使用二分查找法，我们大约做20次比较就可以知道目标元素是不是存在于数组中了。</p>
+<blockquote>
+<p>既然二分查找法效率这么高，比线性查找法好很多，那为什么还要线性查找法呢？其实，线性查找法也不是一无是处，它最大的优点就是简单，特别简单。还有一点就是二分法本身也有局限性，那就是二分法必须要求待查数组是已排序的，比如我给你一个很大的数组，但是这个数组并没有排序，那你如果想用二分查找法的话还必须先给数组排序，然后再查找。这样就会造成除查找之外的额外成本（排序）。</p>
+</blockquote>
+<h1 id="六-总结"><a href="#六-总结" class="headerlink" title="六.总结"></a>六.总结</h1><p><img src="/images/be5012fa4f4a62965b03f2b1c946b91e.webp"></p>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/b07c69a91535">查找算法的Java实现</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhishan/p/3217709.html">算法的时间复杂度(大O表示法)</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8c915179fd02">必须知道的八大种排序算法【java实现】</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/qianguyihao/p/4724692.html">数据结构Java实现</a></p>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/yjh_dream/article/details/81232851">十大经典排序算法最强总结</a><br><a target="_blank" rel="noopener" href="https://juejin.im/post/6844903790684930055">查找算法总结及其算法实现</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2015/03/25/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/">https://lxlfpeng.github.io/2015/03/25/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">编程基础</a><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95/">算法</a><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a><a class="post-meta__tags" href="/tags/Java%E5%9F%BA%E7%A1%80/">Java基础</a></div><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2015/10/31/Git%E5%91%BD%E4%BB%A4%E5%8F%8AGIt%20Flow%E5%B7%A5%E4%BD%9C%E6%B5%81/" title="Git命令及GIt Flow工作流"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Git命令及GIt Flow工作流</div></div><div class="info-2"><div class="info-item-1">一.Git简介Git是目前世界上最先进的分布式版本控制系统。它就没有中央服务器的，每个人的电脑就是一个完整的版本库，这样，工作的时候就不需要联网了，因为版本都是在自己的电脑上。完成开发以后再将各自的修改推送给对方，就可以互相看到对方的修改了(为了便于项目中的所有开发者分享代码，我们将代码存放远程 Git 仓库例如github)。与此对应的是SVN是集中式版本控制系统，版本库是集中放在中央服务器的，而干活的时候，用的都是自己的电脑，所以首先要从中央服务器哪里得到最新的版本，然后干活，干完后，需要把自己做完的活推送到中央服务器。而且集中式版本控制系统是必须联网才能工作。 二.Git文件状态 Untracked: 未跟踪, 此文件在文件夹中, 但并没有加入到git库, 不参与版本控制. 通过git add 状态变为Staged Unmodify: 文件已经入库, 未修改, 即版本库中的文件快照内容与文件夹中完全一致. 这种类型的文件有两种去处, 如果它被修改, 而变为Modified. 如果使用git rm移出版本库, 则成为Untracked文件 Modified: 文件已修改,...</div></div></div></a><a class="pagination-related" href="/2015/02/18/%E4%BB%80%E4%B9%88%E6%98%AF%E5%AD%90%E7%BD%91/" title="什么是子网?"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">什么是子网?</div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-%E7%AE%97%E6%B3%95%E7%9A%84%E4%BC%98%E5%8A%A3%E5%88%A4%E6%96%AD"><span class="toc-number">1.</span> <span class="toc-text">一.算法的优劣判断</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="toc-number">1.0.1.</span> <span class="toc-text">1.时间复杂度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="toc-number">1.0.2.</span> <span class="toc-text">2.空间复杂度</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-%E5%A4%A7O%E8%A1%A8%E7%A4%BA%E6%B3%95%E5%AF%B9%E6%AF%94%E7%AE%97%E6%B3%95%E7%9A%84%E4%BC%98%E5%8A%A3"><span class="toc-number">2.</span> <span class="toc-text">二.大O表示法对比算法的优劣</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-BigO%E8%A1%A8%E7%A4%BA%E6%B3%95%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">2.0.1.</span> <span class="toc-text">1.BigO表示法的概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-BigO%E8%A1%A8%E7%A4%BA%E6%B3%95%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-number">2.0.2.</span> <span class="toc-text">2.BigO表示法的特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-BigO%E8%A1%A8%E7%A4%BA%E6%B3%95%E7%94%A8%E6%B3%95"><span class="toc-number">2.0.3.</span> <span class="toc-text">3.BigO表示法用法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-%E5%B8%B8%E8%A7%81%E7%9A%84%E5%A4%A7O%E8%A1%A8%E7%A4%BA%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">三.常见的大O表示法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%B8%B8%E8%A7%81%E7%9A%84%E5%A4%A7O%E8%A1%A8%E7%A4%BA%E6%B3%95%E4%BB%8B%E7%BB%8D"><span class="toc-number">3.0.1.</span> <span class="toc-text">1.常见的大O表示法介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#O-1-%E5%B8%B8%E6%95%B0%E7%BA%A7"><span class="toc-number">3.0.1.1.</span> <span class="toc-text">O(1) 常数级</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#O-log-n-%E5%AF%B9%E6%95%B0%E7%BA%A7"><span class="toc-number">3.0.1.2.</span> <span class="toc-text">O(log n) 对数级</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#O-n-%E7%BA%BF%E6%80%A7%E7%BA%A7"><span class="toc-number">3.0.1.3.</span> <span class="toc-text">O(n) 线性级</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#O-n-2-%E4%BA%8C%E6%AC%A1%E6%96%B9%E7%BA%A7"><span class="toc-number">3.0.1.4.</span> <span class="toc-text">O(n^2) 二次方级</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#O-2-n-%E6%8C%87%E6%95%B0%E7%BA%A7"><span class="toc-number">3.0.1.5.</span> <span class="toc-text">O(2^n)指数级</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%B8%B8%E8%A7%81%E7%9A%84%E5%A4%A7O%E8%A1%A8%E7%A4%BA%E6%B3%95%E6%80%BB%E7%BB%93"><span class="toc-number">3.0.2.</span> <span class="toc-text">1.常见的大O表示法总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-%E5%B8%B8%E8%A7%81%E7%9A%84%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">四.常见的排序算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95"><span class="toc-number">4.0.1.</span> <span class="toc-text">1.冒泡排序算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95"><span class="toc-number">4.0.2.</span> <span class="toc-text">2.选择排序算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95"><span class="toc-number">4.0.3.</span> <span class="toc-text">3.插入排序算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95"><span class="toc-number">4.0.4.</span> <span class="toc-text">4.快速排序算法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94-%E5%B8%B8%E8%A7%81%E7%9A%84%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95"><span class="toc-number">5.</span> <span class="toc-text">五.常见的查找算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%A1%BA%E5%BA%8F%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95"><span class="toc-number">5.0.1.</span> <span class="toc-text">1.顺序查找算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%BA%8C%E5%88%86%E6%B3%95%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95"><span class="toc-number">5.0.2.</span> <span class="toc-text">2.二分法查找算法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD-%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">六.总结</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

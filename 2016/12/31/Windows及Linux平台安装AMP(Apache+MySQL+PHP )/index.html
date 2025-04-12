@@ -1,0 +1,341 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Windows及Linux平台安装AMP(Apache+MySQL+PHP ) | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一. linux平台安装AMP安装apache1. 查看是否安装了apache服务器(apache服务的软件包名称叫做httpd)。1231、可以通过 apachectl -v 或者httpd -v 查看apache是否安装，如果安装了的话会显示版本号；2、如果通过rpm包安装的话可以用  rpm -q  httpd 查看，如果安装的的话会显示包的名称；  2. 通过yum安装Apache服务程序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows及Linux平台安装AMP(Apache+MySQL+PHP )">
+<meta property="og:url" content="https://lxlfpeng.github.io/2016/12/31/Windows%E5%8F%8ALinux%E5%B9%B3%E5%8F%B0%E5%AE%89%E8%A3%85AMP(Apache+MySQL+PHP%20)/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一. linux平台安装AMP安装apache1. 查看是否安装了apache服务器(apache服务的软件包名称叫做httpd)。1231、可以通过 apachectl -v 或者httpd -v 查看apache是否安装，如果安装了的话会显示版本号；2、如果通过rpm包安装的话可以用  rpm -q  httpd 查看，如果安装的的话会显示包的名称；  2. 通过yum安装Apache服务程序">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2016-12-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.855Z">
+<meta property="article:author" content="peng">
+<meta property="article:tag" content="PHP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2016/12/31/Windows%E5%8F%8ALinux%E5%B9%B3%E5%8F%B0%E5%AE%89%E8%A3%85AMP(Apache+MySQL+PHP%20)/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Windows及Linux平台安装AMP(Apache+MySQL+PHP )',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Windows及Linux平台安装AMP(Apache+MySQL+PHP )</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Windows及Linux平台安装AMP(Apache+MySQL+PHP )</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2016-12-30T16:00:00.000Z" title="发表于 2016-12-31 00:00:00">2016-12-31</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Windows%E7%B3%BB%E7%BB%9F/">Windows系统</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-linux平台安装AMP"><a href="#一-linux平台安装AMP" class="headerlink" title="一. linux平台安装AMP"></a>一. linux平台安装AMP</h1><h3 id="安装apache"><a href="#安装apache" class="headerlink" title="安装apache"></a>安装apache</h3><h4 id="1-查看是否安装了apache服务器-apache服务的软件包名称叫做httpd-。"><a href="#1-查看是否安装了apache服务器-apache服务的软件包名称叫做httpd-。" class="headerlink" title="1. 查看是否安装了apache服务器(apache服务的软件包名称叫做httpd)。"></a>1. 查看是否安装了apache服务器(apache服务的软件包名称叫做httpd)。</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1、可以通过 apachectl -v 或者httpd -v 查看apache是否安装，如果安装了的话会显示版本号；</span><br><span class="line"></span><br><span class="line">2、如果通过rpm包安装的话可以用  rpm -q  httpd 查看，如果安装的的话会显示包的名称；</span><br></pre></td></tr></table></figure>
+<p><img src="/images/e35a00e423d1df755b743b645250b157.webp" alt="image.png"></p>
+<h4 id="2-通过yum安装Apache服务程序。"><a href="#2-通过yum安装Apache服务程序。" class="headerlink" title="2. 通过yum安装Apache服务程序。"></a>2. 通过yum安装Apache服务程序。</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install httpd -y</span><br></pre></td></tr></table></figure>
+<h4 id="3-安装完成后，启用并启动Apache服务。"><a href="#3-安装完成后，启用并启动Apache服务。" class="headerlink" title="3. 安装完成后，启用并启动Apache服务。"></a>3. 安装完成后，启用并启动Apache服务。</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable httpd</span><br><span class="line">sudo systemctl start httpd</span><br></pre></td></tr></table></figure>
+<h4 id="4-检查Apache服务的状态和版本。"><a href="#4-检查Apache服务的状态和版本。" class="headerlink" title="4. 检查Apache服务的状态和版本。"></a>4. 检查Apache服务的状态和版本。</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl status httpd</span><br></pre></td></tr></table></figure>
+<p><img src="/images/aabe2089e8923e139f84faf9e84492f9.webp" alt="image.png"></p>
+<h4 id="5-查看Apache监听的端口。"><a href="#5-查看Apache监听的端口。" class="headerlink" title="5. 查看Apache监听的端口。"></a>5. 查看Apache监听的端口。</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -an|grep :80</span><br></pre></td></tr></table></figure>
+<p><img src="/images/d8c85a0655bc6f8cce133d1e0ba6cdbe.webp" alt="image.png"><br>可以看到，80端口处于监听状态，说明服务已经启动，为使客户端能访问Apache服务器的80端口，要打开防火墙的TCP80端口。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -I INPUT -p tcp --dport 80 -j ACCEPT</span><br></pre></td></tr></table></figure>
+<h4 id="6-查看服务器是否启动成功。"><a href="#6-查看服务器是否启动成功。" class="headerlink" title="6. 查看服务器是否启动成功。"></a>6. 查看服务器是否启动成功。</h4><p>在地址栏里面输入地址如果看到是如下的就说明启动成功了.<br><img src="/images/aaf9587527038bde08f2777a3ef1085c.webp" alt="image.png"></p>
+<h5 id="将网站放到指定的文件夹-默认的是-var-www-html-然后通过浏览器访问"><a href="#将网站放到指定的文件夹-默认的是-var-www-html-然后通过浏览器访问" class="headerlink" title="将网站放到指定的文件夹(默认的是&#x2F;var&#x2F;www&#x2F;html&#x2F;)然后通过浏览器访问"></a>将网站放到指定的文件夹(默认的是&#x2F;var&#x2F;www&#x2F;html&#x2F;)然后通过浏览器访问</h5><h4 id="7-到-etc-httpd-conf-httpd-conf修改下面两行参数"><a href="#7-到-etc-httpd-conf-httpd-conf修改下面两行参数" class="headerlink" title="7. 到&#x2F;etc&#x2F;httpd&#x2F;conf&#x2F;httpd.conf修改下面两行参数"></a>7. 到&#x2F;etc&#x2F;httpd&#x2F;conf&#x2F;httpd.conf修改下面两行参数</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DocumentRoot &quot;/var/www/html&quot; //改为自己想要放的地方</span><br><span class="line"></span><br><span class="line">&lt;Directory &quot;/var/www/html&quot;&gt; 同上</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>若在该目录下放一个html文件，在浏览器中输入</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=http://ip">http://ip</a>地址(或者域名):80&#x2F;文件名</p>
+</blockquote>
+<h3 id="安装PHP"><a href="#安装PHP" class="headerlink" title="安装PHP"></a>安装PHP</h3><h4 id="1-安装php"><a href="#1-安装php" class="headerlink" title="1. 安装php"></a>1. 安装php</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install php</span><br></pre></td></tr></table></figure>
+<h4 id="2-最后测试一下PHP是否成功安装"><a href="#2-最后测试一下PHP是否成功安装" class="headerlink" title="2. 最后测试一下PHP是否成功安装."></a>2. 最后测试一下PHP是否成功安装.</h4><p>在 &#x2F;var&#x2F;www&#x2F;html 目录下创建文件 info.php ,编辑其内容为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    phpinfo();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>重启Apache服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart httpd</span><br></pre></td></tr></table></figure>
+<p>浏览器访问刚刚创建的页面，如下图则为正常安装成功<br><img src="/images/df55503914b6e3232395572b8d70ebed.webp" alt="image.png"></p>
+<h3 id="安装mysql"><a href="#安装mysql" class="headerlink" title="安装mysql"></a>安装mysql</h3><h4 id="1-安装mysql"><a href="#1-安装mysql" class="headerlink" title="1. 安装mysql."></a>1. 安装mysql.</h4><p>查看是否安装mysql</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">whereis mysql：如果安装了mysql就会显示mysql安装的地址</span><br><span class="line"> mysql -V         :查看安装的mysql的版本</span><br></pre></td></tr></table></figure>
+<p>安装mysql</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm</span><br><span class="line">rpm -ivh mysql-community-release-el7-5.noarch.rpm</span><br><span class="line">yum install mysql-community-server</span><br></pre></td></tr></table></figure>
+<p>安装成功后重启mysql服务。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld restart</span><br></pre></td></tr></table></figure>
+<h4 id="2-进入mysql"><a href="#2-进入mysql" class="headerlink" title="2. 进入mysql."></a>2. 进入mysql.</h4><h5 id="2-1-密码明文"><a href="#2-1-密码明文" class="headerlink" title="2.1 密码明文"></a>2.1 密码明文</h5><p>语法：mysql -u用户名 -p用户密码<br>举例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p123456</span><br></pre></td></tr></table></figure>
+<h5 id="2-2-密码密文"><a href="#2-2-密码密文" class="headerlink" title="2.2 密码密文"></a>2.2 密码密文</h5><p>语法：mysql -u用户名 -p+回车，然后输入密码<br>举例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p</span><br></pre></td></tr></table></figure>
+<p><img src="/images/5ec8822431fe3b4113fcb69f67871887.webp" alt="image"></p>
+<h4 id="3-退出mysql"><a href="#3-退出mysql" class="headerlink" title="3. 退出mysql."></a>3. 退出mysql.</h4><p><img src="/images/5f7c5826eb4ddc6a4c8532338df681a6.webp" alt="image.png"></p>
+<h4 id="4-使用命令show-global-variables-like-‘port’-查看端口号"><a href="#4-使用命令show-global-variables-like-‘port’-查看端口号" class="headerlink" title="4. 使用命令show global variables like ‘port’;查看端口号"></a>4. 使用命令show global variables like ‘port’;查看端口号</h4><p><img src="/images/ef92206b3484645b714b19090fdf6cfb.webp" alt="image.png"></p>
+<h4 id="5-修改密码"><a href="#5-修改密码" class="headerlink" title="5. 修改密码"></a>5. 修改密码</h4><p>　　语法：mysql&gt; set password for 用户名@localhost &#x3D; password(‘新密码’);</p>
+<p>　　举例：mysql&gt;set password for root@localhost &#x3D; password(‘123456’);</p>
+<h4 id="6-常用操作（需登录）"><a href="#6-常用操作（需登录）" class="headerlink" title="6. 常用操作（需登录）"></a>6. 常用操作（需登录）</h4><ul>
+<li>显示数据库列表</li>
+</ul>
+<p>　　show databases;</p>
+<ul>
+<li>创建、删除数据库</li>
+</ul>
+<p>　　create database 数据库名;</p>
+<p>　　drop database 数据库名;</p>
+<ul>
+<li>显示库中的数据表</li>
+</ul>
+<p>　　use mysql;</p>
+<p>　　show tables;</p>
+<ul>
+<li>显示数据表结构</li>
+</ul>
+<p>　　describe 数据表名;</p>
+<h4 id="7-远程连接数据库"><a href="#7-远程连接数据库" class="headerlink" title="7. 远程连接数据库."></a>7. 远程连接数据库.</h4><p>把在所有数据库的所有表的所有权限赋值给位于所有IP地址的root用户。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; grant all privileges on *.* to root@&#x27;%&#x27;identified by &#x27;password&#x27;;</span><br></pre></td></tr></table></figure>
+<p>如果是新用户而不是root，则要先新建用户</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt;create user &#x27;username&#x27;@&#x27;%&#x27; identified by &#x27;password&#x27;;  </span><br></pre></td></tr></table></figure>
+<p>如果还是不行则:<br><strong>1.FirewallD防火墙开放3306端口</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=3306/tcp --permanent</span><br></pre></td></tr></table></figure>
+<p>命令含义：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--zone#作用域</span><br><span class="line"></span><br><span class="line">--add-port=3306/tcp#添加端口，格式为：端口/通讯协议</span><br><span class="line"></span><br><span class="line">--permanent#永久生效，没有此参数重启后失效</span><br></pre></td></tr></table></figure>
+<p>重启防火墙</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart firewalld.service</span><br></pre></td></tr></table></figure>
+
+<h1 id="二-window平台安装AMP"><a href="#二-window平台安装AMP" class="headerlink" title="二. window平台安装AMP"></a>二. window平台安装AMP</h1><h3 id="apache服务器"><a href="#apache服务器" class="headerlink" title="apache服务器."></a>apache服务器.</h3><h4 id="1-下载安装文件"><a href="#1-下载安装文件" class="headerlink" title="1. 下载安装文件."></a>1. 下载安装文件.</h4><p><a target="_blank" rel="noopener" href="https://www.apachelounge.com/download/">https://www.apachelounge.com/download/</a><br><a target="_blank" rel="noopener" href="https://home.apache.org/~steffenal/VC15/binaries/httpd-2.4.37-win64-VC15.zip">https://home.apache.org/~steffenal/VC15/binaries/httpd-2.4.37-win64-VC15.zip</a><br><img src="/images/ad7cb5139febca456551d0fbbda60be3.webp" alt="image.png"><br>将下载下来的压缩包解压到要安装的位置，解压即安装；<br><img src="/images/b5a9fb971244597777ba7e83ac0e7bd2.webp" alt="image.png"></p>
+<h4 id="2-配置-Apache-HTTP-Server"><a href="#2-配置-Apache-HTTP-Server" class="headerlink" title="2. 配置 Apache HTTP Server"></a>2. 配置 Apache HTTP Server</h4><p>打开 Apache24\conf 目录下的 httpd.conf，修改配置信息:<br>将文件目录地址修改为你的安装位置:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ServerRoot &quot;C:/Apache24&quot;</span><br></pre></td></tr></table></figure>
+<p><strong>目录斜杠的符号应该是&#x2F;</strong></p>
+<p>修改端口号:<br>默认的是80端口，但是多数情况下，80端口被占用，所以需要修改80端口。如果确定80端口未被占用则可以不修改，建议还是修改一下:<br><img src="/images/4634c813815bcbca956cc50175e2a66b.webp" alt="image.png"></p>
+<h4 id="3-启动Apache-HTTP-Server："><a href="#3-启动Apache-HTTP-Server：" class="headerlink" title="3. 启动Apache HTTP Server："></a>3. 启动Apache HTTP Server：</h4><ul>
+<li>打开dos窗口的第一种方法：快捷键 win + R 或者 在开始菜单输入 cmd </li>
+<li>打开dos窗口的第二种方法：在文件夹所在的地址栏输入 cmd 回车；</li>
+<li>打开dos窗口的第二种方法：在指定的文件下的下，按住shift按键不放单击鼠标的右键，选择 “在此处打开命令窗口”。</li>
+</ul>
+<h4 id="4-检测是否启动服务器"><a href="#4-检测是否启动服务器" class="headerlink" title="4. 检测是否启动服务器."></a>4. 检测是否启动服务器.</h4><p>然后打开浏览器在地址栏输入 <a target="_blank" rel="noopener" href="http://localhost:8081/">http://localhost:8081/</a> 就可以访问页面，页面如下：<br><img src="/images/a2d836c3f0de2cf3925270fdb283bcd6.webp" alt="image.png"></p>
+<h3 id="php的安装"><a href="#php的安装" class="headerlink" title="php的安装."></a>php的安装.</h3><h4 id="1-下载安装文件-1"><a href="#1-下载安装文件-1" class="headerlink" title="1. 下载安装文件:"></a>1. 下载安装文件:</h4><p><a target="_blank" rel="noopener" href="https://windows.php.net/download">https://windows.php.net/download</a><br><img src="/images/c3011f923d6f7105ee5ac1df46f1bff2.webp" alt="image.png"><br>下载完成之后将其解压到之前指定好的文件夹中.</p>
+<h4 id="2-配置php"><a href="#2-配置php" class="headerlink" title="2. 配置php:"></a>2. 配置php:</h4><p>然后，将目录下的php.ini-development文件重命名为php.ini.<br><img src="/images/b8f3f955969e44880b5844f51d498b36.webp" alt="image.png"><br>打开php.ini 进行如下修改:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">;extension_dir=&quot;ext&quot;</span><br></pre></td></tr></table></figure>
+<p>将其修改为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#去掉前面的分号，并且将地址更改为自己的安装位置</span><br><span class="line">extension_dir=&quot;E:/php-7.2.12-Win32-VC15-x64/ext&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">;extension=php_mysqli.dll  </span><br><span class="line">#将前面的;去掉，这样PHP便可以支持mysqli扩展</span><br></pre></td></tr></table></figure>
+<p>保存退出.</p>
+<h4 id="3-配置apache支持php"><a href="#3-配置apache支持php" class="headerlink" title="3. 配置apache支持php"></a>3. 配置apache支持php</h4><p>Apache安装好之后，先向httpd.conf文件中写入PHP支持模块。<br>打开httpd.conf文件.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DirectoryIndex index.html</span><br></pre></td></tr></table></figure>
+<p>将其修改为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">修改首页面文件类型支持</span><br><span class="line">DirectoryIndex index.html index.htm index.php</span><br></pre></td></tr></table></figure>
+<p>然后，在文件尾部添加下面的内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#让Apache支持PHP</span><br><span class="line">LoadModule php7_module &quot;D:/phpenvir/php7.1.1/php7apache2_4.dll&quot; </span><br><span class="line">#告诉Apache php.ini的位置</span><br><span class="line">PHPIniDir  &quot;D:/phpenvir/php7.1.1&quot;   </span><br><span class="line">AddType application/x-httpd-php .php .html .htm</span><br></pre></td></tr></table></figure>
+<p>写好之后保存文件。</p>
+<h3 id="mysql的安装"><a href="#mysql的安装" class="headerlink" title="mysql的安装."></a>mysql的安装.</h3><h4 id="1-下载官网地址"><a href="#1-下载官网地址" class="headerlink" title="1.下载官网地址"></a>1.下载<a target="_blank" rel="noopener" href="https://dev.mysql.com/downloads/mysql/">官网地址</a></h4><p><img src="/images/9f25eed7aac10afd4c1747226300cd1c.webp" alt="image.png"></p>
+<h4 id="2-下载完成，将文件解压到你想要安装的盘里。"><a href="#2-下载完成，将文件解压到你想要安装的盘里。" class="headerlink" title="2.下载完成，将文件解压到你想要安装的盘里。"></a>2.下载完成，将文件解压到你想要安装的盘里。</h4><h4 id="3-配置"><a href="#3-配置" class="headerlink" title="3.配置"></a>3.配置</h4><ul>
+<li><pre><code>在mysql的文件夹下创建一个名为data的空文件夹。
+</code></pre>
+</li>
+<li><pre><code>创建一个my.ini的文件，放在bin目录里面。
+</code></pre>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[mysql]</span><br><span class="line"># 设置mysql客户端默认字符集</span><br><span class="line">default-character-set=utf8 </span><br><span class="line">[mysqld]</span><br><span class="line">#设置3306端口</span><br><span class="line">port = 3306 </span><br><span class="line"># 设置mysql的安装目录</span><br><span class="line">basedir=E:/mysq</span><br><span class="line"># 设置mysql数据库的数据的存放目录</span><br><span class="line">datadir=E:/mysq/data</span><br><span class="line"># 允许最大连接数</span><br><span class="line">max_connections=200</span><br><span class="line"># 服务端使用的字符集默认为8比特编码的latin1字符集</span><br><span class="line">character-set-server=utf8</span><br><span class="line"># 创建新表时将使用的默认存储引擎</span><br><span class="line">default-storage-engine=INNODB</span><br></pre></td></tr></table></figure>
+<h4 id="4-启动mysql"><a href="#4-启动mysql" class="headerlink" title="4.启动mysql."></a>4.启动mysql.</h4><p>以管理员身份运行DOS窗口。进入到mysql的bin文件夹下：<br>接下来在dos窗口里面输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqld --initialize-insecure</span><br></pre></td></tr></table></figure>
+<p>再输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysqld -install        （如果说已经存在，可以使用sc delete mysql  或者 mysql -remove 将其删除）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>会显示Service successfully installed.<br> 最后输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net start mysql     #启动mysql服务</span><br></pre></td></tr></table></figure>
+<p><img src="/images/50b6fad237654af5007476911e724f18.webp" alt="image.png"><br>默认没有密码，直接进入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p</span><br></pre></td></tr></table></figure>
+<p>设置过密码则输入密码进入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqladmin -u root -p password</span><br></pre></td></tr></table></figure>
+<p>展示所有的数据:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show databases;</span><br></pre></td></tr></table></figure>
+<p>修改数据库密码:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER USER &quot;root&quot;@&quot;localhost&quot; IDENTIFIED  BY &quot;password&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>\c 可以退出当前行命令，<br>\q或者exit退出mysql命令行</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2016/12/31/Windows%E5%8F%8ALinux%E5%B9%B3%E5%8F%B0%E5%AE%89%E8%A3%85AMP(Apache+MySQL+PHP%20)/">https://lxlfpeng.github.io/2016/12/31/Windows%E5%8F%8ALinux%E5%B9%B3%E5%8F%B0%E5%AE%89%E8%A3%85AMP(Apache+MySQL+PHP%20)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/PHP/">PHP</a></div><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2017/01/18/Android%E9%A2%9C%E8%89%B2%E9%80%8F%E6%98%8E%E5%BA%A6/" title="Android颜色透明度"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Android颜色透明度</div></div><div class="info-2"><div class="info-item-1">十六进制颜色透明度表格   透明度 十六进制值    100% 全透明 00   99% 03   98% 05   97% 08   96% 0A   95% 0D   94% 0F   93% 12   92% 14   91% 17   90% 1A   89% 1C   88% 1F   87% 21   86% 24   85% 26   84% 29   83% 2B   82% 2E   81% 30   80% 33   79% 36   78% 38   77% 3B   76% 3D   75% 40   74% 42   73% 45   72% 47   71% 4A   70% 4D   69% 4F   68% 52   67% 54   66% 57   65% 59   64% 5C   63% 5E   62% 61   61% 63   60% 66   59% 69   57% 6B   56% 6E   56% 70   55% 73   54% 75   53% 78   52% 7A   51% 7D   50% ...</div></div></div></a><a class="pagination-related" href="/2016/12/22/Python%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/" title="Python语法总结"><img class="cover" src="/images/b84e6e02bfdc6e8abdd155bfb6a23c61.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Python语法总结</div></div><div class="info-2"><div class="info-item-1">一.python的基本数据类型。Python常见的数据类型:Number（数字）、String（字符串）、List（列表）、Tuple（元组）、Set（集合）、Dictionary（字典）。  type(xx)              #获取类型,返回值就是数据类型 isinstance(xx, yy )   #判断是否属于某一种类型,属于返回true,不属于返回false  1.Number（数字）Python3 支持** int、float、bool、complex（复数）**。 123&gt;&gt;&gt; a, b, c, d = 20, 5.5, True, 4 + 3j#定义多个变量&gt;&gt;&gt; print(type(a), type(b), type(c), type(d))#输出变量的类型&lt;class &#x27;int&#x27;&gt; &lt;class &#x27;float&#x27;&gt; &lt;class &#x27;bool&#x27;&gt; &lt;class...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-linux%E5%B9%B3%E5%8F%B0%E5%AE%89%E8%A3%85AMP"><span class="toc-number">1.</span> <span class="toc-text">一. linux平台安装AMP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85apache"><span class="toc-number">1.0.1.</span> <span class="toc-text">安装apache</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%9F%A5%E7%9C%8B%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E4%BA%86apache%E6%9C%8D%E5%8A%A1%E5%99%A8-apache%E6%9C%8D%E5%8A%A1%E7%9A%84%E8%BD%AF%E4%BB%B6%E5%8C%85%E5%90%8D%E7%A7%B0%E5%8F%AB%E5%81%9Ahttpd-%E3%80%82"><span class="toc-number">1.0.1.1.</span> <span class="toc-text">1. 查看是否安装了apache服务器(apache服务的软件包名称叫做httpd)。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E9%80%9A%E8%BF%87yum%E5%AE%89%E8%A3%85Apache%E6%9C%8D%E5%8A%A1%E7%A8%8B%E5%BA%8F%E3%80%82"><span class="toc-number">1.0.1.2.</span> <span class="toc-text">2. 通过yum安装Apache服务程序。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%AE%89%E8%A3%85%E5%AE%8C%E6%88%90%E5%90%8E%EF%BC%8C%E5%90%AF%E7%94%A8%E5%B9%B6%E5%90%AF%E5%8A%A8Apache%E6%9C%8D%E5%8A%A1%E3%80%82"><span class="toc-number">1.0.1.3.</span> <span class="toc-text">3. 安装完成后，启用并启动Apache服务。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E6%A3%80%E6%9F%A5Apache%E6%9C%8D%E5%8A%A1%E7%9A%84%E7%8A%B6%E6%80%81%E5%92%8C%E7%89%88%E6%9C%AC%E3%80%82"><span class="toc-number">1.0.1.4.</span> <span class="toc-text">4. 检查Apache服务的状态和版本。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%9F%A5%E7%9C%8BApache%E7%9B%91%E5%90%AC%E7%9A%84%E7%AB%AF%E5%8F%A3%E3%80%82"><span class="toc-number">1.0.1.5.</span> <span class="toc-text">5. 查看Apache监听的端口。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E6%9F%A5%E7%9C%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%98%AF%E5%90%A6%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%E3%80%82"><span class="toc-number">1.0.1.6.</span> <span class="toc-text">6. 查看服务器是否启动成功。</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B0%86%E7%BD%91%E7%AB%99%E6%94%BE%E5%88%B0%E6%8C%87%E5%AE%9A%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9-%E9%BB%98%E8%AE%A4%E7%9A%84%E6%98%AF-var-www-html-%E7%84%B6%E5%90%8E%E9%80%9A%E8%BF%87%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE"><span class="toc-number">1.0.1.6.1.</span> <span class="toc-text">将网站放到指定的文件夹(默认的是&#x2F;var&#x2F;www&#x2F;html&#x2F;)然后通过浏览器访问</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-%E5%88%B0-etc-httpd-conf-httpd-conf%E4%BF%AE%E6%94%B9%E4%B8%8B%E9%9D%A2%E4%B8%A4%E8%A1%8C%E5%8F%82%E6%95%B0"><span class="toc-number">1.0.1.7.</span> <span class="toc-text">7. 到&#x2F;etc&#x2F;httpd&#x2F;conf&#x2F;httpd.conf修改下面两行参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85PHP"><span class="toc-number">1.0.2.</span> <span class="toc-text">安装PHP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85php"><span class="toc-number">1.0.2.1.</span> <span class="toc-text">1. 安装php</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%9C%80%E5%90%8E%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8BPHP%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F%E5%AE%89%E8%A3%85"><span class="toc-number">1.0.2.2.</span> <span class="toc-text">2. 最后测试一下PHP是否成功安装.</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85mysql"><span class="toc-number">1.0.3.</span> <span class="toc-text">安装mysql</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85mysql"><span class="toc-number">1.0.3.1.</span> <span class="toc-text">1. 安装mysql.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%BF%9B%E5%85%A5mysql"><span class="toc-number">1.0.3.2.</span> <span class="toc-text">2. 进入mysql.</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-%E5%AF%86%E7%A0%81%E6%98%8E%E6%96%87"><span class="toc-number">1.0.3.2.1.</span> <span class="toc-text">2.1 密码明文</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-%E5%AF%86%E7%A0%81%E5%AF%86%E6%96%87"><span class="toc-number">1.0.3.2.2.</span> <span class="toc-text">2.2 密码密文</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%80%80%E5%87%BAmysql"><span class="toc-number">1.0.3.3.</span> <span class="toc-text">3. 退出mysql.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E4%BD%BF%E7%94%A8%E5%91%BD%E4%BB%A4show-global-variables-like-%E2%80%98port%E2%80%99-%E6%9F%A5%E7%9C%8B%E7%AB%AF%E5%8F%A3%E5%8F%B7"><span class="toc-number">1.0.3.4.</span> <span class="toc-text">4. 使用命令show global variables like ‘port’;查看端口号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81"><span class="toc-number">1.0.3.5.</span> <span class="toc-text">5. 修改密码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%EF%BC%88%E9%9C%80%E7%99%BB%E5%BD%95%EF%BC%89"><span class="toc-number">1.0.3.6.</span> <span class="toc-text">6. 常用操作（需登录）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">1.0.3.7.</span> <span class="toc-text">7. 远程连接数据库.</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-window%E5%B9%B3%E5%8F%B0%E5%AE%89%E8%A3%85AMP"><span class="toc-number">2.</span> <span class="toc-text">二. window平台安装AMP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#apache%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.0.1.</span> <span class="toc-text">apache服务器.</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%E6%96%87%E4%BB%B6"><span class="toc-number">2.0.1.1.</span> <span class="toc-text">1. 下载安装文件.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE-Apache-HTTP-Server"><span class="toc-number">2.0.1.2.</span> <span class="toc-text">2. 配置 Apache HTTP Server</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%90%AF%E5%8A%A8Apache-HTTP-Server%EF%BC%9A"><span class="toc-number">2.0.1.3.</span> <span class="toc-text">3. 启动Apache HTTP Server：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E6%A3%80%E6%B5%8B%E6%98%AF%E5%90%A6%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.0.1.4.</span> <span class="toc-text">4. 检测是否启动服务器.</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#php%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-number">2.0.2.</span> <span class="toc-text">php的安装.</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%E6%96%87%E4%BB%B6-1"><span class="toc-number">2.0.2.1.</span> <span class="toc-text">1. 下载安装文件:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AEphp"><span class="toc-number">2.0.2.2.</span> <span class="toc-text">2. 配置php:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AEapache%E6%94%AF%E6%8C%81php"><span class="toc-number">2.0.2.3.</span> <span class="toc-text">3. 配置apache支持php</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-number">2.0.3.</span> <span class="toc-text">mysql的安装.</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD%E5%AE%98%E7%BD%91%E5%9C%B0%E5%9D%80"><span class="toc-number">2.0.3.1.</span> <span class="toc-text">1.下载官网地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E4%B8%8B%E8%BD%BD%E5%AE%8C%E6%88%90%EF%BC%8C%E5%B0%86%E6%96%87%E4%BB%B6%E8%A7%A3%E5%8E%8B%E5%88%B0%E4%BD%A0%E6%83%B3%E8%A6%81%E5%AE%89%E8%A3%85%E7%9A%84%E7%9B%98%E9%87%8C%E3%80%82"><span class="toc-number">2.0.3.2.</span> <span class="toc-text">2.下载完成，将文件解压到你想要安装的盘里。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE"><span class="toc-number">2.0.3.3.</span> <span class="toc-text">3.配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%90%AF%E5%8A%A8mysql"><span class="toc-number">2.0.3.4.</span> <span class="toc-text">4.启动mysql.</span></a></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

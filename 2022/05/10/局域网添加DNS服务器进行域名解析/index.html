@@ -1,0 +1,283 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>局域网添加DNS服务器进行域名解析 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.背景在家庭局域网中，假如有若干个设备连接在同一台路由其中。路由器便和下属设备形成了一个小型局域网。 可以在局域网中我们可以通过设备的 ip 地址互相访问。 但是管理内部的局域网的机器过多，ip地址也变得越来越多，不想浪费精力在对ip的记忆上，而且使用IP远程登录非常容易搞混，为了解决这种问题， 比较简单的有两种方式。第一种方式是通过修改hosts文件，来完成域名和ip的映射，这种只能对一台机器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="局域网添加DNS服务器进行域名解析">
+<meta property="og:url" content="https://lxlfpeng.github.io/2022/05/10/%E5%B1%80%E5%9F%9F%E7%BD%91%E6%B7%BB%E5%8A%A0DNS%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9B%E8%A1%8C%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.背景在家庭局域网中，假如有若干个设备连接在同一台路由其中。路由器便和下属设备形成了一个小型局域网。 可以在局域网中我们可以通过设备的 ip 地址互相访问。 但是管理内部的局域网的机器过多，ip地址也变得越来越多，不想浪费精力在对ip的记忆上，而且使用IP远程登录非常容易搞混，为了解决这种问题， 比较简单的有两种方式。第一种方式是通过修改hosts文件，来完成域名和ip的映射，这种只能对一台机器">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2022-05-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.855Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2022/05/10/%E5%B1%80%E5%9F%9F%E7%BD%91%E6%B7%BB%E5%8A%A0DNS%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9B%E8%A1%8C%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '局域网添加DNS服务器进行域名解析',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">局域网添加DNS服务器进行域名解析</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">局域网添加DNS服务器进行域名解析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2022-05-09T16:00:00.000Z" title="发表于 2022-05-10 00:00:00">2022-05-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">网络基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-背景"><a href="#一-背景" class="headerlink" title="一.背景"></a>一.背景</h1><p>在家庭局域网中，假如有若干个设备连接在同一台路由其中。路由器便和下属设备形成了一个小型局域网。 可以在局域网中我们可以通过设备的 ip 地址互相访问。 但是管理内部的局域网的机器过多，ip地址也变得越来越多，不想浪费精力在对ip的记忆上，而且使用IP远程登录非常容易搞混，为了解决这种问题， 比较简单的有两种方式。第一种方式是通过修改hosts文件，来完成域名和ip的映射，这种只能对一台机器生效，而且例如手机之类的不容易修改hosts的设备也比较麻烦，不过有些新的路由器或者是软路由可以在路由器层面修改hosts来达到适配所有设备的能力。另外一种解决方法是搭建一个局域网的DNS服务器，使用不同的域名指向不同的机器ip。 使用自建DNS服务器的好处远不止这一个，还有很多其他的好处。例如当IP地址发生变化时，只需要更改DNS服务器的设置即可。</p>
+<h1 id="二-DNS简介"><a href="#二-DNS简介" class="headerlink" title="二.DNS简介"></a>二.DNS简介</h1><p>要搭建DNS服务器，首先需要了解一下什么是DNS。</p>
+<h3 id="什么是-DNS？"><a href="#什么是-DNS？" class="headerlink" title="什么是 DNS？"></a>什么是 DNS？</h3><p>DNS 是将域转换为其服务器的数字 IP 地址的系统，例如将域名<code>www.web-server.com</code>转换成ip地址<code>127.0.0.1</code>。每当使用域名发出网络请求时，系统都会执行 DNS 查询以确定域名对应的服务器ip地址。</p>
+<h3 id="为什么要运行自己的-DNS服务器？"><a href="#为什么要运行自己的-DNS服务器？" class="headerlink" title="为什么要运行自己的 DNS服务器？"></a>为什么要运行自己的 DNS服务器？</h3><p>自建DNS服务器可以更好地控制网络。例如能够配置网络级域映射，<code>web-server</code>到<code>192.168.0.101</code>。将路由器配置为使用你自己搭建的 DNS服务器， 可以让任何连接到该路由器设备都能够通过<code>http://web-server</code>访问到<code>192.168.0.101</code>，自建DNS服务器可以对域名解析进行集中式的管理，而不是在每台设备上单独修改<code>/etc/hosts</code>， 自建DNS服务器将适用于你连接到网络的所有内容，包括无法通过其他方式自定义其路由堆栈的嵌入式硬件。自建 DNS 服务器还可以提高性能并提供额外的弹性层。在发生大规模 DNS 中断时可以为你与之交互的关键服务使用具有长期缓存的自定义服务器可以帮助你度过所选上游提供商的停机时间。</p>
+<h3 id="DNS-与-Dnsmasq"><a href="#DNS-与-Dnsmasq" class="headerlink" title="DNS 与 Dnsmasq"></a>DNS 与 Dnsmasq</h3><p>Dnsmasq是一个轻量级的 DNS 服务器，大多数 Linux 发行版中都可以安装它。<br>自建Dnsmasq服务器流程如下所示：</p>
+<ol>
+<li>路由器接收来自你连接的设备之一的请求。路由器将配置为使用 Dnsmasq 主机作为其 DNS 服务器。</li>
+<li>Dnsmasq 会检查它是否有定义的域名路由，例如<code>web-server</code>to <code>192.168.0.101</code>。如果请求是<code>http://web-server/example-page</code>，它将发送<code>192.168.0.101</code>回路由器。</li>
+<li>当 Dnsmasq 没有匹配的路由时，它会将 DNS 请求转发给 Google 的<code>8.8.8.8</code>，从而在公共互联网上启用解析。这确保你在使用自己的 DNS 时仍然可以访问更广泛的网络。</li>
+</ol>
+<blockquote>
+<p>你无需在客户端设备上进行任何配置更改。路由器后面的所有东西最终都会通过 Dnsmasq 进行 DNS 查询。但是，值得注意的是，所有流行的桌面和移动操作系统都支持设置 DNS 服务器，因此您可以将单个设备配置为使用 Dnsmasq，而无需在路由器级别启用它。</p>
+</blockquote>
+<h1 id="三-Dnsmasq搭建DNS服务器"><a href="#三-Dnsmasq搭建DNS服务器" class="headerlink" title="三.Dnsmasq搭建DNS服务器"></a>三.Dnsmasq搭建DNS服务器</h1><h2 id="1-Dnsmasq简介"><a href="#1-Dnsmasq简介" class="headerlink" title="1.Dnsmasq简介"></a>1.Dnsmasq简介</h2><p><a target="_blank" rel="noopener" href="https://wiki.archlinux.org/title/Dnsmasq">Dnsmasq</a> 是一个小巧且方便地用于配置DNS和DHCP的工具，适用于小型网络，它提供了DNS功能和可选择的DHCP功能。它服务那些只在本地适用的域名，这些域名是不会在全球的DNS服务器中出现的。DHCP服务和DNS服务结合，并且允许DHCP分配的地址能在DNS中正常解析，而这些DHCP分配的地址和相关命令可以配置到每台主机中，也可以配置到一台核心设备中（比如路由器），DNSmasq支持静态和动态两种DHCP配置方式。</p>
+<h2 id="2-安装Dnsmasq"><a href="#2-安装Dnsmasq" class="headerlink" title="2.安装Dnsmasq"></a>2.安装Dnsmasq</h2><h3 id="Ubuntu安装dnsmasq"><a href="#Ubuntu安装dnsmasq" class="headerlink" title="Ubuntu安装dnsmasq"></a>Ubuntu安装dnsmasq</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install dnsmasq -y</span><br></pre></td></tr></table></figure>
+
+<h3 id="Docker安装dnsmasq"><a href="#Docker安装dnsmasq" class="headerlink" title="Docker安装dnsmasq"></a>Docker安装dnsmasq</h3><ol>
+<li>下载镜像<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull jpillora/dnsmasq</span><br></pre></td></tr></table></figure></li>
+<li>运行镜像<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">docker run \</span><br><span class="line">    --name dnsmasq \</span><br><span class="line">    -d \</span><br><span class="line">    -p 53:53/udp \</span><br><span class="line"># web控制端</span><br><span class="line">    -p 5380:8080 \</span><br><span class="line"># 账号</span><br><span class="line">    -e &quot;HTTP_USER=foo&quot; \</span><br><span class="line"># 密码</span><br><span class="line">    -e &quot;HTTP_PASS=bar&quot; \</span><br><span class="line">    --restart always \</span><br><span class="line">    jpillora/dnsmasq</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="3-Linux53端口被systemd-resolve占用的解决方法"><a href="#3-Linux53端口被systemd-resolve占用的解决方法" class="headerlink" title="3.Linux53端口被systemd-resolve占用的解决方法"></a>3.Linux53端口被systemd-resolve占用的解决方法</h3><p>在Linux系统中有些软件（如：Dnsmasq解锁Netflix中的Dns等服务）可能要用到53的端口，但有些系统提示已使用（required port 53 already in use ）。使用<code>lsof -i:53</code>查看53端口是否是是被systemd-resolved进程所占用了。</p>
+<ol>
+<li>先停用 systemd-resolved 服务:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop systemd-resolved</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>编辑 &#x2F;etc&#x2F;systemd&#x2F;resolved.conf 文件:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/systemd/resolved.conf</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>修改配置如下:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[Resolve]</span><br><span class="line">DNS=8.8.8.8  #取消注释，增加dns</span><br><span class="line">#FallbackDNS=</span><br><span class="line">#Domains=</span><br><span class="line">#LLMNR=no</span><br><span class="line">#MulticastDNS=no</span><br><span class="line">#DNSSEC=no</span><br><span class="line">#Cache=yes</span><br><span class="line">DNSStubListener=no  #取消注释，把yes改为no</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>最后运行下面命令即可:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-配置Dnsmasq"><a href="#4-配置Dnsmasq" class="headerlink" title="4.配置Dnsmasq"></a>4.配置Dnsmasq</h2><p>打开&#x2F;etc&#x2F;dnsmasq.conf 配置文件，添加需要映射的域名和ip地址:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">#dnsmasq config, for a complete example, see:</span><br><span class="line">#  http://oss.segetech.com/intra/srv/dnsmasq.conf</span><br><span class="line">#dns解析日志</span><br><span class="line">log-queries</span><br><span class="line">#定义主机与IP映射</span><br><span class="line">address=/www.qinglong.com/172.17.205.28</span><br><span class="line">address=/www.baihu.com/172.17.205.32</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-路由器设置DNS服务器"><a href="#5-路由器设置DNS服务器" class="headerlink" title="5.路由器设置DNS服务器"></a>5.路由器设置DNS服务器</h2><p>通过上面的步骤 ，我们已经设置好一个 DNS 服务器。接下来，进入你的路由器管理界面，使用你的设置，把你路由器的 DNS 服务器指向刚才机器在局域网的静态 IP。 也可以配置你的PC电脑的 DNS 指向这个地址。 建议是，保留原始的 DNS 主机地址比如:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">192.168.1.1</span><br><span class="line"></span><br><span class="line">192.168.31.223</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>第一个是我的原始路由器的 DNS 地址</p>
+</li>
+<li><p>第二个是我设置的地址，这样子可以作为补充。</p>
+</li>
+</ul>
+<p><img src="/images/d88f7700d91b945fe8d15bc17657fbbf.webp"></p>
+<blockquote>
+<p>如果你 dnsmasq 设置没有继承 路由器主机的 DNS 服务，可以设置第二个 DNS 服务器为路由器主机 ，这样可以保证原来的状态。</p>
+</blockquote>
+<h2 id="6-远程网页查看Dnsmasq信息"><a href="#6-远程网页查看Dnsmasq信息" class="headerlink" title="6.远程网页查看Dnsmasq信息"></a>6.远程网页查看Dnsmasq信息</h2><p>访问Dnsmasq安装主机的8080端口就可以进入管理界面:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:8080/</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2022/05/10/%E5%B1%80%E5%9F%9F%E7%BD%91%E6%B7%BB%E5%8A%A0DNS%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9B%E8%A1%8C%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90/">https://lxlfpeng.github.io/2022/05/10/%E5%B1%80%E5%9F%9F%E7%BD%91%E6%B7%BB%E5%8A%A0DNS%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9B%E8%A1%8C%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2022/05/11/Vue%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/" title="Vue前端开发"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Vue前端开发</div></div><div class="info-2"><div class="info-item-1">一.Vue简介Vue是和jQuery一样是一个前端框架，它的中心思想就是用数据驱动UI。在使用jQuery的时代，如果要改变某一个DOM元素的值，jQuery首先要获取到dom对象，然后对dom对象进行进行值的修改等操作; 而Vue.js 则是专注于 MVVM 模型的 ViewModel...</div></div></div></a><a class="pagination-related" href="/2022/04/10/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%92%8C%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E8%81%94%E7%B3%BB/" title="Web服务器和应用服务器的区别与联系"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Web服务器和应用服务器的区别与联系</div></div><div class="info-2"><div class="info-item-1">Web服务器与应用服务器Web服务器简介什么是Web服务器WEB即超文本（hypertext）、超媒体（hypermedia）和超文本传输协议（HTTP），获取这些静态资源实际上是在请求服务器上的文件。这些文件都一直保存在服务器的磁盘上一个固定的文件路径，并生成一个对应的地址。HTML页面就是WEB的数据元素，处理这些数据元素的应用软件就叫WEB服务器，WEB服务器常与客户端打交道，它要处理的主要信息有：session、request、response、HTML、JS、CS等。 常用的Web服务器 Nginx Apache Jetty （也支持动态页面处理，但主要还是静态页面） IIS  应用服务器简介什么是应用服务器应用服务器是为客户端提供对业务逻辑的访问这种服务器，根据客户端的请求会将数据转化为动态内容，一般还需要数据库的支持，应用服务器的搭建很多时候依赖于应用程序的开发语言，各种编程语言生态下对应不同的软件， 比如使用Java语言开发的项目通常选择...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">一.背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-DNS%E7%AE%80%E4%BB%8B"><span class="toc-number">2.</span> <span class="toc-text">二.DNS简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-DNS%EF%BC%9F"><span class="toc-number">2.0.1.</span> <span class="toc-text">什么是 DNS？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%BF%90%E8%A1%8C%E8%87%AA%E5%B7%B1%E7%9A%84-DNS%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%9F"><span class="toc-number">2.0.2.</span> <span class="toc-text">为什么要运行自己的 DNS服务器？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS-%E4%B8%8E-Dnsmasq"><span class="toc-number">2.0.3.</span> <span class="toc-text">DNS 与 Dnsmasq</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-Dnsmasq%E6%90%AD%E5%BB%BADNS%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">3.</span> <span class="toc-text">三.Dnsmasq搭建DNS服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Dnsmasq%E7%AE%80%E4%BB%8B"><span class="toc-number">3.1.</span> <span class="toc-text">1.Dnsmasq简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85Dnsmasq"><span class="toc-number">3.2.</span> <span class="toc-text">2.安装Dnsmasq</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Ubuntu%E5%AE%89%E8%A3%85dnsmasq"><span class="toc-number">3.2.1.</span> <span class="toc-text">Ubuntu安装dnsmasq</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker%E5%AE%89%E8%A3%85dnsmasq"><span class="toc-number">3.2.2.</span> <span class="toc-text">Docker安装dnsmasq</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Linux53%E7%AB%AF%E5%8F%A3%E8%A2%ABsystemd-resolve%E5%8D%A0%E7%94%A8%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-number">3.2.3.</span> <span class="toc-text">3.Linux53端口被systemd-resolve占用的解决方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E9%85%8D%E7%BD%AEDnsmasq"><span class="toc-number">3.3.</span> <span class="toc-text">4.配置Dnsmasq</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E8%B7%AF%E7%94%B1%E5%99%A8%E8%AE%BE%E7%BD%AEDNS%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">3.4.</span> <span class="toc-text">5.路由器设置DNS服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E8%BF%9C%E7%A8%8B%E7%BD%91%E9%A1%B5%E6%9F%A5%E7%9C%8BDnsmasq%E4%BF%A1%E6%81%AF"><span class="toc-number">3.5.</span> <span class="toc-text">6.远程网页查看Dnsmasq信息</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

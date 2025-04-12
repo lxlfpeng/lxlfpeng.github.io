@@ -1,0 +1,369 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Android数据库Room之二实体之间的关系 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.定义对象之间的关系由于 SQLite 是关系型数据库，因此您可以定义各个实体之间的关系。尽管大多数对象关系映射库都允许实体对象互相引用，但 Room 明确禁止这样做。如需了解此决策背后的技术原因，请参阅了解 Room 为何不允许对象引用。Room 的数据实体类跟数据库表是对应的，所以，有些表关系可以直接通过定义数据实体类之间的关系来实现，这样就可以无需编写 SQL 语句实现插入和查询过操作。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android数据库Room之二实体之间的关系">
+<meta property="og:url" content="https://lxlfpeng.github.io/2020/06/12/Android%E6%95%B0%E6%8D%AE%E5%BA%93Room%E4%B9%8B%E4%BA%8C%E5%AE%9E%E4%BD%93%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.定义对象之间的关系由于 SQLite 是关系型数据库，因此您可以定义各个实体之间的关系。尽管大多数对象关系映射库都允许实体对象互相引用，但 Room 明确禁止这样做。如需了解此决策背后的技术原因，请参阅了解 Room 为何不允许对象引用。Room 的数据实体类跟数据库表是对应的，所以，有些表关系可以直接通过定义数据实体类之间的关系来实现，这样就可以无需编写 SQL 语句实现插入和查询过操作。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2020-06-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.836Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2020/06/12/Android%E6%95%B0%E6%8D%AE%E5%BA%93Room%E4%B9%8B%E4%BA%8C%E5%AE%9E%E4%BD%93%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Android数据库Room之二实体之间的关系',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Android数据库Room之二实体之间的关系</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Android数据库Room之二实体之间的关系</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2020-06-11T16:00:00.000Z" title="发表于 2020-06-12 00:00:00">2020-06-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">6.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>20分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-定义对象之间的关系"><a href="#一-定义对象之间的关系" class="headerlink" title="一.定义对象之间的关系"></a>一.定义对象之间的关系</h1><p>由于 SQLite 是关系型数据库，因此您可以定义各个实体之间的关系。尽管大多数对象关系映射库都允许实体对象互相引用，但 Room 明确禁止这样做。如需了解此决策背后的技术原因，请参阅<a target="_blank" rel="noopener" href="https://developer.android.com/training/data-storage/room/referencing-data#understand-no-object-references">了解 Room 为何不允许对象引用</a>。Room 的数据实体类跟数据库表是对应的，所以，有些表关系可以直接通过定义数据实体类之间的关系来实现，这样就可以无需编写 SQL 语句实现插入和查询过操作。</p>
+<h2 id="🐼两种可能的方法"><a href="#🐼两种可能的方法" class="headerlink" title="🐼两种可能的方法"></a>🐼两种可能的方法</h2><p>在 Room 中，您可以通过两种方式定义和查询实体之间的关系：<code>使用具有嵌入式对象的中间数据类</code>或<code>具有多重映射返回值类型的关系型查询方法</code>来建立关系。</p>
+<h3 id="🐻中间数据类"><a href="#🐻中间数据类" class="headerlink" title="🐻中间数据类"></a>🐻中间数据类</h3><p>在中间数据类方法中，您可以定义数据类，以便在 Room 实体之间建立关系。此数据类保存一个实体的实例与另一个实体的实例之间的对应方式（作为<a target="_blank" rel="noopener" href="https://developer.android.com/training/data-storage/room/relationships#nested-objects">嵌入式对象</a>）。然后，查询方法可以返回此数据类的实例，通过此数据类的实例我们就可以拿到对应实体的数据。</p>
+<p>例如，您可以定义 <code>UserBook</code> 数据类来表示已借阅特定图书的图书馆用户，并定义一个查询方法用于从数据库中检索 <code>UserBook</code> 实例的列表：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">data class UserBook(val userName: String?, val bookName: String?)</span><br><span class="line"></span><br><span class="line">@Dao</span><br><span class="line">interface UserBookDao &#123;</span><br><span class="line">    @Query(</span><br><span class="line">        &quot;SELECT user.name AS userName, book.name AS bookName &quot; +</span><br><span class="line">        &quot;FROM user, book &quot; +</span><br><span class="line">        &quot;WHERE user.id = book.user_id&quot;</span><br><span class="line">    )</span><br><span class="line">    fun loadUserAndBookNames(): LiveData&lt;List&lt;UserBook&gt;&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="🦝多重映射返回值类型"><a href="#🦝多重映射返回值类型" class="headerlink" title="🦝多重映射返回值类型"></a>🦝多重映射返回值类型</h3><p><strong>注意</strong>：Room 在 2.4 及更高版本中仅支持多重映射返回值类型。在多重映射返回值类型方法中，您无需定义任何其他数据类，而是根据所需的映射结构为您的方法定义<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Multimap">多重映射</a>返回值类型，并直接在 SQL 查询中定义实体之间的关系。</p>
+<p>例如，以下查询方法会返回 <code>User</code> 和 <code>Book</code> 实例的映射，用于表示已借阅特定图书的图书馆用户：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Query(</span><br><span class="line">    &quot;SELECT * FROM user&quot; +</span><br><span class="line">    &quot;JOIN book ON user.id = book.user_id&quot;</span><br><span class="line">)</span><br><span class="line">fun loadUserAndBookNames(): Map&lt;User, List&lt;Book&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="🐵选择一种方法"><a href="#🐵选择一种方法" class="headerlink" title="🐵选择一种方法"></a>🐵选择一种方法</h3><p>Room 同时支持上述两种方法，您应使用最适合您的应用的一种方法。本部分讨论了您可能会倾向于使用其中一种的原因。中间数据类方法可让您避免编写复杂的 SQL 查询，但由于需要额外的数据类，它还可能会导致代码复杂性增加。简而言之，多重映射返回值类型方法需要 SQL 查询完成更多工作；而中间数据类方法需要代码完成更多工作。如果您没有使用中间数据类的特定理由，我们建议您使用多重映射返回值类型方法。如需详细了解此方法，请参阅<a target="_blank" rel="noopener" href="https://developer.android.com/training/data-storage/room/accessing-data#multimap">返回多重映射</a>。<br><strong>本文的其余部分演示了如何使用中间数据类方法定义关系。</strong></p>
+<h1 id="二-创建内嵌的对象"><a href="#二-创建内嵌的对象" class="headerlink" title="二.创建内嵌的对象"></a>二.创建内嵌的对象</h1><p>有时，我们希望将实体或Java对象（POJO）表示为数据库逻辑中的一个组合体，也就是让该对象包含其他对象的多个字段。在这种情况下，我们可以使用注解 <a target="_blank" rel="noopener" href="https://developer.android.google.cn/reference/android/arch/persistence/room/Embedded">@Embedded</a>，使用 <code>@Embedded</code> 注解标注对象，表示要将此对象分解成为数据表的子字段。这样就可以跟查询其他字段一样查询这些内嵌的字段。如下示例所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 内嵌类</span><br><span class="line">data class Coordinates (</span><br><span class="line">  val latitude: Double,</span><br><span class="line">  val longitude: Double</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">// 数据实体类</span><br><span class="line">@Entity(tableName = &quot;address&quot;)</span><br><span class="line">data class Address(@PrimaryKey(autoGenerate = true) val id: Int?, val street: String,, @Embedded val coordinates: Coordinates)</span><br></pre></td></tr></table></figure>
+
+<p>以上的示例中，数据实体类 <code>Address</code> 内嵌了 <code>Coordinates</code> 类，在数据库中对应的表中，会将 <code>Coordinates</code> 类的所有字段都分解称为表的字段，最终数据库的表结构为:<br><img src="/images/b3d7be3eed81d50e494ae16319b254f1.webp" alt="image.png"></p>
+<p>注意事项：</p>
+<ol>
+<li>内嵌类内部还可以内嵌其他类达到套娃的目的。</li>
+<li>内嵌类可以不是数据实体类（也就是说被嵌套的类可以无需 <code>@Entity</code> 注解标注）。</li>
+<li>如果内嵌类跟数据实体属性名有冲突，必须通过 <code>@ColumnInfo</code> 注解重命名数据库表中的列名称（不是数据实体类也可以使用 <code>@ColumnInfo</code> 注解标注字段）。</li>
+<li>如果有多个内嵌类，必须保证内嵌类之间、内嵌类和数据实体类之间对应列名均唯一。</li>
+</ol>
+<h1 id="三-定义一对一关系"><a href="#三-定义一对一关系" class="headerlink" title="三.定义一对一关系"></a>三.定义一对一关系</h1><p>假设有一个音乐在线播放应用，用户在该应用中具有一个属于自己的歌曲库。每个用户只能有一个歌曲库，而且每个歌曲库恰好对应于一个用户。因此，User 实体和 Library 实体之间就应存在一种一对一的关系。</p>
+<h3 id="🐄第一步：创建两个数据实体类（父实体和子实体）"><a href="#🐄第一步：创建两个数据实体类（父实体和子实体）" class="headerlink" title="🐄第一步：创建两个数据实体类（父实体和子实体）"></a>🐄第一步：创建两个数据实体类（父实体和子实体）</h3><p>首先，为两个实体分别创建一个类。其中一个实体必须包含对另一个实体的主键的引用。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@Entity</span><br><span class="line">data class User(</span><br><span class="line">    @PrimaryKey val userId: Long,</span><br><span class="line">    val name: String,</span><br><span class="line">    val age: Int</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">// Library 类的userOwnerId属性变量对应 User 类的 userId 属性变量</span><br><span class="line">@Entity</span><br><span class="line">data class Library(</span><br><span class="line">    @PrimaryKey val libraryId: Long,</span><br><span class="line">    val userOwnerId: Long,</span><br><span class="line">    val music:String</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>注意事项：定义一一对应关系的两个数据实体类，其中一个数据实体类中必须包含引用另个一数据实体类主键的属性变量。</strong></p>
+</blockquote>
+<h3 id="🦓第二步：定义一对一对应关系"><a href="#🦓第二步：定义一对一对应关系" class="headerlink" title="🦓第二步：定义一对一对应关系"></a>🦓第二步：定义一对一对应关系</h3><p>如果要在获得所有的音乐库和它们对应的用户，如果要使用 Sqlite 完成此次查询  ，需要如下两个步骤:</p>
+<ol>
+<li>进行两次Sql查询，先查询出User表中所有的用户，然后在根据用户的userId在Library表中查询出所有的歌曲库:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM User</span><br><span class="line">SELECT * FROM Library WHERE userOwnerId IN (userId1, userId2, …)</span><br></pre></td></tr></table></figure></li>
+<li>将查询从数据库中的查出来的数据映射到LibraryAndUser对象中  ，不同的LibraryAndUser组成List<LibraryAndUser>数据:<br>创建了一个数据类 <code>LibraryAndUser</code>定义一个User字段和一个Library对象 ：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">data class LibraryAndUser(</span><br><span class="line">    val user: User,</span><br><span class="line">    val library: Library</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+如果通过 Room 来获取到 <code>List&lt;LibraryAndUser&gt;</code> ，就不再不需要自己实现两次查询和对象映射操作，仅仅通过添加 <code>@Relation</code> 注解即可。在上面的例子中，由于Library 拥有用户的userid，所以在 歌曲库 变量上添加 <code>@Relation</code> 注解：指定 User 表中的 <code>userId</code> 和 Library 表中的 <code>userOwnerId</code> 是相对应的即可。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">data class UserAndLibrary(</span><br><span class="line">    @Embedded val user: User,</span><br><span class="line">    @Relation(</span><br><span class="line">         parentColumn = &quot;userId&quot;,</span><br><span class="line">         entityColumn = &quot;userOwnerId&quot;</span><br><span class="line">    )</span><br><span class="line">    val library: Library</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="🦄第三步：在-DAO-类中添加查询方法"><a href="#🦄第三步：在-DAO-类中添加查询方法" class="headerlink" title="🦄第三步：在 DAO 类中添加查询方法"></a>🦄第三步：在 DAO 类中添加查询方法</h3><p>最后，向 DAO 类添加一个方法，用于返回将父实体与子实体配对的数据类的所有实例。该方法需要 Room 运行两次查询，因此应向该方法添加 @Transaction (事务)注解，以确保整个操作以原子方式执行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Dao</span><br><span class="line">interface MusicDao &#123;</span><br><span class="line">    @Transaction</span><br><span class="line">    @Query(&quot;SELECT * FROM User&quot;)</span><br><span class="line">    fun getUsersAndLibraries(): List&lt;UserAndLibrary&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用 DAO的 查询方法时， SQL 语句只需要查询父实体数据表，Room 会自动根据定义的关系查询子实体表。 经过以上步骤，就可以调用 DAO 中对应的接口进行连表查询结果了，查询返回的结果中包含一一对应的两个实体对象。</p>
+<h1 id="四-定义一对多关系"><a href="#四-定义一对多关系" class="headerlink" title="四.定义一对多关系"></a>四.定义一对多关系</h1><p>在音乐在线播放应用示例中，如果每个用户可以创建任意数量的播放列表，但每个播放列表只能由一个用户创建。因此，User (用户)实体和 Playlist (播放列表)实体之间应存在一种一对多关系。</p>
+<h3 id="🐇第一步：创建两个数据实体类（父实体和子实体）"><a href="#🐇第一步：创建两个数据实体类（父实体和子实体）" class="headerlink" title="🐇第一步：创建两个数据实体类（父实体和子实体）"></a>🐇第一步：创建两个数据实体类（父实体和子实体）</h3><p>首先，为两个实体分别创建一个类。与上个示例中一样，子实体必须包含一个变量，且该变量是对父实体的主键的引用。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@Entity</span><br><span class="line">data class User(</span><br><span class="line">    @PrimaryKey val userId: Long,</span><br><span class="line">    val name: String,</span><br><span class="line">    val age: Int</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">@Entity</span><br><span class="line">data class Playlist(</span><br><span class="line">    @PrimaryKey val playlistId: Long,</span><br><span class="line">    //Playlist 类的userCreatorId属性变量对应 User 类的 userId 属性变量</span><br><span class="line">    val userCreatorId: Long,</span><br><span class="line">    val playlistName: String</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="🦨第二步：定义一对多对应关系"><a href="#🦨第二步：定义一对多对应关系" class="headerlink" title="🦨第二步：定义一对多对应关系"></a>🦨第二步：定义一对多对应关系</h3><p>为了查询用户列表和对应的播放列表，必须先在两个实体之间建立一对多关系。为此，需要创建一个新的数据类，来描述这两个实体类之间的对应关系,其中每个实例都包含父实体的一个实例和与之对应的所有子实体实例的列表。父实体采用内嵌的方式，使用 <code>@Embedded</code> 注解标注  ，将 @Relation 注解添加到子实体的实例，同时将 parentColumn 设置为父实体主键列的名称，并将 entityColumn 设置为引用父实体主键的子实体列的名称。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">data class UserWithPlaylists(</span><br><span class="line">    @Embedded val user: User,</span><br><span class="line">    @Relation(</span><br><span class="line">          parentColumn = &quot;userId&quot;,</span><br><span class="line">          entityColumn = &quot;userCreatorId&quot;</span><br><span class="line">    )</span><br><span class="line">    val playlists: List&lt;Playlist&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="🦈第三步：在-DAO-中添加查询方法"><a href="#🦈第三步：在-DAO-中添加查询方法" class="headerlink" title="🦈第三步：在 DAO 中添加查询方法"></a>🦈第三步：在 DAO 中添加查询方法</h3><p>最后，向 DAO 类添加一个方法，用于返回将父实体与子实体配对的数据类的所有实例。和上述情况一样该方法需要 Room 运行两次查询，因此应向该方法添加 @Transaction 注释，以确保整个操作以原子方式执行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Dao</span><br><span class="line">interface MusicDao &#123;</span><br><span class="line">	@Transaction</span><br><span class="line">	@Query(&quot;SELECT * FROM User&quot;)</span><br><span class="line">	fun getUsersWithPlaylists(): List&lt;UserWithPlaylists&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>注意：编写 DAO 查询方法时， SQL 语句只需要查询父实体数据表，Room 会自动根据定义的关系查询子实体表。</strong></p>
+</blockquote>
+<h1 id="五-定义多对多关系"><a href="#五-定义多对多关系" class="headerlink" title="五.定义多对多关系"></a>五.定义多对多关系</h1><p>在音乐在线播放应用示例中，再次考虑用户定义的播放列表。 每个播放列表都可以包含多首歌曲，每首歌曲都可以包含在多个不同的播放列表中。因此，<code>Playlist</code>(播放列表) 实体和 <code>Song</code>(歌曲) 实体之间应存在多对多的关系。</p>
+<p>多对多关系与其他类型的关系是有区别的，多对多关系在子实体中通常是没有父实体主键列的引用，而是创建一个第三方关联实体类（称之为交叉关系表）来表示两个实体之间的关联关系。交叉关系表中必须包含多对多关系中的每个实体类对应的数据表的主键列（即通过主键列进行关联）。</p>
+<h3 id="🐧第一步：创建两个实体类"><a href="#🐧第一步：创建两个实体类" class="headerlink" title="🐧第一步：创建两个实体类"></a>🐧第一步：创建两个实体类</h3><p>首先，为您的两个实体分别创建一个类。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@Entity</span><br><span class="line">data class Playlist(</span><br><span class="line">    @PrimaryKey val playlistId: Long,</span><br><span class="line">    val playlistName: String</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">@Entity</span><br><span class="line">data class Song(</span><br><span class="line">    @PrimaryKey val songId: Long,</span><br><span class="line">    val songName: String,</span><br><span class="line">    val artist: String</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="🐦第二步：创建第三方类（交叉关系表）"><a href="#🐦第二步：创建第三方类（交叉关系表）" class="headerlink" title="🐦第二步：创建第三方类（交叉关系表）"></a>🐦第二步：创建第三方类（交叉关系表）</h3><p>多对多关系与其他关系类型均不同的一点在于，子实体中通常不存在对父实体的引用。因此，需要创建第三个类来表示两个实体之间的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Associative_entity">关联实体</a>（即交叉引用表）。交叉引用表中必须包含表中表示的多对多关系中每个实体的主键列。在本例中，交叉引用表中的每一行都对应于 <code>Playlist</code> 实例和 <code>Song</code> 实例的配对，其中引用的歌曲包含在引用的播放列表中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 交叉关系表的主键列名必须跟对应的数据实体类主键列名一致，如果变量名跟列名不一致，可以使用 @columnInfo 注解指定列名</span><br><span class="line">@Entity(primaryKeys = [&quot;playlistId&quot;, &quot;songId&quot;])</span><br><span class="line">data class PlaylistSongCrossRef(</span><br><span class="line">	 // Playlist 实体类主键列名是playlistId， Song 实体类主键列名是songId</span><br><span class="line">    val playlistId: Long,</span><br><span class="line">    val songId: Long</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>注意事项：第三方类（交叉关系表）中必须包含多对多关系的每个数据实体类的主键列，而且必须保证列名跟数据实体的主键列名一致（否则编译会报错）。</strong></p>
+</blockquote>
+<h3 id="👽第三步：定义对应关系（根据查询需求）"><a href="#👽第三步：定义对应关系（根据查询需求）" class="headerlink" title="👽第三步：定义对应关系（根据查询需求）"></a>👽第三步：定义对应关系（根据查询需求）</h3><p>这一步取决于您想如何查询这些相关实体。多对多关系跟其他对应关系不一样，需要根据查询需求定义相应的对应关系，其实就是将多对多关系，根据查询需求分解成一对多关系，查询需要的数据,于是就变成了以哪个数据实体类为父实体的问题。例如，查询某个播放列表所包含的歌曲，那么 <code>Playlist</code>就是父实体， <code>Song</code>就是子实体；反过来查询歌曲包含在哪些播放列表中，那么 <code>Song</code>就成了父实体，而 <code>Playlist</code>就成了子实体。于是，定义对应关系就跟定义一对多关系差不多的操作，唯一不同的就是需要在 <code>@Relation</code> 注解的 <code>associateBy</code> 属性指定第三方类（交叉关系表类）。</p>
+<ul>
+<li>如果您想查询播放列表和每个播放列表所含歌曲的列表，则应创建一个新的数据类，其中包含单个 <code>Playlist</code> 对象，以及该播放列表所包含的所有 <code>Song</code> 对象的列表。</li>
+<li>如果您想查询歌曲和每首歌曲所在播放列表的列表，则应创建一个新的数据类，其中包含单个 <code>Song</code> 对象，以及包含该歌曲的所有 <code>Playlist</code> 对象的列表。</li>
+</ul>
+<p>在这两种情况下，都可以通过以下方法在实体之间建立关系：在上述每个类中的 <a target="_blank" rel="noopener" href="https://developer.android.com/reference/kotlin/androidx/room/Relation"><code>@Relation</code></a> 注释中使用 <a target="_blank" rel="noopener" href="https://developer.android.com/reference/kotlin/androidx/room/Relation#associateby"><code>associateBy</code></a> 属性来确定提供 <code>Playlist</code> 实体与 <code>Song</code> 实体之间关系的交叉引用实体。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// 查询播放列表的歌曲（查询 Playlist 表, 联合获取 Song 信息）</span><br><span class="line">data class PlaylistWithSongs(</span><br><span class="line">    @Embedded val playlist: Playlist,</span><br><span class="line">    @Relation(</span><br><span class="line">         parentColumn = &quot;playlistId&quot;,</span><br><span class="line">         entityColumn = &quot;songId&quot;,</span><br><span class="line">         associateBy = Junction(PlaylistSongCrossRef::class)</span><br><span class="line">    )</span><br><span class="line">    val songs: List&lt;Song&gt;</span><br><span class="line">)</span><br><span class="line">// 查询歌曲包含在哪些播放列表当中（查询 Song 表, 联合获取 Playlist 信息）</span><br><span class="line">data class SongWithPlaylists(</span><br><span class="line">    @Embedded val song: Song,</span><br><span class="line">    @Relation(</span><br><span class="line">         parentColumn = &quot;songId&quot;,</span><br><span class="line">         entityColumn = &quot;playlistId&quot;,</span><br><span class="line">         associateBy = Junction(PlaylistSongCrossRef::class)</span><br><span class="line">    )</span><br><span class="line">    val playlists: List&lt;Playlist&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="🐉第四步：在-DAO-中添加查询方法"><a href="#🐉第四步：在-DAO-中添加查询方法" class="headerlink" title="🐉第四步：在 DAO 中添加查询方法"></a>🐉第四步：在 DAO 中添加查询方法</h3><p>最后，向 DAO 类添加一个方法，用于提供您的应用所需的查询功能。在前面提到，多对多关系的查询，限定条件之后，跟一对多的查询类似，但是需要注意的是，不同的限定条件，父类和子类会发生变化，查询的表也就不一样（查询父实体所对应的的表）。例如：查询某个播放列表所包含的歌曲（限定条件为播放列表）， <code>Playlist</code>就是父实体， <code>Song</code> 就是子实体，此时查询 <code>Playlist</code> 表；反过来，查询歌曲包含在哪些播放列表中（限定条件是歌曲），那么 <code>Song</code> 就成了父实体，而 <code>Playlist</code> 就成了子实体，此时查询 <code>Song</code> 表。</p>
+<ul>
+<li><code>getPlaylistsWithSongs</code>：该方法会查询数据库并返回查询到的所有 <code>PlaylistWithSongs</code> 对象。</li>
+<li><code>getSongsWithPlaylists</code>：该方法会查询数据库并返回查询到的所有 <code>SongWithPlaylists</code> 对象。</li>
+</ul>
+<p>这两个方法都需要 Room 运行两次查询，因此应为这两个方法添加 <a target="_blank" rel="noopener" href="https://developer.android.com/reference/kotlin/androidx/room/Transaction"><code>@Transaction</code></a> 注释，以确保整个操作以原子方式执行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Dao</span><br><span class="line">interface MusicDao &#123;</span><br><span class="line">	@Transaction</span><br><span class="line">	@Query(&quot;SELECT * FROM Playlist&quot;)</span><br><span class="line">	fun getPlaylistsWithSongs(): List&lt;PlaylistWithSongs&gt;</span><br><span class="line">	</span><br><span class="line">	@Transaction</span><br><span class="line">	@Query(&quot;SELECT * FROM Song&quot;)</span><br><span class="line">	fun getSongsWithPlaylists(): List&lt;SongWithPlaylists&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：如果 <code>@Relation</code> 注解不适用于您的特定用例，如果无法满足，可以在需要在 SQL 查询中使用 <code>JOIN</code> 关键字进行手动关联确切的关联关系。如需详细了解如何手动查询多个表，请参阅<a target="_blank" rel="noopener" href="https://developer.android.com/training/data-storage/room/accessing-data#query-multiple-tables">使用 Room DAO 访问数据</a>。</p>
+<h1 id="六-定义嵌套关系"><a href="#六-定义嵌套关系" class="headerlink" title="六.定义嵌套关系"></a>六.定义嵌套关系</h1><p>有时候，你需要查询三个或者更多相互关联的表，在这种情况下，你需要在这些表之间定义内嵌关系。所谓的嵌套关系，就是一个关系的查询中嵌套另一个关系的查询。在音乐在线播放应用示例中，假设您想要查询所有用户、每个用户的所有播放列表以及每个用户的各个播放列表中包含的所有歌曲。用户与播放列表之间存在<a target="_blank" rel="noopener" href="https://developer.android.com/training/data-storage/room/relationships#one-to-many">一对多关系</a>，而播放列表与歌曲之间存在<a target="_blank" rel="noopener" href="https://developer.android.com/training/data-storage/room/relationships#many-to-many">多对多关系</a>。简单来说就是要同时查询用户、播放列表、播放列表关联歌曲的数据。下面将详细讲解下如何定义嵌套关系。</p>
+<h3 id="🦏第一步：定义实体类"><a href="#🦏第一步：定义实体类" class="headerlink" title="🦏第一步：定义实体类"></a>🦏第一步：定义实体类</h3><p>以下代码示例显示了代表这些实体以及播放列表与歌曲之间多对多关系的交叉引用表的类：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">@Entity</span><br><span class="line">data class User(</span><br><span class="line">    @PrimaryKey val userId: Long,</span><br><span class="line">    val name: String,</span><br><span class="line">    val age: Int</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">@Entity</span><br><span class="line">data class Playlist(</span><br><span class="line">    @PrimaryKey val playlistId: Long,</span><br><span class="line">    val userCreatorId: Long,</span><br><span class="line">    val playlistName: String</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">@Entity</span><br><span class="line">data class Song(</span><br><span class="line">    @PrimaryKey val songId: Long,</span><br><span class="line">    val songName: String,</span><br><span class="line">    val artist: String</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="🐯第二步：定义多对多关系的交叉关系表"><a href="#🐯第二步：定义多对多关系的交叉关系表" class="headerlink" title="🐯第二步：定义多对多关系的交叉关系表"></a>🐯第二步：定义多对多关系的交叉关系表</h3><p>定义多对多关系的第三方类，也就是交叉关系表对应的数据实体类。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 这里必须使用实体的主键一致的列名</span><br><span class="line">@Entity(primaryKeys = [&quot;playlistId&quot;, &quot;songId&quot;])</span><br><span class="line">data class PlaylistSongCrossRef(</span><br><span class="line">    val playlistId: Long,</span><br><span class="line">    val songId: Long</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="🦁第三步：定义对应关系"><a href="#🦁第三步：定义对应关系" class="headerlink" title="🦁第三步：定义对应关系"></a>🦁第三步：定义对应关系</h3><p>首先，按照常规方法使用数据类和 <a target="_blank" rel="noopener" href="https://developer.android.com/reference/kotlin/androidx/room/Relation"><code>@Relation</code></a> 注释在集合中的两个表格之间建立关系。以下示例展示了一个 <code>PlaylistWithSongs</code> 类，该类可在 <code>Playlist</code> 实体类和 <code>Song</code> 实体类之间建立多对多关系：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//查询播放列表的歌曲（查询 Playlist 表, 联合获取 Song 信息）</span><br><span class="line">data class PlaylistWithSongs(</span><br><span class="line">    @Embedded val playlist: Playlist,</span><br><span class="line">    @Relation(</span><br><span class="line">         parentColumn = &quot;playlistId&quot;,</span><br><span class="line">         entityColumn = &quot;songId&quot;,</span><br><span class="line">         associateBy = Junction(PlaylistSongCrossRef::class)</span><br><span class="line">    )</span><br><span class="line">    val songs: List&lt;Song&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>接下来是用户跟歌曲之间的关系，所以还需要再定义一个实体类，用于在集合中的另一个表与第一个关系类之间建立关系，并将现有关系嵌套到新关系中。这实体类 <code>User</code> 为父实体，歌曲与播放列表对应关系实体为子实体（即上面定义的 <code>PlaylistWithSongs</code> 实体为子实体）。在 <code>@Relation</code> 注解中，子实体与父实体主键对应的列名为 <code>User</code> 类中父实体的主键对应的列（<code>song</code> 为 <code>PlaylistWithSongs</code> 关系类的父实体）。</p>
+<p>以下示例展示了一个 <code>UserWithPlaylistsAndSongs</code> 类，该类可在 <code>User</code> 实体类和 <code>PlaylistWithSongs</code> 关系类之间建立一对多关系：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">data class UserWithPlaylistsAndSongs(</span><br><span class="line">    @Embedded val user: User</span><br><span class="line">    @Relation(</span><br><span class="line">        entity = Playlist::class,</span><br><span class="line">        parentColumn = &quot;userId&quot;,</span><br><span class="line">        entityColumn = &quot;userCreatorId&quot;</span><br><span class="line">    )</span><br><span class="line">    val playlists: List&lt;PlaylistWithSongs&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><code>UserWithPlaylistsAndSongs</code> 类间接地在以下三个实体类之间建立了关系：<code>User</code>、<code>Playlist</code> 和 <code>Song</code>。</p>
+<p>图展示了该关系。</p>
+<p><img src="/images/d2655d8c59ff6faaf8243c741fa83285.webp"><br>音乐在线播放应用示例中关系类的示意图。</p>
+<p>如果集合中还有其他表，则可以创建类在剩余的每个表和关系类（此类可在之前的所有表之间建立关系）之间建立关系。这样会在您要查询的所有表之间创建一系列嵌套关系。</p>
+<h3 id="🐺第四步：在-DAO中-添加查询方法"><a href="#🐺第四步：在-DAO中-添加查询方法" class="headerlink" title="🐺第四步：在 DAO中 添加查询方法"></a>🐺第四步：在 DAO中 添加查询方法</h3><p>最后，向 DAO 类添加一个方法，用于提供您的应用所需的查询功能。该方法需要 Room 运行多次查询，因此应添加 <a target="_blank" rel="noopener" href="https://developer.android.com/reference/kotlin/androidx/room/Transaction"><code>@Transaction</code></a> 注释，以便确保整个操作以原子方式执行。查询结果为 <code>UserWithPlaylistsAndSongs</code> 关系实体类，所以 SQL 只需要查询 <code>UserWithPlaylistsAndSongs</code> 关系类中的父实体数据类对应的表即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Dao</span><br><span class="line">interface MusicDao &#123;</span><br><span class="line">	@Transaction</span><br><span class="line">	@Query(&quot;SELECT * FROM User&quot;)</span><br><span class="line">	fun getUsersWithPlaylistsAndSongs(): List&lt;UserWithPlaylistsAndSongs&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意事项：</p>
+<ol>
+<li>嵌套关系只能对第一层（SQL 所查询的表） 进行条件查询，如果需要更加复杂的条件查询，可以在 SQL 查询语句中使用 <code>JOIN</code> 关键字进行手动关联确切的关联关系，更多详情请参考： <a target="_blank" rel="noopener" href="https://blog.csdn.net/yingaizhu/article/details/117573618#t5">Android Room 数据访问对象（DAO）详解</a>；</li>
+<li>在定义对应关系时，<code>@Relation</code> 注解中，<code>parentColumn</code> 属性值为对应关系的父实体主键列，<code>entityColumn</code> 必须是内嵌的对应关系主实体的主键列。</li>
+<li>使用嵌套关系查询数据需要 Room 处理大量数据，可能会影响性能。因此，请在查询中尽量少用嵌套关系。</li>
+</ol>
+</blockquote>
+<h1 id="七-外键约束"><a href="#七-外键约束" class="headerlink" title="七.外键约束"></a>七.外键约束</h1><h3 id="🐶使用ForeignKey外键约束"><a href="#🐶使用ForeignKey外键约束" class="headerlink" title="🐶使用ForeignKey外键约束"></a>🐶使用ForeignKey外键约束</h3><p>外键的作用是是用来加强在表之间的约束  ，Room允许通过**外键(Foreign Key)**来表示Entity之间的关系。在room中使用<a target="_blank" rel="noopener" href="https://developer.android.google.cn/reference/androidx/room/ForeignKey">@ForeignKey</a>注解来关联两个实体对象的关系。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@Entity(foreignKeys = @ForeignKey(entity = User.class,</span><br><span class="line">                                  parentColumns = &quot;id&quot;,</span><br><span class="line">                                  childColumns = &quot;user_id&quot;))</span><br><span class="line">class Book &#123;</span><br><span class="line">    @PrimaryKey</span><br><span class="line">    public int bookId;</span><br><span class="line"></span><br><span class="line">    public String title;</span><br><span class="line"></span><br><span class="line">    @ColumnInfo(name = &quot;user_id&quot;)</span><br><span class="line">    public int userId;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如上面代码所示，Book对象与User对象是属于的关系。Book中的user_id,对应User中的id。 那么当一个User对象被删除时， 对应的Book会发生什么呢？</p>
+<p><code>@ForeignKey</code>注解中有两个属性<code>onDelete</code>和<code>onUpdate</code>， 这两个属性对应<code>ForeignKey</code>中的<code>onDelete()</code>和<code>onUpdate()</code>  ， 通过这两个属性的值来设置当User对象被删除／更新时，Book对象作出的响应。这两个属性的可选值如下：</p>
+<ul>
+<li><code>CASCADE</code>：User删除时对应Book一同删除； 更新时，关联的字段一同更新</li>
+<li><code>NO_ACTION</code>：User删除时不做任何响应</li>
+<li><code>RESTRICT</code>：禁止User的删除／更新。当User删除或更新时，Sqlite会立马报错。</li>
+<li><code>SET_NULL</code>：当User删除时， Book中的userId会设为NULL</li>
+<li><code>SET_DEFAULT</code>：与<code>SET_NULL</code>类似，当User删除时，Book中的userId会设为默认值</li>
+</ul>
+<blockquote>
+<p>外键的作用非常强大，因为它允许我们指定：引用的实体类更新时发生的情况。SQLite 中的外键会创建索引，并且会在更新或者删除表中数据时做级联操作。因此您要根据实际情况来判断是否使用外键功能。</p>
+</blockquote>
+<h3 id="🐂-ForeignKey和-Relation的区别"><a href="#🐂-ForeignKey和-Relation的区别" class="headerlink" title="🐂@ForeignKey和@Relation的区别"></a>🐂@ForeignKey和@Relation的区别</h3><p>虽然这两个概念都用于为 Room 数据库提供结构，但它们的用例的不同之处在于：</p>
+<ul>
+<li><code>@ForeignKey</code>用于在<em>插入&#x2F;修改</em>数据时强制实施关系结构</li>
+<li><code>@Relation</code>用于在<em>检索&#x2F;查看</em>数据时强制实施关系结构。</li>
+</ul>
+<p>为了更好地理解ForeignKeys 的需求，请考虑以下示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Entity</span><br><span class="line">data class Artist(</span><br><span class="line">    @PrimaryKey val artistId: Long,</span><br><span class="line">    val name: String</span><br><span class="line">)</span><br><span class="line">@Entity</span><br><span class="line">data class Album(</span><br><span class="line">    @PrimaryKey val albumId: Long,</span><br><span class="line">    val title: String,</span><br><span class="line">    val artistId: Long</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>使用此数据库的应用程序有权假定<strong>对于 Album</strong> 表中的每一行，<strong>Artist</strong> 表中都存在相应的行。遗憾的是，如果用户使用外部工具编辑数据库，或者如果应用程序中存在 Bug，则可能会在 <strong>Album</strong> 表中插入与 <strong>Artist</strong> 表中的任何行都不对应的行。或者，可能会从“艺术家”（Artist） 表格中删除行，从而在“相册<em>表格中留下与</em>“艺术家*”中的任何剩余行都不对应的孤立行。这可能会导致应用程序在以后出现故障，或者至少使应用程序编码更加困难。</p>
+<p>一种解决方案是向数据库架构添加 SQL 外键约束，以强制实施<em>艺术家</em>和<em>唱片集</em>表之间的关系。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">@Entity</span><br><span class="line">data class Artist(</span><br><span class="line">    @PrimaryKey val id: Long,</span><br><span class="line">    val name: String</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">@Entity(</span><br><span class="line">    foreignKeys = [ForeignKey(</span><br><span class="line">        entity = Artist::class,</span><br><span class="line">        parentColumns = arrayOf(&quot;id&quot;),</span><br><span class="line">        childColumns = arrayOf(&quot;artistId&quot;),</span><br><span class="line">        onUpdate = ForeignKey.CASCADE,</span><br><span class="line">        onDelete = ForeignKey.CASCADE</span><br><span class="line">    )]</span><br><span class="line">)</span><br><span class="line">data class Album(</span><br><span class="line">    @PrimaryKey val albumId: Long,</span><br><span class="line">    val title: String,</span><br><span class="line">    val artistId: Long</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>现在，每当您插入新专辑时，SQL都会检查是否存在具有该给定ID的艺术家，只有这样您才能继续交易。此外，如果您更新艺术家的信息或将其从<em>艺术家</em>表格中删除，SQL会检查该艺术家的任何专辑并更新&#x2F;删除它们。这就是<code>ForeignKey.CASCADE</code>所起的作用。但这不会在查询期间自动使它们一起返回，因此请使用：<code>@Relation</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">// 我们以前的数据类</span><br><span class="line">@Entity</span><br><span class="line">data class Artist(</span><br><span class="line">    @PrimaryKey val id: Long,</span><br><span class="line">    val name: String</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">@Entity(</span><br><span class="line">    foreignKeys = [ForeignKey(</span><br><span class="line">        entity = Artist::class,</span><br><span class="line">        parentColumns = arrayOf(&quot;id&quot;),</span><br><span class="line">        childColumns = arrayOf(&quot;artistId&quot;),</span><br><span class="line">        onUpdate = ForeignKey.CASCADE,</span><br><span class="line">        onDelete = ForeignKey.CASCADE</span><br><span class="line">    )]</span><br><span class="line">)</span><br><span class="line">data class Album(</span><br><span class="line">    @PrimaryKey val albumId: Long,</span><br><span class="line">    val title: String,</span><br><span class="line">    val artistId: Long</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">// 现在嵌入以实现高效查询</span><br><span class="line">data class ArtistAndAlbums(</span><br><span class="line">    @Embedded val artist: Artist,</span><br><span class="line">    @Relation(</span><br><span class="line">         parentColumn = &quot;id&quot;,</span><br><span class="line">         entityColumn = &quot;artistId&quot;</span><br><span class="line">    )</span><br><span class="line">    val album: List&lt;Album&gt; // &lt;-- 这是一对多的关系，因为每个艺术家都有很多专辑，因此在这里返回一个列表</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>现在，您可以使用以下内容轻松获取艺术家及其专辑的列表：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Dao</span><br><span class="line">interface MusicDao&#123;</span><br><span class="line">    @Transaction </span><br><span class="line">    @Query(&quot;SELECT * FROM Artist&quot;)</span><br><span class="line">    fun getArtistsAndAlbums(): List&lt;ArtistAndAlbums&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以前，您必须编写长样板 SQL 查询才能加入查询并返回对应的数据关系。</p>
+<blockquote>
+<p>注意：需要注释才能使 SQLite 一次性执行两个搜索查询（一个在 Artist 表中查找，一个在 Album 表中查找），而不是单独执行。<code>@Transaction</code></p>
+</blockquote>
+<p>参考资料:<br><a target="_blank" rel="noopener" href="https://developer.android.com/training/data-storage/room">Room官方文档</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2020/06/12/Android%E6%95%B0%E6%8D%AE%E5%BA%93Room%E4%B9%8B%E4%BA%8C%E5%AE%9E%E4%BD%93%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB/">https://lxlfpeng.github.io/2020/06/12/Android%E6%95%B0%E6%8D%AE%E5%BA%93Room%E4%B9%8B%E4%BA%8C%E5%AE%9E%E4%BD%93%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/07/11/Android%E5%BC%B9%E7%AA%97BottomSheetDialog%E6%80%BB%E7%BB%93/" title="Android弹窗BottomSheetDialog总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Android弹窗BottomSheetDialog总结</div></div><div class="info-2"><div class="info-item-1">圆角效果 先设置原有背景透明  style.xml 1234567&lt;!--实现BottomSheetDialog圆角效果--&gt;&lt;style name=&quot;BottomSheetDialog&quot; parent=&quot;Theme.Design.Light.BottomSheetDialog&quot;&gt;    &lt;item name=&quot;bottomSheetStyle&quot;&gt;@style/bottomSheetStyleWrapper&lt;/item&gt;&lt;/style&gt;&lt;style name=&quot;bottomSheetStyleWrapper&quot; parent=&quot;Widget.Design.BottomSheet.Modal&quot;&gt;    &lt;item...</div></div></div></a><a class="pagination-related" href="/2020/06/10/Android%E6%95%B0%E6%8D%AE%E5%BA%93Room%E4%B9%8B%E4%B8%80%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/" title="Android数据库Room之一基础使用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Android数据库Room之一基础使用</div></div><div class="info-2"><div class="info-item-1">一.Room简介Room是Google推出的数据库框架，是一个 ORM (Object Relational Mapping)对象关系映射数据库、其底层还是对SQLite的封装。 使用ORM可以让开发者更加关注业务逻辑，而不是SQL 语句。在JavaWeb领域也有类似的ORM 数据库框架Hibernate、MyBatis等等。 1.Android平台数据库框架在 Android 中常见的数据库框架：  Greendao  Realm  DBFlow LitePal Jetpack-Room  🦝Greendao: 是 room 之前用得最广泛的 ORM 数据库框架，不过官方目前已经不再积极维护（官方在推新品 ObjectBox )在 ROOM,，出来以后据非官方数据统计多种场景下(插入、更新、删除)，ROOM 性能上也只是和 greendao 不相上下，强得有限，毕竟底层都还是 Android 的 SQLite 只能通过包装层和生成语句去优化。Greendao的缺点是配置复杂，不支持监听数据表&#x2F;Kotlin&#x2F;协程等特性。🦁Realm: 不是基于...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-%E5%AE%9A%E4%B9%89%E5%AF%B9%E8%B1%A1%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.</span> <span class="toc-text">一.定义对象之间的关系</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%90%BC%E4%B8%A4%E7%A7%8D%E5%8F%AF%E8%83%BD%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">🐼两种可能的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%BB%E4%B8%AD%E9%97%B4%E6%95%B0%E6%8D%AE%E7%B1%BB"><span class="toc-number">1.1.1.</span> <span class="toc-text">🐻中间数据类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%9D%E5%A4%9A%E9%87%8D%E6%98%A0%E5%B0%84%E8%BF%94%E5%9B%9E%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">🦝多重映射返回值类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%B5%E9%80%89%E6%8B%A9%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.3.</span> <span class="toc-text">🐵选择一种方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-%E5%88%9B%E5%BB%BA%E5%86%85%E5%B5%8C%E7%9A%84%E5%AF%B9%E8%B1%A1"><span class="toc-number">2.</span> <span class="toc-text">二.创建内嵌的对象</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-%E5%AE%9A%E4%B9%89%E4%B8%80%E5%AF%B9%E4%B8%80%E5%85%B3%E7%B3%BB"><span class="toc-number">3.</span> <span class="toc-text">三.定义一对一关系</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%84%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%88%9B%E5%BB%BA%E4%B8%A4%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%AE%9E%E4%BD%93%E7%B1%BB%EF%BC%88%E7%88%B6%E5%AE%9E%E4%BD%93%E5%92%8C%E5%AD%90%E5%AE%9E%E4%BD%93%EF%BC%89"><span class="toc-number">3.0.1.</span> <span class="toc-text">🐄第一步：创建两个数据实体类（父实体和子实体）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%93%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E5%AE%9A%E4%B9%89%E4%B8%80%E5%AF%B9%E4%B8%80%E5%AF%B9%E5%BA%94%E5%85%B3%E7%B3%BB"><span class="toc-number">3.0.2.</span> <span class="toc-text">🦓第二步：定义一对一对应关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%84%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E5%9C%A8-DAO-%E7%B1%BB%E4%B8%AD%E6%B7%BB%E5%8A%A0%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%B3%95"><span class="toc-number">3.0.3.</span> <span class="toc-text">🦄第三步：在 DAO 类中添加查询方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-%E5%AE%9A%E4%B9%89%E4%B8%80%E5%AF%B9%E5%A4%9A%E5%85%B3%E7%B3%BB"><span class="toc-number">4.</span> <span class="toc-text">四.定义一对多关系</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%87%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%88%9B%E5%BB%BA%E4%B8%A4%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%AE%9E%E4%BD%93%E7%B1%BB%EF%BC%88%E7%88%B6%E5%AE%9E%E4%BD%93%E5%92%8C%E5%AD%90%E5%AE%9E%E4%BD%93%EF%BC%89"><span class="toc-number">4.0.1.</span> <span class="toc-text">🐇第一步：创建两个数据实体类（父实体和子实体）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%A8%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E5%AE%9A%E4%B9%89%E4%B8%80%E5%AF%B9%E5%A4%9A%E5%AF%B9%E5%BA%94%E5%85%B3%E7%B3%BB"><span class="toc-number">4.0.2.</span> <span class="toc-text">🦨第二步：定义一对多对应关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%88%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E5%9C%A8-DAO-%E4%B8%AD%E6%B7%BB%E5%8A%A0%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%B3%95"><span class="toc-number">4.0.3.</span> <span class="toc-text">🦈第三步：在 DAO 中添加查询方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94-%E5%AE%9A%E4%B9%89%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%85%B3%E7%B3%BB"><span class="toc-number">5.</span> <span class="toc-text">五.定义多对多关系</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%A7%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%88%9B%E5%BB%BA%E4%B8%A4%E4%B8%AA%E5%AE%9E%E4%BD%93%E7%B1%BB"><span class="toc-number">5.0.1.</span> <span class="toc-text">🐧第一步：创建两个实体类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%A6%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E5%88%9B%E5%BB%BA%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B1%BB%EF%BC%88%E4%BA%A4%E5%8F%89%E5%85%B3%E7%B3%BB%E8%A1%A8%EF%BC%89"><span class="toc-number">5.0.2.</span> <span class="toc-text">🐦第二步：创建第三方类（交叉关系表）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%91%BD%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E5%AE%9A%E4%B9%89%E5%AF%B9%E5%BA%94%E5%85%B3%E7%B3%BB%EF%BC%88%E6%A0%B9%E6%8D%AE%E6%9F%A5%E8%AF%A2%E9%9C%80%E6%B1%82%EF%BC%89"><span class="toc-number">5.0.3.</span> <span class="toc-text">👽第三步：定义对应关系（根据查询需求）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%89%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9A%E5%9C%A8-DAO-%E4%B8%AD%E6%B7%BB%E5%8A%A0%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%B3%95"><span class="toc-number">5.0.4.</span> <span class="toc-text">🐉第四步：在 DAO 中添加查询方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD-%E5%AE%9A%E4%B9%89%E5%B5%8C%E5%A5%97%E5%85%B3%E7%B3%BB"><span class="toc-number">6.</span> <span class="toc-text">六.定义嵌套关系</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%8F%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%AE%9A%E4%B9%89%E5%AE%9E%E4%BD%93%E7%B1%BB"><span class="toc-number">6.0.1.</span> <span class="toc-text">🦏第一步：定义实体类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%AF%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E5%AE%9A%E4%B9%89%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%85%B3%E7%B3%BB%E7%9A%84%E4%BA%A4%E5%8F%89%E5%85%B3%E7%B3%BB%E8%A1%A8"><span class="toc-number">6.0.2.</span> <span class="toc-text">🐯第二步：定义多对多关系的交叉关系表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%81%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E5%AE%9A%E4%B9%89%E5%AF%B9%E5%BA%94%E5%85%B3%E7%B3%BB"><span class="toc-number">6.0.3.</span> <span class="toc-text">🦁第三步：定义对应关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%BA%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9A%E5%9C%A8-DAO%E4%B8%AD-%E6%B7%BB%E5%8A%A0%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%B3%95"><span class="toc-number">6.0.4.</span> <span class="toc-text">🐺第四步：在 DAO中 添加查询方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83-%E5%A4%96%E9%94%AE%E7%BA%A6%E6%9D%9F"><span class="toc-number">7.</span> <span class="toc-text">七.外键约束</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%B6%E4%BD%BF%E7%94%A8ForeignKey%E5%A4%96%E9%94%AE%E7%BA%A6%E6%9D%9F"><span class="toc-number">7.0.1.</span> <span class="toc-text">🐶使用ForeignKey外键约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%82-ForeignKey%E5%92%8C-Relation%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">7.0.2.</span> <span class="toc-text">🐂@ForeignKey和@Relation的区别</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

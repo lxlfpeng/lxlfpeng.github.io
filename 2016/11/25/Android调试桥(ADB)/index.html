@@ -1,0 +1,293 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Android调试桥(ADB) | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.ADB概念1. 什么是ADB?ADB全称Android Debug Bridge(安卓调试桥)，在PC端安装ADB并且配置好ADB环境变量。就可以通过DOS命令行窗口输入命令的方式来对Android设备进行调试。 2. ADB的作用?ADB的主要左右有两大类，一类是直接对Android进行调试。二类是通过adb shell进入到shell模式以后用linux命令行 对设备进行操作。  对应用进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android调试桥(ADB)">
+<meta property="og:url" content="https://lxlfpeng.github.io/2016/11/25/Android%E8%B0%83%E8%AF%95%E6%A1%A5(ADB)/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.ADB概念1. 什么是ADB?ADB全称Android Debug Bridge(安卓调试桥)，在PC端安装ADB并且配置好ADB环境变量。就可以通过DOS命令行窗口输入命令的方式来对Android设备进行调试。 2. ADB的作用?ADB的主要左右有两大类，一类是直接对Android进行调试。二类是通过adb shell进入到shell模式以后用linux命令行 对设备进行操作。  对应用进">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2016-11-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.836Z">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2016/11/25/Android%E8%B0%83%E8%AF%95%E6%A1%A5(ADB)/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Android调试桥(ADB)',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Android调试桥(ADB)</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Android调试桥(ADB)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2016-11-24T16:00:00.000Z" title="发表于 2016-11-25 00:00:00">2016-11-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-ADB概念"><a href="#一-ADB概念" class="headerlink" title="一.ADB概念"></a>一.ADB概念</h1><h3 id="1-什么是ADB"><a href="#1-什么是ADB" class="headerlink" title="1. 什么是ADB?"></a>1. 什么是ADB?</h3><p>ADB全称Android Debug Bridge(安卓调试桥)，在PC端安装ADB并且配置好ADB环境变量。就可以通过DOS命令行窗口输入命令的方式来对Android设备进行调试。</p>
+<h3 id="2-ADB的作用"><a href="#2-ADB的作用" class="headerlink" title="2. ADB的作用?"></a>2. ADB的作用?</h3><p>ADB的主要左右有两大类，一类是直接对Android进行调试。二类是通过<code>adb shell</code>进入到shell模式以后用linux命令行 对设备进行操作。</p>
+<ol>
+<li><p>对应用进行调试</p>
+<ul>
+<li>安装卸载应用。</li>
+<li>将文件从pc推到Android设备中,从Android设备中拉取图片。</li>
+<li>获取截图,录屏,获取正在显示的Activity等功能。</li>
+</ul>
+</li>
+<li><p>安卓系统是基于Linux系统开发，也就支持常见的Linux的命令。通过<code>adb shell</code>来执行这些命令。</p>
+</li>
+</ol>
+<h1 id="二-ADB的环境配置-Win10版"><a href="#二-ADB的环境配置-Win10版" class="headerlink" title="二.ADB的环境配置(Win10版)"></a>二.ADB的环境配置(Win10版)</h1><p>为了ADB能够在PC端全局任意位置使用DOS命令行进行操作，首先要在PC端配置环境变量。</p>
+<h3 id="1-下载ADB文件到PC"><a href="#1-下载ADB文件到PC" class="headerlink" title="1.下载ADB文件到PC"></a>1.下载ADB文件到PC</h3><p><a target="_blank" rel="noopener" href="https://dl.google.com/android/repository/platform-tools-latest-windows.zip">ADB And Fastboot for Windows</a></p>
+<h3 id="2-配置环境变量"><a href="#2-配置环境变量" class="headerlink" title="2.配置环境变量"></a>2.配置环境变量</h3><p>在win10中依次打开我的电脑-&gt;属性-&gt;高级系统设置-&gt;环境变量-&gt;Path<br><img src="/images/08fb9683d35d002db9b99a43bbfde503.webp"><br>配置完成以后打开DOS命令行,输入<code>adb version</code>如果能看到ADB的版本则说明ADB安装成功了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Android Debug Bridge version 1.0.41</span><br><span class="line">Version 30.0.5-6877874</span><br><span class="line">Installed as C:\sdk\platform-tools\adb.exe</span><br></pre></td></tr></table></figure>
+
+<h1 id="三-ADB连接Android设备"><a href="#三-ADB连接Android设备" class="headerlink" title="三.ADB连接Android设备"></a>三.ADB连接Android设备</h1><h3 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1.准备工作"></a>1.准备工作</h3><ul>
+<li>一台Android设备。</li>
+<li>数据线(最好是原装的,部分奸商卖的的数据线只能充电,要注意)。</li>
+<li>打开Android设备的开发者选项.勾选usb调试。</li>
+</ul>
+<h3 id="2-通过手机数据线进行连接"><a href="#2-通过手机数据线进行连接" class="headerlink" title="2.通过手机数据线进行连接"></a>2.通过手机数据线进行连接</h3><p>手机通过数据线连接电脑.如果没有驱动可以下载驱动精灵,驱动精灵,或者豌豆荚安装好驱动。<br>启动ADB:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb start-server</span><br></pre></td></tr></table></figure>
+<p>如果出现如下内容则说明ADB被正常启动了:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">* daemon not running; starting now at tcp:5037</span><br><span class="line">* daemon started successfully</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-解决端口被占用的问题"><a href="#3-解决端口被占用的问题" class="headerlink" title="3. 解决端口被占用的问题"></a>3. 解决端口被占用的问题</h3><p>如果在win10启动ADB有时候会提示5037端口被占用，导致启动失败。提示如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">* daemon not running. starting it now on port 5037 *</span><br><span class="line">ADB server didn&#x27;t ACK </span><br><span class="line">* failed to start daemon *daemon</span><br></pre></td></tr></table></figure>
+<p>目前有两种方案解决该问题:一是将占用ADB端口的应用杀死。二则是修改ADB的端口(推荐)。</p>
+<h5 id="1-方式一"><a href="#1-方式一" class="headerlink" title="(1.)方式一"></a>(1.)方式一</h5><ul>
+<li>查看当前哪个进程占用了这个端口<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -ano | findstr &quot;5037&quot;</span><br></pre></td></tr></table></figure></li>
+<li>杀掉占用的进程即可<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">taskkill /f /pid xxx</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="2-方式二"><a href="#2-方式二" class="headerlink" title="(2.)方式二"></a>(2.)方式二</h5><p>系统环境变量中定义 ANDROID_ADB_SERVER_PORT 的值即可。数值尽量选择一个不常用的端口，如11223等<br>右键计算机 -&gt; 属性 -&gt;高级计算机设置 -&gt;环境变量 -&gt;新建 -&gt;变量名：ANDROID_ADB_SERVER_PORT -&gt;值：11223(任意)<br>重启ADB即可。</p>
+<h3 id="4-ADB通过wifi连接Android设备"><a href="#4-ADB通过wifi连接Android设备" class="headerlink" title="4.ADB通过wifi连接Android设备"></a>4.ADB通过wifi连接Android设备</h3><ol>
+<li>Android设备和Pc必须处于同一个内网中。</li>
+<li>通过数据线连接Android设备,ADB打开5555端口:  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb tcpip 5555  //restarting in TCP mode port: 5555</span><br></pre></td></tr></table></figure></li>
+<li>连接Android设备在内网中的地址:  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb connect 192.168.1.104</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="四-ADB常用指令"><a href="#四-ADB常用指令" class="headerlink" title="四.ADB常用指令"></a>四.ADB常用指令</h1><p><code>adb start_server</code> 启动ADB服务</p>
+<p><code>adb kill-server</code> 关闭ADB服务</p>
+<p><code>adb devices</code> &#x2F;&#x2F;列出所有的连接设备</p>
+<p><code>adb install xxx.apk</code> &#x2F;&#x2F;安装apk 一共有lrtsdg六个选项</p>
+<ul>
+<li>-l 锁定该应用程序</li>
+<li>-r 替换已存在的应用程序，也就是说强制安装</li>
+<li>-t 允许测试包</li>
+<li>-s 把应用程序安装到sd卡上</li>
+<li>-d 允许进行将见状，也就是安装的比手机上带的版本低</li>
+<li>-g 为应用程序授予所有运行时的权限</li>
+</ul>
+<p><code>adb install -r xxx.apk </code>&#x2F;&#x2F;强制安装apk</p>
+<p><code>adb -s 设备1  install -r xxx.apk </code>&#x2F;&#x2F; 选择设备进行安装</p>
+<p><code>adb shell pm list packages </code>&#x2F;&#x2F;列出所有的安装的包名</p>
+<p><code>adb shell pm path com.android.search</code>&#x2F;&#x2F; 列出指定包名对应的apk路径</p>
+<p><code>adb shell pm clear com.android.search</code>&#x2F;&#x2F; 清空指定包名对应的应用的数据和缓存文件，开发时很有用</p>
+<p><code>adb shell dumpsys window w |findstr \/ |findstr name= </code>&#x2F;&#x2F;查看前台进程和前台activity</p>
+<p><code>adb shell ps </code>&#x2F;&#x2F;列出设备里面所有的进程</p>
+<p><code>adb shell ps |findstr baidu  </code>&#x2F;&#x2F;查看包含关键字的进程,如baidu</p>
+<p><code>adb shell service list </code>&#x2F;&#x2F;查看Service列表</p>
+<p><code>adb shell top</code>列出进程的信息</p>
+<ul>
+<li>-d 表示刷新的时间(单位秒).</li>
+<li>-m 表示显示进程最大数.</li>
+<li>|grep (进程名称) 抓取进程名的进程显示它的子线程情况</li>
+<li>-p pid 显示某个进程的信息.如果是多个进程都好分割:pid1,pid2,pid3</li>
+</ul>
+<p>参考:<br><a target="_blank" rel="noopener" href="https://developer.android.google.cn/studio/command-line/adb">Google官方文档之ADB</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2016/11/25/Android%E8%B0%83%E8%AF%95%E6%A1%A5(ADB)/">https://lxlfpeng.github.io/2016/11/25/Android%E8%B0%83%E8%AF%95%E6%A1%A5(ADB)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2016/12/11/Java-%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7%E4%B9%8B%E9%94%81/" title="Java-高级特性之锁"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Java-高级特性之锁</div></div><div class="info-2"><div class="info-item-1">Java多线程开发中，如果涉及到共享资源操作场景，那就必不可少要和Java锁打交道。 Java中的锁机制主要分为Lock和Synchronized，本文主要分析Java锁机制的使用和实现原理，按照Java锁使用、JDK中锁实现、系统层锁实现的顺序来进行分析，话不多说，let’s go~ Java锁使用在Lock接口出现之前，Java程序是靠synchronized关键字实现锁功能的，而JavaSE 5之后，并发包中新增了Lock接口（以及相关实现类）用来实现锁功能，它提供了与synchronized关键字类似的同步功能，只是在使用时需要显式地获取和释放锁。虽然它缺少了（通过synchronized块或者方法）隐式获取释放锁的便捷性，但是却拥有了锁获取与释放的可操作性、可中断的获取锁以及超时获取锁等多种synchronized关键字所不具备的同步特性。 Java锁使用示例： Lock lock &#x3D; new ReentrantLock();lock.lock();try {&#x2F;&#x2F; ..} finally...</div></div></div></a><a class="pagination-related" href="/2016/11/12/Java-%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7%E4%B9%8B%E6%B3%9B%E5%9E%8B/" title="Java-高级特性之泛型"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Java-高级特性之泛型</div></div><div class="info-2"><div class="info-item-1">一. Java 中的泛型Java 5 中添加了泛型，用以编译时类型检查，借此消除使用集合类时常见的ClassCastException风险。 123456List list = new ArrayList();list.add(&quot;abc&quot;);list.add(1); for(Object obj : list)&#123;    String str=(String) obj; &#125; 上面的代码可以很好地编译，但是在运行时会引发ClassCastException，因为我们试图将集合中的对象强制转换为String，而其中一个元素是Integer类型。使用泛型之后: 123456List&lt;String&gt; list1 = new ArrayList&lt;String&gt;(); list1.add(&quot;abc&quot;);//list1.add(1); //编译时期就会发生报错for(String str : list1)&#123;     //不需要类型转换,...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-ADB%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">一.ADB概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AFADB"><span class="toc-number">1.0.1.</span> <span class="toc-text">1. 什么是ADB?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-ADB%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.0.2.</span> <span class="toc-text">2. ADB的作用?</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-ADB%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE-Win10%E7%89%88"><span class="toc-number">2.</span> <span class="toc-text">二.ADB的环境配置(Win10版)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BDADB%E6%96%87%E4%BB%B6%E5%88%B0PC"><span class="toc-number">2.0.1.</span> <span class="toc-text">1.下载ADB文件到PC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">2.0.2.</span> <span class="toc-text">2.配置环境变量</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-ADB%E8%BF%9E%E6%8E%A5Android%E8%AE%BE%E5%A4%87"><span class="toc-number">3.</span> <span class="toc-text">三.ADB连接Android设备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">3.0.1.</span> <span class="toc-text">1.准备工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%80%9A%E8%BF%87%E6%89%8B%E6%9C%BA%E6%95%B0%E6%8D%AE%E7%BA%BF%E8%BF%9B%E8%A1%8C%E8%BF%9E%E6%8E%A5"><span class="toc-number">3.0.2.</span> <span class="toc-text">2.通过手机数据线进行连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%A7%A3%E5%86%B3%E7%AB%AF%E5%8F%A3%E8%A2%AB%E5%8D%A0%E7%94%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">3.0.3.</span> <span class="toc-text">3. 解决端口被占用的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E6%96%B9%E5%BC%8F%E4%B8%80"><span class="toc-number">3.0.3.0.1.</span> <span class="toc-text">(1.)方式一</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E6%96%B9%E5%BC%8F%E4%BA%8C"><span class="toc-number">3.0.3.0.2.</span> <span class="toc-text">(2.)方式二</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-ADB%E9%80%9A%E8%BF%87wifi%E8%BF%9E%E6%8E%A5Android%E8%AE%BE%E5%A4%87"><span class="toc-number">3.0.4.</span> <span class="toc-text">4.ADB通过wifi连接Android设备</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-ADB%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="toc-number">4.</span> <span class="toc-text">四.ADB常用指令</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

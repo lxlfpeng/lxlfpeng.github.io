@@ -1,0 +1,303 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>UEFI与BIOS-有什么区别 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一.BIOS🐒BIOS是什么BIOS（Basic Input Output System）译为基本输入输出系统。它是一组固化到计算机内主板上一个ROM芯片上的程序 ，保存着计算机最重要的基本输入输出的程序、开机后自检程序和系统自启动程序，为计算机提供最低级的、最直接的硬件控制。和其它程序不同的是，BIOS是储存在BIOS芯片中的，而不是储存在磁盘中，因此它属于主板的一部分。大家有时就称呼它一个既">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UEFI与BIOS-有什么区别">
+<meta property="og:url" content="https://lxlfpeng.github.io/2021/07/09/UEFI%E4%B8%8EBIOS-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一.BIOS🐒BIOS是什么BIOS（Basic Input Output System）译为基本输入输出系统。它是一组固化到计算机内主板上一个ROM芯片上的程序 ，保存着计算机最重要的基本输入输出的程序、开机后自检程序和系统自启动程序，为计算机提供最低级的、最直接的硬件控制。和其它程序不同的是，BIOS是储存在BIOS芯片中的，而不是储存在磁盘中，因此它属于主板的一部分。大家有时就称呼它一个既">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2021-07-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.855Z">
+<meta property="article:author" content="peng">
+<meta property="article:tag" content="Bios">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2021/07/09/UEFI%E4%B8%8EBIOS-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'UEFI与BIOS-有什么区别',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">UEFI与BIOS-有什么区别</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">UEFI与BIOS-有什么区别</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2021-07-08T16:00:00.000Z" title="发表于 2021-07-09 00:00:00">2021-07-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Windows%E7%B3%BB%E7%BB%9F/">Windows系统</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一-BIOS"><a href="#一-BIOS" class="headerlink" title="一.BIOS"></a>一.BIOS</h1><h3 id="🐒BIOS是什么"><a href="#🐒BIOS是什么" class="headerlink" title="🐒BIOS是什么"></a>🐒BIOS是什么</h3><p>BIOS（Basic Input Output System）译为基本输入输出系统。它是一组固化到计算机内主板上一个ROM芯片上的程序 ，保存着计算机最重要的基本输入输出的程序、开机后自检程序和系统自启动程序，为计算机提供最低级的、最直接的硬件控制。和其它程序不同的是，BIOS是储存在BIOS芯片中的，而不是储存在磁盘中，因此它属于主板的一部分。大家有时就称呼它一个既不同于软件也不同于硬件的名字“Firmware”（固件）。一般而言，BIOS ROM芯片是主板上唯一贴有标签的芯片，上面印有“BIOS”字样， 虽然有些主板上的BIOS 芯片没有明确印出“BIOS”，但凭借外贴的标签也能很容易地将它认出，BIOS ROM芯片在主板上很引人注目（如下图）。<br><img src="/images/c676a41fc17680ada3172bea69621ca2.webp" alt="image.png"><br>BIOS是一种程序，其内容是软件，由生产厂商在出厂时用烧录的形式集成在主板上的一块ROM芯片中，因此它的表现形式为硬件。通常所说的BIOS芯片实际上指的是存储BIOS的ROM芯片，ROM只是BIOS的载体。 为了在关机后使 BIOS 不会丢失，早期的 BIOS 存储在ROM中，不能进行写入操作，并且其大小不会超过 64KB；从奔腾时代开始，目前的 BIOS 大多有 1MB 到 2MB，使用 闪存（Flash ROM）来作为BIOS的存储芯片，支持写操作，这也为刷写BIOS提供了方便。</p>
+<h3 id="🐕BIOS如何运行"><a href="#🐕BIOS如何运行" class="headerlink" title="🐕BIOS如何运行"></a>🐕BIOS如何运行</h3><p>BIOS是连接软件与硬件的一座“桥梁”，是计算机的开启时运行的第一个程序，主要功能是为计算机提供最底层的、最直接的硬件设置和控制。因此，硬件系统一上电或重置，处理器要执行第一条指令的地址会被定位到BIOS存储器，初始化开始运行。在X86系统中，CPU加电后跳转至BIOS的固定物理地址0xFFFF0。打开计算机电源，计算机会首先加载BIOS，然后它会对电脑的硬件设备进行完全彻底的检验和测试。如果发现问题，分两种情况处理：严重故障停机，不给出任何提示或信号；非严重故障则给出屏幕提示或声音报警信号，等待用户处理。如果未发现问题，，屏幕就会显示出CPU、内存、硬盘等信息。BIOS在执行完硬件自检和初始化后，会将自己复制到从 0xA0000 开始的物理内存中并继续执行。将硬件设置为备用状态，然后启动操作系统，把对电脑的控制权交给用户。 BIOS的主要作用有三点:</p>
+<ul>
+<li>自检及初始化。</li>
+<li>程序服务。</li>
+<li>设定中断。</li>
+</ul>
+<h5 id="1-自检及初始化程序"><a href="#1-自检及初始化程序" class="headerlink" title="1.自检及初始化程序"></a>1.自检及初始化程序</h5><p>自检及初始化程序又分为三个部分:</p>
+<ol>
+<li><p>加电自检（POST） 功能是检查计算机硬件是否良好，自检中如发现有错误，将按两种情况处理：对于严重故障（致命性故障）则停机，此时由于各种初始化操作还没完成，不能给出任何提示或信号；对于非严重故障则给出提示或声音报警信号，等待用户处理。</p>
+</li>
+<li><p>初始化 创建中断向量、设置寄存器、对一些外部设备进行初始化和检测等，其中很重要的一部分是BIOS设置，主要是对硬件设置的一些参数，当计算机启动时会读取这些参数，并和实际硬件设置进行比较，如果不符合，会影响系统的启动。</p>
+</li>
+<li><p>引导程序 功能是引导Dos或其他操作系统 ，此时会在硬盘读取引导记录，然后把计算机的控制权转交给引导记录，由引导记录把操作系统装入电脑，在电脑启动成功后，BIOS的这部分任务就完成了。</p>
+</li>
+</ol>
+<h5 id="2-程序服务处理"><a href="#2-程序服务处理" class="headerlink" title="2.程序服务处理"></a>2.程序服务处理</h5><p>BIOS直接与计算机的I&#x2F;O设备（Input&#x2F;Output，即输入&#x2F;输出设备）打交道，通过特定的数据端口发出命令，传送或者接受各种外部设备的数据，实现软件程序对硬件的直接操作。</p>
+<h5 id="3-硬件中断处理"><a href="#3-硬件中断处理" class="headerlink" title="3.硬件中断处理"></a>3.硬件中断处理</h5><p>开机时BIOS会告诉CPU各硬件设备的中断号，当用户发出使用某个设备的指令后，CPU就根据中断号使用相对应的硬件完成工作，再根据中断号跳回原来的工作。</p>
+<p><strong>BIOS ： 主要就是负责 在开机时做硬件启动和检测等工作，并且担任操作系统控制硬件时的中介角色，</strong></p>
+<blockquote>
+<p>传统BIOS传输模式启动顺序：开机→BIOS初始化→BIOS自检→引导操作系统→进入系统。</p>
+</blockquote>
+<h3 id="🦉BIOS的缺点"><a href="#🦉BIOS的缺点" class="headerlink" title="🦉BIOS的缺点"></a>🦉BIOS的缺点</h3><ul>
+<li>开发效率低：大部分BIOS代码使用汇编开发，开发效率不言而喻。汇编开发的另一个缺点是使得代码与设备的耦合程度太高，代码受硬件变化的影响大。</li>
+<li>性能差：BIOS基本输入&#x2F;输出服务需要通过中断来完成，开销大，并且BIOS没有提供异步工作模式，大量的时间消耗在等待上。</li>
+<li>功能扩展性差，升级缓慢：BIOS代码采用静态链接，增加硬件功能时，必须将16位代码放置在0x0C0000～0x0DFFFF区间，初始化时将其设置为约定的中断处理程序。而且BIOS没有提供动态加载设备驱动的方案。</li>
+<li>安全性：BIOS运行过程中对可执行代码没有安全方面的考虑。</li>
+<li>不支持从硬盘２TB以上的地址引导：受限于BIOS硬盘的寻址方式，BIOS硬盘采用32位地址，因而引导扇区的最大逻辑块地址是232(换算成字节地址，即232×512&#x3D;2TB)</li>
+</ul>
+<p>由于这些问题的存在，UEFI出现了。</p>
+<h1 id="二-UEFI"><a href="#二-UEFI" class="headerlink" title="二.UEFI"></a>二.UEFI</h1><h3 id="🐉什么是UEFI"><a href="#🐉什么是UEFI" class="headerlink" title="🐉什么是UEFI"></a>🐉什么是UEFI</h3><p>UEFI，全称Unified Extensible Firmware Interface，即“统一的可扩展固件接口”，是一种详细描述全新类型接口的标准，是适用于电脑的标准固件接口，旨在代替BIOS。UEFI旨在提高软件互操作性和解决BIOS的局限性。作为传统BIOS的继任者，UEFI拥有前辈所不具备的诸多功能，比如图形化界面、多种多样的操作方式、允许植入硬件驱动等等。这些特性让UEFI相比于传统BIOS更加易用、更加多功能、更加方便。BIOS只能在16位模式下运行，而UEFI可以在32位或64位模式下运行，并且具有比BIOS更多的可寻址地址空间，这意味着引导过程更快。这也意味着UEFI设置屏幕可以比BIOS设置屏幕更光滑，包括图形和鼠标光标支持。但是这不是强制性的，许多pc机仍然带有文本模式的UEFI设置界面，这些界面看起来和工作起来都像一个旧的BIOS设置屏幕。老一点的机器都是使用BIOS主板，现在大部分新机器都是采用UEFI主板，UEFI采用了向后兼容，所以BIOS切换为UEFI不可以，而UEFI切换为BIOS是可以的。UEFI还包含了其他功能，它支持安全引导，这意味着可以检查操作系统的有效性，以确保没有恶意软件篡改引导过程。它可以在UEFI固件本身中支持联网特性，这有助于远程故障排除和配置。UEFI也不仅仅是BIOS替换。UEFI本质上是一个运行在PC固件之上的微型操作系统，它可以做的比BIOS多得多。它可以存储在主板的闪存中，也可以在启动时从硬盘或网络共享加载。一般的UEFI系统仅能识别FAT32，不同于BIOS只能识别固定位置的磁盘引导块。这意味着只要将引导程序放到FAT32分区里，UEFI系统就能通过分区表的指引找到这个保存着引导程序的FAT32分区。UEFI系统是由模块化的C语言程序写出来的，所以通过添加或修改程序模块就能获得更多的功能。例如支持更多的文件系统，图形界面，甚至能使用浏览器浏览网页。</p>
+<blockquote>
+<p>UEFI模式启动顺序：开机→UEFI初始化→引导操作系统→进入操作系统启动。速度相对lagacy模式要更快。</p>
+</blockquote>
+<h1 id="三磁盘分区表"><a href="#三磁盘分区表" class="headerlink" title="三磁盘分区表"></a>三磁盘分区表</h1><p>在安装win7&#x2F;win8&#x2F;win10系统时，有的时候会出现提示磁盘具有MBR分区表，EFI无法正常安装Windows系统之类的情况，如下图:<br><img src="/images/166d2d4fcb764fa79c490ff646fb111b.webp"><br>那么，磁盘MBR分区表和GPT分区表两者之间有什么区别?<br>我们都知道，如果电脑中安装了一块新的硬盘。这块物理硬盘是无法被直接使用的，而是需要在硬盘上划分出分区，在划分好的分区上创建FAT或NTFS等文件系统，这块硬盘才能够被正常使用。当然，这块物理硬盘可以划分成多个分区，这取决于使用者的需求而定，有些人喜欢分三个区，有些人喜欢分两个区。那，怎么把硬盘分成多个区?这就要使用到分区表了，分区表定义与保存了硬盘的分区信息，<br>分区表位于硬盘开头的一段特定的物理空间内，操作系统等软件通过读取分区表内的信息，就能够获得该硬盘的分区信息。<br><img src="/images/3e7a214fed6ba37adf1e776c7a89ffb0.webp" alt="image.png"><br>如上图所见，硬盘的空间会划分为C、D、E等3个分区，而这3个分区内的信息将在硬盘最开头的分区表中保存着。分区表在Windows系统中则有2种类型的分区方案： MBR与GPT之分。</p>
+<p><strong>硬盘必须要分区之后才能使用的原因有如下两点:</strong></p>
+<ul>
+<li>数据的安全性： 每个分区的数据是分开的，所以，当你需要将某个分区的数据重整时，例如你要将计算机中Windows的C盘重装系统时， 可以将其他重要数据移动到其他分区，那么C盘重装系统并不会影响到D盘。</li>
+<li>系统的性能考虑： 由于分区将数据集中在某个柱面的区段，当有数据要读取自该分区时， 磁盘只会查找对应的柱面范围，由于数据集中，将有助于数据读取的速度与性能。</li>
+</ul>
+<h3 id="🦆MBR分区表"><a href="#🦆MBR分区表" class="headerlink" title="🦆MBR分区表"></a>🦆MBR分区表</h3><p>MBR的意思是“主引导记录”，是IBM公司早年间提出的。它是存在于磁盘驱动器开始部分的一个特殊的启动扇区。这个扇区包含了已安装的操作系统系统信息，并用一小段代码来启动系统。如果MBR的信息损坏或误删就不能正常启动系统，这时候你就需要找一个引导修复软件工具来修复它就可以了。Linux系统中MBR通常会是GRUB加载器。当一台电脑启动时，它会先启动主板自带的BIOS系统，BIOS加载MBR，MBR再启动Windows，这就是mbr的启动过程。<br><img src="/images/435a9d339f4451bae3a3e66acf03676b.webp" alt="image.png"><br>在MBR磁盘的第一扇区还会保存着电脑系统的启动代码以及硬盘分区表，而在MBR中，分区表的大小是固定不变的，一共可容纳4个主分区信息。MBR分区表中支持的硬盘最大分区容量仅为2TB，对2TB以上容量的物理硬盘，不适合使用MBR分区方案。</p>
+<h3 id="🦔GPT分区表"><a href="#🦔GPT分区表" class="headerlink" title="🦔GPT分区表"></a>🦔GPT分区表</h3><p>GPT是GUID磁碟分割表的缩写，主要的意思是全局唯一标识磁盘分区表，这是实体硬盘的分区表的结构布局的标准。<br><img src="/images/ba4ca0d66b8a332830053669f4d0e1bd.webp" alt="image.png"><br>在GTP磁盘的第一个数据块中同样有一个与MBR(主引导记录)类似的标记，叫做PMBR。PMBR的作用是，当使用不支持GPT的分区工具时，整个硬盘将显示为一个受保护的分区，以防止分区表及硬盘数据遭到破坏。GPT的分区方案相对MBR来说更为先进，这是有原因的，主要是GPT分区表头中可自定义分区数量的最大值，也就是说GPT分区表的大小不是固定的。在Windows中，微软设定GPT磁盘最大分区数量为128个。另外，GPT分区表则能够识别2TB以上的硬盘空间。除此之外，GPT分区方案在硬盘的末端还有一个备份分区表，保证了分区信息不容易丢失。目前新出的电脑配置的硬盘基本上都使用了GPT分区方案。任何一块GPT磁盘上都有一个MSR分区，大小随硬盘总容量而定，一般不超过128MB。这个分区不能被用户直接使用，它的用途是防止将一块GPT磁盘接到老系统（如XP）中，被当作未格式化的空硬盘而继续操作（例如重新格式化），导致数据丢失。GPT磁盘上有了这个分区，当把它接入XP等老系统中，会提示无法识别的磁盘，也无法进一步操作。MBR分区表最多只能支持4个主分区或三个主分区+1个扩展分区(逻辑分区不限制)，GPT分区表在Windows系统下可以支持128个主分区。<br><img src="/images/72a5698bcf741d1731911d4590714701.webp" alt="image.png"></p>
+<h3 id="🦀BIOS-MBR"><a href="#🦀BIOS-MBR" class="headerlink" title="🦀BIOS + MBR"></a>🦀BIOS + MBR</h3><p>BIOS是一个写入到主机板上的一个程序，是开机时电脑系统会主动执行的第一个程序。接下来BIOS会去分析电脑里面有哪些储存设备，以硬盘为例，BIOS会依据使用者的设定去取得能够使用的硬盘，并且到该硬盘里面去读取第一个磁区的MBR位置。MBR这个仅有446B的硬碟容量里面会放置最基本的硬盘引导程序(硬盘引导程序的主要作用是检查分区表是否正确并且在系统硬件完成自检以后引导具有激活标志的分区上的操作系统，并将控制权交给启动程序。)，此时BIOS就功成圆满，而接下来就是MBR内的开机管理程序的工作了。BIOS引导windows操作系统时，是通过一个活动的主分区下的bootmgr（启动管理器）文件导入根目录下boot文件夹里的BCD（启动设置数据）文件，<br>然后BCD文件根据自身的配置内容加载系统启动文件winload.exe（位置：根目录\Windows\system32\winload.exe）来启动系统。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BIOS→MBR→“活动的主分区”→\bootmgr→\Boot\BCD→\Windows\system32\winload.exe</span><br></pre></td></tr></table></figure>
+
+<p>当引导程序运行后，操作系统内核就被加载运行，完成从<code>BIOS</code>程序中接手的引导流程，整体流程如下图：</p>
+<p><img src="/images/be8ce6a3c6b964788350031fab4f423a.webp" alt="在这里插入图片描述"></p>
+<h3 id="🐙UEFI-GPT"><a href="#🐙UEFI-GPT" class="headerlink" title="🐙UEFI + GPT"></a>🐙UEFI + GPT</h3><p>同上一种情况相对应，新式的UEFI主板，采用了UEFI方式，那么，需要给硬盘采用GPT分区方案。 UEFI BIOS引导windows系统时，是通过一个FAT格式分区下的bootmgfw.efi文件来导入BCD文件，然后BCD文件根据自身的配置内容加载系统引导文件winload.efi:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UEFIBIOS→EFI系统分区（FAT格式的分区）→\efi\Microsoft\boot\bootmgfw.efi→efi\Microsoft\BCD→\Windows\system32\winload.efi</span><br></pre></td></tr></table></figure>
+
+<p>整个<code>UEFI</code>的启动详细流程描述如下：</p>
+<ul>
+<li>开机后，固化在<code>ROM</code>里的<code>UEFI BIOS</code>就会被加载到内存运行。</li>
+<li><code>UEFI BIOS</code>将引导<code>EFI</code>系统进行运行。</li>
+<li>在<code>EFI</code>系统启动后，<code>GUID</code>分区表就会被识别，之后<code>EFI</code>系统就会通过<code>.efi</code>文件启动<code>Boot Loader</code>程序加载操作系统内核。 整体流程如下图：<br><img src="/images/93cc0567f68360fc8793e27a099e5f56.webp" alt="在这里插入图片描述"></li>
+</ul>
+<p>使用UEFI启动的系统，必须要有一个ESP（FAT32格式）分区供UEFI使用，这是因为，不管是使用grub（或者其他比如微软windows的引导器）来引导操作系统还是UEFI直接引导linux内核镜像，<br>都需要有ESP分区用于存放引导文件（BIOS里面的UEFI只认这个分区，如果走UEFI引导，也必须从这个分区加载引导文件），UEFI标准定义了默认的引导文件如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">esp/EFI/BOOT/BOOTx64.EFI  64位系统的引导文件</span><br><span class="line">esp/EFI/BOOT/BOOTIA.EFI  32位系统的一道文件</span><br></pre></td></tr></table></figure>
+
+<p>有些出厂预装win8系统的电脑下将该FAT分区称之为ESP分区或EFI分区，ESP和EFI分区一般都是隐藏的FAT分区， 可以通过DG分区工具来创建ESP分区，还可以用DG为该分区添加盘符让其在资源管理器下显现出来。可见，UEFI+GPT模式引导windows系统时，并不需要mbr主引导记录，也不需要活动分区， 只需要你一个存放了引导启动文件的fat格式分区就可以了，这个fat分区当然也可以是U盘等外接USB设备了。UEFI还有一个重要特性就是在UEFI下运行应用程序，这类程序文件通常以efi结尾。利用UEFI可以直接识别FAT分区中的文件，又有可直接在其中运行应用程序。我们就可以将Windows安装程序做成efi类型应用程序，然后把它放到任意FATA分区中直接运行即可。</p>
+<h1 id="四-磁盘文件系统"><a href="#四-磁盘文件系统" class="headerlink" title="四.磁盘文件系统"></a>四.磁盘文件系统</h1><p>操作系统中负责管理和存储文件信息的软件结 构称为文件管理系统，简称文件系统。 如果没有文件系统，那么我们只能以0和1二进制的方式来访问磁盘上的内容不能以文件的方式来访问磁盘数据。所以不管是MBR还是GPT，在分好区以后都需要将分区格式化为文件系统。这个文件系统就是所谓的分区格式。目前来说windows下最推荐的文件系统是NTFS，MAC下最推荐APFS，Linux下ext4。</p>
+<h3 id="🐸Windows下常见的文件系统"><a href="#🐸Windows下常见的文件系统" class="headerlink" title="🐸Windows下常见的文件系统"></a>🐸Windows下常见的文件系统</h3><ul>
+<li><strong>FAT32</strong>:（最大分区128G，单文件最大4G）。</li>
+<li><strong>exFAT</strong>:（最大分区8T，单文件最大4G）。</li>
+<li><strong>NTFS</strong> :  该文件系统时微软的专利。</li>
+</ul>
+<h3 id="🐺Mac下常见的文件系统"><a href="#🐺Mac下常见的文件系统" class="headerlink" title="🐺Mac下常见的文件系统"></a>🐺Mac下常见的文件系统</h3><ul>
+<li><strong>HFS</strong>: 分层文件系统（Hierarchical File System，HFS）是一种由苹果电脑开发，并使用在Mac OS上的文件系统。</li>
+<li><strong>HFS+</strong>:<br>HFS+来源于UNIX，但是又不用于UNIX，它增加了许多新的特性，同时也有许多不同于Windows、UNIX等系统的概念。HFS+是苹果公司为替代他们的分层文件系统（HFS）而开发的一种文件系统。它被用在macintosh电脑（或者其他运行MacOS的电脑）上。它也是iPod上使用的其中一种格式。</li>
+<li><strong>APFS</strong>: APFS是Apple FileSystem的简称，是苹果公司发布的新的文件系统，替代目前所使用的HFS+文件系统。该系统的核心为加密功能，其将为苹果旗下的每款设备提供统一的加密方法。该系统包含有多密钥加密功能，内置有针对每个文件的密钥，其针对敏感元数据也都有独立的密钥。</li>
+</ul>
+<h3 id="🐏Linux下常见文件系统"><a href="#🐏Linux下常见文件系统" class="headerlink" title="🐏Linux下常见文件系统"></a>🐏Linux下常见文件系统</h3><ul>
+<li><strong>Ext2</strong> EXT2第二代扩展文件系统（英语：second extended filesystem，缩写为 ext2），是LINUX内核所用的文件系统。</li>
+<li><strong>Ext3</strong> EXT3是第三代扩展文件系统（英语：Third extended filesystem，缩写为ext3），是一个日志文件系统，常用于Linux操作系统。它是很多Linux发行版的默认文件系统。</li>
+<li><strong>Ext4</strong> EXT4是第四代扩展文件系统（英语：Fourth extended filesystem，缩写为 ext4）是Linux系统下的日志文件系统，是ext3文件系统的后继版本。</li>
+</ul>
+<p>部分参考资料:</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/ZuoWeiXiaoDuZuoZuo/article/details/83380201">科普–常见的磁盘文件系统</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bwsl.wang/script/81.html">EFI启动，真没那么复杂</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2021/07/09/UEFI%E4%B8%8EBIOS-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB/">https://lxlfpeng.github.io/2021/07/09/UEFI%E4%B8%8EBIOS-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Bios/">Bios</a></div><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2021/07/11/x96max+-%E7%94%B5%E8%A7%86%E7%9B%92%E5%AD%90%E5%A6%82%E4%BD%95%E5%88%B7%E5%85%A5EmuELEC%E6%B8%B8%E6%88%8F%E7%B3%BB%E7%BB%9F/" title="x96max+-电视盒子如何刷入EmuELEC游戏系统"><img class="cover" src="/images/368ed8979644e82aaaaf3a9694d0d744.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">x96max+-电视盒子如何刷入EmuELEC游戏系统</div></div><div class="info-2"><div class="info-item-1">一. 了解相关概念1. Kodi是什么?Kodi（以前称为XBMC）是一个免费的开放源代码媒体播放器软件应用程序，它可以运行在Linux、OSX、Windows、Android等多种操作系统和硬件平台。它是一个优秀的开源的（GPL）媒体中心软件。最初为Xbox而开发，叫XBMC(全称是XBOX Media Center)，也就是XBOX平台的媒体中心。因为全世界开发者的参与，这个软件已经拥有远远超过以往的功能，这已经不能用‘一个简单播放器’来包含所有的一切了。因为这个原因，XBMC.14后更名为Kodi。Kodi的图形用户界面让用户方便地从硬盘、光盘、局域网和互联网浏览和观看视频、图片，收听广播和音乐。Kodi项目由非营利的XBMC基金会管理，并由分布在世界各地的志愿者参与开发。不仅如此Kodi还能通过插件提供各种扩展的功能，有Kodi开发团队，也有第三方人员开发的插件。kodi中文网 2. LibreELEC是什么?LibreELEC 是基于 Linux 的多媒体播放系统，其宗旨是在一个高度精简的 Linux 系统下通过 KODI 播放多媒体音视频，LibreELEC 是...</div></div></div></a><a class="pagination-related" href="/2021/07/05/Flutter%E4%B9%8B%E4%B8%BB%E9%A2%98%E5%92%8C%E5%A4%9A%E8%AF%AD%E8%A8%80/" title="Flutter之主题和多语言"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Flutter之主题和多语言</div></div><div class="info-2"><div class="info-item-1">支持国际化为了尽可能小而且简单，flutter包中仅提供美国英语值的MaterialLocalizations和WidgetsLocalizations接口的实现（实现类分别为DefaultMaterialLocalizations和DefaultWidgetsLocalizations）。所以Material组件库和开发人员的UI都需要进行国际化：  Material组件库比如：日历组件默认在任何环境下都会以英文显示，所以需要国际化。需要依赖flutter_localizations包，包含GlobalMaterialLocalizations和GlobalWidgetsLocalizations的本地化接口的多语言实现。 开发人员的UI。需要实现Localizations。  iOS需要在info.plist中添加Localizations项（在其中添加语言，默认有一个英文） 添加依赖默认情况下，Flutter...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-BIOS"><span class="toc-number">1.</span> <span class="toc-text">一.BIOS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%92BIOS%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.0.1.</span> <span class="toc-text">🐒BIOS是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%95BIOS%E5%A6%82%E4%BD%95%E8%BF%90%E8%A1%8C"><span class="toc-number">1.0.2.</span> <span class="toc-text">🐕BIOS如何运行</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E8%87%AA%E6%A3%80%E5%8F%8A%E5%88%9D%E5%A7%8B%E5%8C%96%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.0.2.0.1.</span> <span class="toc-text">1.自检及初始化程序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E7%A8%8B%E5%BA%8F%E6%9C%8D%E5%8A%A1%E5%A4%84%E7%90%86"><span class="toc-number">1.0.2.0.2.</span> <span class="toc-text">2.程序服务处理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E7%A1%AC%E4%BB%B6%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86"><span class="toc-number">1.0.2.0.3.</span> <span class="toc-text">3.硬件中断处理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%89BIOS%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-number">1.0.3.</span> <span class="toc-text">🦉BIOS的缺点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-UEFI"><span class="toc-number">2.</span> <span class="toc-text">二.UEFI</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%89%E4%BB%80%E4%B9%88%E6%98%AFUEFI"><span class="toc-number">2.0.1.</span> <span class="toc-text">🐉什么是UEFI</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E8%A1%A8"><span class="toc-number">3.</span> <span class="toc-text">三磁盘分区表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%86MBR%E5%88%86%E5%8C%BA%E8%A1%A8"><span class="toc-number">3.0.1.</span> <span class="toc-text">🦆MBR分区表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%94GPT%E5%88%86%E5%8C%BA%E8%A1%A8"><span class="toc-number">3.0.2.</span> <span class="toc-text">🦔GPT分区表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A6%80BIOS-MBR"><span class="toc-number">3.0.3.</span> <span class="toc-text">🦀BIOS + MBR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%99UEFI-GPT"><span class="toc-number">3.0.4.</span> <span class="toc-text">🐙UEFI + GPT</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.</span> <span class="toc-text">四.磁盘文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%B8Windows%E4%B8%8B%E5%B8%B8%E8%A7%81%E7%9A%84%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.0.1.</span> <span class="toc-text">🐸Windows下常见的文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%BAMac%E4%B8%8B%E5%B8%B8%E8%A7%81%E7%9A%84%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.0.2.</span> <span class="toc-text">🐺Mac下常见的文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%8FLinux%E4%B8%8B%E5%B8%B8%E8%A7%81%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.0.3.</span> <span class="toc-text">🐏Linux下常见文件系统</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

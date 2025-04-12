@@ -1,0 +1,245 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta property="og:type" content="website">
+<meta property="og:title" content="鹏哥的Blog">
+<meta property="og:url" content="https://lxlfpeng.github.io/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:author" content="peng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '鹏哥的Blog',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/images/home_bg.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">鹏哥的Blog</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="post_cover left"><a href="/2021/01/05/Docker%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/" title="Docker容器化技术总结"><img class="post-bg" src="/images/075436a543601219ed7b207a2164f00d.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Docker容器化技术总结"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/01/05/Docker%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/" title="Docker容器化技术总结"><i class="fas fa-thumbtack sticky"></i>Docker容器化技术总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-01-04T16:00:00.000Z" title="发表于 2021-01-05 00:00:00">2021-01-05</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Docker%E5%AE%B9%E5%99%A8/">Docker容器</a></span></div><div class="content">一.Docker基础 image：镜像，是一个只读模版，用来创建容器。 container: 容器，是一个可运行的镜像实例。 Dockerfile: 镜像构建的模版，描述镜像构建的步骤。通过镜像来创建容器，程序就跑在容器中。并且一个镜像可以随意创建N个容器，各个容器间相互隔离。  二.Docker的安装安装Docker 卸载旧版本1sudo apt-get remove docker docker-engine docker.io containerd runc &#x2F;var&#x2F;lib&#x2F;docker的内容，包括镜像、容器、卷和网络，可以保留也可以删除。 运行安装 Docker 的命令：1sudo apt-get install -y docker.io 等待安装完毕，现在我们使用下面的命令启动 Docker：123systemctl start docker或者:sudo /etc/init.d/docker start 设置开机自动启动：1systemctl enable docker 查看 docker 版本：1docker...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2021/08/13/Ubuntu%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98%E5%8F%8A%E5%A4%84%E7%90%86/" title="Ubuntu相关问题及处理"><img class="post-bg" src="/images/fb37ca12540fb58a6073b431b513a309.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu相关问题及处理"></a></div><div class="recent-post-info"><a class="article-title" href="/2021/08/13/Ubuntu%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98%E5%8F%8A%E5%A4%84%E7%90%86/" title="Ubuntu相关问题及处理"><i class="fas fa-thumbtack sticky"></i>Ubuntu相关问题及处理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-08-12T16:00:00.000Z" title="发表于 2021-08-13 00:00:00">2021-08-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux%E7%B3%BB%E7%BB%9F/">Linux系统</a></span></div><div class="content">Ubuntu下root用户无法通过SSH登录？如果你的Ubuntu是新安装的，你会发现root用户无法通过SSH登录。这是因为root权限太高可以做任何事，安全起见Ubuntu下的SSH默认不让root登录。 假如一个普通用户有sudo权限，那就可以以普通用户先SSH登录，然后在‘sudo -s’切换成root。这样可行但不是很方便。为了方便起见，我们可以通过修改SSH配置文件让root用户可以直接SSH登录。  打开ssh配置文件*&#x2F;etc&#x2F;ssh&#x2F;sshd_config*  1vim /etc/ssh/sshd_config   找到下面这一行  1PermitRootLogin prohibit-password   将 上面的prohibit-password替换成yes  1PermitRootLogin yes   保存退出  重启sshd.service   1$ sudo systemctl restart sshd.service  完成后root就可以通过SSH登录了，当然需要输入root密码。 注：...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2016/12/22/Python%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/" title="Python语法总结"><img class="post-bg" src="/images/b84e6e02bfdc6e8abdd155bfb6a23c61.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Python语法总结"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/12/22/Python%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/" title="Python语法总结"><i class="fas fa-thumbtack sticky"></i>Python语法总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2016-12-21T16:00:00.000Z" title="发表于 2016-12-22 00:00:00">2016-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python%E5%BC%80%E5%8F%91/">Python开发</a></span></div><div class="content">一.python的基本数据类型。Python常见的数据类型:Number（数字）、String（字符串）、List（列表）、Tuple（元组）、Set（集合）、Dictionary（字典）。  type(xx)              #获取类型,返回值就是数据类型 isinstance(xx, yy )   #判断是否属于某一种类型,属于返回true,不属于返回false  1.Number（数字）Python3 支持** int、float、bool、complex（复数）**。 123&gt;&gt;&gt; a, b, c, d = 20, 5.5, True, 4 + 3j#定义多个变量&gt;&gt;&gt; print(type(a), type(b), type(c), type(d))#输出变量的类型&lt;class &#x27;int&#x27;&gt; &lt;class &#x27;float&#x27;&gt; &lt;class &#x27;bool&#x27;&gt; &lt;class...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2017/05/19/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%90%86%E8%AE%BA%E6%80%BB%E7%BB%93-Java%E7%89%88/" title="面向对象设计模式理论总结-Java版"><img class="post-bg" src="/images/311e68177cc2ec89577840663136ab3e.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="面向对象设计模式理论总结-Java版"></a></div><div class="recent-post-info"><a class="article-title" href="/2017/05/19/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%90%86%E8%AE%BA%E6%80%BB%E7%BB%93-Java%E7%89%88/" title="面向对象设计模式理论总结-Java版"><i class="fas fa-thumbtack sticky"></i>面向对象设计模式理论总结-Java版</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2017-05-18T16:00:00.000Z" title="发表于 2017-05-19 00:00:00">2017-05-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">编程基础</a></span></div><div class="content">一. 什么是UML类图?UML类图是一种结构图，用于描述一个系统的静态结构。类图以反映类结构和类之间关系为目的，用以描述软件系统的结构，是一种静态建模方法。类图中的类，与面向对象语言中的类的概念是对应的，因此又称统一建模语言，类图是使用频率最高的UML图之一。 二. 类图中的表示方式1.类在类图中的表示方式在UML类图中，类使用包含类名、属性(field) 和方法(method) 且带有分割线的矩形来表示，比如下图表示一个Employee类，它包含name、age和email这3个属性，以及modifyInfo()方法。对应代码： 123456789public class Employee &#123;    private String name;    private int age;    private String email;        public void modifyInfo() &#123;        ...   ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2017/02/13/%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E5%BF%85%E7%9F%A5%E7%9A%84%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/" title="开发人员必知的网络基础知识总结"><img class="post-bg" src="/images/dd71e626215b0002229989133ed60ac9.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="开发人员必知的网络基础知识总结"></a></div><div class="recent-post-info"><a class="article-title" href="/2017/02/13/%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E5%BF%85%E7%9F%A5%E7%9A%84%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/" title="开发人员必知的网络基础知识总结"><i class="fas fa-thumbtack sticky"></i>开发人员必知的网络基础知识总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2017-02-12T16:00:00.000Z" title="发表于 2017-02-13 00:00:00">2017-02-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">网络基础</a></span></div><div class="content">一.网络分层模型1.什么是网络分层模型?为了减少网络设计的复杂性，大多数网络都采用了分层结构。在相同的网络中，处于第N层的机器之间使用第N层的协议进行通信。计算机网络的各层及其协议的集合被称为网络的体系结构，按照不同的维度，通常被分为七层、五层、四层网络结构。 2.七层网络模型开放式系统互联模型（Open System Interconnection Model，简称为 OSI 模型）是一种概念模型，由国际标准化组织提出，并试图成为计算机在世界范围内互连为网络的标准框架，它具有七层网络结构。主要是由：应用层（Application）、表示层（Presentation）、会话层（Session）、传输层（Transport）、网络层（Network）、数据链路层（Data Link）、物理层（Physical）构成。 3.四层网络模型互联网协议套件（Internet Protocol Suite，IPS）是多个网络传输协议的集合，它为网际网络的基础通信提供架构支撑。由于该协议族中最核心的两个协议分别为 TCP（传输控制协议）和 IP（网际协议），因此它也被称为...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2020/11/02/AndroidStudio%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/" title="AndroidStudio使用技巧"><img class="post-bg" src="/images/87f42f55c8644e1103e4c56020007b5e.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AndroidStudio使用技巧"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/11/02/AndroidStudio%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/" title="AndroidStudio使用技巧"><i class="fas fa-thumbtack sticky"></i>AndroidStudio使用技巧</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-11-01T16:00:00.000Z" title="发表于 2020-11-02 00:00:00">2020-11-02</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="content">...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2020/01/12/%E4%B8%87%E5%AD%97%E9%95%BF%E6%96%87%E6%80%BB%E7%BB%93MySQL%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" title="万字长文总结MySQL关系型数据库"><img class="post-bg" src="/images/6d9745d8ee86584dd4929e520fb298d8.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="万字长文总结MySQL关系型数据库"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/01/12/%E4%B8%87%E5%AD%97%E9%95%BF%E6%96%87%E6%80%BB%E7%BB%93MySQL%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" title="万字长文总结MySQL关系型数据库"><i class="fas fa-thumbtack sticky"></i>万字长文总结MySQL关系型数据库</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-01-11T16:00:00.000Z" title="发表于 2020-01-12 00:00:00">2020-01-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span></div><div class="content">数据库介绍什么是数据库？数据库的英文单词：data base，简称DB。数据库本质就是一个文件系统，它可以按照特定的格式把数据存储起来，可以方便对存储的数据进行增删改查操作。 数据库的分类目前数据库总共分为两个大类:  关系型数据库：是建立在关系模型基础上的数据库。（MySQL、Oracle、DB2、SQL Server等等）。 非关系型数据库（NO SQL）：通常指数据之间无关系的数据库。（monggodb、redis等等）。  数据库服务器、数据库和数据表的关系数据库服务器是一台安装了一个数据库管理系统（比如： MySQL）的主机，通常会开放一个远程连接的端口(例如MySQL的3306端口)来对外提供数据服务，通过数据库管理系统(MySQL)可以创建并管理管理多个数据库，一般开发人员会针对每一个应用创建一个数据库。在一个数据库中可以创建多张数据表，这些数据表是真正存储数据的载体。表的每一行称为一条记录（Record）。 SQL语言简介SQL(Structured Query...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2019/07/04/Linux%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/" title="Linux系统基础总结"><i class="fas fa-thumbtack sticky"></i>Linux系统基础总结</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2019-07-03T16:00:00.000Z" title="发表于 2019-07-04 00:00:00">2019-07-04</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux%E7%B3%BB%E7%BB%9F/">Linux系统</a></span></div><div class="content">一.Linux系统Linux 是一套自由和开放源码的类 Unix 操作系统，是基于 POSIX 和 UNIX 的多用户、多任务、支持多线程和多 CPU 的操作系统。Linux 的设计与 UNIX 类似，但经过不断变革，它已可以在各种硬件上运行(从手机到超级计算机)。每个基于 Linux 的操作系统都包含 Linux 内核（管理着硬件资源）和一组软件包（构成了操作系统的其余部分）。 1.Linux内核linux内核kernel是操作系统的关键组件。它借助进程间通信和系统调用，在硬件级别上充当应用程序和数据处理之间的桥梁。每当将操作系统加载到内存中时，首先，将加载内核并将其保留在那里，直到操作系统关闭。 内核负责处理低级任务，例如任务管理，内存管理，风险管理等。Linux内核版本有两种：稳定版和开发版...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2018/08/11/Python%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/" title="Python使用技巧"><i class="fas fa-thumbtack sticky"></i>Python使用技巧</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2018-08-10T16:00:00.000Z" title="发表于 2018-08-11 00:00:00">2018-08-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python%E5%BC%80%E5%8F%91/">Python开发</a></span></div><div class="content">Python拼接字符串的几种方式123456&quot;&quot;&quot;1. 使用加号“+”连接字符串    用加号“+”连接两个字符串，连接后这两个字符串将连接成一个字符串。但需注意的是，不能用“+”连接字符串和数字，需要把数字使用str()函数转换成字符串，或者直接在数字两侧加带引号，再进行连接、&quot;&quot;&quot;  1234str11 = &quot;hello&quot;str12 = &quot;world&quot;str13 = str11 + str12print(str13)         # helloworld   1&quot;&quot;&quot; 注： 但在python中，尽量少用加号“+”连接字符串，原因如下：在python中，String对象是定长对象，一旦创建，长度就不可变化，若是使用+号连接两个字符串，则会新开辟一段长度总和长度的内存，再将两个字符串memcpy进去。如果要连接N个String对象，则要进行N-1次内存申请和拷贝。...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2017/08/21/Android%20APK%E5%8F%8D%E7%BC%96%E8%AF%91%E5%8F%8A%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" title="Android APK反编译及逆向工程"><i class="fas fa-thumbtack sticky"></i>Android APK反编译及逆向工程</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2017-08-20T16:00:00.000Z" title="发表于 2017-08-21 00:00:00">2017-08-21</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Android%E5%BC%80%E5%8F%91/">Android开发</a></span></div><div class="content">一. 分析已经打好的apk.首先来简单的说明下Apk文件本质上其实是一个zip包。我们直接进行解压就能看到其中的目录。 1. 目录说明 AndroidManifest.xml：应用的全局配置文件 classes.dex：源代码编译成class后，转成jar，再压缩成dex文件，dex是可以直接在Android虚拟机上运行的文件。 lib文件夹：引用的第三方sdk的so文件。 META-INF文件夹：Apk签名文件。 res文件夹：资源文件，包括了布局、图片等等。 resources.arsc：记录资源文件和资源id的映射关系。 其中还有一个没有显示就是→assets文件夹：原始资源文件夹，对应着Android工程的assets文件夹，一般用于存放原始的网页、音频等等。  上述的这些说明...</div></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/#content-inner">13</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+      <i class="fas fa-angle-right"></i></a>
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Android%E5%BC%80%E5%8F%91/"><span class="card-category-list-name">Android开发</span><span class="card-category-list-count">45</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/CI-CD/"><span class="card-category-list-name">CI/CD</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Docker%E5%AE%B9%E5%99%A8/"><span class="card-category-list-name">Docker容器</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Flutter%E5%BC%80%E5%8F%91/"><span class="card-category-list-name">Flutter开发</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Git/"><span class="card-category-list-name">Git</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/GitHub/"><span class="card-category-list-name">GitHub</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Java%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/"><span class="card-category-list-name">Java后端开发</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Java%E8%AF%AD%E8%A8%80/"><span class="card-category-list-name">Java语言</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/JetpackCompose/"><span class="card-category-list-name">JetpackCompose</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Kotlin%E8%AF%AD%E8%A8%80/"><span class="card-category-list-name">Kotlin语言</span><span class="card-category-list-count">5</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/JetpackCompose/" style="font-size: 1.5em; color: #99a9bf">JetpackCompose</a> <a href="/tags/Android%E5%BC%B9%E7%AA%97/" style="font-size: 1.1em; color: #999">Android弹窗</a> <a href="/tags/Okhttp/" style="font-size: 1.1em; color: #999">Okhttp</a> <a href="/tags/Android%E8%87%AA%E5%8A%A8%E5%8C%96/" style="font-size: 1.1em; color: #999">Android自动化</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 1.1em; color: #999">Java基础</a> <a href="/tags/Shell/" style="font-size: 1.1em; color: #999">Shell</a> <a href="/tags/Gradle/" style="font-size: 1.42em; color: #99a6b7">Gradle</a> <a href="/tags/NodeJs/" style="font-size: 1.18em; color: #999ca1">NodeJs</a> <a href="/tags/Retrofit/" style="font-size: 1.1em; color: #999">Retrofit</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" style="font-size: 1.26em; color: #999fa8">依赖注入</a> <a href="/tags/linux/" style="font-size: 1.1em; color: #999">linux</a> <a href="/tags/Vue/" style="font-size: 1.1em; color: #999">Vue</a> <a href="/tags/Flutter%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/" style="font-size: 1.1em; color: #999">Flutter状态管理</a> <a href="/tags/Android%E8%87%AA%E5%8A%A8%E5%8C%96%E6%89%93%E5%8C%85/" style="font-size: 1.1em; color: #999">Android自动化打包</a> <a href="/tags/Https/" style="font-size: 1.1em; color: #999">Https</a> <a href="/tags/AOP/" style="font-size: 1.1em; color: #999">AOP</a> <a href="/tags/Redis/" style="font-size: 1.1em; color: #999">Redis</a> <a href="/tags/Feed43/" style="font-size: 1.1em; color: #999">Feed43</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" style="font-size: 1.1em; color: #999">编程基础</a> <a href="/tags/Android%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD/" style="font-size: 1.1em; color: #999">Android文件下载</a> <a href="/tags/MacOs/" style="font-size: 1.1em; color: #999">MacOs</a> <a href="/tags/Android%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" style="font-size: 1.18em; color: #999ca1">Android逆向工程</a> <a href="/tags/%E5%88%86%E5%8C%BA%E5%AD%98%E5%82%A8/" style="font-size: 1.1em; color: #999">分区存储</a> <a href="/tags/Javascript/" style="font-size: 1.1em; color: #999">Javascript</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 1.34em; color: #99a3b0">数据库</a> <a href="/tags/Android%E7%8A%B6%E6%80%81%E6%A0%8F/" style="font-size: 1.1em; color: #999">Android状态栏</a> <a href="/tags/Mysql/" style="font-size: 1.1em; color: #999">Mysql</a> <a href="/tags/%E6%8A%93%E5%8C%85/" style="font-size: 1.1em; color: #999">抓包</a> <a href="/tags/Html/" style="font-size: 1.1em; color: #999">Html</a> <a href="/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/" style="font-size: 1.1em; color: #999">音视频</a> <a href="/tags/Fiddler/" style="font-size: 1.1em; color: #999">Fiddler</a> <a href="/tags/MongoDB/" style="font-size: 1.1em; color: #999">MongoDB</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E6%9F%A5/" style="font-size: 1.1em; color: #999">代码审查</a> <a href="/tags/%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/" style="font-size: 1.1em; color: #999">切面编程</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 1.1em; color: #999">数据结构</a> <a href="/tags/wsl/" style="font-size: 1.1em; color: #999">wsl</a> <a href="/tags/CSS/" style="font-size: 1.1em; color: #999">CSS</a> <a href="/tags/Android%E5%AD%98%E5%82%A8/" style="font-size: 1.1em; color: #999">Android存储</a> <a href="/tags/Koltin/" style="font-size: 1.1em; color: #999">Koltin</a> <a href="/tags/Nginx/" style="font-size: 1.18em; color: #999ca1">Nginx</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/" title="查看更多"><i class="fas fa-angle-right"></i></a>
+    </div>
+    <ul class="card-archive-list">
+  
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2023/02/">
+          <span class="card-archive-list-date">二月 2023</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/12/">
+          <span class="card-archive-list-date">十二月 2022</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/10/">
+          <span class="card-archive-list-date">十月 2022</span>
+          <span class="card-archive-list-count">2</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/09/">
+          <span class="card-archive-list-date">九月 2022</span>
+          <span class="card-archive-list-count">4</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/08/">
+          <span class="card-archive-list-date">八月 2022</span>
+          <span class="card-archive-list-count">4</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/07/">
+          <span class="card-archive-list-date">七月 2022</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/06/">
+          <span class="card-archive-list-date">六月 2022</span>
+          <span class="card-archive-list-count">3</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/05/">
+          <span class="card-archive-list-date">五月 2022</span>
+          <span class="card-archive-list-count">4</span>
+        </a>
+      </li>
+    </ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">127</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">565.5k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-04-12T15:17:05.800Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/images/home_bg.webp);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: subtitleType => {
+    if (true) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  }
+}
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
+</script><script>function subtitleType () {
+  if (true) {
+    typedJSFn.init(["学而不思则罔，思而不学则殆","今日事&#44;今日毕"])
+  } else {
+    document.getElementById("subtitle").textContent = "学而不思则罔，思而不学则殆"
+  }
+}
+typedJSFn.run(subtitleType)</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

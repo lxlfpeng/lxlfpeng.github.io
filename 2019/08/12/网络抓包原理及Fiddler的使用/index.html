@@ -1,0 +1,327 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>网络抓包原理及Fiddler的使用 | 鹏哥的Blog</title><meta name="author" content="peng"><meta name="copyright" content="peng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="一. 什么是抓包?在应用的开发调试中，查看软件实际运行时HTTP&#x2F;HTTPS通信的请求数据和返回数据，从而分析问题的过程就叫做抓包。通常我们说的抓包主要是分为两种：  使用Wireshark抓取传输层的TCP&#x2F;UDP通信包。 使用Fiddler或者Charles抓取应用层的HTTP&#x2F;HTTPS通信包。   在大部分场景下，我们只是需要抓取应用层的HTTP&#x2F;HTTPS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络抓包原理及Fiddler的使用">
+<meta property="og:url" content="https://lxlfpeng.github.io/2019/08/12/%E7%BD%91%E7%BB%9C%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86%E5%8F%8AFiddler%E7%9A%84%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="鹏哥的Blog">
+<meta property="og:description" content="一. 什么是抓包?在应用的开发调试中，查看软件实际运行时HTTP&#x2F;HTTPS通信的请求数据和返回数据，从而分析问题的过程就叫做抓包。通常我们说的抓包主要是分为两种：  使用Wireshark抓取传输层的TCP&#x2F;UDP通信包。 使用Fiddler或者Charles抓取应用层的HTTP&#x2F;HTTPS通信包。   在大部分场景下，我们只是需要抓取应用层的HTTP&#x2F;HTTPS">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lxlfpeng.github.io/images/about_avatar.webp">
+<meta property="article:published_time" content="2019-08-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T15:02:01.855Z">
+<meta property="article:author" content="peng">
+<meta property="article:tag" content="抓包">
+<meta property="article:tag" content="Fiddler">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lxlfpeng.github.io/images/about_avatar.webp"><link rel="shortcut icon" href="/images/favicon.webp"><link rel="canonical" href="https://lxlfpeng.github.io/2019/08/12/%E7%BD%91%E7%BB%9C%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86%E5%8F%8AFiddler%E7%9A%84%E4%BD%BF%E7%94%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '网络抓包原理及Fiddler的使用',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/about_avatar.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/nav_logo.webp" alt="Logo"><span class="site-name">鹏哥的Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">网络抓包原理及Fiddler的使用</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">网络抓包原理及Fiddler的使用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2019-08-11T16:00:00.000Z" title="发表于 2019-08-12 00:00:00">2019-08-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">网络基础</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p><img src="/images/e55567f9cf38efa380d41574d8e5b6ac.webp"></p>
+<h1 id="一-什么是抓包"><a href="#一-什么是抓包" class="headerlink" title="一. 什么是抓包?"></a>一. 什么是抓包?</h1><p>在应用的开发调试中，查看软件实际运行时HTTP&#x2F;HTTPS通信的请求数据和返回数据，从而分析问题的过程就叫做抓包。通常我们说的抓包主要是分为两种：</p>
+<ul>
+<li>使用Wireshark抓取传输层的TCP&#x2F;UDP通信包。</li>
+<li>使用Fiddler或者Charles抓取应用层的HTTP&#x2F;HTTPS通信包。</li>
+</ul>
+<blockquote>
+<p>在大部分场景下，我们只是需要抓取应用层的<code>HTTP/HTTPS数据包</code>也就是第二种方式。</p>
+</blockquote>
+<h1 id="二-抓包的原理"><a href="#二-抓包的原理" class="headerlink" title="二. 抓包的原理."></a>二. 抓包的原理.</h1><p>抓包的原理其实很简单，PC上的Fiddler监听一个端口，比如8888，在Android测试机上连接同一个局域网，配置网络代理，指向该PC的8888端口，这样一来测试机的所有网络通信都会被转发到PC的8888端口，进而被Fiddler捕获，然后就可以对数据包进行分析。经常用的网络协议分为HTTP和HTTPS，HTTPS在HTTP上进行了加密操作，所以对这两种请求进行抓包也有不同。</p>
+<h3 id="对HTTP请求进行抓包"><a href="#对HTTP请求进行抓包" class="headerlink" title="对HTTP请求进行抓包"></a>对HTTP请求进行抓包</h3><p>对于HTTP协议，因为本身就是<code>明文传输</code>，所以可以直接看到数据报文，除非对这些明文在传输时进行二次加密，但那是另一种情况，这里暂不分析。</p>
+<h3 id="对HTTPS请求进行抓包"><a href="#对HTTPS请求进行抓包" class="headerlink" title="对HTTPS请求进行抓包"></a>对HTTPS请求进行抓包</h3><p>对于双向加密的HTTPS，正常情况下，即使能以<code>中间人的方式拿到通信报文</code>，但是因为没有密钥，同样也不能看到具体的传输内容。基于HTTPS加密通信的建立过程，和密钥交换方式，如果在加密通信建立之前，<code>截取服务端发送的包含证书的报文，伪装成服务端，把自己的证书发给客户端，然后拿到客户端返回的包含对称加密通信密钥的报文，以服务端自己的公钥加密后发给服务端，</code>这样一来，双向加密通信建立完成，而中间人实际拿到了通信的密钥，所以可以查看、修改HTTPS的通信报文，这就是典型的<code>Man-in-the-middle attack即MITM中间人攻击。</code><br>这样似乎看起来，HTTPS也不是那么安全，当然不能这么说了，实现MITM最关键的一点，是中间人要把服务端证书替换成自己的证书发给客户端，让客户端相信自己就是服务端，那么问题是，客户端为什么会信任而进行替换呢？HTTPS之所以安全，是因为它用来建立加密通信的证书是由权威的<code>CA机构签发</code>的，受信的CA机构的根证书都会被内嵌在Windows, Linux, macOS, Android, iOS这些操作系统里，用来验证服务端发来的证书是否是由CA签发的。CA机构当然不可能随便给一个中间人签发不属于它的域名证书，那么只有一个很明显的办法了，把中间人的根证书，导入到客户端的操作系统里，以此来完成建立加密通信时对中间人证书的验证。</p>
+<blockquote>
+<p>所以，在一定的情况下，HTTPS通信是可以被监听的，抓包的实现基础，是Android测试机导入Fiddler或者Charles的根证书。</p>
+</blockquote>
+<p>无论是fidder和charles都是充当了一个中间人代理的角色来对HTTPS进行抓包:</p>
+<ul>
+<li>截获客户端向发起的HTTPS请求，佯装客户端，向真实的服务器发起请求。</li>
+<li>截获真实服务器的返回，佯装真实服务器，向客户端发送数据。</li>
+<li>获取了用来加密服务器公钥的非对称秘钥和用来加密数据的对称秘钥。<br><img src="/images/72e5c8dd9bce0e49b8e6a2abe30813ec.webp" alt="HTTPS中间人攻击"></li>
+</ul>
+<h1 id="三-Android设备抓包问题"><a href="#三-Android设备抓包问题" class="headerlink" title="三. Android设备抓包问题"></a>三. Android设备抓包问题</h1><h3 id="1-Android6-0-及以下系统"><a href="#1-Android6-0-及以下系统" class="headerlink" title="1. Android6.0 及以下系统"></a>1. Android6.0 及以下系统</h3><p>可以直接使用FIddler进行抓包。</p>
+<h3 id="2-Android7-0-及以上系统"><a href="#2-Android7-0-及以上系统" class="headerlink" title="2. Android7.0 及以上系统"></a>2. Android7.0 及以上系统</h3><p>在Android 7.0及以上的设备上测试时，发现又抓不到HTTPS了。原因是，Google在Android 7.0时更改了App对操作系统本地证书的信任机制，在Android 7.0之前，默认信任系统预置证书和用户自导入证书，在Android 7.0(API 24)之后，为了保障App的通信安全，避免被第三方抓包,做了些改动，App默认只信任系统预置证书，而不再信任用户自导入证书(把MITM的ssl证书，安装到 受信任的凭据 -&gt; 用户)抓出来的https的请求，都是加了密的，无法看到原文了.解决的方式有如下几种:</p>
+<ul>
+<li>修改App的AndroidManifest网络安全配置，信任用户自导入证书。</li>
+<li>Root测试机或自编译系统，把Fiddler根证书设置为系统预置证书。</li>
+<li>在Android 7.0以下的测试机中抓包。</li>
+<li>targetSDK版本设置为24以下。</li>
+</ul>
+<p><strong>方式一</strong><br>如果是自己公司开发的应用那么在 Android 工程目录的 res 底下创建一个 xml 文件夹，然后在内部创建一个名为 “network_security_config.xml” 的文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;network-security-config&gt;</span><br><span class="line">  &lt;base-config cleartextTrafficPermitted=&quot;true&quot;&gt;</span><br><span class="line">      &lt;trust-anchors&gt;</span><br><span class="line">          &lt;certificates src=&quot;system&quot; overridePins=&quot;true&quot; /&gt;</span><br><span class="line">          &lt;certificates src=&quot;user&quot; overridePins=&quot;true&quot; /&gt;</span><br><span class="line">      &lt;/trust-anchors&gt;</span><br><span class="line">  &lt;/base-config&gt;</span><br><span class="line">&lt;/network-security-config&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在 AndroidManifest 里的标签中，添加代码:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android:networkSecurityConfig=&quot;@xml/network_security_config&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这种方式只适用于能自己修改源码的应用。</p>
+</blockquote>
+<p><strong>方式二</strong></p>
+<ul>
+<li>root手机<br>Root手机将用户下载的CA协议移动到系统信任的证书目录下。</li>
+<li>非root手机可以VirtualXposed插件<br><a target="_blank" rel="noopener" href="https://github.com/android-hacker/VirtualXposed">VirtualXposed下载地址</a><br><a target="_blank" rel="noopener" href="https://github.com/Fuzion24/JustTrustMe">JustTrustMe下载地址</a></li>
+</ul>
+<blockquote>
+<p>方式三和方式四用的比较少.</p>
+</blockquote>
+<h1 id="四-选择抓包工具"><a href="#四-选择抓包工具" class="headerlink" title="四. 选择抓包工具"></a>四. 选择抓包工具</h1><p>主流的Http&#x2F;Https抓包工具有<code>Fiddler、Charles</code>等。Mac上用的较多的一般是Charles。两种工具的使用方式大同小异，本文主要讲Fiddler抓包工具的使用。</p>
+<h3 id="1-下载Fiddler"><a href="#1-下载Fiddler" class="headerlink" title="1. 下载Fiddler:"></a>1. 下载Fiddler:</h3><p><a target="_blank" rel="noopener" href="https://www.telerik.com/fiddler">官网下载</a><br><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1zih7wAZhCv_PEnAVjfkU9A">百度云</a> 提取码：fqdr</p>
+<h3 id="2-安装Fiddler"><a href="#2-安装Fiddler" class="headerlink" title="2. 安装Fiddler:"></a>2. 安装Fiddler:</h3><ul>
+<li>将安装包进行安装。</li>
+<li>找到安装的目录,将启动文件发送到桌面快捷方式。<br><img src="/images/0174d2606a92d973194e03b41dffa7e5.webp" alt="image.png"></li>
+</ul>
+<h3 id="3-Fiddler工作原理"><a href="#3-Fiddler工作原理" class="headerlink" title="3. Fiddler工作原理."></a>3. Fiddler工作原理.</h3><p>Fiddler是以代理WEB服务器的形式工作的，它默认使用代理地址**:127.0.0.1<strong>， 端口</strong>:8888**。 当Fiddler开启时会自动设置代理， 退出的时候它会自动注销代理，这样就不会影响别的程序。不过如果Fiddler非正常退出，这时候因为Fiddler没有自动注销，会造成网页无法访问。解决的办法是重新启动下Fiddler。<br><img src="/images/9933f1506d99a285328c25f65a0d943e.webp"></p>
+<h1 id="五-Fiddler相关设置"><a href="#五-Fiddler相关设置" class="headerlink" title="五. Fiddler相关设置"></a>五. Fiddler相关设置</h1><h3 id="1-浏览器设置代理"><a href="#1-浏览器设置代理" class="headerlink" title="1. 浏览器设置代理."></a>1. 浏览器设置代理.</h3><p>当Fiddler启动后，会默认将代理设为了127.0.0.1 端口号为8888。有些浏览器需要手动设置代理，在浏览器设置里面进行代理设置：<br><img src="/images/37501cdd58f255a3e2c2f276d3b60f61.webp"></p>
+<h3 id="2-Fiddler开启抓包"><a href="#2-Fiddler开启抓包" class="headerlink" title="2. Fiddler开启抓包."></a>2. Fiddler开启抓包.</h3><p>要使用Fiddler进行抓包，首先需要确保Capture Traffic是开启的（安装后是默认开启的），勾选File-&gt;Capture Traffic3。<br><img src="/images/6cea2cab8f1abe370c42366e17d0182a.webp"></p>
+<h3 id="3-Fiddler工具面板"><a href="#3-Fiddler工具面板" class="headerlink" title="3. Fiddler工具面板."></a>3. Fiddler工具面板.</h3><p><img src="/images/3eaa90a5ef62a65325b09cffaa239763.webp"><br>说明注释、重新请求、删除会话、继续执行、流模式&#x2F;缓冲模式、解码、保留会话、监控指定进程、寻找、保存会话、切图、计时、打开浏览器、清除IE缓存、编码&#x2F;解码工具、弹出控制监控面板、MSDN、帮助。<br>两种模式：</p>
+<ul>
+<li><strong>缓冲模式（Buffering Mode）</strong>Fiddler直到HTTP响应完成时才将数据返回给应用程序。可以控制响应，修改响应数据。但是时序图有时候会出现异常。</li>
+<li><strong>流模式（Streaming Mode）</strong>Fiddler会即时将HTTP响应的数据返回给应用程序。更接近真实浏览器的性能。时序图更准确，但是不能控制响应。</li>
+</ul>
+<h3 id="4-Fiddler会话面板"><a href="#4-Fiddler会话面板" class="headerlink" title="4. Fiddler会话面板."></a>4. Fiddler会话面板.</h3><p><img src="/images/61aa809ddd4f21d80fde531718a40211.webp"><br>各种图标的含义:<br><img src="/images/68cb380fc254c10ba7669c4df9c83db1.webp"></p>
+<h3 id="5-Fiddler页签功能"><a href="#5-Fiddler页签功能" class="headerlink" title="5. Fiddler页签功能."></a>5. Fiddler页签功能.</h3><p><img src="/images/b27374d3854754eb7549feb53afbac6e.webp"></p>
+<h6 id="5-1-Statistics"><a href="#5-1-Statistics" class="headerlink" title="5.1 Statistics"></a>5.1 Statistics</h6><p>这一部分是统计信息视图，显示了所有HTTP通信，展示了哪些文件生成了当前请求的页面。可以选择一个或多个会话，然后得出所选会话的统计信息:<br><img src="/images/bd8c287d25069e0b47157c3291d71052.webp"></p>
+<h6 id="5-2-Inspectors"><a href="#5-2-Inspectors" class="headerlink" title="5.2 Inspectors"></a>5.2 Inspectors</h6><p>分为上下两个部分，上半部分是请求头部分，下半部分是响应头部分。对于每一部分，提供了多种不同格式查看每个请求和响应的内容。JPG 格式使用 ImageView 就可以看到图片，HTML&#x2F;JS&#x2F;CSS 使用 TextView 可以看到响应的内容。Raw标签可以查看原始的符合HTTP标准的请求和响应头。Auth则可以查看授权Proxy-Authorization 和 Authorization的相关信息。Cookies标签可以看到请求的cookie和响应的set-cookie头信息。<br><img src="/images/84e307780d174747ebcb088f3a5d3f75.webp"></p>
+<h6 id="5-3-AutoResponder"><a href="#5-3-AutoResponder" class="headerlink" title="5.3 AutoResponder"></a>5.3 AutoResponder</h6><p>Fiddler比较重要且比较强大的功能之一。可用于拦截某一请求，并重定向到本地的资源，或者使用Fiddler的内置响应。可用于调试服务器端代码而无需修改服务器端的代码和配置，因为拦截和重定向后，实际上访问的是本地的文件或者得到的是Fiddler的内置响应。</p>
+<h6 id="5-4-Composer"><a href="#5-4-Composer" class="headerlink" title="5.4 Composer"></a>5.4 Composer</h6><p>HTTP Request发射器。功能是创建HTTPRequest，然后发送。</p>
+<h6 id="5-5-Filter-过滤器"><a href="#5-5-Filter-过滤器" class="headerlink" title="5.5 Filter(过滤器)"></a>5.5 Filter(<a target="_blank" rel="noopener" href="https://www.cnblogs.com/sjl179947253/p/7627250.html">过滤器</a>)</h6><ul>
+<li><strong>开启过滤功能:</strong><br><img src="/images/8b1e07f7477da5f41d18e1db7c4057c1.webp"></li>
+<li><strong>加载过滤功能:</strong><br><img src="/images/ac8a12dc232a72df913708ebefd2a663.webp"></li>
+</ul>
+<h3 id="6-Fiddler过滤方式"><a href="#6-Fiddler过滤方式" class="headerlink" title="6. Fiddler过滤方式"></a>6. Fiddler过滤方式</h3><h5 id="6-1-内外网过滤"><a href="#6-1-内外网过滤" class="headerlink" title="6.1 内外网过滤:"></a>6.1 内外网过滤:</h5><p><img src="/images/9b082a81ae87e94784ecac08ed80ecde.webp"></p>
+<h5 id="6-2-对host过滤"><a href="#6-2-对host过滤" class="headerlink" title="6.2 对host过滤:"></a>6.2 对host过滤:</h5><p><img src="/images/c092fc4f2cbd1c18a01686b94b16b488.webp"><br>输入多个HOST，多个之前用半角逗号或者回车分隔；<br>支持通配符：*,baidu.com；<br><img src="/images/2f6430ebd485a154149b2fd40ab2d02e.webp"></p>
+<h5 id="6-3-Client-Process-进程-过滤"><a href="#6-3-Client-Process-进程-过滤" class="headerlink" title="6.3 Client Process(进程)过滤"></a>6.3 Client Process(进程)过滤</h5><ul>
+<li>Show only traffic from：你可以指定只捕获哪个Windows进程中的请求；</li>
+<li>Show only Internet Explorer traffic：只显示IE发出的请求；</li>
+<li>Hide Windows RSS platform traffic：隐藏Windows RSS平台发出的请求；</li>
+</ul>
+<p><img src="/images/617a96eb64407aa9202de2c7eb837593.webp" alt="image.png"></p>
+<p><img src="/images/1c8cf8e931a8612b565a119b1bf0432b.webp" alt="image.png"></p>
+<h5 id="6-4-Request-Headers过滤"><a href="#6-4-Request-Headers过滤" class="headerlink" title="6.4 Request Headers过滤"></a>6.4 Request Headers过滤</h5><p>请求header过滤规则：<br>  经常使用：Show only if URL contains；<br>  Flag requests with headers：标记带有特定header的请求；<br>  Delete request headers：删除请求header；<br>  Set request header设置请求的header；<br><img src="/images/fc95a7328432219d72c52b5a5215b0cb.webp" alt="image.png"></p>
+<h5 id="6-5-Breakpoints"><a href="#6-5-Breakpoints" class="headerlink" title="6.5 Breakpoints"></a>6.5 Breakpoints</h5><p>断点设置规则：<br>  Break request on HTTP POST：给所有POST请求设置断点；<br>  Break request on HTTP GET with QueryString：给所有带参数的GET请求设置断点；<br>  Break response on Content-Type：给特定的Content-Type设定断点；<br><img src="/images/f68aa32c1db816c22143089de1ecc4ff.webp"></p>
+<h5 id="6-6-Response-Status-Code过滤"><a href="#6-6-Response-Status-Code过滤" class="headerlink" title="6.6 Response Status Code过滤"></a>6.6 Response Status Code过滤</h5><p>响应HTTP状态过滤规则：<br>  Hide success(202,204,206)：隐藏响应成功的session(202,204,206)；<br>  Hide Authentication demands(401)：隐藏未经授权被拒绝的session(401)；<br>  Hide redirects(300,301,302,303,307)：隐藏重定向的session(300,301,302,303,307)；<br>  Hide Not Modified(304)：隐藏无变更的session(304)；<br><img src="/images/91ea3fa84aa721d2c9be3add2affd1d3.webp"></p>
+<h5 id="6-7-Response-Type-and-Size"><a href="#6-7-Response-Type-and-Size" class="headerlink" title="6.7 Response Type and Size"></a>6.7 Response Type and Size</h5><p>响应类型和大小过滤规则：<br>  Show all Content-Type：显示所有响应类型；<br>  Hide smaller than ？KB：隐藏小于指定大小的session；<br>  Hide larger than ？KB：隐藏大于指定大小的session；<br>  Time HeatMap：获得即时数据（绿色阴影代表响应时间在50毫秒以内；超过50毫秒但在300毫秒之内的响应条目没有颜色；响应时间在300至500毫秒之间的会涂以黄色；超过500毫秒的用红色底纹显示）；<br>  Block script files：阻止脚本文件，显示为404；<br>  Block image files：阻止图片文件；<br>  Block SWF files：阻止SWF文件；<br>  Block CSS files：阻止CSS文件；</p>
+<h5 id="6-8-Response-Headers"><a href="#6-8-Response-Headers" class="headerlink" title="6.8 Response Headers"></a>6.8 Response Headers</h5><p>响应header过滤规则：<br>  Flag response that set cookies：标记会设置cookie的响应；<br>  Flag response with headers：标记带有特定header的响应；<br>  Delete response headers：删除响应header；<br>  Set response header：设置响应的header；<br><img src="/images/7be4504177d7904b91d3616383ca1d20.webp"></p>
+<h1 id="六-Fiddler断点功能"><a href="#六-Fiddler断点功能" class="headerlink" title="六. Fiddler断点功能"></a>六. Fiddler断点功能</h1><p>断点的主要作用：篡改和伪造数据。<br>1.为什么要打断点呢？<br>比如一个购买的金额输入框，输入框前端做了限制100-1000，那么我们测试的时候，需要测试小于100的情况下。很显然前端只能输入大于100的。这时我们可以先抓到接口，修改请求参数，绕过前端，传一个小于100的数，检查服务端的功能是否OK。也就是说接口测试其实是不需要管前端的，主要测后端的功能。<br><strong>例如：</strong><br>使用支付宝购买虚拟商品，往支付宝跳转时，篡改了小的金额，结果购买虚拟商品成功了。（原本10元的商品，0.01元就搞定了）。多么可怕的一个bug。</p>
+<p>断点可以打到两个地方:</p>
+<ol>
+<li>before response：这个是打在request请求的时候，未到达服务器之前。</li>
+<li>after response：也就是服务器响应之后，在Fiddler将响应传回给客户端之前。<br><img src="/images/3e743419b11be0ac329942775f50fe61.webp"><br><img src="/images/18432177aac75fc8272fc8ff9fcc475e.webp"><br>选中before requests选项后，请求一个网址：<br><img src="/images/4dc796949bf6fe0ac91c3ded6995d434.webp"><br>进入到断点了<br><img src="/images/281816fec40bffe17a730e711626121d.webp"></li>
+</ol>
+<p>对数据进行拦截并且修改：<br><img src="/images/b493d6ce5c342460f35912dc5ecf342e.webp"><br><img src="/images/4400dd7566b4d57de6b1c405c3fa89c2.webp"><br><img src="/images/273d24cb6a7fd4bb763854fecc0bd406.webp"><br>通过最后的结果可以看到数据已经被我们拦截并且修改成功了。</p>
+<h1 id="七-Fiddler抓取https请求"><a href="#七-Fiddler抓取https请求" class="headerlink" title="七. Fiddler抓取https请求"></a>七. Fiddler抓取https请求</h1><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/54dd21c50f21">fiddler抓取https原理</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25591288">Fiddler处理HTTPS请求的原理</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/24484809">Fiddler抓取https原理-知乎</a><br>在抓取https的数据包时，fiddler会话栏目会显示“Tunnel to….443”的信息，这个是什么原因呢？<br>connect表示https的握手（也就是认证信息，只要是https就要进行认证），只要不是满篇的Tunnel to….443，就没有任何问题。我们可以选择将这类信息进行隐藏。<br><img src="/images/9ac1b00753aae598c8b54a02ef2e3a88.webp"><br><img src="/images/2f89c4a879d9ebc59d2080458a91bf9f.webp"><br><img src="/images/3b2a300d88d7549ea3d972fe399c65fc.webp"><br><img src="/images/6799c04ed5de0c2b53d5257b6eaa328d.webp"><br><img src="/images/ec854db86852637747bcc94e12ca591a.webp"><br>查看一下证书，Actions—&gt;open windows certificate Manager<br><img src="/images/514c1bab362ab308923b96771f3bf518.webp"><br><img src="/images/6b908069119f736362bc721081729d91.webp"><br>如果还是不能抓包成功参考一下解决:<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/joshua317/p/8670923.html">强烈推荐（原创亲测）！！！Fiddler抓取https设置详解（图文）</a></p>
+<h3 id="八-移动设备抓包"><a href="#八-移动设备抓包" class="headerlink" title="八. 移动设备抓包."></a>八. 移动设备抓包.</h3><h4 id="1-Fiddler设置允许手机远程连接。"><a href="#1-Fiddler设置允许手机远程连接。" class="headerlink" title="1. Fiddler设置允许手机远程连接。"></a>1. Fiddler设置允许手机远程连接。</h4><p>如果想要捕获手机上的通信数据，就需要手机连接上Fiddler代理，而Fiddler默认是不允许其他设备进行连接的，解决办法：点击 Fiddler-&gt;Tools -&gt; Options，在 Connections 面板选中 Allow remote computers to connect 允许其他设备连接（此操作需重启Fiddler生效）。<br><img src="/images/bb7aebe934912bb71077bbbec6562e3c.webp"></p>
+<h4 id="2-获取安装Fiddler的Pc的ip地址。"><a href="#2-获取安装Fiddler的Pc的ip地址。" class="headerlink" title="2. 获取安装Fiddler的Pc的ip地址。"></a>2. 获取安装Fiddler的Pc的ip地址。</h4><ul>
+<li>通过fiddler里面查看<br><img src="/images/c4fc543fd9e485dc0aa3d16eafc439f5.webp"></li>
+<li>通过windows命令行查看<br><img src="/images/bb1425b4207488b630abb3d9d1479905.webp"></li>
+</ul>
+<h4 id="3-Android设备抓包"><a href="#3-Android设备抓包" class="headerlink" title="3. Android设备抓包"></a>3. Android设备抓包</h4><p><em><strong>注意:需要手机和电脑在同一局域网里面才可以进行抓包</strong></em><br>在手机设置里面找到自己连接的WiFi长按，弹出修改网络弹窗，选择修改网络，点击高级选项的下拉菜单，选择手动，配置好主机和端口号，然后确定就可以对手机进行抓包了。<br><img src="/images/f816e9dfa4ed7526ef564422893672c5.webp"><br><img src="/images/1b335858a07ddc884a62e5664934b3b1.webp"><br><img src="/images/20198fc41977d40eae7d2abf87592dc9.webp"><br><img src="/images/4495ce412d8711f6e0d6a84006586114.webp"></p>
+<h4 id="4-IOS设备抓包"><a href="#4-IOS设备抓包" class="headerlink" title="4. IOS设备抓包"></a>4. IOS设备抓包</h4><p><img src="/images/82f90fc26108a4779bd61d483c552a29.webp"><br><img src="/images/84a8c54b3977099cdef61c5ced930010.webp"></p>
+<h5 id="手机安装根证书。"><a href="#手机安装根证书。" class="headerlink" title="手机安装根证书。"></a>手机安装根证书。</h5><p>在手机上需要安装Fiddler根证书，因为Fiddler是通过自己生成的证书对网络请求重新签名进行https会话解密的，如果不安装证书的话只能抓取HTTP请求。<br>打开手机浏览器，输入Fiddler Server地址， 跳转到 Fiddler Echo Service 证书下载页，点击FiddlerRoot certificate下载并安装；<br><img src="/images/ac2feee4c492147c5dc43f6d27f8a2e9.webp"><br><img src="/images/d281b677ccda2e78fb10a76895b0d610.webp"><br>然后输入手机密码，安装好证书。</p>
+<blockquote>
+<p>注意：如果手机设置代理后，测玩之后记得恢复原样(去掉手动设置的代理)，要不然手机无法正常上网。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io">peng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://lxlfpeng.github.io/2019/08/12/%E7%BD%91%E7%BB%9C%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86%E5%8F%8AFiddler%E7%9A%84%E4%BD%BF%E7%94%A8/">https://lxlfpeng.github.io/2019/08/12/%E7%BD%91%E7%BB%9C%E6%8A%93%E5%8C%85%E5%8E%9F%E7%90%86%E5%8F%8AFiddler%E7%9A%84%E4%BD%BF%E7%94%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://lxlfpeng.github.io" target="_blank">鹏哥的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8A%93%E5%8C%85/">抓包</a><a class="post-meta__tags" href="/tags/Fiddler/">Fiddler</a></div><div class="post-share"><div class="social-share" data-image="/images/about_avatar.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2019/08/12/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93/" title="微信小程序开发总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">微信小程序开发总结</div></div><div class="info-2"><div class="info-item-1">一.开发前准备1.注册账号如果还没有微信公众平台的账号，先进入微信公众平台首页，点击 “立即注册” 按钮进行注册。注册的账号类型选择 “小程序” 即可。接着填写账号信息，需要注意的是，填写的邮箱必须是未被微信公众平台注册、未被个人微信号绑定的邮箱，而且每个邮箱仅能申请一个小程序。激活邮箱之后，选择主体类型为 “个人类型”，并按要求登记主体信息。主体信息提交后不可修改，该主体将成为你使用微信公众平台各项服务和功能的唯一法律主体与缔约主体，在后续开通其他业务功能时不得变更或修改。 2.获取id登录微信公众平台 —&gt; 开发 —&gt;...</div></div></div></a><a class="pagination-related" href="/2019/08/08/Kotlin%E6%80%BB%E7%BB%93%E4%B9%8B%E5%9B%9B%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/" title="Kotlin总结之四面向对象编程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Kotlin总结之四面向对象编程</div></div><div class="info-2"><div class="info-item-1">一.Kotlin类的创建1.类的声明Kotlin 类可以包含：构造函数和初始化代码块、函数、属性、内部类、对象声明。Kotlin 中使用关键字 class 声明类，后面紧跟类名： 1234// 类名为 Appleclass Apple&#123;   // 大括号内是类体构成&#125; 当类没有结构体的时候，大括号可以省略。如: 1class Apple    类的修饰符 描述    abstract 抽象类   final 类不可继承，默认属性   enum 枚举类   open 类可继承，类默认是final的   annotation 注解类      访问权限修饰符 描述    private 仅在同一个文件中可见   protected 同一个文件中或子类可见   public 所有调用的地方都可见   internal 同一个模块中可见   2....</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/about_avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">peng</div><div class="author-info-description">过往不恋 未来不迎 当下不负</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">127</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/lxlfpeng"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/lxlfpeng" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:565289282@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-%E4%BB%80%E4%B9%88%E6%98%AF%E6%8A%93%E5%8C%85"><span class="toc-number">1.</span> <span class="toc-text">一. 什么是抓包?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-%E6%8A%93%E5%8C%85%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">二. 抓包的原理.</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9HTTP%E8%AF%B7%E6%B1%82%E8%BF%9B%E8%A1%8C%E6%8A%93%E5%8C%85"><span class="toc-number">2.0.1.</span> <span class="toc-text">对HTTP请求进行抓包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9HTTPS%E8%AF%B7%E6%B1%82%E8%BF%9B%E8%A1%8C%E6%8A%93%E5%8C%85"><span class="toc-number">2.0.2.</span> <span class="toc-text">对HTTPS请求进行抓包</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-Android%E8%AE%BE%E5%A4%87%E6%8A%93%E5%8C%85%E9%97%AE%E9%A2%98"><span class="toc-number">3.</span> <span class="toc-text">三. Android设备抓包问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Android6-0-%E5%8F%8A%E4%BB%A5%E4%B8%8B%E7%B3%BB%E7%BB%9F"><span class="toc-number">3.0.1.</span> <span class="toc-text">1. Android6.0 及以下系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Android7-0-%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%B3%BB%E7%BB%9F"><span class="toc-number">3.0.2.</span> <span class="toc-text">2. Android7.0 及以上系统</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-%E9%80%89%E6%8B%A9%E6%8A%93%E5%8C%85%E5%B7%A5%E5%85%B7"><span class="toc-number">4.</span> <span class="toc-text">四. 选择抓包工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BDFiddler"><span class="toc-number">4.0.1.</span> <span class="toc-text">1. 下载Fiddler:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85Fiddler"><span class="toc-number">4.0.2.</span> <span class="toc-text">2. 安装Fiddler:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Fiddler%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">4.0.3.</span> <span class="toc-text">3. Fiddler工作原理.</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94-Fiddler%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE"><span class="toc-number">5.</span> <span class="toc-text">五. Fiddler相关设置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BE%E7%BD%AE%E4%BB%A3%E7%90%86"><span class="toc-number">5.0.1.</span> <span class="toc-text">1. 浏览器设置代理.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Fiddler%E5%BC%80%E5%90%AF%E6%8A%93%E5%8C%85"><span class="toc-number">5.0.2.</span> <span class="toc-text">2. Fiddler开启抓包.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Fiddler%E5%B7%A5%E5%85%B7%E9%9D%A2%E6%9D%BF"><span class="toc-number">5.0.3.</span> <span class="toc-text">3. Fiddler工具面板.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Fiddler%E4%BC%9A%E8%AF%9D%E9%9D%A2%E6%9D%BF"><span class="toc-number">5.0.4.</span> <span class="toc-text">4. Fiddler会话面板.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-Fiddler%E9%A1%B5%E7%AD%BE%E5%8A%9F%E8%83%BD"><span class="toc-number">5.0.5.</span> <span class="toc-text">5. Fiddler页签功能.</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#5-1-Statistics"><span class="toc-number">5.0.5.0.0.1.</span> <span class="toc-text">5.1 Statistics</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#5-2-Inspectors"><span class="toc-number">5.0.5.0.0.2.</span> <span class="toc-text">5.2 Inspectors</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#5-3-AutoResponder"><span class="toc-number">5.0.5.0.0.3.</span> <span class="toc-text">5.3 AutoResponder</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#5-4-Composer"><span class="toc-number">5.0.5.0.0.4.</span> <span class="toc-text">5.4 Composer</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#5-5-Filter-%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-number">5.0.5.0.0.5.</span> <span class="toc-text">5.5 Filter(过滤器)</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-Fiddler%E8%BF%87%E6%BB%A4%E6%96%B9%E5%BC%8F"><span class="toc-number">5.0.6.</span> <span class="toc-text">6. Fiddler过滤方式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#6-1-%E5%86%85%E5%A4%96%E7%BD%91%E8%BF%87%E6%BB%A4"><span class="toc-number">5.0.6.0.1.</span> <span class="toc-text">6.1 内外网过滤:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-2-%E5%AF%B9host%E8%BF%87%E6%BB%A4"><span class="toc-number">5.0.6.0.2.</span> <span class="toc-text">6.2 对host过滤:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-3-Client-Process-%E8%BF%9B%E7%A8%8B-%E8%BF%87%E6%BB%A4"><span class="toc-number">5.0.6.0.3.</span> <span class="toc-text">6.3 Client Process(进程)过滤</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-4-Request-Headers%E8%BF%87%E6%BB%A4"><span class="toc-number">5.0.6.0.4.</span> <span class="toc-text">6.4 Request Headers过滤</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-5-Breakpoints"><span class="toc-number">5.0.6.0.5.</span> <span class="toc-text">6.5 Breakpoints</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-6-Response-Status-Code%E8%BF%87%E6%BB%A4"><span class="toc-number">5.0.6.0.6.</span> <span class="toc-text">6.6 Response Status Code过滤</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-7-Response-Type-and-Size"><span class="toc-number">5.0.6.0.7.</span> <span class="toc-text">6.7 Response Type and Size</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-8-Response-Headers"><span class="toc-number">5.0.6.0.8.</span> <span class="toc-text">6.8 Response Headers</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD-Fiddler%E6%96%AD%E7%82%B9%E5%8A%9F%E8%83%BD"><span class="toc-number">6.</span> <span class="toc-text">六. Fiddler断点功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83-Fiddler%E6%8A%93%E5%8F%96https%E8%AF%B7%E6%B1%82"><span class="toc-number">7.</span> <span class="toc-text">七. Fiddler抓取https请求</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AB-%E7%A7%BB%E5%8A%A8%E8%AE%BE%E5%A4%87%E6%8A%93%E5%8C%85"><span class="toc-number">7.0.1.</span> <span class="toc-text">八. 移动设备抓包.</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Fiddler%E8%AE%BE%E7%BD%AE%E5%85%81%E8%AE%B8%E6%89%8B%E6%9C%BA%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5%E3%80%82"><span class="toc-number">7.0.1.1.</span> <span class="toc-text">1. Fiddler设置允许手机远程连接。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%8E%B7%E5%8F%96%E5%AE%89%E8%A3%85Fiddler%E7%9A%84Pc%E7%9A%84ip%E5%9C%B0%E5%9D%80%E3%80%82"><span class="toc-number">7.0.1.2.</span> <span class="toc-text">2. 获取安装Fiddler的Pc的ip地址。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Android%E8%AE%BE%E5%A4%87%E6%8A%93%E5%8C%85"><span class="toc-number">7.0.1.3.</span> <span class="toc-text">3. Android设备抓包</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-IOS%E8%AE%BE%E5%A4%87%E6%8A%93%E5%8C%85"><span class="toc-number">7.0.1.4.</span> <span class="toc-text">4. IOS设备抓包</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%89%8B%E6%9C%BA%E5%AE%89%E8%A3%85%E6%A0%B9%E8%AF%81%E4%B9%A6%E3%80%82"><span class="toc-number">7.0.1.4.1.</span> <span class="toc-text">手机安装根证书。</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347);"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2025 By peng</div><div class="footer_custom_text"> <a target="_blank" rel="nofollow noopener"><span>千里之行</span></a> <i class="iconfont icon-love"></i> <a target="_blank" rel="nofollow noopener"><span>始于足下</span></a> </div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'lxlfpeng/blog_comments',
+      'data-repo-id': 'R_kgDONYoexA',
+      'data-category-id': 'DIC_kwDONYoexM4Ck4JQ',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
