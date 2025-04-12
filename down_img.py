@@ -4,6 +4,8 @@ import requests
 from PIL import Image
 from io import BytesIO
 
+# 作用:下载指定 URL 的图片，将其转换为 WebP 格式，并保存到本地指定目录。
+
 # 下载并转换图片的函数
 def download_and_convert_image(image_url, save_dir="source/images"):
     # 获取图片内容

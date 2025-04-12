@@ -1,7 +1,12 @@
 import os
 
-# 定义要读取的目录
-markdown_dir = "/Users/apple/JavaScript/github_hexo_blog/source/_posts"
+#作用:遍历指定目录下的所有 Markdown 文件，为那些没有 YAML 头部信息的文件添加包含标题的 YAML 头部。
+
+# 获取当前工作目录
+current_dir = os.getcwd()
+
+# 拼接路径
+markdown_dir = os.path.join(current_dir, 'source', '_posts')
 
 # 遍历指定目录下的所有 Markdown 文件
 for filename in os.listdir(markdown_dir):

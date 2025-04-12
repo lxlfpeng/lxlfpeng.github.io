@@ -5,6 +5,7 @@ from PIL import Image
 from io import BytesIO
 import hashlib
 
+#脚本会遍历指定目录下的 Markdown 文件，下载其中的网络图片，将其转换为 WebP 格式，并更新 Markdown 文件中的图片链接，使图片引用指向本地的 WebP 图片文件。这样可以优化图片资源，减少网页加载时间，同时便于管理本地的图片资源。
 
 def get_md5(input_string):
     # 创建 MD5 哈希对象
@@ -26,7 +27,6 @@ def download_image(url, save_path):
     else:
         print(f"下载失败: {url}")
 
-
 def convert_to_webp(image_path):
     """将图片转换为 WebP 格式"""
     with Image.open(image_path) as img:
@@ -35,7 +35,6 @@ def convert_to_webp(image_path):
     os.remove(image_path)  # 删除原图
     print(f"图片转换为 WebP 格式: {webp_path}")
     return webp_path
-
 
 def process_markdown_files(directory):
     """处理指定目录下的所有 Markdown 文件"""
@@ -71,7 +70,9 @@ def process_markdown_files(directory):
                     md_file.write(content)
                 print(f"已处理 Markdown 文件: {md_file_path}")
 
-
 if __name__ == "__main__":
-    md_directory = "/Users/apple/JavaScript/github_hexo_blog/source/_posts"  # 替换为你的 Markdown 文件所在目录
-    process_markdown_files(md_directory)
+    # 获取当前工作目录
+    current_dir = os.getcwd()
+    # 拼接路径
+    markdown_dir = os.path.join(current_dir, 'source', '_posts')
+    process_markdown_files(markdown_dir)
