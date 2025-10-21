@@ -644,7 +644,7 @@ dev_dependencies:
     
 flutter:
   uses-material-design: true
-```  
+```
 下面，我们逐一解释一下各个字段的意义：
 
 - name：应用或包名称。

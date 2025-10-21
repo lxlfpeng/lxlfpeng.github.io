@@ -144,7 +144,7 @@ docker run --name nginx -p 7000:80  -d nginx
 1. 执行命令进入到nginx容器内部，
 ```
 docker exec -it nginx容器ID /bin/bash
-```          
+```
 ``nginx -t ``查看nginx配置文件的位置
 
 2. 修改配置文件

@@ -141,7 +141,7 @@ public class ObjAdapter implements IDC {
         }
     ```
 3. 如果某一天，有一个特殊的需求，需要绘制一个红色的圆形，但又不允许更改Circle类，如果是按继承写法会是如下：
-    ```   
+    ```
        /**
         * 红色的圆形
         */

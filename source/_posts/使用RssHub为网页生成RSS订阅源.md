@@ -164,7 +164,7 @@ $ yarn start
 ```
 CACHE_TYPE=redis
 CACHE_EXPIRE=600
-```    
+```
 注意它不会覆盖已有的环境变量，更多配置项请看 [配置](https://docs.rsshub.app/install/#pei-zhi)
 
 > 手动部署方式不包括 puppeteer 和 redis 依赖，如有需要请改用 Docker Compose 部署方式或自行部署外部依赖。

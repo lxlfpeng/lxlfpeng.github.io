@@ -637,21 +637,21 @@ source /etc/profile
 ```
 5. 测试一下
 在任意目录下输入
-```   
+``` 
 docker-compose --version
 ```
 **脚本自动安装Docker-Compose**
 1. 下载docker-compose
-```   
+```
 curl -L "https://github.com/docker/compose/releases/download/1.28.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 ```
 2. 修改执行权限
-```   
+``` 
 chmod +x /usr/local/bin/docker-compose
 ```
 3. 测试一下
    在任意目录下输入
-```   
+```
 docker-compose --version
 ```
 **pip安装**

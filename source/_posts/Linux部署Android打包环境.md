@@ -286,7 +286,7 @@ windows:
 gradlew version
 ```
 如果linux报错:
-```            
+```
 ./gradlew: Permission denied
 ```
 运行: 

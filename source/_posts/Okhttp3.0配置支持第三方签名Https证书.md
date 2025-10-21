@@ -98,7 +98,7 @@ private static SSLSocketFactory createSSLSocketFactory() {
 
         return sslContext != null ? sslContext.getSocketFactory() : null;
     }
-```   
+``` 
 注意:这里可以将证书放到assets文件夹里面然后获取:
 ```
 InputStream inputStream = null;

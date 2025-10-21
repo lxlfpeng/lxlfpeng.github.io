@@ -112,7 +112,7 @@ fun FirstPage(navController: NavController) {
 fun SecondPage(navController: NavController) {
     Text(text = "SecondPage页面")
 }
-```  
+```
 
 在上面的代码中，使用NavHost制作屏幕，而我们的第一个屏幕是“ first_screen”，因为我们将startDestination设置为“ first_screen”。在此，“ first_screen ”，“ second_screen ”和“ third_screen ”是每个屏幕的路线。每个目的地都应具有唯一的路线，因为借助这些路线，一个屏幕会与其他屏幕区分开。
 

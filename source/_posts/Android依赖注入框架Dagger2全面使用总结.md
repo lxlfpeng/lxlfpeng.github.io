@@ -808,7 +808,7 @@ public class ThirdActivity extends AppCompatActivity {
 ```
     @Inject
     Lazy<Object> object;
-```    
+```
 用Lazy<T>修饰需要被注入的对象即可。
 ```
 public class Car {

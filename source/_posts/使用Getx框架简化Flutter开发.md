@@ -62,7 +62,7 @@ class MyController extends GetxController {
 }
 ```
 ##### (2. )Widget中注入实例化控制器并使用
-```  
+```
 class HomePage extends StatelessWidget {
    
   MyController controller = Get.put<MyController>(MyController()); 

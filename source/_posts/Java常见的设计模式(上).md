@@ -404,7 +404,7 @@ public class Test {
             LatteFactory latteFactory = new LatteFactory();
             Coffee latte = latteFactory.create();
         }
-    ```             
+    ```
 
 >当需要增加一个产品 Mocca(摩卡咖啡) 时，只需要增加 Mocca 具体产品类和 MoccaFactory 具体工厂类即可，不需要修改原有的产品类和工厂类
 

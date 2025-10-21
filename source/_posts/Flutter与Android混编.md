@@ -626,7 +626,7 @@ public interface MethodCallHandler {
     @UiThread
     void onMethodCall(@NonNull MethodCall call, @NonNull Result result);
 }
-```    
+```
 这个接口只有一个onMethodCall方法，并且有两个参数，MethodCall和Result，其实最终就是通过这两个参数来与Flutter进行通信。Result，为一个接口，当Android处理完Flutter调用的方法逻辑后需要向Flutter回传一些数据时，就通过Result来实现。
 
 ### 2.在Android中调用Flutter方法

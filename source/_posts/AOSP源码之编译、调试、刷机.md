@@ -426,7 +426,7 @@ sudo apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils
 $ kvm-ok
   INFO: /dev/kvm exists
   KVM acceleration can be used
-```  
+```
 3. 创建 kvm 用户组并把当前登录用户（如 peng ）添加到 kvm 用户组
 ``` 
 sudo addgroup kvm

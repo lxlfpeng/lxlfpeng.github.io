@@ -417,7 +417,7 @@ Offstage(
 
 ### 4.可以通过if条件控制控件的显示或隐藏
 用 Row 或者 Column 控件，控件里面有一个包含Widget的list，所以可以根据条件把需要展示的 Widget 放入 list 中，然后再使用 Row 或 Column 控件来展示 list，达到控制显示还是不显示的目的。
-```  
+```
    Column(
      children: <Widget>[
        if (show) Text("根据show值显示或隐藏"),
