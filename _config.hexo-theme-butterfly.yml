@@ -56,7 +56,7 @@ social:
 # Image Settings
 # --------------------------------------
 
-favicon: /images/favicon.webp
+favicon: /images/favicon.png
 
 avatar:
   img: /images/about_avatar.webp

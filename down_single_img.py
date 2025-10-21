@@ -68,7 +68,7 @@ def process_markdown_files(md_file_path):
                     print(f"转换后的图片路径: {webp_path}")
                      # 替换 Markdown 中的图片链接
                     # webp_relative_path = os.path.relpath(webp_path, directory)
-                    reppath=os.path.join("/", webp_path)
+                    reppath = os.path.join("/", os.path.relpath(webp_path, directory))
                     print(f"替换后的路径: {reppath}")
                    
                     # print(f"相对路径: {webp_relative_path}")
