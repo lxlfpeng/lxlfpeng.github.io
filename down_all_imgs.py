@@ -29,16 +29,19 @@ def download_image(url, save_path):
 
 def convert_to_webp(image_path):
     """将图片转换为 WebP 格式"""
+    current_dir = os.getcwd()
     with Image.open(image_path) as img:
-        webp_path = image_path.rsplit(".", 1)[0] + ".webp"
-        img.save(webp_path, "WEBP")
+        webp_path = image_path.split('\\')[-1] + ".webp"
+        print(f"转换图片路径: {webp_path}")
+        image_folder = os.path.join(current_dir, 'source', 'images',webp_path) 
+        img.save(image_folder, "WEBP")
     os.remove(image_path)  # 删除原图
     print(f"图片转换为 WebP 格式: {webp_path}")
     return webp_path
 
 def process_markdown_files(directory):
     """处理指定目录下的所有 Markdown 文件"""
-    image_folder = os.path.join(directory, "images")
+    image_folder = os.path.join(os.getcwd(), 'source', 'images')  
     os.makedirs(image_folder, exist_ok=True)
 
     md_pattern = re.compile(r"!\[.*?\]\((http[s]?://.*?)\)")
@@ -52,23 +55,26 @@ def process_markdown_files(directory):
 
                 # 查找图片链接
                 matches = md_pattern.findall(content)
+                if not matches:
+                    continue
+                print(f"Markdown 文件: {md_file_path} 查到的图片连接数:{len(matches)}个")
                 for url in matches:
                     # 下载图片
                     image_name = get_md5(url)
                     local_image_path = os.path.join(image_folder, image_name)
                     download_image(url, local_image_path)
-
+                    print(f"本地图片路径: {local_image_path}")
                     # 转换为 WebP 格式
                     webp_path = convert_to_webp(local_image_path)
-
+                    print(f"转换后的图片路径: {webp_path}")
                     # 替换 Markdown 中的图片链接
-                    webp_relative_path = os.path.relpath(webp_path, directory)
+                    webp_relative_path = os.path.relpath(webp_path, os.path.join(os.getcwd(), 'source'))
                     content = content.replace(url, os.path.join("/", webp_relative_path))
 
                 # 写回修改后的内容
                 with open(md_file_path, 'w', encoding='utf-8') as md_file:
                     md_file.write(content)
-                print(f"已处理 Markdown 文件: {md_file_path}")
+                print(f"Markdown 文件: {md_file_path} ")
 
 if __name__ == "__main__":
     # 获取当前工作目录
