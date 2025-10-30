@@ -8,7 +8,7 @@ tags:
 ---
 
 # 一.Compose状态管理绪论
-状态是什么？状态指的是Ui的形态，例如按钮控件上的文字、颜色都是一种状态，在软件编程中通常都会用一个状态值去保存这个状态。传统的Android视图层次结构中，界面是通过一个个的View， 例如:ImageView、TextView等搭建而成，然后通过findViewById找到对应的View的引用后，设置它的内部状态值，例如设置TextView的文本，在TextView的setText方法中会有一个成员变量mText来记录设置的状态值。当UI的状态值改变时，基于XML的UI框架会通过重新绘制刷新UI来显示正确的状态。
+状态指的是 UI 的表现形式，例如按钮上的文字、颜色等都可以视为状态。在软件编程中通常都会用一个状态值去保存这个状态。传统的Android视图层次结构中，界面是通过一个个的View， 例如:ImageView、TextView等搭建而成，然后通过findViewById找到对应的View的引用后，设置它的内部状态值，例如设置TextView的文本，在TextView的setText方法中会有一个成员变量mText来记录设置的状态值。当UI的状态值改变时，基于XML的UI框架会通过重新绘制刷新UI来显示正确的状态。
 
 Compose 是声明式 UI 框架，UI 的状态由可组合函数的参数或可观察的状态（如 MutableState）描述。要改变 UI，只需修改状态值，Compose 会自动触发依赖该状态的可组合函数进行重组(重绘)，从而刷新 UI。也就是说，UI 的变化是由状态驱动的，而不是通过手动调用控件方法。
 
