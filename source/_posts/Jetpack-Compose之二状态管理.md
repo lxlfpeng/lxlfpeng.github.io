@@ -8,60 +8,150 @@ tags:
 ---
 
 # 一.Compose状态管理绪论
-状态是什么?状态指的是Ui的形态，例如按钮控件的文字、颜色的状态等等，在软件编程中我们会用一个状态值去保存该状态。传统的Android视图层次结构中，界面是通过一个个的View， 例如:ImageView、TextView等搭建而成，然后通过findViewById找到对应的View的引用后，设置它的内部状态值，例如设置TextView的文本，当UI的状态值改变时，基于XML的UI框架会自动刷新UI来显示正确的状态。Compose 是声明式的 UI，在组合函数中这些状态值描述了这个UI组件的状态，所以想更改一个UI的状态，只能用``新的状态值去重新调用该组件的可组合函数``，状态值的更新就对应着重组(重绘)的发生(刷新该UI)。 也就是说Compose 主要是根据状态的改变进行重组的，实际上Compose的UI变化本质是："状态(State) 驱动"，即控件UI的变化原因是控件UI的状态发生了变化，需要加入状态并对相关的状态进行管理。
+状态是什么？状态指的是Ui的形态，例如按钮控件上的文字、颜色都是一种状态，在软件编程中通常都会用一个状态值去保存这个状态。传统的Android视图层次结构中，界面是通过一个个的View， 例如:ImageView、TextView等搭建而成，然后通过findViewById找到对应的View的引用后，设置它的内部状态值，例如设置TextView的文本，在TextView的setText方法中会有一个成员变量mText来记录设置的状态值。当UI的状态值改变时，基于XML的UI框架会通过重新绘制刷新UI来显示正确的状态。
 
-**对状态变化做出反应是 Compose 的核心。Compose 应用程序通过调用 Composable 函数将数据转换为 UI。如果您的数据发生变化，您可以使用新数据调用这些函数，从而创建更新的 UI。Compose 提供了用于观察应用程序数据变化的工具，这些工具会自动调用您的函数——这称为重构。Compose 还会查看单个可组合组件需要哪些数据，以便它只需要重新组合数据已更改的组件，并且可以跳过组合未受影响的组件。 在底层，Compose 使用自定义 Kotlin 编译器插件，因此当底层数据发生变化时，可以重新调用可组合函数以更新 UI 层次结构。 例如，当你调用Greeting("Android")的MyScreenContent可组合的功能，你是硬编码的输入("Android")，所以Greeting将添加到UI树一次，永远不会改变，即使身体MyScreenContent被重构。 要将内部状态添加到可组合，请使用该mutableStateOf函数，它提供可组合的可变内存。为了不让每次重组都有不同的状态，请记住使用remember. 而且，如果在屏幕上的不同位置有多个可组合实例，每个副本将获得自己的状态版本。您可以将内部状态视为类中的私有变量。 可组合函数将自动订阅它。如果状态发生变化，读取这些字段的可组合项将被重新组合。**
-[节选自](https://blog.csdn.net/Mr_Tony/article/details/118858756)
+Compose 是声明式 UI 框架，UI 的状态由可组合函数的参数或可观察的状态（如 MutableState）描述。要改变 UI，只需修改状态值，Compose 会自动触发依赖该状态的可组合函数进行重组(重绘)，从而刷新 UI。也就是说，UI 的变化是由状态驱动的，而不是通过手动调用控件方法。
 
 # 二.Compose重组(Recomposition)
 ### 1.什么是Compose重组(Recomposition)
-在命令式界面模型中，如需更改某个控件的状态，可以在该控件上调用 setter()等方法通过改变其属性来更改其内部状态。 在 Compose 中，可以使用新数据再次调用可组合函数，这样就会导致可组合函数进行重组(重绘)，系统会根据新数据重新调用绘制函数绘制出新的UI。简单来说重组实际上就是当状态值改变后，再次调用可组合函数进行的绘制过程，是否重组的判断条件是与 @Composable 元素绑定的数据是否发生了变化。
+重组是 Compose 在状态发生变化时，**重新执行可组合函数的过程，从而生成新的 UI 层次结构**。区别于命令式：在传统的命令式 UI（如 XML + TextView.setText()）中，直接操作控件来修改 UI。Compose 的方式：不直接操作控件，而是通过状态驱动，当状态变化时，Compose 会重新调用可组合函数生成新的 UI。
 
 ### 2.Compose智能重组
-上文说到当状态变化时需要再次调用可组合函数触发UI重组，但是如果是一个很庞大的 Composable 层级结构，当只针对于层级中的某一部分发生改变时，不可能对该层级中所有的UI都进行重组，这样会带来很多多余的性能损耗。因此仅仅只需要针对依赖该状态的UI元素进行重组生成新的UI即可，与状态修改无关的UI元素，让其保持之前生成的实例。Compose 为了保证重组性能引入了"局部重组，也叫智能重组":Compose 编译器会在 @Composable 元素初始化的时候，对每一个元素做标记，当关联状态变化时，然后根据状态是否修改来智能的选择需要被重组的元素。
+上文说到当状态变化时需要再次调用可组合函数触发UI重组，但是如果是一个很庞大的 Composable 层级结构，当只针对于层级中的某一部分发生改变时，不可能对该层级中所有的UI都进行重组，这样会带来很多多余的性能损耗。因此仅仅只需要针对依赖该状态的UI元素进行重组生成新的UI即可，与状态修改无关的UI元素，让其保持之前生成的UI。Compose 为了保证重组性能引入了"局部重组，也叫智能重组（Smart Recomposition）"。
+- Compose 在编译 @Composable 函数时，编译器插件会在函数体内部插入特殊的标记（slots / group keys）。
+- 在首次组合（Composition）时，Compose 会记录 UI 树中每个可组合函数和它所读取的状态之间的依赖关系。
+- 当某个状态（MutableState）发生变化时，系统可以精确找到哪些可组合函数依赖该状态。
+- 然后只重新执行这些函数及其子树，从而实现“局部重组”。
 
 重组需要注意的地方:
-- 重组意味着系统会重新调用 @Composable 元素方法的执行，而重组可能会随时且非常频繁的发生，所有的 @Composable 组合函数的执行都是乱序和并行的。
-- 应避免修改可组合 lambda 中的变量的代码，因为此类代码并非线程安全代码，而且可能被多次调用应该禁止此类变量的写入操作。
+- 重组意味着系统会重新调用 @Composable 元素方法的执行，而重组可能会随时且非常频繁的发生，所有的 @Composable 组合函数的执行都是**乱序或者是并行**的。
+- 应避免修改可组合 lambda 中的变量的代码，因为此类代码并非线程安全代码，而且可能被多次调用所以应该禁止此类变量的写入操作。
 - 可能在重组过程中，Local 变量可能会失效，动态计算方法会调用很多次。
 
 ### 3.Compose重组的最小范围
 在Compose中重组的范围主要受两种因素影响:
-- 只有会受到 state 变化影响的代码块才会参与到重组，不依赖 state 的代码不参与重组。
-- 只有非inline函数才有资格成为重组的最小范围， 这是因为Compose 在编译期分析出会受到某 state 变化影响的代码块，并记录其引用，当此 state 变化时，会根据引用找到这些代码块并标记为 Invalid。在下一渲染帧到来之前 Compose 会触发 recomposition，并在重组过程中执行 invalid 代码块。
+- 只有会受到状态(state)变化影响的代码块才会参与到重组，不依赖 状态(state)的代码不参与重组。
+- 只有非inline函数才有资格成为重组的最小范围， 这是因为Compose 在编译期会分析出会受到某 state 变化影响的代码块，并记录其引用，当此 state 变化时，会根据引用找到这些代码块并标记为 Invalid。在下一渲染帧到来之前 Compose 会触发 recomposition，并在重组过程中执行 invalid 代码块。
+```
+    @Composable
+    fun Parent() {
+        Column {
+            Text("Title")
+
+            // ① 普通可组合函数（非 inline）
+            Child()
+
+            // ② inline Composable
+            InlineChild()
+        }
+    }
+
+    @Composable
+    fun Child() {
+        val count by remember { mutableStateOf(0) }
+        Text("Count: $count")
+    }
+
+    @Composable
+    inline fun InlineChild() {
+        val count by remember { mutableStateOf(0) }
+        Text("Count inline: $count")
+    }
+```
+
+🔹 情况 1：Child()（非 inline）
+- 编译器会为 Child() 创建一个独立的重组边界；
+- 如果 count 改变，只会触发 Child() 的重组；
+- Parent() 不会被重新调用；
+- 因此性能更好，粒度更小。
+>✅ Child() 是一个独立的重组单元。
+
+🔹 情况 2：InlineChild()（inline）
+- 因为 inline 函数会在编译期被直接展开到调用处；
+- 也就是说，InlineChild() 的内容直接变成了 Parent() 的一部分；
+- 当 count 变化时，Compose 只能重组 Parent() 整个函数；
+- 因为它没法单独找到 InlineChild() 这段逻辑的边界。
+> ⚠️InlineChild() 不是独立的重组单元，它的重组会影响 Parent()。
 
 ### 4.Compose重组是乐观的操作
-只要Compose认为可组合项中的数据或状态发生了改变，就会开始重组。重组是个乐观的操作，所以Compose会预计在下一次改变发生前完成重组。但是如果在重组完成前再次发生变化时，Compose会取消当前的重组，并使用新数据重新开始重组。 并且取消重组后，Compose 会从重组中舍弃界面树。如有任何附带效应依赖于显示的界面，那么即使取消了组成操作，也会应用该附带效应。这可能会导致应用状态不一致。需要确保所有可组合函数和 lambda 都幂等且没有附带效应，以处理乐观的重组。
+只要Compose认为可组合项中的数据或状态发生了改变，就会开始重组。重组是个乐观的操作，所以Compose会预计在下一次改变发生前完成重组。但是如果在重组完成前状态再次发生变化时，Compose就会取消当前的重组，并使用新数据重新开始重组。并且取消重组后，Compose会从重组中舍弃界面树。如果你的 Composable 在重组中产生了副作用（Side Effect）（比如启动协程、触发网络请求、打印日志等），这些副作用可能已经执行了，即使 UI 树最终没被提交。这可能会导致应用状态不一致。需要确保所有可组合函数和 lambda 都幂等且没有附带效应，以处理乐观的重组。
+
+错误写法:
+```
+@Composable
+fun Example() {
+    var count by remember { mutableStateOf(0) }
+
+    // ❌ 直接在重组过程中修改状态，非幂等
+    count++
+
+    Text("Count = $count")
+}
+```
+- 每次重组 Example() 都会执行 count++
+- 这会导致重组无限触发 → 死循环
+- 并且 UI 和状态完全失控
+
+正确写法：保持幂等 & 使用副作用 API
+```
+@Composable
+fun Example() {
+    var count by remember { mutableStateOf(0) }
+
+    // 在点击事件中更新状态，而不是在组合函数体中
+    Button(onClick = { count++ }) {
+        Text("Count = $count")
+    }
+}
+```
+或者对于真正的副作用，用 LaunchedEffect / DisposableEffect 包裹：
+```
+@Composable
+fun FetchData(id: Int) {
+    LaunchedEffect(id) {
+        // ✅ 副作用：网络请求，仅在 id 变化时触发
+        fetchFromNetwork(id)
+    }
+}
+```
 
 # 三.在Compose重组中保存状态值(remember)
-上文说到Compose声明式UI不像以前可以通过setText会自动更新UI，它需要向可组合函数传入新的状态值来触发重组，从而生成新的UI。Compose提供了remember，remember的作用是将该状态存储在 Composition 中，当重组发生的时候会自动丢弃原先的对象转而使用改变状态后的值。remember 既可用于存储可变对象，又可用于存储不可变对象。remember 会将对象存储在组合中，当调用 remember 的可组合项从组合中移除后，它会忘记该对象。
+上文说到可组合函数重组时，Compose 会重新执行函数体，这会导致所有的普通局部变量都会重新创建。为了在重组（Recomposition）时不丢失状态的值，Compose 提供了 remember。remember 的作用是将对象保存在 Composition 中，这样**当重组发生时，Compose 会复用之前保存的对象，而不会重新创建它**。remember 可以用于在可组合项中存储任意对象（无论可变或不可变）。当调用 remember 的可组合项从 Composition 中移除后，Compose 会丢弃对该对象的引用，从而“忘记”它。
+例如:
+```
+@Composable
+fun Greeting(show: Boolean) {
+    if (show) {
+        val name = remember { "Alice-${System.currentTimeMillis()}" }
+        Text("Hello $name")
+    }
+}
+```
+1. show = true → remember 创建 "Alice-169..."
+2. 多次重组（比如键盘输入）时，remember 会复用之前的 name
+3. show = false → Greeting 被移出 Composition，Compose 丢弃记忆（释放 name）
+4. 再次 show = true → remember 重新执行初始化表达式，创建一个新的 "Alice-169..."
+
 >虽然 remember 可帮助您在重组后保持状态，但不会帮助您在配置例如旋转屏幕等情况更改后保持状态。在这种情况下，必须使用 rememberSaveable。rememberSaveable 会自动保存可保存在 Bundle 中的任何值。对于其他值，您可以将其传入自定义 Saver 对象。
 
 # 四.在Compose中创建可观察的状态(MutableState)
-在Compose实际编程中，当数据发生变更后，怎么去通知刷新界面?Compose通过可观察的状态，来触发可组合函数的重组。Compose将状态的显示与状态的存储和更改解耦，通过观察者模式来驱动界面变化。
+在Compose实际编程中，当数据发生变更后，怎么去通知刷新界面？Compose通过可观察的状态，来触发可组合函数的重组。Compose将状态的显示与状态的存储和更改解耦，通过观察者模式来驱动界面变化。
 mutableStateOf 会创建可观察的 MutableState<T>:
 ```
 interface MutableState<T> : State<T> {
     override var value: T
 }
 ```
-value如有任何更改，系统会通知所有订阅了该可观察对象的可组合函数，并触发它们的重组。简单来说就是只要对 MutableState 的 value 进行改变就会引起用到该状态的 composable 方法重组。
-例如:
-```
-var data = remember { mutableStateOf("")}
-```
-上述代码中data就是一个MutableState对象，每当data.value值发生改变的时候，系统就会重组ui。
+**value如有任何更改，系统会通知所有订阅了该可观察对象的可组合函数，并触发它们的重组**。简单来说就是只要对 MutableState 的 value 进行改变(set)就会引起用到该状态(get)的 composable 方法重组。
 
 在可组合项中声明 MutableState 对象的方法有三种：
 - ``val mutableState = remember { mutableStateOf(default) }``
 - ``var value by remember { mutableStateOf(default) }``
 - ``val (value, setValue) = remember { mutableStateOf(default) }``
 
-这三种写法是等效的，以语法糖的形式针对状态的不同用法提供。
+这三种写法是等效的，且以语法糖的形式针对状态的不同用法提供。
 
->Compose 的核心内容就是响应 state 状态的改变，Compose 通过调用 Composable 函数可以将 state 展示在 UI 上，Compose 本身也提供了MutableState等工具去观察 state 的变化，从而可以自动地回调重组UI。
-
-MutableState需要结合remember进行使用，remember 将该状态存储在 Composition 中，当重组发生的时候会自动丢弃原先的对象转而使用改变状态后的值。只要对 MutableState 的 value 进行改变就会引起用到该状态的 composable 方法重组。
+MutableState一般需要结合remember进行使用，remember 将该状态存储在 Composition 中，当重组发生的时候会自动丢弃原先的对象转而使用改变状态后的值。只要对 MutableState 的 value 进行改变就会引起用到该状态的 composable 方法重组。
 例如:
 ```
 @Composable
@@ -82,15 +172,12 @@ fun Greeting() {
 }
 
 ```
-这里的功能很简单，就是在 OutlinedTextField 中用键盘输入的内容如果不为空就能够实时显示在上方，主要是通过 ``var info by remember { mutableStateOf("") }`` 来进行通知改变的，当 变量的值发生了改变的时候，Compose 就会刷新使用到这个变量的组件，对应的组件状态也会发生改变，所以在使用 Compose 的时候只需要更新数据就可以了。
-
->但是 remember 只能在重组的时候保存状态，一旦其他情况如屏幕旋转等 Configuration 发生改变的时候 remember 就无能为力了，这时候就需要使用 rememberSaveable。只要是 Bundle 类型的数据，rememberSaveable 就能够自动保存。
+这里的功能很简单，就是在 OutlinedTextField 中获取键盘输入的内容如果不为空就能够实时显示在上方，主要是通过 ``var info by remember { mutableStateOf("") }`` 来进行通知改变的，当变量的值发生了改变的时候，Compose 就会刷新使用到这个变量的组件，对应的组件状态也会发生改变，所以在使用 Compose 的时候只需要更新数据就可以了。
 
 # 五.使用rememberSaveable保存状态及恢复态
-remember可以帮助我们在界面重组的时候保存状态，而rememberSaveable可以帮助我们存储配置更改(重新创建activity或进程)时的状态。使用rememberSaveable来存储UI的状态变量， 可以在activity或进程重新创建、可组合函数的重绘过程中保存状态。
+remember可以帮助我们在界面重组的时候保存状态，而rememberSaveable可以帮助我们存储配置更改(重新创建activity或进程)时的状态。使用rememberSaveable来存储UI的状态变量，可以在activity或进程重新创建、可组合函数的重绘过程中保存状态。所有能被添加到Bundle中的数据都会自动保存。如果你想保存一些无法被添加到Bundle中的数据，可以用下列方法：
 ### 1.Parcelize
-所有能被添加到Bundle中的数据都会自动保存。如果你想保存一些无法被添加到Bundle中的数据，可以用下列方法：对该对象的类加上注解 @Parcelize。
-例如下面的代码定义了一个Persion数据类型实现了Parcelable接口，就可以使用rememberSaveable保存状态:
+对该对象的类加上注解 @Parcelize。例如下面的代码定义了一个Persion数据类型实现了Parcelable接口，就可以使用rememberSaveable保存状态:
 ```
 @Parcelize
 data class Persion(val name: String, val country: String) : Parcelable
@@ -186,7 +273,7 @@ fun CounterScreen() {
 }
 
 ```
-Compose使用 remember 存储内部状态，使可组合函数变成有状态的。 无状态的可组合函数不持有任何状态变量，例如上面例子中的HelloScreen。上面的例子中，CounterScreen 就是个有状态的可组合函数，其内部持有并自动修改count属性的值。 这在调用者不需要控制组件的状态的情况下非常有用。但是这样的可组合函数不容易复用和测试。解决方法是可以通过状态提升来解决这样的问题。
+无状态的可组合函数不持有任何状态变量，例如上面例子中的HelloScreen。上面的例子中，CounterScreen 就是个有状态的可组合函数，其内部持有并自动修改count属性的值。 这在调用者不需要控制组件的状态的情况下非常有用。但是这样的可组合函数不容易复用和测试。解决方法是可以通过**状态提升**来解决这样的问题。
 
 # 八.状态提升
 ### 1.可组合函数状态提升
@@ -233,7 +320,7 @@ fun HelloContent(name: String, onNameChange: (String) -> Unit) {
 
 ![](/images/d768c945c42086a9b3f8def4ee61b882.webp)
 
-以上的逻辑也叫做：状态下降，事件上升。上例中，状态量从HelloScreen流向HelloContent，而事件则反向传递。 遵循这种编程模式，你可以将展示UI的可组合函数与存储状态变量解耦开来。
+以上的逻辑也叫做：**状态下降，事件上升**。上例中，状态量从HelloScreen流向HelloContent，而事件则反向传递。 遵循这种编程模式，你可以将展示UI的可组合函数与存储状态变量解耦开来。
 
 提升状态的三条原则:
 - 状态变量至少被提升到所有使用了该状态变量的可组合函数的最近的调用者处。
