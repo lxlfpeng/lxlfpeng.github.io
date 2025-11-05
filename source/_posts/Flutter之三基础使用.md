@@ -1,11 +1,11 @@
 ---
-title: Flutter开发基础总结
+title: Flutter之三基础使用
 date: 2020-04-08
 categories: 
   - Flutter开发
 ---
 
-# 一.命令式UI和声明式UI
+# 一. 命令式UI和声明式UI
 ### 1. 命令式编程和声明式编程的区别
 命令式编程：命令“机器”如何去做事情(how)，这样不管你想要的是什么(what)，它都会按照你的命令实现。
 声明式编程：告诉“机器”你想要的是什么(what)，让机器想出如何去做(how)。
@@ -15,7 +15,7 @@ categories:
 如何高效渲染，就是框架去做的事情了。通过这种方式，不管是UI的初始布局结构，还是后面的修改，都是build函数返回的对象结构去声明的，完整的声明式UI由此而来。
 所以Flutter是构建新的widget实例，而不是改变旧的实例。
 
-# 二.Flutter中的Widget
+# 二. Flutter中的Widget
 Flutter 中Widget 是一切的基础,一切的显示都是 Widget,利用响应式模式进行渲染。在 Flutter 中自定义组件就是一个类，这个类需要继承 ``StatelessWidget\StatefulWidget``。
 Widget 分为 ``有状态(StatefulWidget)`` 和 ``无状态(StatelessWidget)`` 两种，在 Flutter 中每个页面都是一帧，无状态就是保持在那一帧，而有状态的 Widget 当数据更新时，其实是创建了新的 Widget，
 只是 State 实现了跨帧的数据同步保存。
@@ -31,7 +31,7 @@ Widget 分为 ``有状态(StatefulWidget)`` 和 ``无状态(StatelessWidget)`` �
 
 ### (2.)使用
 flutter系统中提供了许多的已经定义好的StatelessWidget，例如StatelessWidget：StatelessWidget、 Icon、 IconButton、Text等。
-```
+```dart
 class CircleAvatar extends StatelessWidget {}
 class Icon extends StatelessWidget {}
 class Text extends StatelessWidget {}
@@ -41,7 +41,7 @@ Widget 和 Widget 之间通过 child: 进行嵌套。其中有的 Widget 只能�
 
 StatelessWidget 是不能调用setState函数的。
 例如：
-```
+```dart
 class HomePage extends StatelessWidget {
   int countNum = 1; 
   @override
@@ -71,14 +71,14 @@ StatefulWidget是可变状态的widget。StatefulWidget依赖的数据在Widget�
 会通知Flutter框架某个状态发生了变化，Flutter会重新运行build方法，应用程序变可以显示最新的状态，Widget只是视图的“配置信息”，是数据的映射。
 ### (2.)使用
 flutter系统中提供了许多的已经定义好的StatefulWidget，例如Checkbox, Radio, Slider, InkWell, Form, 和 TextField 都是有状态的widget，也是StatefulWidget的子类。
-```
+```dart
 class Checkbox extends StatefulWidget {}
 class Radio<T> extends StatefulWidget {}
 class Slider extends StatefulWidget {}
 ```
 
 自定义 StatefullWidget :
-```
+```dart
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
   _HomePageState createState() => _HomePageState();
@@ -110,13 +110,13 @@ class _HomePageState extends State<HomePage> {
 
 ### (3.)State概念
 每一个 StatefulWidget 类都会对应一个 State 类，State 表示与其对应的 StatefulWidget 要维护的状态，保存的状态信息可以在 build 时被获取，
-同时，在 widget 生命周期中可以被改变，改变发生时，可以调用其 setState() 方法通知 framework 发生改变，framework 会重新调用 build 方法重构 widget 树，最终完成更新 UI 的目的。 
+同时，在 widget 生命周期中可以被改变，改变发生时，可以调用其 setState() 方法通知 framework 发生改变，framework 会重新调用 build 方法重构 widget 树，最终完成更新 UI 的目的。
 state 中包含两个常用属性：``widget`` 和 ``context``。widget 属性表示当前正在关联的 widget 实例，但关联关系可能会在 widget 重构时发生变化（framework 会动态设置 widget 属性为最新的widget 对象）。context 属性是 buildContext 类的实例，表示构建 widget 的上下文，每个 widget 都有一个自己的 context 对象，
 它包含了查找、遍历当前 widget 树的方法。
 
 ### (3.)State的生命周期
 如下代码:
-```
+```dart
 class TestStateWidget extends StatefulWidget {
   @override
   _TestStateWidgetState createState() => _TestStateWidgetState(text);
@@ -176,7 +176,7 @@ Widget描述了他们的视图在给定其当前配置和状态时应该看起�
 ### 2.widget的状态改变的实现
 来看一下Widget的源码：
 
-```
+```dart
 @immutable
 abstract class Widget extends DiagnosticableTree {
     // ...
@@ -187,7 +187,7 @@ StatelessWidget是没有状态得因此它里面的数据通常是直接定义�
 那么StatefulWidget如何来存储可变的状态呢？Flutter是靠将StatefulWidget设计成了两个类来实现状态的变化的:
 - 一个类继承自StatefulWidget，作为Widget树的一部分；
 - 一个类继承自State，用于记录StatefulWidget会变化的状态，并且根据状态的变化，构建出新的Widget；
-这样设计的原因是因为在Flutter中，只要数据改变了Widget就需要重新构建（rebuild）
+  这样设计的原因是因为在Flutter中，只要数据改变了Widget就需要重新构建（rebuild）
 
 
 ### 3.widget的状态管理的方式
@@ -196,8 +196,8 @@ StatelessWidget是没有状态得因此它里面的数据通常是直接定义�
 - Widget管理自己的状态。
 - 父Widget管理子Widget状态。
 - 混合管理（父Widget和子Widget都管理状态）。
-如果某些状态只需要在自己的Widget中使用即可,Widget树中的其它部分并不需要访问这个状态.那么我们可以通过widget 管理自己的 state.比如选择框的选中状态.
-但是如果某些状态需要在多个部分进行共享,那我们只有通过父 widget 管理子 widget 状态或者混合管理来实现了.比如用户的登录状态信息.
+  如果某些状态只需要在自己的Widget中使用即可,Widget树中的其它部分并不需要访问这个状态.那么我们可以通过widget 管理自己的 state.比如选择框的选中状态.
+  但是如果某些状态需要在多个部分进行共享,那我们只有通过父 widget 管理子 widget 状态或者混合管理来实现了.比如用户的登录状态信息.
 
 >一般的原则是：如果状态是组件私有的，则应该由组件自己管理；如果状态要跨组件共享，则该状态应该由各个组件共同的父元素来管理.
 
@@ -211,41 +211,905 @@ StatelessWidget是没有状态得因此它里面的数据通常是直接定义�
 - 实现一个全局的事件总线EventBus，需要这个状态的组件可以通过订阅这个状态的通知,在收到通知后调用setState(...)方法重新build一下自身即可。
 - 使用一些专门用于状态管理的包，如Provider、GetX、Redux等专门管理状态的工具包进行管理.(后续我会讲解这些包的使用)
 
-# 三.常见的Widget
-### 1.容器
-Flutter 中拥有需要将近30种内置的 容器Widget，其中常用有 Container、Padding、Center、Flex、Stack、Row、Column、ListView 等.
-例如:
-- Row，是水平方向的线性布局（linearlayout）
-- Column，是垂直方向的线性布局（linearlayout）
-- Stack，可以理解成为相对布局。
-```
-class MyApp extends StatelessWidget{
+# 四. Scaffold（脚手架页面）
+在 **Flutter** 中，“脚手架页面（Scaffold Page）” 是指使用 **`Scaffold`** 组件构建的页面结构。
+它是 **Material Design** 的核心布局容器，用于快速搭建常见的 App 页面框架，比如带有 **AppBar、Drawer、BottomNavigationBar、FloatingActionButton** 等组件的页面。
+
+---
+
+## **Scaffold（脚手架页面）详解**
+
+### 一、基本作用
+
+`Scaffold` 是一个提供基础页面结构的容器组件，帮助开发者快速搭建应用的整体 UI 框架。
+
+它内部包含了：
+
+* 顶部导航栏（`AppBar`）
+* 主体内容区（`body`）
+* 底部导航栏（`BottomNavigationBar`）
+* 悬浮按钮（`FloatingActionButton`）
+* 抽屉菜单（`Drawer` / `EndDrawer`）
+* 底部浮动区域（`bottomSheet`）
+* SnackBar、BottomSheet 的显示逻辑等。
+
+---
+
+### 二、常用属性与功能说明
+
+| 属性名                             | 作用                               | 示例                                            |
+| ------------------------------------ | ------------------------------------ | ------------------------------------------------- |
+| `appBar`                       | 顶部导航栏，通常放标题、操作按钮等 | `AppBar(title: Text('主页'))`               |
+| `body`                         | 页面主体内容                       | `ListView()`/`Column()`等               |
+| `floatingActionButton`         | 悬浮操作按钮                       | `FloatingActionButton(onPressed: () {})`    |
+| `floatingActionButtonLocation` | 悬浮按钮位置                       | `FloatingActionButtonLocation.centerDocked` |
+| `bottomNavigationBar`          | 底部导航栏                         | `BottomNavigationBar(items: [...])`         |
+| `bottomSheet`                  | 固定在底部的视图                   | `Container(height: 50, color: Colors.blue)` |
+| `drawer`                       | 左侧抽屉菜单                       | `Drawer(child: ListView(...))`              |
+| `endDrawer`                    | 右侧抽屉菜单                       | 同上                                            |
+| `backgroundColor`              | 页面背景色                         | `Colors.white`                              |
+| `extendBodyBehindAppBar`       | 是否让 body 内容延伸到 AppBar 后面 | `true/false`                                |
+
+---
+
+### 三、使用示例
+
+#### **基础 Scaffold 页面**
+
+```dart
+import 'package:flutter/material.dart';
+
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Welcome to Flutter',
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Welcome to Flutter'),
-        ),
-        body: new Center(
-          child: new Column(
-            children: <Widget>[
-              new Text('Text 1'),
-              new Text('Text 2'),
-              new Text('Text 3')
-            ],),),),);}
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('首页'),
+        backgroundColor: Colors.blue,
+      ),
+      body: Center(
+        child: Text('这是主体内容区域'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print('点击悬浮按钮');
+        },
+        child: Icon(Icons.add),
+      ),
+    );
+  }
 }
 ```
-### 2.页面
-Flutter 中除了布局的 Widget，还有交互显示的 Widget 和完整页面呈现的Widget，其中常见的有Scaffold等.
 
-# 四. widget事件
+---
+
+#### **带底部导航和抽屉的页面**
+
+```dart
+import 'package:flutter/material.dart';
+
+class MainScaffoldPage extends StatefulWidget {
+  @override
+  _MainScaffoldPageState createState() => _MainScaffoldPageState();
+}
+
+class _MainScaffoldPageState extends State<MainScaffoldPage> {
+  int _currentIndex = 0;
+  final pages = [
+    Center(child: Text("首页")),
+    Center(child: Text("消息")),
+    Center(child: Text("我的")),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('脚手架示例'),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            DrawerHeader(
+              child: Text('菜单头部'),
+              decoration: BoxDecoration(color: Colors.blue),
+            ),
+            ListTile(
+              title: Text('主页'),
+              onTap: () {},
+            ),
+            ListTile(
+              title: Text('设置'),
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
+      body: pages[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) => setState(() => _currentIndex = index),
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: '首页'),
+          BottomNavigationBarItem(icon: Icon(Icons.message), label: '消息'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: '我的'),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {},
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+}
+```
+
+---
+
+### 四、Scaffold 的特点总结
+
+| 特点     | 说明                                                 |
+|--------| ------------------------------------------------------ |
+| 组件集成   | 内置 AppBar、Drawer、FAB、BottomNavigationBar 等     |
+| 布局规范   | 遵循 Material Design 标准                            |
+| 智能管理   | 自动处理 Snackbar、BottomSheet 等的显示逻辑          |
+| 使用方便   | 快速搭建标准页面结构                                 |
+| 扩展灵活 | 可结合 SliverAppBar、NestedScrollView 等创建复杂页面 |
+
+---
+
+### 五、典型使用场景
+
+| 场景                        | 示例                                       |
+| ----------------------------- | -------------------------------------------- |
+| **普通页面**          | AppBar + Body                              |
+| **多页面导航**        | Scaffold + BottomNavigationBar             |
+| **带抽屉菜单**        | Scaffold + Drawer                          |
+| **内容+悬浮按钮操作** | Scaffold + FloatingActionButton            |
+| **混合滚动页面**      | Scaffold + NestedScrollView / SliverAppBar |
+
+---
+
+# 五. 常见的容器Widget
+Flutter 布局容器可以按功能分为 **线性布局、层叠布局、网格布局、弹性布局、约束布局、对齐与辅助布局** 六大类。
+
+## **线性布局（Row / Column / Flex）**
+
+### **常用控件**
+
+* `Row`：水平排列子 Widget
+* `Column`：垂直排列子 Widget
+* `Flex`：可指定方向（horizontal/vertical）
+* `Expanded`：占据父控件剩余空间
+* `Flexible`：弹性占据空间，可设 `fit` 为 tight 或 loose
+
+### **特点**
+
+* 一维布局（水平或垂直）
+* 支持主轴（MainAxisAlignment）和交叉轴（CrossAxisAlignment）对齐
+* 可配合 Expanded/Flexible 实现响应式布局
+
+### **使用场景**
+
+* 按行或列排列控件
+* 导航栏、按钮组、表单行布局
+* 剩余空间分配，如列表项宽度自适应
+
+---
+
+## **层叠布局（Stack / Positioned / IndexedStack）**
+
+### **常用控件**
+
+* `Stack`：子 Widget 可重叠
+* `Positioned`：在 Stack 中精确定位
+* `IndexedStack`：只显示指定索引的子 Widget，但保留其他 Widget 状态
+
+### **特点**
+
+* 二维布局（允许重叠）
+* 可精确控制子控件位置
+* IndexedStack 保持子 Widget 状态不被销毁
+
+### **使用场景**
+
+* 悬浮按钮、徽章、叠加图片
+* Tab 页面切换需要保留状态
+* 弹窗、遮罩层布局
+
+---
+
+## **网格与流式布局（GridView / Wrap / Flow / Table）**
+
+### **常用控件**
+
+* `GridView`：滚动网格布局
+* `GridTile`：GridView 子项
+* `Wrap`：自动换行排列
+* `Flow`：自定义高性能流式布局
+* `Table`：表格布局
+
+### **特点**
+
+* 二维布局（网格或流式）
+* Wrap 超出主轴自动换行
+* Flow 可自定义布局规则，性能优于 Wrap
+* Table 可指定列宽和对齐方式
+
+### **使用场景**
+
+* 图片墙、标签云、卡片列表
+* 表格数据展示
+* 多按钮流式排列
+
+---
+
+## **弹性布局（Expanded / Flexible / Spacer）**
+
+### **常用控件**
+
+* `Expanded`：占据剩余空间
+* `Flexible`：弹性空间，可按比例占据
+* `Spacer`：占据空白空间，辅助分隔
+
+### **特点**
+
+* 用于剩余空间的动态分配
+* 可以按比例占用空间，实现响应式布局
+
+### **使用场景**
+
+* Row / Column 中控件自动拉伸
+* 平分剩余空间
+* 控件间隔自适应布局
+
+---
+
+## **约束布局（SizedBox / ConstrainedBox / AspectRatio / FractionallySizedBox）**
+
+### **常用控件**
+
+* `SizedBox`：固定宽高，或作为间距
+* `ConstrainedBox`：最小/最大宽高约束
+* `LimitedBox`：仅在无限约束下生效
+* `FractionallySizedBox`：按父容器比例设置宽高
+* `AspectRatio`：固定宽高比
+* `IntrinsicWidth/Height`：根据子 Widget 内在尺寸计算宽高
+
+### **特点**
+
+* 精确控制宽高
+* 可做响应式布局
+* AspectRatio 保持宽高比例
+
+### **使用场景**
+
+* 图片、视频播放器固定比例显示
+* 控件尺寸受父布局限制
+* 间距占位和自适应布局
+
+---
+
+## **对齐与辅助布局（Align / Center / Padding / Visibility / Clip）**
+
+### **常用控件**
+
+* `Padding`：增加内边距
+* `Align` / `Center`：对齐布局
+* `Baseline`：按文字基线对齐
+* `Visibility` / `Offstage`：控制显示/隐藏
+* `ClipRect` / `ClipRRect` / `ClipOval`：裁剪布局
+
+### **特点**
+
+* 对齐、间距、显示控制
+* 可实现圆角、圆形、遮罩效果
+
+### **使用场景**
+
+* 控件居中、对齐
+* 控件间距
+* 隐藏控件或实现裁剪效果
+
+---
+
+## **总结表格**
+
+| 布局类型 | 常用 Widget                                                    | 特点                                      | 使用场景                           |
+| ---------- | ---------------------------------------------------------------- | ------------------------------------------- | ------------------------------------ |
+| 线性布局 | Row / Column / Flex / Expanded / Flexible                      | 一维布局，主轴/交叉轴对齐，可弹性分配空间 | 导航栏、表单行布局、按钮组         |
+| 层叠布局 | Stack / Positioned / IndexedStack                              | 二维叠加，可精确定位                      | 悬浮按钮、Tab页面、弹窗、遮罩      |
+| 网格布局 | GridView / Wrap / Flow / Table                                 | 二维排列或流式布局，支持换行              | 图片墙、标签云、表格、卡片列表     |
+| 弹性布局 | Expanded / Flexible / Spacer                                   | 剩余空间动态分配，按比例占用              | 自动拉伸、控件间隔、响应式布局     |
+| 约束布局 | SizedBox / ConstrainedBox / AspectRatio / FractionallySizedBox | 控件尺寸约束，固定或比例                  | 图片、视频、间距占位、自适应布局   |
+| 对齐辅助 | Align / Center / Padding / Visibility / Clip                   | 对齐、间距、隐藏、裁剪                    | 控件居中、间距、圆角裁剪、隐藏显示 |
+
+---
+
+💡 '**总结思路**'：
+
+* **一维布局** → Row/Column/Flex
+* **二维叠加'** → Stack / Positioned
+* **二维网格/流式** → GridView / Wrap / Flow / Table
+* **弹性空间** → Expanded / Flexible / Spacer
+* **尺寸约束** → SizedBox / ConstrainedBox / AspectRatio
+* **对齐辅助** → Align / Padding / Visibility / Clip
+
+# 六. 可滚动Widget
+在 **Flutter** 中，**滚动布局（Scrollable Widgets）** 是构建可滑动页面、长列表、分页加载等界面的核心。
+它们的特点是可以让内容在视口（屏幕可见区域）内 '**滚动显示**'，以应对内容超出屏幕大小的情况。
+
+下面我给你一个 '**系统的总结**'，包括常见滚动类组件、它们的特性、使用方式和适用场景 👇
+
+---
+
+## 一、单一方向滚动布局
+
+### 1. **ListView**
+
+* '**特性**'：
+    * 最常用的滚动控件。
+    * 默认垂直方向，可改为水平。
+    * 可自动回收（懒加载）、支持 itemBuilder。
+* '**使用方式**'：
+
+```dart
+ListView.builder(
+  itemCount: 20,
+  itemBuilder: (context, index) => ListTile(title: Text('Item $index')),
+)
+```
+
+* '**典型场景**'：
+    * 列表展示、聊天记录、新闻流等。
+
+---
+
+### 2. **GridView**
+
+* '**特性**'：
+    * 网格滚动布局。
+    * 支持固定列数或固定宽度。
+* '**使用方式**'：
+
+```dart
+GridView.count(
+  crossAxisCount: 3,
+  children: List.generate(9, (index) => Container(color: Colors.blue)),
+)
+
+```
+
+* '**典型场景**'：
+    * 图片墙、九宫格、商品展示页。
+
+---
+
+### 3. **SingleChildScrollView**
+
+* '**特性**'：
+    * 只能包含一个子 Widget。
+    * 内容超出时可以滚动。
+    * 常用于嵌套多种控件（不定高度）。
+* '**使用方式**'：
+
+```dart
+SingleChildScrollView(
+  child: Column(
+    children: List.generate(30, (i) => Text('Line $i')),
+  ),
+)
+
+```
+
+* '**典型场景**'：
+    * 表单页、静态内容较多的详情页。
+
+---
+
+### 4. **PageView**
+
+* '**特性**'：
+    * 按页滚动（水平或垂直翻页）。
+    * 支持 `PageController`。
+* '**使用方式**'：
+
+```dart
+PageView(
+  children: [
+    Container(color: Colors.red),
+    Container(color: Colors.green),
+    Container(color: Colors.blue),
+  ],
+)
+
+```
+
+* '**典型场景**'：
+    * 引导页、Banner、分页内容切换。
+
+---
+
+## 二、基于 CustomScrollView 的可组合滚动布局
+
+### 5. **CustomScrollView + Slivers 系列**
+
+* '**特性**'：
+    * 高度可定制的滚动体系。
+    * 支持组合多种 “Sliver” 元素（懒加载部分）。
+    * 常见 Sliver：
+        * `SliverList`
+        * `SliverGrid`
+        * `SliverAppBar`
+        * `SliverToBoxAdapter`
+* '**使用方式**'：
+
+```dart
+CustomScrollView(
+  slivers: [
+    SliverAppBar(
+      title: Text('Sliver Example'),
+      pinned: true,
+      expandedHeight: 200,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Image.asset('assets/header.jpg', fit: BoxFit.cover),
+      ),
+    ),
+    SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) => ListTile(title: Text('Item $index')),
+        childCount: 20,
+      ),
+    ),
+  ],
+)
+
+```
+
+* '**典型场景**'：
+    * 吸顶效果、可伸缩头部、复杂混合滚动页面。
+
+---
+
+## 三、支持嵌套或多方向滚动的布局
+
+### 6. **NestedScrollView**
+
+* '**特性**'：
+    * 实现 **头部+内容** 的联动滚动（比如 AppBar + TabBar + 内容列表）。
+    * 支持内部嵌套的可滚动子视图。
+* '**使用方式**'：
+
+```dart
+NestedScrollView(
+  headerSliverBuilder: (context, innerBoxIsScrolled) => [
+    SliverAppBar(
+      expandedHeight: 200,
+      floating: false,
+      pinned: true,
+      flexibleSpace: FlexibleSpaceBar(title: Text('Header')),
+    )
+  ],
+  body: ListView.builder(
+    itemCount: 30,
+    itemBuilder: (context, index) => ListTile(title: Text('Item $index')),
+  ),
+)
+
+```
+
+* '**典型场景**'：
+    * 复杂吸顶页、滚动联动页面（如微博、知乎个人页）。
+
+---
+
+### 7. **Scrollable（底层类）**
+
+* '**特性**'：
+    * 所有滚动组件的基类。
+    * 通常不直接使用。
+* '**使用方式**'：
+    * 由上层如 `ListView`、`GridView` 等封装使用。
+* '**典型场景**'：
+    * 自定义滚动行为（高级开发中）。
+
+---
+
+### 8. **ScrollView（抽象类）**
+
+* '**特性**'：
+    * 滚动布局基类，`ListView`、`GridView`、`PageView` 等都继承自它。
+    * 一般不直接实例化。
+
+---
+
+## 四、特殊滚动控件
+
+### 9. **ReorderableListView**
+
+* '**特性**'：
+    * 支持 **拖拽重新排序** 的列表。
+* '**使用方式**'：
+
+```dart
+ReorderableListView(
+  children: List.generate(
+    10,
+    (i) => ListTile(key: ValueKey(i), title: Text('Item $i')),
+  ),
+  onReorder: (oldIndex, newIndex) {},
+)
+
+```
+
+* '**典型场景**'：
+    * 可拖拽排序功能，如“我的频道”。
+
+---
+
+### 10. **Scrollbar**
+
+* '**特性**'：
+    * 给滚动内容添加可视化滚动条。
+* '**使用方式**'：
+
+```dart
+Scrollbar(
+  thumbVisibility: true,
+  child: ListView.builder(
+    itemCount: 50,
+    itemBuilder: (_, i) => ListTile(title: Text('Item $i')),
+  ),
+)
+
+```
+
+* '**典型场景**'：
+    * 长列表滚动提示。
+
+---
+
+### 11. **DraggableScrollableSheet**
+
+* '**特性**'：
+    * 可拖拽的底部弹出面板。
+    * 可在最小/最大范围间滑动。
+* '**使用方式**'：
+
+```dart
+DraggableScrollableSheet(
+  initialChildSize: 0.3,
+  minChildSize: 0.2,
+  maxChildSize: 0.8,
+  builder: (context, controller) => ListView.builder(
+    controller: controller,
+    itemCount: 30,
+    itemBuilder: (_, i) => ListTile(title: Text('Item $i')),
+  ),
+)
+```
+
+* '**典型场景**'：
+    * 弹出底部滑动面板（如地图详情面板）。
+
+---
+
+## 五、总结对比表
+
+| 名称                               | 滚动方向  | 子组件类型 | 特性             | 常见场景         |
+| ------------------------------------ | ----------- | ------------ | ------------------ | ------------------ |
+| **ListView**                 | 垂直/水平 | 多个       | 懒加载，简单易用 | 列表、聊天页     |
+| **GridView**                 | 垂直/水平 | 多个       | 网格布局         | 图片墙、商品页   |
+| **SingleChildScrollView**    | 垂直/水平 | 单个       | 嵌套静态内容     | 表单页、详情页   |
+| **PageView**                 | 垂直/水平 | 多个       | 翻页切换         | 引导页、Banner   |
+| **CustomScrollView**         | 任意      | Sliver     | 组合滚动         | 吸顶、复杂滚动   |
+| **NestedScrollView**         | 垂直      | 多个       | 嵌套滚动         | Tab联动          |
+| **ReorderableListView**      | 垂直      | 多个       | 可拖拽排序       | 编辑频道         |
+| **Scrollbar**                | 任意      | 任意       | 滚动条可视化     | 长列表提示       |
+| **DraggableScrollableSheet** | 垂直      | 一个       | 可拖动面板       | 地图详情、弹出层 |
+
+---
+
+## 附加建议
+
+* 如果是'**静态页面**'：推荐使用 `SingleChildScrollView + Column`
+* 如果是'**长列表 / 动态数据**'：使用 `ListView.builder`
+* 如果是'**复杂滚动 / 吸顶头部**'：使用 `CustomScrollView + Sliver`
+* 如果是'**页面切换**'：使用 `PageView`
+* 如果是'**联动滑动**'：使用 `NestedScrollView`
+
+# 七. 常见的UI显示Widget
+## 1. **Text**
+
+* '**特性**'：
+    * 显示文本内容。
+    * 可设置字体大小、颜色、粗细、行高、溢出方式等。
+* '**使用方式**'：
+
+```
+Text(
+  'Hello Flutter',
+  style: TextStyle(
+    fontSize: 18,
+    color: Colors.blue,
+    fontWeight: FontWeight.bold,
+  ),
+  maxLines: 2,
+  overflow: TextOverflow.ellipsis,
+)
+
+```
+
+* '**典型场景**'：
+    * 显示文字内容、标题、描述。
+
+---
+
+## 2. **Icon / Image / Image.network / Image.asset**
+
+* **Icon**
+    * 显示图标，通常与 `Icons` 或自定义 IconFont 配合。
+
+```
+Icon(Icons.favorite, color: Colors.red, size: 30)
+```
+
+* **Image**
+    * 显示图片资源：
+        * `Image.asset` 本地资源
+        * `Image.network` 网络资源
+        * `Image.file` 本地文件
+
+```
+Image.network('https://example.com/image.png', width: 100, height: 100)
+```
+
+* '**典型场景**'：
+    * 显示图标、图片、头像、装饰图。
+
+---
+
+## 3. **Button 系列（ElevatedButton / TextButton / IconButton / OutlinedButton）**
+
+* '**特性**'：
+    * 用于用户交互触发事件。
+    * 样式多样，可设置颜色、形状、阴影。
+* '**使用方式**'：
+
+```
+ElevatedButton(
+  onPressed: () { print('Pressed'); },
+  child: Text('Click Me'),
+)
+IconButton(
+  onPressed: () {},
+  icon: Icon(Icons.add),
+)
+
+```
+
+* '**典型场景**'：
+    * 提交操作、导航、交互按钮。
+
+---
+
+## 4. **TextField / TextFormField**
+
+* '**特性**'：
+    * 输入框 Widget。
+    * 支持验证、样式、光标、前缀/后缀图标。
+* '**使用方式**'：
+
+```
+TextField(
+  decoration: InputDecoration(
+    labelText: 'Username',
+    border: OutlineInputBorder(),
+    prefixIcon: Icon(Icons.person),
+  ),
+)
+
+```
+
+* '**典型场景**'：
+    * 表单输入、搜索框、聊天输入。
+
+---
+
+## 5. **Checkbox / Radio / Switch**
+
+* '**特性**'：
+    * 选择类控件，单选、多选、开关。
+* '**使用方式**'：
+
+```
+Checkbox(value: true, onChanged: (val) {})
+Radio(value: 1, groupValue: 1, onChanged: (val) {})
+Switch(value: true, onChanged: (val) {})
+```
+
+* '**典型场景**'：
+    * 设置开关、选项选择、表单。
+
+---
+
+## 6. **ProgressIndicator（CircularProgressIndicator / LinearProgressIndicator）**
+
+* '**特性**'：
+    * 进度显示控件。
+    * 支持旋转、线性显示、确定/不确定进度。
+* '**使用方式**'：
+
+```
+CircularProgressIndicator()
+LinearProgressIndicator(value: 0.5)
+```
+
+* '**典型场景**'：
+    * 数据加载、进度展示。
+
+---
+
+## 7. **Divider / VerticalDivider / Spacer**
+
+* **Divider**
+    * 水平分割线。
+* **VerticalDivider**
+    * 垂直分割线。
+* **Spacer**
+    * 弹性占位，非容器但影响布局。
+
+```
+Divider(color: Colors.grey, thickness: 1)
+Spacer(flex: 1)
+```
+
+* '**典型场景**'：
+    * 列表分割、弹性间隔。
+
+---
+
+## 8. **Tooltip / Chip / Badge**
+
+* **Tooltip**
+    * 提示信息，当长按或悬停显示文本。
+
+```
+Tooltip(message: 'Edit', child: Icon(Icons.edit))
+```
+
+* **Chip**
+    * 小型标签、可附加图标或删除按钮。
+
+```
+Chip(label: Text('Flutter'))
+```
+
+* **Badge**
+    * 消息角标、数量标记。
+
+```
+Badge(label: Text('3'))
+```
+
+* '**典型场景**'：
+    * 提示、标签、角标显示。
+
+---
+
+## 9. **RichText / TextSpan**
+
+* '**特性**'：
+    * 支持文本多样式、部分文字点击。
+* '**使用方式**'：
+
+```
+RichText(
+  text: TextSpan(
+    text: 'Hello ',
+    style: TextStyle(color: Colors.black),
+    children: [
+      TextSpan(text: 'Flutter', style: TextStyle(color: Colors.blue)),
+    ],
+  ),
+)
+```
+
+* '**典型场景**'：
+    * 富文本显示、部分文字高亮或可点击。
+
+---
+
+## 10. **GestureDetector / InkWell / InkResponse**
+
+* '**特性**'：
+    * 用于 '**捕获用户手势**'。
+    * InkWell 提供水波纹效果，GestureDetector 更灵活。
+* '**使用方式**'：
+
+```
+GestureDetector(
+  onTap: () { print('Tapped'); },
+  child: Container(width: 100, height: 50, color: Colors.blue),
+)
+InkWell(
+  onTap: () {},
+  child: Padding(padding: EdgeInsets.all(8), child: Text('Click Me')),
+)
+```
+
+* '**典型场景**'：
+    * 点击、长按、拖动等手势事件。
+
+---
+
+## 11. **IconButton / FloatingActionButton**
+
+* **IconButton**
+    * 小图标按钮。
+* **FloatingActionButton**
+    * 浮动操作按钮，一般放在页面右下角。
+
+```
+FloatingActionButton(onPressed: () {}, child: Icon(Icons.add))
+```
+
+* '**典型场景**'：
+    * 快速操作、工具栏按钮。
+
+---
+
+## 12. **Other Display Widgets**
+
+* **Card / ListTile**
+    * 单独显示内容。
+
+```
+ListTile(
+  leading: Icon(Icons.person),
+  title: Text('User'),
+  subtitle: Text('Details'),
+)
+```
+
+* **CircleAvatar**
+    * 圆形头像。
+
+```
+CircleAvatar(backgroundImage: NetworkImage(url))
+```
+
+* **Placeholder**
+    * 占位控件，用于布局开发调试。
+
+```
+Placeholder()
+```
+---
+
+### 总结
+
+| Widget                                       | 特性           | 使用场景               |
+| ---------------------------------------------- | ---------------- | ------------------------ |
+| Text                                         | 文本显示       | 标题、描述、文字内容   |
+| Icon / Image                                 | 图标/图片显示  | 图标、图片、头像       |
+| Button 系列                                  | 用户交互       | 提交操作、点击事件     |
+| TextField                                    | 文本输入       | 表单、搜索、聊天       |
+| Checkbox / Radio / Switch                    | 选择控件       | 表单、设置选项         |
+| ProgressIndicator                            | 进度显示       | 数据加载、进度展示     |
+| Divider / Spacer                             | 分隔/弹性占位  | 列表、布局间隔         |
+| Tooltip / Chip / Badge                       | 提示/标签/角标 | 小组件提示、标签显示   |
+| RichText                                     | 富文本         | 高亮、部分样式文本     |
+| GestureDetector / InkWell                    | 手势捕获       | 点击、滑动、长按       |
+| IconButton / FloatingActionButton            | 图标操作按钮   | 页面快速操作           |
+| ListTile / Card / CircleAvatar / Placeholder | 内容显示       | 列表项、头像、占位调试 |
+
+# 八. widget事件
 这里分两种情况,一种是widget 本身支持事件监测,另外一种是widget不支持事件检测.
 ### 1.widget 本身支持事件,
 如果 widget 本身支持事件监测，直接传递给它一个函数，并在这个函数里实现响应方法。例如，RaisedButton、IconButton、OutlineButton、Checkbox、SnackBar、Switch等。
-```
-
+```dart
 class SampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -265,7 +1129,7 @@ class SampleApp extends StatelessWidget {
 ``` 
 ### 2. widget 本身不支持事件,
 如果 widget 本身不支持事件监测，则在外面包裹一个 GestureDetector(或者支持事件的widget例如: InkWell)，并给它的属性传递一个onTap函数：
-```
+```dart
 class SampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -310,13 +1174,13 @@ onScaleStart	|当用户触摸屏幕并开始缩放时触发
 onScaleUpdate	|当用户触摸屏幕并产生缩放时触发
 onScaleEnd	|当用户完成缩放时触发
 
-# 五.路由和导航
+# 九. 路由和导航
 Flutter 中万物皆 Widget，页面自然也是一个 Widget。只不过是一个全屏的 Widget。在flutter中两种页面跳转方式:
 - 无名路由跳转(一种动态构建路由的方式)。
 - 命名路由跳转(一种提前命名路由的方式)。
 ### 1.无名路由跳转
 直接使用使用 Navigator 跳转页面，在 Flutter 中，使用 Navigator 来进行页面跳转。一个简单的跳转页面的例子：
-```
+```dart
 Navigator.push(
   context,
   MaterialPageRoute(
@@ -326,7 +1190,7 @@ Navigator.push(
 );
 ```
 或者
-```
+```dart
 Navigator.of(context).push(
   MaterialPageRoute(
     builder: (context) => PageA(),
@@ -334,17 +1198,17 @@ Navigator.of(context).push(
 );
 ```
 在A页面中关闭A页面返回到上一个页面:
-```
+```dart
 Navigator.pop(context);
 ```
 或者:
-```
+```dart
  Navigator.of(context).pop();
 ```
 ### 2.命名路由跳转
 命名路由跳转需要先注册路由表,放在MaterialApp的 initialRoute 和 routes 中.命名路由路由存在的意义在于可以让我们更方便的导航到想要到达的页面，便于管理和维护。
 要想使用命名路由，我们必须先提供并注册一个路由表（routing table），这样应用程序才知道哪个名字与哪个路由组件相对应。路由表的注册方式很简单，找到MaterialApp，添加routes属性，
-```
+```dart
 void main() => runApp(MyApp());//单行函数调用写法
 class MyApp extends StatelessWidget {
   @override
@@ -365,7 +1229,7 @@ class MyApp extends StatelessWidget {
 要通过路由名称来打开新路由，可以使用Navigator 的pushNamed方法：
 Future pushNamed(BuildContext context, String routeName,{Object arguments})
 Navigator 除了pushNamed方法，还有pushReplacementNamed等其他管理命名路由的方法，读者可以自行查看API文档。通过刚刚注册的页面名称来跳转一个页面：
-```
+```dart
 Navigator.pushNamed(context, 'first_page');// one_page表示页面别名
 ```
 ### 3.界面之间传递参数
@@ -374,7 +1238,7 @@ Navigator.pushNamed(context, 'first_page');// one_page表示页面别名
 - 在Route中传递数据给下一个页面。
 ##### (1. )通过构造方法中传递数据
 需要在接收数据的页面事先定义好构造方法，构造方法中定义要接收的参数。例如：我们在SecondPage中定义一个构造方法，构造方法中可以定义我们要接收的数据:
-```
+```dart
 class SecondPage extends StatelessWidget {
   String data;
   PageB({this.data});
@@ -392,7 +1256,7 @@ class SecondPage extends StatelessWidget {
 }
 ```
 Frist页面跳转SecondPage页面时给传递数据：
-```
+```dart
 Navigator.push(
   context,
   MaterialPageRoute(
@@ -405,9 +1269,9 @@ Navigator.push(
 ##### (2.)将参数传递给指定路由
 构造方法参数参数的缺点不是太灵活。Flutter提供了把传递的参数放到Navigator中，然后传递给指定的路由，在接收的页面提取出需要的参数即可，这种方式更加灵活一些。
 1. 首先要先定义好要传递的数据
-例如：
-我们先定义一个实体类：
-```
+   例如：
+   我们先定义一个实体类：
+```dart
 class People {
   String name;
   int age;
@@ -415,9 +1279,9 @@ class People {
 }
 ```
 2. 传递参数
-将参数数据传递给SecondPage，可以有如下四种传参方式，效果都一样
-第一种:
-```
+   将参数数据传递给SecondPage，可以有如下四种传参方式，效果都一样
+   第一种:
+```dart
 Navigator.pushNamed(
   context,
   second_page,
@@ -425,11 +1289,11 @@ Navigator.pushNamed(
 );
 ```
 第二种:
-```
+```dart
 Navigator.of(context).pushNamed(second_page, arguments: People("张三", 30));
 ```
 第三种:
-```
+```dart
 Navigator.push(context,
    MaterialPageRoute(
      builder: (context) => SecondPage(),
@@ -440,7 +1304,7 @@ Navigator.push(context,
  );
 ```
 第四种
-```
+```dart
 Navigator.of(context).push(
   MaterialPageRoute(
       builder: (context) => SecondPage(),
@@ -451,8 +1315,8 @@ Navigator.of(context).push(
 );
 ```
 3. 接收参数
-在SecondPage接收数据时，数据要通过 ModalRoute.of 方法。此方法返回带有参数的当前路由。
-```
+   在SecondPage接收数据时，数据要通过 ModalRoute.of 方法。此方法返回带有参数的当前路由。
+```dart
 class SecondPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -472,7 +1336,7 @@ class SecondPage extends StatelessWidget {
 ```
 ### 4.返回参数
 路由打开页面后可以通过await 关键字等待路由返回参数.
-```
+```dart
 class FirstPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -501,7 +1365,7 @@ class FirstPage extends StatelessWidget {
 }
 ```
 通过Navigator.pop返回数据
-```
+```dart
 class SecondPage extends StatelessWidget {
   TipRoute({
     Key key,
@@ -534,7 +1398,7 @@ class SecondPage extends StatelessWidget {
 在打开每一个路由页前判断用户登录状态,但是每次打开路由前我们都需要去判断一下将会非常麻烦，可以用Flutter提供路由拦截来解决这种问题.MaterialApp有一个onGenerateRoute属性，
 当调用Navigator.pushNamed(...)打开命名路由时，如果指定的路由名在路由表中已注册，则会调用路由表中生成路由组件；
 如果路由表中没有注册，才会调用onGenerateRoute来生成路由。要实现制页面权限的功能就非常容易：在onGenerateRoute中进行统一的权限控制判断，如：
-```
+```dart
 MaterialApp(
   ... 
    onGenerateRoute: (RouteSettings settings) {
@@ -567,13 +1431,13 @@ MaterialApp(
 - 代码更好维护；如果使用匿名路由，则必须在调用Navigator.push的地方创建新路由页，这样不仅需要import新路由页的dart文件，而且这样的代码将会非常分散。
 - 可以通过onGenerateRoute做一些全局的路由跳转前置处理逻辑。
 
-# 六. 资源管理
+# 十. 资源管理
 Flutter APP安装包中会包含代码和 assets（资源）两部分。Assets是会打包到程序安装包中的，可在运行时进行访问。常见类型的assets包括:
-- 图标和图片（JPEG，WebP，GIF，动画WebP / GIF，PNG，BMP和WBMP） 
+- 图标和图片（JPEG，WebP，GIF，动画WebP / GIF，PNG，BMP和WBMP）
 - 字体
 - Json文件
 - 静态数据(视频,声音)
- 
+
 ### 1.加载图片
 类似于Android原生开发，Flutter也可以为当前设备加载适合其分辨率的图像。
 
@@ -596,7 +1460,7 @@ pubspec.yaml中asset添加不同设备像素比例的图片。
 ```
 在设备像素比率为1.8的设备上，.../2.0x/my_icon.png 将被选择。对于2.7的设备像素比率，.../3.0x/my_icon.png将被选择。
 
-如果没有在Image widget上指定渲染图像的宽度和高度，那么Image widget将占用与主资源相同的屏幕空间大小。 
+如果没有在Image widget上指定渲染图像的宽度和高度，那么Image widget将占用与主资源相同的屏幕空间大小。
 也就是说，如果是.../my_icon.png是72px乘72px，如果是.../3.0x/my_icon.png应该是216px乘216px;
 pubspec.yaml中asset部分中的每一项都应与实际文件相对应，但主资源项除外。当主资源缺少某个资源时，会按分辨率从低到高的顺序去选择，也就是说1x中没有的话会在2x中找，2x中还没有的话就在3x中找。
 
@@ -606,7 +1470,7 @@ pubspec.yaml中asset部分中的每一项都应与实际文件相对应，但主
 ##### (1.)设置APP启动图标
 **Android**
 在Flutter项目的根目录中，导航到.../android/app/src/main/res目录，里面包含了各种资源文件夹（如mipmap-hdpi已包含占位符图像“ic_launcher.png”）。
- 只需按照Android开发人员指南 (opens new window)中的说明， 将其替换为所需的资源，并遵守每种屏幕密度（dpi）的建议图标大小标准。
+只需按照Android开发人员指南 (opens new window)中的说明， 将其替换为所需的资源，并遵守每种屏幕密度（dpi）的建议图标大小标准。
 
 >注意: 如果您重命名.png文件，则还必须在您AndroidManifest.xml的<application>标签的android:icon属性中更新名称。
 
@@ -623,7 +1487,7 @@ pubspec.yaml中asset部分中的每一项都应与实际文件相对应，但主
 并命名为LaunchImage.png、LaunchImage@2x.png、LaunchImage@3x.png。 如果你使用不同的文件名，那您还必须更新同一目录中的Contents.json文件，图片的具体尺寸可以查看苹果官方的标准。
 您也可以通过打开Xcode完全自定义storyboard。在Project Navigator中导航到Runner/Runner然后通过打开Assets.xcassets拖入图片，或者通过在LaunchScreen.storyboard中使用Interface Builder进行自定义。
 
-# 七.包管理与第三方库引入
+# 十一.包管理与第三方库引入
 ### 1. YAML包管理
 Flutter使用配置文件pubspec.yaml（位于项目根目录）来管理第三方依赖包。
 pubspec.yaml:
@@ -653,7 +1517,7 @@ flutter:
 - dependencies：应用或包依赖的其它包或插件。
 - dev_dependencies：开发环境依赖的工具包（而不是flutter应用本身依赖的包）。
 - flutter：flutter相关的配置选项。
-如果我们的Flutter应用本身依赖某个包，我们需要将所依赖的包添加到dependencies 下.
+  如果我们的Flutter应用本身依赖某个包，我们需要将所依赖的包添加到dependencies 下.
 >需要注意dependencies和dev_dependencies的区别，前者的依赖包将作为APP的源码的一部分参与编译，生成最终的安装包。
 >而后者的依赖包只是作为开发阶段的一些工具包，主要是用于帮助我们提高开发、测试效率，比如flutter的自动化测试包等。
 
@@ -687,7 +1551,7 @@ dependencies:
       path: packages/package1        
 ```
 
-# 八.Json解析
+# 十二.Json解析
 由于Flutter禁用运行时反射，所以在Flutter中是没有GSON，Jackson这类解析JSON的库。
 - 方案一:手写实体类
 - 方案二:json_ serializable库生成实体类
@@ -697,7 +1561,7 @@ dependencies:
 它能够将原始JSON字符串传递给json.decode() 方法，该方法可以根据JSON字符串具体内容将其转为List或Map,然后在返回的Map<String, dynamic>或者List中查找所需的值。
 它不需要依赖任何第三方库，对于小项目来说很方便。
 例如:
-```
+```dart
 Map<String, dynamic> person = JSON.decode(jsonStr);
 print('${person['name']}');
 print('${person['age']');
@@ -705,7 +1569,7 @@ print('${person['age']');
 >JSON.decode()返回一个Map<String, dynamic>，这意味着我们直到运行时才知道值的类型。失去了静态类型语言特性，代码非常容易出错。非常不推荐。
 
 可以通过引入Model在模型类中序列化JSON来解决上述问题.
-```
+```dart
 class Person {
   final String name;
   final String age;
@@ -724,7 +1588,7 @@ class Person {
 }
 ```
 使用时
-```
+```dart
 Map personMap = JSON.decode(jsonStr);
 var person = Person.fromJson(personMap);
 print('${person.name}');
@@ -740,7 +1604,7 @@ json_serializable是Google提供的一个自动化的源代码生成器，可以
 - [json_annotation ](https://pub.dev/packages/json_annotation)
 - [json_serializable ](https://pub.dev/packages/json_serializable)
 - [build_runner](https://pub.dev/packages/build_runner)
-在pubspec.yaml中添加依赖并执行flutter pub get：
+  在pubspec.yaml中添加依赖并执行flutter pub get：
 ```
 dependencies:
   json_annotation: ^x.x.x
@@ -759,7 +1623,7 @@ dev_dependencies:
 }
 ```
 编写生成模型类:
-```
+```dart
 import 'package:json_annotation/json_annotation.dart'; 
 part 'person.g.dart';// result.g.dart 将在我们运行生成命令后自动生成
 @JsonSerializable()
@@ -820,14 +1684,14 @@ Json2Dart在线插件:
 json_serializable| 需要定义字段、易维护 | 中大型项目
 json-to-dart插件| 快速、易操作 | 任何类型的项目 
 
-# 九.网络请求
-flutter网络请求三种方式: 
+# 十三.网络请求
+flutter网络请求三种方式:
 - flutter自带的HttpClient
-- 第三方库http 
-- 第三方库Dio 
+- 第三方库http
+- 第三方库Dio
 ### 1. 原生方式(不建议使用)
 1.1 get 请求
-```
+```dart
   void getNetData() async {
     var client = new HttpClient();
     var request = await client.getUrl(Uri.parse(url));
@@ -840,7 +1704,7 @@ flutter网络请求三种方式:
 ### 2.库http(不建议使用)
 ##### (1.)get 请求
 代码如下：
-```
+```dart
   void getNet() async {
     var client = http.Client();
     http.Response response = await client.get(url);
@@ -848,7 +1712,7 @@ flutter网络请求三种方式:
   }
 ```
 代码量比原生的简洁很多，然而还可以更简洁
-```
+```dart
   void getNet() {
     http.Client()
         .get(url)
@@ -858,7 +1722,7 @@ flutter网络请求三种方式:
   }
 ```
 ##### (2.)post 请求
-```
+```dart
   void postNet() async {
     var params = Map<String, String>();
     params["username"] = "xxxx";
@@ -879,7 +1743,7 @@ dependencies:
   dio: ^1.0.9
 ```
 ##### (1.)get 请求
-```
+```dart
   void getNet() async {
     Dio dio = new Dio();
     var response = await dio.get(url);
@@ -888,7 +1752,7 @@ dependencies:
 ```
 
 ##### (2.)post 请求
-```
+```dart
   void postNet() async {
     FormData formData = new FormData.from({
       "username": "xxxx",
@@ -899,11 +1763,12 @@ dependencies:
     _content = response.data.toString();
   }
 ```
-# 十.弹窗Dialog
+
+# 十四.弹窗Dialog
 Flutter中的操作提示主要有 ``SnackBar、BottomSheet、Dialog``
 Flutter中也提供了很多Dialog 弹窗，如：``AboutDialog、AlertDialog、SimpleDialog、CupertinoAlertDialog、CupertinoFullscreenDialogTransition、BottomSheet``。
 对话框本质上是属于一个路由的页面Route，由Navigator进行管理，所以控制对话框的显示和隐藏，也是调用Navigator.of(context)的push和pop方法。
-在Flutter中，对话框会有两种风格，调用showDialog()方法展示的是material风格的对话框，调用showCupertinoDialog()方法展示的是ios风格的对话框。 
+在Flutter中，对话框会有两种风格，调用showDialog()方法展示的是material风格的对话框，调用showCupertinoDialog()方法展示的是ios风格的对话框。
 而这两个方法其实都会去调用showGeneralDialog()方法，可以从源码中看到最后是利用Navigator.of(context, rootNavigator: true).push()一个页面。
 基本要传的参数:context上下文,builder用于创建显示的widget,barrierDismissible可以控制点击对话框以外的区域是否隐藏对话框。
 showDialog()方法返回的是一个Future对象,可以通过这个future对象来获取对话框所传递的数据。 比如我们想知道想知道用户是点击了对话框的确认按钮还是取消按钮,那就在退出对话框的时候，
@@ -915,7 +1780,7 @@ Dialog主要有 3 种：
 - AlertDialog
 - BottomSheet
 ### 1. SimpleDialog
-```
+```dart
 void showMySimpleDialog(BuildContext context) {
     showDialog(
         context: context,
@@ -947,7 +1812,7 @@ void showMySimpleDialog(BuildContext context) {
   }
 ```
 ### 2. AlertDialog
-```
+```dart
 void showMyMaterialDialog(BuildContext context) {
     showDialog(
         context: context,
@@ -974,7 +1839,7 @@ void showMyMaterialDialog(BuildContext context) {
   }
 ```
 ### 3. BottomSheet
-```
+```dart
 showModalBottomSheet(
      context: context,
      backgroundColor: Colors.green,
@@ -1005,7 +1870,7 @@ showModalBottomSheet(
 
 ### 4. 自定义弹窗
 定义组件类来继承Dialog,添加build方法，return 自定义内容
-```
+```dart
 class MyCustomLoadingDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -1057,10 +1922,10 @@ class MyCustomLoadingDialog extends StatelessWidget {
 }
 ```
 
-
+<!-- 
 Flutter相关教程:
 [Flutter布局方式总](https://www.jianshu.com/p/88c66747eec1)
-[Flutter 初尝试：入门教程](https://www.jianshu.com/p/e889c5d407a9) 
+[Flutter 初尝试：入门教程](https://www.jianshu.com/p/e889c5d407a9)
 [GSY Flutter 系列专栏](https://guoshuyu.cn/home/wx/)
 [flutter中文网](https://book.flutterchina.club/)
 [Flutter入门进阶之旅](https://www.jianshu.com/u/794cff487721)
@@ -1079,7 +1944,7 @@ Flutter综合教程:
 [Flutter核心技术与实战](https://www.kancloud.cn/alex_wsc/flutter_demo/1559549)
 [给 Android 开发者的 Flutter 指南](https://flutter.cn/docs/get-started/flutter-for/android-devs)
 [Flutter页面跳转和传值传参，接收页面返回数据、以及解决返回（pop）页面时黑屏的问题](https://blog.csdn.net/yuzhiqiang_1993/article/details/89090742)
-
+-->
 
 
 

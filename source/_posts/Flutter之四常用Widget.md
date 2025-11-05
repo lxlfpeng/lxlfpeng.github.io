@@ -1,6 +1,6 @@
 ---
-title: Flutter之常见控件
-date: 2021-05-13
+title: Flutter之四常用Widget
+date: 2020-06-01
 categories: 
   - Flutter开发
 ---
@@ -11,15 +11,15 @@ ListView 构造方法:
 - ListView：仅适用于列表中含有少量元素的场景
 - ListView.build：适用于子 Widget 比较多的场景
 - ListView.separated：适用于需要设置分割线的场景
-构造方法名 | 特点 |	使用场景
-|-|-|-|
-|ListView|一次性创建好所有子 Widget|适用于展示少量连续子 Widget 的场景。|
-|ListView.build|提供了子 Widget 创建方法，仅在需要展示时才创建|适用于子 Widget 较多，且视觉效果呈现某种规律性的场景。|
-|ListView.separated|提供了子 Widget 创建方法，仅在需要展示时才创建，且提供了自定义分割线的功能|适用于子 Widget 较多，且视觉效果呈现某种规律性、每个子 Widget 之间需要分割线的场景。|
- 
+  构造方法名 | 特点 |	使用场景
+  |-|-|-|
+  |ListView|一次性创建好所有子 Widget|适用于展示少量连续子 Widget 的场景。|
+  |ListView.build|提供了子 Widget 创建方法，仅在需要展示时才创建|适用于子 Widget 较多，且视觉效果呈现某种规律性的场景。|
+  |ListView.separated|提供了子 Widget 创建方法，仅在需要展示时才创建，且提供了自定义分割线的功能|适用于子 Widget 较多，且视觉效果呈现某种规律性、每个子 Widget 之间需要分割线的场景。|
+
 ### 1.ListView
 可以通过设置 children 参数，将所有子 Widget 包含到 listView 中，但这种创建方法要求提前将所有子 Widget 一次性创建好，而不是等到真正需要在屏幕上显示时才创建，即这种方法是导致性能下降 。因此，这种方式只适合列表中含有少量元素的场景:
-```
+```dart
 class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class ListPage extends StatelessWidget {
 - itemBuilder：列表项的创建方法。当列表滚动到相应位置时，ListView 会调用该方法创建对应的子 Widget
 - itemCount：列表项的数目。如果不设置或设置为空，则表示 ListView 为无限列表
 - itemExtent：列表项高度。可选参数，但对于定高的列表项元素，建议设置该参数的值（不设置时，ListView 会动态的根据子 Widget 创建完成后的结果，决定自身的视图高度，以及子 Widget 在 ListView 中的相对位置）
-```
+```dart
 class ListBuild extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class ListBuild extends StatelessWidget {
 
 ### 3.ListView.separatorBuilder
 设置列表项之间的分隔线，可以根据下标设置不同的分隔线
-```
+```dart
 class ListSeparated extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -121,28 +121,28 @@ class ListSeparated extends StatelessWidget {
 # Flutter设置margin和padding
 ### 方式一使用Container包裹
 用Container包裹起来然后在Container上面设置:
-```
+```dart
   padding: EdgeInsets.fromLTRB(10, 10, 15, 20),//内边距，里边的蓝块，需要给宽高
   margin: EdgeInsets.fromLTRB(100, 10, 15, 15),//外边距，父容器本身相对外部容器的移动
 ```
 ### 方式二使用Padding和SizedBox 组件
 Flutter开发，万物皆Widget，对于内边距，我们一般是在目标控件包裹一层父级控件Padding，并通过Padding控件的padding属性指定内边距数值，例如:
 统一指定上下左右的内边距
-```
+```dart
 Padding(
   padding: const EdgeInsets.all(20.0),
   child: Text(text),
 ),
 ```
 指定左侧内边距
-```
+```dart
 Padding(
   padding: EdgeInsets.only(left: 20.0),
   child: Text(text),
 ),
 ```
 指定上下左右内边距
-```
+```dart
 Padding(
   padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),//此处也可以使用EdgeInsets.only
   child: Text(text),
@@ -151,19 +151,19 @@ Padding(
 对于外边距，Flutter没有类似Padding的控件，但是很多时候我们又想要实现控件间的间距效果，这个时候SizedBox控件就派上用场了，它是一种类似于Android平台的space占位view，只占空间不显示，使用方法也很简单：
 
 设置上下外边距
-```
+```dart
 SizedBox(
   height: 20.0,
 )
 ```
 设置左右外边距
-```
+```dart
 SizedBox(
   width: 20.0,
 )
 ```
 2.使用Spacer填充尽可能大的空间
-```
+```dart
 Row(
   children: <Widget>[
       Text("1"),
@@ -188,13 +188,13 @@ Expanded组件必须用在Row、Column、Flex内，并且从Expanded到封装它
 - 在flutter 开发中用InkWell或者GestureDetector将某个组件包起来，可添加点击事件。
 - GestureDetector 使用点击无水波纹出现，InkWell可以实现水波纹效果。
 ### 1. InkWell有点击效果
-```
+```dart
 InkWell(
       onTap: (){},
       child: Container())
 ```
 ### 2. GestureDetector 设置点击
-```
+```dart
 GestureDetector(
             child: Text("GestureDetector 点击"),
             onTap: () {})
@@ -206,7 +206,7 @@ GestureDetector(
 
 # Flutter圆角控件
 ### 1.通过Card的shape属性
-```
+```dart
 Card(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadiusDirectional.circular(20)),
@@ -219,7 +219,7 @@ Card(
 ```
 唯一值的注意的地方就是borderRadius看准了，不要用错了，要不然没效果。
 ### 2.通过Container的decoration
-```
+```dart
 Container(
           decoration: ShapeDecoration(
               image: DecorationImage(
@@ -243,7 +243,7 @@ Container(
 ```
 使用的DecorationImage，相当于把图片当做一个背景，这里需要注意的就是Container的child的尺寸问题，就算不放内容，也需要设置一个带尺寸的child Widget。
 ### 3.直接使用ClipRRect
-```
+```dart
 ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Image.asset("images/landscape2.jpeg"),
@@ -253,26 +253,25 @@ ClipRRect(
 
 # 装饰容器DecoratedBox
 DecoratedBox可以在其子组件绘制前(或后)绘制一些装饰（Decoration），如背景、边框、渐变等。DecoratedBox定义如下：
-```
-/**
- * 在子控件绘制之前或之后绘制一个装饰
+```dart
+/*** 在子控件绘制之前或之后绘制一个装饰 */
     const DecoratedBox({
     Key key,
     @required this.decoration,//要绘制的装饰器
     this.position = DecorationPosition.background,//绘制在子组件上面(DecorationPosition.background)还是下面(DecorationPosition.foreground)
     Widget child
     })
- */
+
 ```
 - decoration：代表将要绘制的装饰，它的类型为Decoration。Decoration是一个抽象类，它定义了一个接口 createBoxPainter()，子类的主要职责是需要通过实现它来创建一个画笔，该画笔用于绘制装饰。
 - position：此属性决定在哪里绘制Decoration，它接收DecorationPosition的枚举类型，该枚举类有两个值：
 - background：在子组件之后绘制，即背景装饰。
 - foreground：在子组件之上绘制，即前景。
-BoxDecoration
-我们通常会直接使用BoxDecoration类，它是一个Decoration的子类，实现了常用的装饰元素的绘制。
-定义：
-```
-/** 装饰器，可以用来修饰其他的组件，和Android里面的shape很相似
+  BoxDecoration
+  我们通常会直接使用BoxDecoration类，它是一个Decoration的子类，实现了常用的装饰元素的绘制。
+  定义：
+```dart
+/** 装饰器，可以用来修饰其他的组件，和Android里面的shape很相似 */
     const BoxDecoration({
     this.color,//背景色
     this.image,//图片
@@ -283,20 +282,20 @@ BoxDecoration
     this.backgroundBlendMode,//背景混合模式
     this.shape = BoxShape.rectangle,//形状,BoxShape.circle和borderRadius不能同时使用
     })
- */
+
 ```
 
 # Flutter Container组件宽度撑满屏幕
 在flutter开发中，如果不给Container组件设置宽度的话，它的宽度是取决于子组件的宽度，如何给Container设置撑满屏幕的宽度呢？
 以下两种方式都可：
-```
+```dart
 Container(
   color: Colors.red,
   width: MediaQuery.of(context).size.width,
   child: Text("宽度有多宽"),
 )
 ```
-```
+```dart
 Container(
   color: Colors.red,
   width: double.infinity,
@@ -307,39 +306,39 @@ Container(
 # Flutter中的颜色
 ### 1.常规使用
 Flutter中颜色的设置有很多方法，但是一般我使用的有4种.
-```
+```dart
 Color c1 = Color(0xFF3CAAFA);
 Color c2 = Color.fromRGBO(60, 170, 250, 1);
 Color c3 = Color.fromARGB(255, 60, 170, 250);
 Color c5 = Colors.blue;
 ```
 1. Color(int value)
-Color(0xFF3CAAFA),value接收的是一个十六进制（0x开头),FF表示的是十六进制透明度(00-FF),3CAAFA是十六进制色值。
+   Color(0xFF3CAAFA),value接收的是一个十六进制（0x开头),FF表示的是十六进制透明度(00-FF),3CAAFA是十六进制色值。
 
 2. Color.fromRGBO(int r, int g, int b, double opacity)
-Color.fromRGBO(60, 170, 250, 1)，r、g、b分别表示red、green、blue，常规的红绿蓝三色，取值范围为0-255，opacity表示透明度，取值0.0-1.0。
+   Color.fromRGBO(60, 170, 250, 1)，r、g、b分别表示red、green、blue，常规的红绿蓝三色，取值范围为0-255，opacity表示透明度，取值0.0-1.0。
 
 3. Color.fromARGB(int a, int r, int g, int b)
-Color.fromARGB(255, 60, 170, 250),a表示透明度，取值0-255，rgb同上一样。
+   Color.fromARGB(255, 60, 170, 250),a表示透明度，取值0-255，rgb同上一样。
 
 4. Colors._()
-Colors类定义了很多颜色，可以直接使用，例如 Colors.blue,其实就是第一种Color(int value)的封装。
+   Colors类定义了很多颜色，可以直接使用，例如 Colors.blue,其实就是第一种Color(int value)的封装。
 
 ### 2.在Flutter中使用16进制颜色
 ##### (1.)方法一: 使用原生方法
 Flutter中, Color类仅接收整数作为参数. 你也可以使用fromARGB或者fromRGBO.
 
 比如拿到了一个16进制颜色#b74093. 因为Color还需要传入透明度, 255就是最大值(也就是不透明), 转为16进制就是0xFF, 所以我们只需这样表示:
-```
+```dart
 const color = Color(0xffb74093);
 ```
 正规一点的写法(可选, 因为大小写不敏感):
-```
+```dart
 const color = Color(0xFFB74093);
 ```
 ##### (2.)方法二: 接收字符串格式, 转为Color
 创建一个HexColor类:
-```
+```dart
 class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
@@ -353,14 +352,14 @@ class HexColor extends Color {
 }
 ```
 然后进行调用:
-```
+```dart
 Color color1 = HexColor("b74093");
 Color color2 = HexColor("#b74093");
 Color color3 = HexColor("#88b74093");
 ```
 
 ### 3.封装Color使用
-```
+```dart
 class Colours {
   static const Color app_main = Color(0xFFFE9A4E);
   static const Color dark_app_main = Color(0xFFFE9A4E);
@@ -369,7 +368,7 @@ class Colours {
 
 ```
 调用：
-```
+```dart
 theme: ThemeData(
 		...
         primaryColor: Colours.colorPrimary,
@@ -381,7 +380,7 @@ theme: ThemeData(
 
 # Flutter根据状态显示隐藏widget
 ### 1.占位方案
-```
+```dart
 buildTestWidget() {
     if (xxx) {
         // 真正需要展示的空间
@@ -397,7 +396,7 @@ buildTestWidget() {
 ```
 
 ### 2.Visibility控件
-```
+```dart
 Visibility(
   child: Text("不可见"),
   maintainSize: true, 
@@ -408,7 +407,7 @@ Visibility(
 
 ### 3.Offstage控件
 offstage为true时表示不渲染，也不占位，相当于gone。
-```
+```dart
 Offstage(
   offstage: true, //这里控制 true  false 布尔值
   child: '子控件',
@@ -417,7 +416,7 @@ Offstage(
 
 ### 4.可以通过if条件控制控件的显示或隐藏
 用 Row 或者 Column 控件，控件里面有一个包含Widget的list，所以可以根据条件把需要展示的 Widget 放入 list 中，然后再使用 Row 或 Column 控件来展示 list，达到控制显示还是不显示的目的。
-```
+```dart
    Column(
      children: <Widget>[
        if (show) Text("根据show值显示或隐藏"),
@@ -427,7 +426,7 @@ Offstage(
 
 ### 5.使用Opacity控件
 opacity 其实是根据visible 控制透明度而已，其实还是占位的，相当于invisible，而且也是会渲染绘制的。
-```
+```dart
      Opacity(
                  opacity: visible ? 1.0 : 0.0,
                  child: Padding(
@@ -448,7 +447,7 @@ TextField输入框
 ### 2.监听文本变化
 监听文本变化也有两种方式：
 - 设置onChange回调
-```
+```dart
   TextField(
        autofocus: true,
        onChanged: (v) {
@@ -457,7 +456,7 @@ TextField输入框
    )
 ```
 - 通过controller监听
-```
+```dart
  @override
    void initState() {
      //监听输入改变  
@@ -470,7 +469,7 @@ TextField输入框
 
 # Flutter中的常见错误
 ### 1. Navigator operation requested with a context that does not include a Navigator.
-```
+```dart
 class  MyApp  extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -511,7 +510,7 @@ class  MyApp  extends StatelessWidget {
 |unselectedLabelStyle|未选中 label 的 Style|
 
 ### 2.TabBar的实现方式1（不常用）
-```
+```dart
 import 'package:flutter/material.dart';
 
 void main() {
@@ -563,7 +562,7 @@ void main() {
 ```
 
 ### 3.TabBar的实现方式2（常用）
-```
+```dart
 import 'package:flutter/material.dart';
 
 void main() {
@@ -641,7 +640,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin{
 ```
 flutter TabBarView 没有跟Scaffold 一起使用的时候，容易报 Horizontal viewport was given unbounded height 错误，例如将其作为Column的子元素，就会出现该错误。错误提示意思是水平视图高是无限的，这里由于是用在Column中， 所以水平应该理解为垂直方向。解决该问题就是需要在其父级添加高度限制。
 例如在其外层包裹Expanded，并设置flex。如下：
-```
+```dart
 Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
@@ -655,7 +654,7 @@ Widget build(BuildContext context) {
   }
 ```
 **写动态tabbar将 singleTickerProviderStateMixin 改成 TickerProviderStateMixin 才能调用setState重绘**
-```
+```dart
 class _TravelPageState extends State<TravelPage> with TickerProviderStateMixin{
   TabController _tabController;
   TravelTabModel travelTabModel;
@@ -677,7 +676,7 @@ class _TravelPageState extends State<TravelPage> with TickerProviderStateMixin{
   }
 ```
 
-# Flutter中的状态栏 
+# Flutter中的状态栏
 通过SafeArea包裹内容来防止布局的内容填充到状态栏里面。
 
 # Flutter的嵌套层级深
@@ -693,11 +692,11 @@ class _TravelPageState extends State<TravelPage> with TickerProviderStateMixin{
 Flutter 有多种实现自定义 Widget 的方式：
 - 通过继承 Widget 来修改和扩展它的功能；
 - 通过组合 Widget 来扩展功能；
-使用 CustomPaint 绘制自定义 Widget。这几种方式都有各自的优势和特点，相对来说 CustomPaint 绘制实现自定义是这里面比较复杂的一种自定义 Widget 方式。
-Flutter 中的很多基础 Widget 也是通过继承 Widget 进行扩展形成新的 Widget 或者是自己绘制 Widget。其实在大部分的平台都存在 Canvas 这个对象，它可以实现绘制布局、组件等功能，
-当然 Flutter 也可以通过 Canvas 来实现 Widget 的绘制。自定义Widget 在开发中也非常常见，例如：我们可以自定义封装实现一个加载中的对话框、实现一个通用的 ToolBar 等等。
+  使用 CustomPaint 绘制自定义 Widget。这几种方式都有各自的优势和特点，相对来说 CustomPaint 绘制实现自定义是这里面比较复杂的一种自定义 Widget 方式。
+  Flutter 中的很多基础 Widget 也是通过继承 Widget 进行扩展形成新的 Widget 或者是自己绘制 Widget。其实在大部分的平台都存在 Canvas 这个对象，它可以实现绘制布局、组件等功能，
+  当然 Flutter 也可以通过 Canvas 来实现 Widget 的绘制。自定义Widget 在开发中也非常常见，例如：我们可以自定义封装实现一个加载中的对话框、实现一个通用的 ToolBar 等等。
 
-
+<!-- 
 [『Flutter』组件通信传值学习](https://www.jianshu.com/p/879ee03cab23)
 [Flutter | 深入理解BuildContext](https://juejin.cn/post/6844903777565147150)
 [Dio官方文档](https://github.com/flutterchina/dio/blob/master/README-ZH.md)
@@ -706,3 +705,4 @@ Flutter 中的很多基础 Widget 也是通过继承 Widget 进行扩展形成�
 [Flutter动态加载TabBar](https://blog.csdn.net/xudailong_blog/article/details/98967330)
 [善用 Provider 榨干 Flutter 最后一点性能](https://juejin.cn/post/6844904057321046029)
 [实操flutter避免嵌套地狱的5种方法](https://zhuanlan.zhihu.com/p/182985171)
+-->

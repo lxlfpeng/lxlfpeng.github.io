@@ -1,5 +1,5 @@
 ---
-title: 使用Getx框架简化Flutter开发
+title: Flutter之八使用Getx框架
 date: 2021-09-29
 categories: 
   - Flutter开发
@@ -24,11 +24,11 @@ get: ^4.x.x
 ```
 ### 2. GetX入口配置
 各模块导包，均使用下面包即可
-```
+```dart
 import 'package:get/get.dart';
 ```
 只需要将MaterialApp改成GetMaterialApp便可以使用GetX提供的相关功能.
-```
+```dart
 void main() {
   runApp(MyApp());
 }
@@ -56,13 +56,13 @@ GetMaterialApp还可以配置如下设置:
 就可以实现我们自定义的控制器.
 ### 2.GetxController的简单使用
 ##### (1.)定义控制器继承自GetxController
-```
+```dart
 class MyController extends GetxController {
     ...
 }
 ```
 ##### (2. )Widget中注入实例化控制器并使用
-```
+```dart
 class HomePage extends StatelessWidget {
    
   MyController controller = Get.put<MyController>(MyController()); 
@@ -76,19 +76,19 @@ class HomePage extends StatelessWidget {
 ```
 Get提供了一个简单而强大的依赖管理器，通过依赖注入就能检索到 Controller 并使用，不需要提供上下文，不像其他的状态管理方案需要在 inheritedWidget 的子节点进行。
 Get.put可以使任何一个子路由使用依赖。所以，如果我们需要访问其他类中的同一个实例，我们可以使用Get.find。当有多个控制器时，使用Get.find也可以指定使用某个具体的控制器。
-```
+```dart
 class HomePage extends StatelessWidget {
   MyController controller = Get.put<MyController>(MyController());
 }
 ```
-```
+```dart
 class SecondPage extends StatelessWidget {
   MyController controller = Get.find<MyController>(); 
 }
 ```
 
 **Get.put()方法详解**
-```
+```dart
   S put<S>(S dependency,
           {String? tag,
           bool permanent = false,
@@ -98,15 +98,15 @@ class SecondPage extends StatelessWidget {
 - dependency 是必传的参数,表示要注入的类.
 - tag 在注入多个相同类型的类时,用tag进行区分,比如有两个商品实例，就需要使用tag区分不同的实例。
 - permanent 代表是否不销毁。通常Get.put()的实例的生命周期和 put 所在的 Widget 生命周期绑定，如果在全局 （main 方法里）put，那么这个实例就一直存在。如果在一个
-Widget 里 put ，那么这个那么这个 Widget 从内存中删除，这个实例也会被销毁。
+  Widget 里 put ，那么这个那么这个 Widget 从内存中删除，这个实例也会被销毁。
 
 **Get.lazyPut方法详解**
 懒加载一个依赖，只有在使用时才会被实例化。适用于不确定是否会被使用的依赖或者计算高昂的依赖。类似 Kotlin 的 Lazy 代理。
-```
+```dart
 Get.lazyPut<LazyController>(() => LazyController());
 ```
 LazyController 在这时候并不会被创建，而是等到你使用LazyController的时候才会被 initialized，也就是执行下面代码的时候才 initialized：
-```
+```dart
 Get.find<LazyController>();
 ``` 
 在使用后，使用时的 Wdiget 的生命周期结束，也就是这个 Widgetdispose，这个实例就会被销毁。
@@ -115,7 +115,7 @@ Get.find<LazyController>();
 。即使全局注入，也一样。可以理解为，Get.lazyPut 注入的实例的生命周期是和在Get.find时的上下文所绑定。
 ### 3.GetxController的生命周期
 GetxController也有生命周期的：
-```
+```dart
 class SimpleController extends GetxController {
     @override
     void onInit() {
@@ -143,14 +143,14 @@ class SimpleController extends GetxController {
 - onReady：上一篇我们介绍过，这里是在 onInit 一帧后被调用，适合做一些导航进入的事件，例如对话框提示、SnackBar 或异步网络请求。
 - onClose：在 onDelete 方法前调用、用于销毁 controller 使用的资源，例如关闭事件监听，关闭流对象，或者销毁可能造成内存泄露的对象，例如
   TextEditingController，AniamtionController。也适用于将数据进行离线持久化。
-  
+
 ### 4.GetxController实现跨页面交互
 例如在A界面处理数据，需要再B界面显示的时候，或者C界面，或者D界面。只要注入了控制器。在其他界面就能拿到A界面的数据。 A界面通过Get.put注入Controller;
 此刻A界面跳到B Get.to(BPage)； B在跳到C Get.to(CPage)； C在跳到D Get.to(DPage)；D页面需要A界面的数据,可以通过 Get.find找到A界面里注入的Controller进行操作.
 
 > Get.put可以使任何一个子路由使用该依赖。所以，如果需要访问其他类中的同一个实例，可以使用Get.find。
 
-```
+```dart
 class HomePage extends StatelessWidget {
   Controller controller = Get.put(Controller());
 }
@@ -162,7 +162,7 @@ class SecondPage extends StatelessWidget {
 ##### (1.)GetxController资源释放
 在我们使用GetX的时候，并没有写代码来对GetxController进行释放，如果用了getx的那一套路由跳转api（Get.to、Get.toName...）之类.在组件被销毁的时候GetxController
 也会被销毁.在页面中使用GetxController,并且在注入Controller之前在这里打印了一句：
-```
+```dart
 class SimplePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -175,7 +175,7 @@ class SimplePage extends StatelessWidget {
 ```
 再次打开这个页面，控制台输出：
 
-```
+```dart
 flutter: SimplePage-->build
 flutter: SimpleController--onInit
 [GETX] " SimpleController" has been initialized
@@ -183,7 +183,7 @@ flutter: SimpleController--onReady
 SimplePage-build->SimpleController-onInit->SimpleController-onReady
 ```
 关闭当前页面返回：
-```
+```dart
 [GETX] CLOSE TO ROUTE /SimplePage
 flutter: SimpleController--onClose
 [GETX] "SimpleController" onClose() called
@@ -200,7 +200,7 @@ flutter: SimpleController--onClose
 ##### (2.)GetxController资源未销毁解决
 未使用GetX提供的路由跳转：直接使用原生路由api的跳转操作,这样会直接导致GetX无法感知对应页面GetxController的生命周期，会导致其无法释放.
 
-```
+```dart
 Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => XxxxPage()),
@@ -208,8 +208,7 @@ Navigator.push(
 ```
 
 解决方案是使用StatefulWidget，在这种情况，无法感知生命周期，就需要使用StatefulWidget生命周期在dispose回调处，把当前GetxController从整个GetxController管理链中删除即可:
-```
-
+```dart
 class SimplePage extends StatefulWidget {
   @override
   _SimplePageState createState() => _SimplePageState();
@@ -240,7 +239,7 @@ class SimpleController extends GetxController {
 ### 1.GetBuilder实现状态管理
 ##### (1)GetBuilder的使用
 1. 用计数器示例来演示一下GetBuilder的基本使用：
-```
+```dart
 class CounterController extends GetxController {
   int _counter = 0;
   int get counter => _counter;
@@ -253,7 +252,7 @@ class CounterController extends GetxController {
 ```
 这是一个控制器，有 UI 需要的数据counter和用户点击一次加1的方法。
 2. 在UI 层一个展示的文本和一个按钮：
-```
+```dart
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -279,7 +278,7 @@ class HomePage extends StatelessWidget {
 使用了GetBuilder这个 Widget 包裹了页面，在 init初始化CounterController,然后每次点击，都会更新builder对应的 Widget，GetxController通过update()更新GetBuilder。
 这看起来和别状态管理框架并无不同，有时只想重新 build 需要变化的部分，遵循最小原则，那么我们改下GetBuilder的位置，只包裹 Text:
 3. 局部刷新:
-```
+```dart
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -309,7 +308,7 @@ GetX强大的一点的就表现出来了，按钮和文本并不在父子组件�
 ##### (2.)GetxBuilder局部更新UniqueID
 在开发的过程中会碰到一种情况，就是多个地方引用了同一个属性，但我只想单独更新某一个地方，那么就可以用UniqueID来进行区分。
 
-```
+```dart
 class BuilderController extends GetxController {
   int count = 0;
 
@@ -332,7 +331,7 @@ class BuilderController extends GetxController {
 
 注意update(['counter']里添加了 id 数组，这样就只更新这个 id 对应的GetBuilder:
 
-```
+```dart
 class GetxBuilderTest extends StatelessWidget {
   const GetxBuilderTest({Key? key}) : super(key: key);
 
@@ -385,7 +384,7 @@ class GetxBuilderTest extends StatelessWidget {
 ### 2.响应式状态管理OBX
 ##### (1)OBX基本使用
 1. 用计数器示例来演示一下OBX的基本使用：
-```
+```dart
 class CounterController extends GetxController {
   // 使用 Rx 和 Darts 泛型，Rx < type >
     final count =0.obs;
@@ -400,7 +399,7 @@ class CounterController extends GetxController {
 ```
 这是一个控制器，有 UI 需要的数据counter和用户点击一次加1的方法。
 2. 在UI 层进行数据的增加和页面的更新：
-```
+```dart
 class HomePage extends StatelessWidget {
   //注入化控制器
   CounterController controller =
@@ -436,7 +435,7 @@ class HomePage extends StatelessWidget {
 Obx是一种响应式的状态管理,和GetBuilder不同,不需要需要手动调用 update() 更新状态的变化，在Obx包裹的对象属性发生变化时视图会自动更新渲染。
 将一个对象编程Obx响应式对象有三种方式:
 第一种是使用 Rx { Type }。
-```
+```dart
 final name = RxString('');
 final isLogged = RxBool(false);
 final count = RxInt(0);
@@ -445,7 +444,7 @@ final items = RxList<String>([]);
 final myMap = RxMap<String, int>({});
 ```
 第二种是使用 Rx 和 Darts 泛型，Rx < type >
-```
+```dart
 final name = Rx<string>('');
 final isLogged = Rx<bool>(false);
 final count = Rx<int>(0);
@@ -456,7 +455,7 @@ final myMap = Rx<Map<string, int>>({});
 final user = Rx<User>();// 自定义类
 ```
 第三种方法更实用、更简单也是首选，就是把.obs 作为你的变量的后缀:
-```
+```dart
 final name = ''.obs;
 final isLogged = false.obs;
 final count = 0.obs;
@@ -472,7 +471,7 @@ final user = User().obs;// 自定义类
 将整个类对象设置为响应类型，当你改变了类其中一个变量，然后执行更新操作，只要包裹了该响应类变量的Obx()，都会实行刷新操作.
 如果我们需要观察的数据是一个有许多属性的类.如何进行管理呢?
 1. 我们将使整个类成为可观察的，而不是每个属性。
-```
+```dart
 class User{
     User({this.name = '', this.age = 0});
     String name;
@@ -482,32 +481,32 @@ class User{
 // controller
 final user = User().obs;
 ```
-2. 有两种方式可以更新对象变量. 
-方式一:
-```
+2. 有两种方式可以更新对象变量.
+   方式一:
+```dart
 user.update( (user) { // 这个参数是你要更新的类本身。
     user.name = '张三';
     user.age = 18;
 });
 ```
 方式二:
-```
+```dart
 user(User(name: '李四', age: 35));
 ```
 3. 获取Obx的值的方式也有两种:
-方式一:通过value这种方式获取
-```
+   方式一:通过value这种方式获取
+```dart
 Obx(()=> Text("Name ${user.value.name}: Age: ${user.value.age}"));
 ```
 方式二:
-```
+```dart
 Obx(()=> Text("Name ${user().name}: Age: ${user().age}"));
 ```
 当你定义了一个响应式变量，该响应式变量改变时，包裹该响应式变量的Obx()方法才会执行刷新操作，其它的未包裹该响应式变量的Obx()方法并不会执行刷新操作.
 
 ##### (3.)Obx使用Workers回调
 响应式不只这些好处，还有一个 Workers ，将协助我们在事件发生时触发特定的回调，也就是 RxJava 的一些操作符；
-```
+```dart
 class PersonController extends GetxController {
   var person = Person(20, "张三").obs;
   @override
@@ -557,7 +556,7 @@ Binding 类是一个将依赖注入进行分离，Binding模块在路由跳转�
 Binding " 路由到状态管理器和依赖管理器。 这使得 GetX 可以知道当使用某个控制器时，哪个页面正在显示，并知道在哪里以及如何销毁它。
 ### 2.如何使用Bindings
 ##### (1)第一步： 创建一个控制器
-```
+```dart
 class CounterController extends GetxController {
   int _counter = 0;
   int get counter => _counter;
@@ -569,7 +568,7 @@ class CounterController extends GetxController {
 ```
 ##### (2)第二步： 创建一个类并实现 Binding，如果有多个控制器，就在这实例化多个
 // 创建bindings
-```
+```dart
 class TestBingding implements Bindings {
   @override
   void dependencies() {
@@ -581,7 +580,7 @@ class TestBingding implements Bindings {
 ##### (3)第三步： 绑定到路由中
 我们要使用该 Binding 来建立路由管理器、依赖关系和状态之间的连接。 这里有两种方式，如果使用的是命名路由表：
 
-```
+```dart
  GetMaterialApp(
        ...
        getPages: [
@@ -593,12 +592,12 @@ class TestBingding implements Bindings {
      )
 ```
 如果是直接跳转：
-```
+```dart
 Get.to(GetXBingdingPage(), binding: TestBingding());
 ```
 ##### (4)第四步：Widget 中使用
 使用 Get.find() ,可以处理一个UI中有多个控制器的情况，如果你只有一个控制器，可以选择使用GeView.
-```
+```dart
 class GetXBingdingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -627,7 +626,7 @@ class GetXBingdingPage extends StatelessWidget {
 ### 3.GetView
 上面使用注入依赖解耦了，但是获取还是略显不方便，GetX 也为我们考虑到了。使用GetView代替StatelessWidget,可以直接使用 controller.变量调用,
 前提条件就是只能用于有一个controller控制器
-```
+```dart
 class SimplePage extends GetView<CounterController> {
   @override
   Widget build(BuildContext context) {
@@ -650,7 +649,7 @@ class SimplePage extends GetView<CounterController> {
 
 GetxView<HomeController> 会自动帮你把 Controller 注入到 view 中，你可以简单理解为它自动帮你执行了以下步骤
 
-```
+```dart
 final controller = Get.find<HomeController>();
 ```
 
@@ -658,7 +657,7 @@ final controller = Get.find<HomeController>();
 
 GetView是一个Stateless Widget，仅是为了方便使用controller。如果我们只有一个controller作为依赖，可以使用GetView取代StatelessWidget并且不用再写Get.find。
 这里完全没有Get.find，但是可以直接使用controller，因为GetView里封装好了：
-```
+```dart
 abstract class GetView<T> extends StatelessWidget {
   const GetView({Key key}) : super(key: key);
 
@@ -674,7 +673,7 @@ abstract class GetView<T> extends StatelessWidget {
 不在需要 StatelessWidget 和 StatefulWidget。这也是开发最常用的模式，推荐大家使用。
 
 当然，也许有时候觉得每次声明一个 Bingings 类也很麻烦，那么可以使用 BindingsBuilder ，这样就可以简单地使用一个函数来实例化任何想要注入的东西。
-```
+```dart
  GetMaterialApp(
        ...
         GetPage(
@@ -697,25 +696,25 @@ Bindings的工作原理 Bindings 会创建过渡性工厂，在点击进入另�
 
 #### (1.)导航到新页面
 
-```
+```dart
 Get.to(()=>LoginPage());
 ```
 
 #### (2.)进入新页面 配置路由名称 建议这种统一配置
 
-```
+```dart
 Get.toNamed(Routes.XXXX);
 ```
 
 #### (3.)pop 返回、关闭snackbars, dialogs, bottomsheets
 
-```
+```dart
 Get.back();
 ```
 
 #### (4.)push到下一页，但禁止从下一页返回过来
 
-```
+```dart
 Get.off(LoginPage());
 ```
 
@@ -723,7 +722,7 @@ Get.off(LoginPage());
 
 #### (5.)push到下一页，并且从栈内移除以前的所有路由
 
-```
+```dart
 Get.offAll(LoginPage());
 ```
 
@@ -733,13 +732,13 @@ Get.offAll(LoginPage());
 ##### (1.)argment 传递
 argments 参数是 dynamic 类型的 ， 与Navigator中的arguments相同,但是在getx中获取却非常方便
 传递参数:
-```
+```dart
 // a页面 附带argements参数
 Get.toNamed("/b",arguments: true);  
 // 等同于 Navigator.pushNamed(Get.context, "/b", arguments: true);
 ```
 获取参数:
-```
+```dart
 //b页面  获取argments参数  (在 build 中)
 var data = Get.arguments;
 //等同于  var data = ModalRoute.of(context).settings.arguments;
@@ -747,14 +746,14 @@ var data = Get.arguments;
 ##### (2.)parameters 传递
 parameters接受 Map<String, String>作为参数传递, 方式类似与网页传值
 传递参数:
-```
+```dart
 //a页面  
 Get.toNamed("/b", parameters: {"name":"张三"});
 //或者  使用 拼接形式
 Get.toNamed("/b?name=张三");
 ```
 获取参数:
-```
+```dart
 //b页面
 var data = Get.parameters;
 data['name']   
@@ -762,7 +761,7 @@ data['name']
 ##### (3.)parameters 还有一种 传值方式传值通过 绑定路由地址
 
 // 修改路由表  新增 /serach/:id
-```
+```dart
 GetPage(
         name: Routes.HOME,  // "/home"
         page: () => TabBarPage(),
@@ -779,7 +778,7 @@ GetPage(
     ),
 ```
 /search/:id 是home的子路由 那么访问 他的完整链接应该是 “/home/search/:id”
-```
+```dart
 // 跳转 传递参数
 Get.toNamed("/home/search/123");
 
@@ -789,14 +788,14 @@ var data = Get.parameters;
 ```
 上面的方式学过前端框架的应该很熟悉
 
-```
+```dart
 onPressed: () async {
 var data = await Get.to(MinePage());
 // 上个页面返回后，立即拿到数据,456
 print(data);
 }
 ```
-```
+```dart
 MaterialButton(
 onPressed: () {
 // 返回携带参数
@@ -811,7 +810,7 @@ child: Text("返回上个页面"),
 
 要使用别名路由导航，需要定义路由，在main函数内使用GetMaterialApp，并设置相关属性。
 
-```
+```dart
 void main() {
   // 别名路由配置
   runApp(
@@ -829,31 +828,31 @@ void main() {
 
 #### GetMaterialApp下还有一个属性unknownRoute，可以设置未定义路由的导航，如错误页面。
 
-```
+```dart
 unknownRoute: GetPage(name: '/notfound', page: () => UnknownRoutePage()),
 ```
 
 #### push到下一页
 
-```
+```dart
 Get.toNamed("/two");
 ```
 
 #### push下一页并移除前一个页面。
 
-```
+```dart
 Get.offNamed("/two");
 ```
 
 #### push下一页并移除所有之前的页面
 
-```
+```dart
 Get.offAllNamed("/two");
 ```
 
 #### push时携带数据 主要在后面加上你要传递的数据即可
 
-```
+```dart
 Get.toNamed("/two", arguments: 'www.qson.tech');
 ```
 
@@ -862,7 +861,7 @@ Get.toNamed("/two", arguments: 'www.qson.tech');
 
 在跳转前做些事情，比如判断是否登录，可以使用routingCallback来实现：
 
-```
+```dart
 GetMaterialApp(
   routingCallback: (routing) {
     if(routing.current == '/second'){
@@ -880,7 +879,7 @@ GetxService不会从内存中删除。所以可以在程序任何地方都可以
 ### 2. GetxService的简单使用
 通过GetxService获取usertoken的例子:
 第一步：创建Service
-```
+```dart
 class SpService extends GetxService {
   Future<String> getUserToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -891,7 +890,7 @@ class SpService extends GetxService {
 }
 ```
 第二步：初始化Service
-```
+```dart
 /// 初始化服务
 Future<void> main() async {
   await initServices();
@@ -915,7 +914,7 @@ class MyApp extends StatelessWidget {
 }
 ```
 第三步：调用Service
-```
+```dart
 class GetXServiceExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -936,7 +935,7 @@ class GetXServiceExample extends StatelessWidget {
 # 八.GetX其他功能
 Getx还提供了许许多多的Api供我们开发时使用.
 其他高级API:
-```
+```dart
 // 给出当前页面的args。
 Get.arguments
 
@@ -1081,6 +1080,7 @@ CLI有如下的功能:
 ### 2.开发工具插件
 可以通过AndroidStudio或者是Vscode找寻模板插件,提升开发效率。例如getx_template.
 
+<!-- 
 相关资料:
 [Flutter GetX使用---简洁的魅力！](https://juejin.cn/post/6924104248275763208)
 [【源码篇】Flutter GetX深度剖析 | 我们终将走出自己的路（万字图文）](https://juejin.cn/post/6984593635681517582#heading-34)
@@ -1098,3 +1098,4 @@ CLI有如下的功能:
 [Flutter 入门与实战（七十四）：GetxController 的生命周期详解](https://juejin.cn/post/7005342494552489991)
 [Flutter GetX系列教程---GetxController](https://juejin.cn/post/7005010372637753352#heading-2)
 [Flutter状态管理--GetX的简单使用](https://juejin.cn/post/6978079109804982285)
+-->

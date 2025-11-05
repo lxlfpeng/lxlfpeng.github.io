@@ -1,6 +1,6 @@
 ---
-title: Flutter与Android混编
-date: 2020-11-13
+title: Flutter之七Flutter与Android混编
+date: 2021-04-05
 categories: 
   - Flutter开发
 ---
@@ -686,13 +686,10 @@ Flutter 整个项目都是绘制在一个 Surface 画布上，而fluttet_boost �
 ### 2.flutter_boost（单引擎方案）
 [flutter_boost](https://github.com/alibaba/flutter_boost)阿里巴巴闲鱼团队出品的一款解决Flutter栈管理的框架
 
-
+<!-- 
 参考资料:
 [Flutter 开发文档](https://flutter.cn/docs)
 [Flutter 开发文档(英文版)](https://docs.flutter.dev/)
-
-
-
 [恋猫小郭Flutter合集](https://juejin.cn/user/817692379985752/posts)
 [android调用flutter aar_在原生项目中集成Flutter](https://blog.csdn.net/weixin_39567870/article/details/112136412)
 [Flutter文章中文版](https://flutter.cn/docs/get-started)
@@ -710,3 +707,4 @@ Flutter 整个项目都是绘制在一个 Surface 画布上，而fluttet_boost �
 [给现有 App 引入 Flutter Module](https://juejin.cn/post/6844903991923441672)
 [开门见山——Flutter 自动打包aars 并上传Maven仓库](https://juejin.cn/post/6917079172913299470)
 [Flutter 2.0 下混合开发浅析](https://juejin.cn/post/6940937798593544222)
+-->

@@ -1,6 +1,6 @@
 ---
-title: Flutter环境搭建及项目配置
-date: 2019-06-21
+title: Flutter之二环境搭建及项目配置
+date: 2020-02-15
 categories: 
   - Flutter开发
 ---
